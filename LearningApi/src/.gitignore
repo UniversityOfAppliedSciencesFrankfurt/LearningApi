@@ -1,0 +1,16 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+/DataProviders/CsvDataProvider/bin/Debug
+/DataProviders/CsvDataProvider/obj/Debug
+/LearningApi/bin/Debug
+/LearningApi/obj/Debug
+/MLAlgorithms/AnomDetect.KMeans/bin/Debug/netstandard1.2
+/MLAlgorithms/AnomDetect.KMeans/obj/Debug/netstandard1.2
+/MLAlgorithms/NeuralNetworks/NeuralNet.BackPropagation/bin/Debug
+/MLAlgorithms/NeuralNetworks/NeuralNet.BackPropagation/obj/Debug
+/MLAlgorithms/NeuralNetworks/NeuralNetworks.Core/bin/Debug
+/MLAlgorithms/NeuralNetworks/NeuralNetworks.Core/obj/Debug
+/UnitTests/bin/Debug
+/UnitTests/obj/Debug

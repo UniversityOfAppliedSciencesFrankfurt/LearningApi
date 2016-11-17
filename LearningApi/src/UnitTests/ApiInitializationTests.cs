@@ -16,6 +16,7 @@ namespace UnitTests
 
         }
 
+      //  [Fact()]
         public void InitNeuralBackPropagationTest()
         {
             LearningApi api = new LearningApi();
