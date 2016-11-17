@@ -1,0 +1,17 @@
+#:C:\tfs\git\LearningAPI\LearningApi\src\MLAlgorithms\NeuralNetworks\NeuralNetworks.Core\NeuralNetworks.Core.xproj
+C:\tfs\git\LearningAPI\LearningApi\src\MLAlgorithms\NeuralNetworks\NeuralNetworks.Core\NeuralNetworks.Core.xproj|C:\tfs\git\LearningAPI\LearningApi\src\LearningApi\LearningApi.xproj
+#:C:\tfs\git\LearningAPI\LearningApi\src\MLAlgorithms\NeuralNetworks\NeuralNet.BackPropagation\NeuralNet.BackPropagation.xproj
+C:\tfs\git\LearningAPI\LearningApi\src\MLAlgorithms\NeuralNetworks\NeuralNet.BackPropagation\NeuralNet.BackPropagation.xproj|C:\tfs\git\LearningAPI\LearningApi\src\LearningApi\LearningApi.xproj
+C:\tfs\git\LearningAPI\LearningApi\src\MLAlgorithms\NeuralNetworks\NeuralNet.BackPropagation\NeuralNet.BackPropagation.xproj|C:\tfs\git\LearningAPI\LearningApi\src\MLAlgorithms\NeuralNetworks\NeuralNetworks.Core\NeuralNetworks.Core.xproj
+C:\tfs\git\LearningAPI\LearningApi\src\MLAlgorithms\NeuralNetworks\NeuralNetworks.Core\NeuralNetworks.Core.xproj|C:\tfs\git\LearningAPI\LearningApi\src\LearningApi\LearningApi.xproj
+#:C:\tfs\git\LearningAPI\LearningApi\src\UnitTests\UnitTests.xproj
+C:\tfs\git\LearningAPI\LearningApi\src\UnitTests\UnitTests.xproj|C:\tfs\git\LearningAPI\LearningApi\src\MLAlgorithms\AnomDetect.KMeans\AnomDetect.KMeans.xproj
+C:\tfs\git\LearningAPI\LearningApi\src\UnitTests\UnitTests.xproj|C:\tfs\git\LearningAPI\LearningApi\src\DataProviders\CsvDataProvider\CsvDataProvider.xproj
+C:\tfs\git\LearningAPI\LearningApi\src\UnitTests\UnitTests.xproj|C:\tfs\git\LearningAPI\LearningApi\src\LearningApi\LearningApi.xproj
+C:\tfs\git\LearningAPI\LearningApi\src\UnitTests\UnitTests.xproj|C:\tfs\git\LearningAPI\LearningApi\src\MLAlgorithms\NeuralNetworks\NeuralNet.BackPropagation\NeuralNet.BackPropagation.xproj
+C:\tfs\git\LearningAPI\LearningApi\src\UnitTests\UnitTests.xproj|C:\tfs\git\LearningAPI\LearningApi\src\MLAlgorithms\NeuralNetworks\NeuralNetworks.Core\NeuralNetworks.Core.xproj
+C:\tfs\git\LearningAPI\LearningApi\src\MLAlgorithms\AnomDetect.KMeans\AnomDetect.KMeans.xproj|C:\tfs\git\LearningAPI\LearningApi\src\LearningApi\LearningApi.xproj
+C:\tfs\git\LearningAPI\LearningApi\src\DataProviders\CsvDataProvider\CsvDataProvider.xproj|C:\tfs\git\LearningAPI\LearningApi\src\LearningApi\LearningApi.xproj
+C:\tfs\git\LearningAPI\LearningApi\src\MLAlgorithms\NeuralNetworks\NeuralNet.BackPropagation\NeuralNet.BackPropagation.xproj|C:\tfs\git\LearningAPI\LearningApi\src\LearningApi\LearningApi.xproj
+C:\tfs\git\LearningAPI\LearningApi\src\MLAlgorithms\NeuralNetworks\NeuralNet.BackPropagation\NeuralNet.BackPropagation.xproj|C:\tfs\git\LearningAPI\LearningApi\src\MLAlgorithms\NeuralNetworks\NeuralNetworks.Core\NeuralNetworks.Core.xproj
+C:\tfs\git\LearningAPI\LearningApi\src\MLAlgorithms\NeuralNetworks\NeuralNetworks.Core\NeuralNetworks.Core.xproj|C:\tfs\git\LearningAPI\LearningApi\src\LearningApi\LearningApi.xproj
