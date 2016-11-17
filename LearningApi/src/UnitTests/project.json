@@ -1,0 +1,18 @@
+{
+  "version": "1.0.0-*",
+
+  "dependencies": {
+    "AnomDetect.KMeans": "1.0.0-*",
+    "CsvDataProvider": "1.0.0-*",
+    "LearningApi": "1.0.0-*",
+    "NETStandard.Library": "1.6.0",
+    "NeuralNet.BackPropagation": "1.0.0-*",
+    "NeuralNetworks.Core": "1.0.0-*"
+  },
+
+  "frameworks": {
+    "netstandard1.2": {
+      "imports": "dnxcore50"
+    }
+  }
+}

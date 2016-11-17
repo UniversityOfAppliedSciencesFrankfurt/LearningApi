@@ -1,0 +1,15 @@
+{
+  "version": "1.0.0-*",
+
+  "dependencies": {
+    "LearningApi": "1.0.0-*",
+    "NETStandard.Library": "1.6.0",
+    "NeuralNetworks.Core": "1.0.0-*"
+  },
+
+  "frameworks": {
+    "netstandard1.2": {
+      "imports": "dnxcore50"
+    }
+  }
+}
