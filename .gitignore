@@ -3,3 +3,16 @@
 ################################################################################
 
 /LearningApi/src/DataProviders/CsvDataProvider/bin/Debug
+/LearningApi/src/DataProviders/CsvDataProvider/obj/Debug/netstandard1.2
+/LearningApi/src/LearningApi/obj/Debug/netstandard1.2
+/LearningApi/src/LearningApi/bin/Debug/netstandard1.2
+/LearningApi/src/MLAlgorithms/AnomDetect.KMeans/bin/Debug/netstandard1.2
+/LearningApi/src/MLAlgorithms/AnomDetect.KMeans/obj/Debug/netstandard1.2
+/LearningApi/src/MLAlgorithms/NeuralNetworks/NeuralNet.BackPropagation/bin/Debug/netstandard1.2
+/LearningApi/src/MLAlgorithms/NeuralNetworks/NeuralNet.BackPropagation/obj/Debug/netstandard1.2
+/LearningApi/src/MLAlgorithms/NeuralNetworks/NeuralNetworks.Core/bin/Debug/netstandard1.2
+/LearningApi/src/MLAlgorithms/NeuralNetworks/NeuralNetworks.Core/obj/Debug/netstandard1.2
+/LearningApi/src/UnitTests/bin/Debug/netstandard1.2
+/LearningApi/src/UnitTests/obj/Debug
+/LearningApi/test/bin/Debug/netcoreapp1.0
+/LearningApi/test/obj/Debug/netcoreapp1.0

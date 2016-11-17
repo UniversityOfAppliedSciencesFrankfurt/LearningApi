@@ -1,0 +1,11 @@
+#:C:\sc\git\github\LearningAPI\LearningApi\test\UnitTest.xproj
+C:\sc\git\github\LearningAPI\LearningApi\test\UnitTest.xproj|C:\sc\git\github\LearningAPI\LearningApi\src\MLAlgorithms\AnomDetect.KMeans\AnomDetect.KMeans.xproj
+C:\sc\git\github\LearningAPI\LearningApi\test\UnitTest.xproj|C:\sc\git\github\LearningAPI\LearningApi\src\DataProviders\CsvDataProvider\CsvDataProvider.xproj
+C:\sc\git\github\LearningAPI\LearningApi\test\UnitTest.xproj|C:\sc\git\github\LearningAPI\LearningApi\src\LearningApi\LearningApi.xproj
+C:\sc\git\github\LearningAPI\LearningApi\test\UnitTest.xproj|C:\sc\git\github\LearningAPI\LearningApi\src\MLAlgorithms\NeuralNetworks\NeuralNet.BackPropagation\NeuralNet.BackPropagation.xproj
+C:\sc\git\github\LearningAPI\LearningApi\test\UnitTest.xproj|C:\sc\git\github\LearningAPI\LearningApi\src\MLAlgorithms\NeuralNetworks\NeuralNetworks.Core\NeuralNetworks.Core.xproj
+C:\sc\git\github\LearningAPI\LearningApi\src\MLAlgorithms\AnomDetect.KMeans\AnomDetect.KMeans.xproj|C:\sc\git\github\LearningAPI\LearningApi\src\LearningApi\LearningApi.xproj
+C:\sc\git\github\LearningAPI\LearningApi\src\DataProviders\CsvDataProvider\CsvDataProvider.xproj|C:\sc\git\github\LearningAPI\LearningApi\src\LearningApi\LearningApi.xproj
+C:\sc\git\github\LearningAPI\LearningApi\src\MLAlgorithms\NeuralNetworks\NeuralNet.BackPropagation\NeuralNet.BackPropagation.xproj|C:\sc\git\github\LearningAPI\LearningApi\src\LearningApi\LearningApi.xproj
+C:\sc\git\github\LearningAPI\LearningApi\src\MLAlgorithms\NeuralNetworks\NeuralNet.BackPropagation\NeuralNet.BackPropagation.xproj|C:\sc\git\github\LearningAPI\LearningApi\src\MLAlgorithms\NeuralNetworks\NeuralNetworks.Core\NeuralNetworks.Core.xproj
+C:\sc\git\github\LearningAPI\LearningApi\src\MLAlgorithms\NeuralNetworks\NeuralNetworks.Core\NeuralNetworks.Core.xproj|C:\sc\git\github\LearningAPI\LearningApi\src\LearningApi\LearningApi.xproj
