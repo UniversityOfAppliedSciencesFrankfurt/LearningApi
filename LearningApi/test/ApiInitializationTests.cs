@@ -19,8 +19,10 @@ namespace UnitTests
         [Fact]
         public bool InitNeuralBackPropagationTest()
         {
-            var path = System.IO.Path.Combine(Directory.GetCurrentDirectory(), @"sample_data\iris_multi_class_data.csv");
-            
+            var path = System.IO.Path.Combine(Directory.GetCurrentDirectory(), @"sample_data\iris\iris.csv");
+            FileInfo fi= new FileInfo(path);
+            Assert.True(fi.Exists);
+
             LearningApi api = new LearningApi();
             api.UseBackPropagation(1, 0.2, 1.0, null);
             api.UseCsvDataProvider("", ',', 0);
