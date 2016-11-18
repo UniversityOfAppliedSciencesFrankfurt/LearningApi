@@ -104,3 +104,6 @@ LearningApi/test/bin/Debug/netcoreapp1.0/test.runtimeconfig.dev.json
 LearningApi/test/obj/Debug/netcoreapp1.0/.IncrementalCache
 LearningApi/test/obj/Debug/netcoreapp1.0/dotnet-compile.rsp
 LearningApi/test/obj/Debug/netcoreapp1.0/dotnet-compile-csc.rsp
+/LearningApi/.vs
+/LearningApi/test/obj
+/LearningApi/test/bin

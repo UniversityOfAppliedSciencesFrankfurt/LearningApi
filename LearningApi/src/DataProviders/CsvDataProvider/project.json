@@ -3,7 +3,8 @@
 
   "dependencies": {
     "LearningApi": "1.0.0-*",
-    "NETStandard.Library": "1.6.0"
+    "NETStandard.Library": "1.6.0",
+    "System.IO.FileSystem": "4.0.1"
   },
 
   "frameworks": {

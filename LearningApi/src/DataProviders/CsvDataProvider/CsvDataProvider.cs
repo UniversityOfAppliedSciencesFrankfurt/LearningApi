@@ -10,8 +10,22 @@ namespace LearningFoundation.DataProviders
 {
     public class CsvDataProvider : IDataProvider
     {
-        List<object[]> list = new List<object[]>();
+        public string[] Header { get; set; }
 
+        //
+        IEnumerable<object[]> list = new List<object[]>();
+        public IEnumerable<object[]> DataSet
+        {
+            get
+            {
+                return list;
+            }
+            set
+            {
+                if (list != value)
+                    list = value;
+            }
+        }
         int m_Current = 0;
 
         public CsvDataProvider()
@@ -22,7 +36,7 @@ namespace LearningFoundation.DataProviders
         {
             get
             {
-                return list[m_Current];
+                return list.ElementAt(m_Current);
             }
         }
 
@@ -41,7 +55,7 @@ namespace LearningFoundation.DataProviders
 
         public bool MoveNext()
         {
-            return m_Current < list.Count;
+            return m_Current < list.Count();
         }
 
         public void Reset()

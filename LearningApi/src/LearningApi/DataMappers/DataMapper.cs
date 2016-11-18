@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace LearningFoundation
+namespace LearningFoundation.DataMappers
 {
     public class DataMapper : IDataMapper
     {
@@ -55,6 +55,21 @@ namespace LearningFoundation
         public double[] MapInputVector(object[] rawData)
         {
             return new double[NumOfFeatures]; //TODO..
+        }
+
+        /// <summary>
+        /// Initialize mapper from file
+        /// </summary>
+        /// <param name="filePath">path of the file contining mapper configuration</param>
+        /// <returns>.Net data mapper object</returns>
+        public static DataMapper loadMapper(string filePath)
+        {
+            var dm = new DataMapper();
+
+            //TODO
+
+            //
+            return dm;
         }
     }
 

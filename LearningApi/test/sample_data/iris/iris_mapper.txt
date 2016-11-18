@@ -1,0 +1,14 @@
+﻿#line which begins with # is comment and should not be parsed
+
+#######         LearningAPI data mapper file for iris data set       ########
+
+# col:f- feature, l - label (only one is alowed), i - ignore column
+# - colType, num - numerical column, bin - binary column, catx - category column with x - categories,
+# str - string column which shoub be avoided during mapping
+#normalisation: minmax, gaus, none, ....
+#missingvalue:min, max, mean, ......
+
+col:f,f,f,f,l
+coltype:num,num,num,num,cat3
+normalisation:minmax,minmax,minmax,minmax,none 
+missingvalue:mean,mean,mean,mean,mean
