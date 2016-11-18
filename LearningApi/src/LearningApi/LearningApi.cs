@@ -30,7 +30,7 @@ namespace LearningFoundation
 
         public IScore GetScore()
         {
-            throw new NotImplementedException();
+            
         }
         
         /// <summary>
