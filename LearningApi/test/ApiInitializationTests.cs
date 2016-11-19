@@ -23,7 +23,7 @@ namespace UnitTests
             
             //mapper initialization
             var irisMapperFilePath = System.IO.Path.Combine(Directory.GetCurrentDirectory(), @"sample_data\iris\iris_mapper.txt");
-            var irisMapper = DataMapper.loadMapper(irisMapperFilePath);
+            var irisMapper = DataMapper.Load(irisMapperFilePath);
             //iris data file
             var path = System.IO.Path.Combine(Directory.GetCurrentDirectory(), @"sample_data\iris\iris.csv");
 
@@ -31,7 +31,7 @@ namespace UnitTests
             LearningApi api = new LearningApi();
             //prepares the ML Algoritm
             api.UseBackPropagation(1, 0.2, 1.0, null);
-
+            
             //connect to data file for streaming the data
             api.UseCsvDataProvider(path, ',', 1);
             

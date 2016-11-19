@@ -62,7 +62,7 @@ namespace LearningFoundation.DataMappers
         /// </summary>
         /// <param name="filePath">path of the file contining mapper configuration</param>
         /// <returns>.Net data mapper object</returns>
-        public static DataMapper loadMapper(string filePath)
+        public static DataMapper Load(string filePath)
         {
             var dm = new DataMapper();
 

@@ -1,15 +1,16 @@
 {
   "version": "1.0.0-*",
-
   "dependencies": {
     "LearningApi": "1.0.0-*",
     "NETStandard.Library": "1.6.0",
     "System.IO.FileSystem": "4.0.1"
   },
-
   "frameworks": {
     "netstandard1.2": {
       "imports": "dnxcore50"
     }
+  },
+  "buildOptions": {
+    "xmlDoc": true
   }
 }
