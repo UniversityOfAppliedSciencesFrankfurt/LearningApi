@@ -11,10 +11,10 @@ namespace LearningFoundation.DataMappers
     /// </summary>
     public class DataMapper : IDataMapper
     {
-        //array of feature which play role in training 
-        private Column[] m_Features;
-
-        //private Column m_Label;
+        /// <summary>
+        ///array of feature which play role in training 
+        /// </summary>
+        public Column[] Features { get; set; }
 
         /// <summary>
         /// main constructor
@@ -66,14 +66,14 @@ namespace LearningFoundation.DataMappers
         /// <returns></returns>
         public int GetFeatureIndex(int feature)
         {
-            return m_Features[feature].Index;
+            return Features[feature].Index;
         }
 
         /// <summary>
         /// Transform the featureVector from natural format in to double format.
-        /// If the data is loaded from the file, all data are in string format regadles of the type of the column.
-        /// THis method transform string values in to numeric value. ALso in case of the binary or the category type
-        /// it returns number representation of the class. Eg. 0 or 1 in case of binary, 
+        /// If the data is loaded from the file, all data are in string format regadless of the type of the column.
+        /// THis method transform string values in to numeric value. Also in case of the binary or the category type
+        /// it transforms binary or category value in to number representation of the class. Eg. 0 or 1 in case of binary, 
         /// and 0,1,2,3...n, whre n is number of categories, in case of category type.
         /// </summary>
         /// <param name="rawData"></param>
@@ -86,7 +86,7 @@ namespace LearningFoundation.DataMappers
             for(int i=0; i< rawData.Length; i++)
             {
                
-                var col= m_Features[i];
+                var col= Features[i];
                 if (col.Type == 0)
                     continue;
                 else if(col.Type == 1)//numeric column

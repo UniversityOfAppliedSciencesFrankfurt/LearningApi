@@ -28,7 +28,7 @@ namespace LearningFoundation.DataNormalizers
         /// <returns></returns>
         public double[] DeNormalize(double[] normilizedData)
         {
-            throw new NotImplementedException();
+            return new double[1];
         }
         /// <summary>
         /// perform process of normalization where natural data is being transformd in to normalized format
@@ -37,7 +37,7 @@ namespace LearningFoundation.DataNormalizers
         /// <returns></returns>
         public double[] Normalize(double[] rawData)
         {
-            throw new NotImplementedException();
+            return new double[1];
         }
     }
 }
