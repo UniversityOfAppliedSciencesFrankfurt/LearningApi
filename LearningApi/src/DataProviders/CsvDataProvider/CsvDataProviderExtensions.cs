@@ -7,8 +7,19 @@ using System.Threading.Tasks;
 
 namespace LearningFoundation.DataProviders
 {
+    /// <summary>
+    /// Extension method for loading and parsing data from SCV file 
+    /// </summary>
     public static class CsvDataProviderExtensions
     {
+        /// <summary>
+        /// perform the loading data from SCV file
+        /// </summary>
+        /// <param name="api">instance of the LearningAPI</param>
+        /// <param name="fileName">csv file path</param>
+        /// <param name="delimiter">csv delimiter</param>
+        /// <param name="skipRows">firs several rows which should be skiped in parsing</param>
+        /// <returns></returns>
         public static LearningApi UseCsvDataProvider(this LearningApi api, string fileName, char delimiter, int skipRows = 0)       
         {
             //
@@ -27,7 +38,7 @@ namespace LearningFoundation.DataProviders
         /// <summary>
         /// Creating dataset row by row
         /// </summary>
-        /// <param name="fileName">csv filepath</param>
+        /// <param name="reader">csv file reade</param>
         /// <param name="delimeter">csvdelimiter</param>
         /// <returns></returns>
         private static IEnumerable<object[]> LoadDataFromFile(StreamReader reader, char delimeter)

@@ -8,12 +8,19 @@ using System.Collections;
 
 namespace LearningFoundation.DataProviders
 {
+    /// <summary>
+    /// Implememtation of loading data from CSV file
+    /// </summary>
     public class CsvDataProvider : IDataProvider
     {
-        public string[] Header { get; set; }
+
+        //public string[] Header { get; set; }
 
         //
         IEnumerable<object[]> list = new List<object[]>();
+        /// <summary>
+        /// Respesent the loaded data
+        /// </summary>
         public IEnumerable<object[]> DataSet
         {
             get
@@ -28,18 +35,26 @@ namespace LearningFoundation.DataProviders
         }
         int m_Current = 0;
 
+        /// <summary>
+        /// main constructor
+        /// </summary>
         public CsvDataProvider()
         {
         }
 
+        /// <summary>
+        /// Current object of the enumerator
+        /// </summary>
         public object[] Current
         {
             get
             {
-                return list.ElementAt(m_Current);
+                return list.ElementAtOrDefault(m_Current);
             }
         }
-
+        /// <summary>
+        /// Current item of the enumerator
+        /// </summary>
         object IEnumerator.Current
         {
             get
@@ -48,16 +63,25 @@ namespace LearningFoundation.DataProviders
             }
         }
 
+        /// <summary>
+        /// Disposing the enumerator
+        /// </summary>
         public void Dispose()
         {
          
         }
 
+        /// <summary>
+        /// can enumerator move one idex forward
+        /// </summary>
+        /// <returns></returns>
         public bool MoveNext()
         {
-            return m_Current < list.Count();
+            return true;//m_Current < list.Count();
         }
-
+        /// <summary>
+        /// reset index of the enumerator
+        /// </summary>
         public void Reset()
         {
         }

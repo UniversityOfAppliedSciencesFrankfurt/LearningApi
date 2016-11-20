@@ -9,20 +9,20 @@ namespace LearningFoundation
     /// <summary>
     /// Performs data normalization and denormalization.
     /// </summary>
-    public interface IDataNormilizer
+    public interface IDataNormalizer
     {
         /// <summary>
         /// Does normalization of vector in rawData
         /// </summary>
         /// <param name="rawData">Vector with raw scalar values.</param>
         /// <returns></returns>
-        double[] Normilize(double[] rawData );
+        double[] Normalize(double[] rawData );
 
         /// <summary>
         /// Denormilizes normalized data.
         /// </summary>
         /// <param name="normilizedData"></param>
         /// <returns></returns>
-        double[] DeNormilize(double[] normilizedData);
+        double[] DeNormalize(double[] normilizedData);
     }
 }
