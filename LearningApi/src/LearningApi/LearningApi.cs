@@ -72,9 +72,7 @@ namespace LearningFoundation
                     await this.Algorithm.Train(normFeatureVector, data[labelIndx]);
                 }
                 else
-                    break;//if the nex item is null, we reached the end of the list
-
-                
+                    break;//if the next item is null, we reached the end of the list
             }
         }
     }

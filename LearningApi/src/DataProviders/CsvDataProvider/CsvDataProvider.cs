@@ -13,9 +13,6 @@ namespace LearningFoundation.DataProviders
     /// </summary>
     public class CsvDataProvider : IDataProvider
     {
-
-        //public string[] Header { get; set; }
-
         //
         IEnumerable<object[]> list = new List<object[]>();
         /// <summary>
@@ -72,11 +69,12 @@ namespace LearningFoundation.DataProviders
         }
 
         /// <summary>
-        /// can enumerator move one idex forward
+        /// enumerator move one index forward
         /// </summary>
         /// <returns></returns>
         public bool MoveNext()
         {
+            m_Current++;
             return true;//m_Current < list.Count();
         }
         /// <summary>

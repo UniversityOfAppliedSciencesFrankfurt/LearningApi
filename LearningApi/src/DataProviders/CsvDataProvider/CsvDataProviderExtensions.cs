@@ -25,8 +25,7 @@ namespace LearningFoundation.DataProviders
             //
             var dp = new CsvDataProvider();
             //
-            StreamReader reader = File.OpenText(fileName);
-            var rawData = LoadDataFromFile(reader, delimiter);
+            var rawData = LoadDataFromFile(fileName, delimiter);
 
             //create dataset
             dp.DataSet = rawData.Skip(skipRows);
@@ -38,31 +37,34 @@ namespace LearningFoundation.DataProviders
         /// <summary>
         /// Creating dataset row by row
         /// </summary>
-        /// <param name="reader">csv file reade</param>
+        /// <param name="fileName">csv file reade</param>
         /// <param name="delimeter">csvdelimiter</param>
         /// <returns></returns>
-        private static IEnumerable<object[]> LoadDataFromFile(StreamReader reader, char delimeter)
+        private static IEnumerable<object[]> LoadDataFromFile(string fileName, char delimeter)
         {
-            
-            //
-            foreach (string line in ReadLineFromFile(reader))
+            using (StreamReader reader = File.OpenText(fileName))
             {
-
-                //split line in to column
-                var strCols = line.Split(delimeter);
-
-                //Transform data from row->col in to col->row
-                var rawData = new object[strCols.Length];
-
-                //define columns
-                for (int i = 0; i < strCols.Length; i++)
+                //
+                foreach (string line in ReadLineFromFile(reader))
                 {
-                    rawData[i] = strCols[i];
 
+                    //split line in to column
+                    var strCols = line.Split(delimeter);
+
+                    //Transform data from row->col in to col->row
+                    var rawData = new object[strCols.Length];
+
+                    //define columns
+                    for (int i = 0; i < strCols.Length; i++)
+                    {
+                        rawData[i] = strCols[i];
+
+                    }
+
+                    yield return rawData;
                 }
-
-                yield return rawData;
             }
+                
         }
 
         /// <summary>
@@ -72,7 +74,7 @@ namespace LearningFoundation.DataProviders
         /// <returns></returns>
         private static IEnumerable<string> ReadLineFromFile(StreamReader reader)
         {
-            using (reader)
+           // using (reader)
             {
                 string currentLine;
                 while ((currentLine = reader.ReadLine()) != null)
