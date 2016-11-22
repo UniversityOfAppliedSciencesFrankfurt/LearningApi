@@ -37,7 +37,7 @@ namespace UnitTests
             var dm = DataMapper.Load(irisMapperFilePath);
 
             //setup normalizer to prepare data for normalization
-            api.Normilizer = new DataNormalizer(dm); 
+            api.Normilizer = new MinMaxNormalizer(dm); 
 
             //connect to data file for streaming the data
             api.UseCsvDataProvider(path, ',', 1);
