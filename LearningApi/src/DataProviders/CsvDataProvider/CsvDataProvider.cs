@@ -8,12 +8,17 @@ using System.Collections;
 
 namespace LearningFoundation.DataProviders
 {
+    /// <summary>
+    /// DataProvider implementation in case data is comming from CSV file
+    /// </summary>
     public class CsvDataProvider : IDataProvider
     {
-        public string[] Header { get; set; }
-
         //
         IEnumerable<object[]> list = new List<object[]>();
+
+        /// <summary>
+        /// Respesent the loaded data
+        /// </summary>
         public IEnumerable<object[]> DataSet
         {
             get
@@ -28,18 +33,29 @@ namespace LearningFoundation.DataProviders
         }
         int m_Current = 0;
 
+        /// <summary>
+        /// main constructor
+        /// </summary>
         public CsvDataProvider()
         {
         }
 
+        /// <summary>
+        /// Current object of the enumerator
+        /// </summary>
         public object[] Current
         {
             get
             {
-                return list.ElementAt(m_Current);
+                var val= list.ElementAtOrDefault(m_Current);
+                if (val == null)
+                    Reset();
+                return val;
             }
         }
-
+        /// <summary>
+        /// Current item of the enumerator
+        /// </summary>
         object IEnumerator.Current
         {
             get
@@ -48,18 +64,29 @@ namespace LearningFoundation.DataProviders
             }
         }
 
+        /// <summary>
+        /// Disposing the enumerator
+        /// </summary>
         public void Dispose()
         {
          
         }
 
+        /// <summary>
+        /// enumerator move one index forward
+        /// </summary>
+        /// <returns></returns>
         public bool MoveNext()
         {
-            return m_Current < list.Count();
+            m_Current++;
+            return true;//m_Current < list.Count();
         }
-
+        /// <summary>
+        /// reset index of the enumerator
+        /// </summary>
         public void Reset()
         {
+            m_Current = 0;
         }
     }
 }
