@@ -7,3 +7,19 @@ It is sometimes called Anderson's Iris data set because Edgar Anderson collected
  -Four features were measured from each sample: the length and the width of the sepals and petals, in centimetres. 
  Based on the combination of these four features, Fisher developed a linear discriminant model to distinguish the species from each other.
 - The data set consists of samples from each of three species of Iris (Iris setosa, Iris virginica and Iris versicolor).
+
+
+//#line which begins with # is comment and should not be parsed
+//
+//#######         LearningAPI data mapper file for iris data set       ########
+//
+//# col:f- feature, l - label (only one is alowed), i - ignore column
+//# - colType, num - numerical column, bin - binary column, catx - category column with x - categories,
+//# str - string column which shoub be avoided during mapping
+//#normalisation: minmax, gaus, none, ....
+//#missingvalue:min, max, mean, ......
+//
+//col:f,f,f,f,l
+//coltype:num,num,num,num,cat3
+//normalisation:minmax,minmax,minmax,minmax,none 
+//missingvalue:mean,mean,mean,mean,mean
