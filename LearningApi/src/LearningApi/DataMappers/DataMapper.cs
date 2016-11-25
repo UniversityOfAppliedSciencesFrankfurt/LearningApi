@@ -162,7 +162,7 @@ namespace LearningFoundation.DataMappers
 
             for (int j = 0; j < stats.Length; j++)
             {
-                var col = new DataMappers.ColumnStatistics(j + 1, data.Select(x => x[j]).ToArray());
+                var col = new ColumnStatistics(j + 1, data.Select(x => x[j]).ToArray());
                 stats[j] = col;
             }
 
