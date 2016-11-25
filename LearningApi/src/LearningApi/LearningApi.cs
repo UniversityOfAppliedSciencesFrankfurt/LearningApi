@@ -52,7 +52,7 @@ namespace LearningFoundation
             int numOfFeatures = this.DataMapper.NumOfFeatures;
             int labelIndx = this.DataMapper.LabelIndex;
 
-            while (this.DataProvider.MoveNext())
+            do
             {
                 var rawData = this.DataProvider.Current;
 
@@ -67,13 +67,13 @@ namespace LearningFoundation
                         featureVector[i] = data[this.DataMapper.GetFeatureIndex(i)];
                     }
 
-                    var normFeatureVector = this.Normilizer.Normalize(featureVector);
+                    var normFeatureVector = this.Normilizer.Normalize(this.DataMapper.Statistics,featureVector);
 
                     await this.Algorithm.Train(normFeatureVector, data[labelIndx]);
                 }
                 else
                     break;//if the next item is null, we reached the end of the list
-            }
-        }
+            } while (this.DataProvider.MoveNext());
+        }       
     }
 }

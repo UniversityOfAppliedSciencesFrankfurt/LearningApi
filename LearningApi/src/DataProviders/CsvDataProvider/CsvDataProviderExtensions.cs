@@ -40,7 +40,7 @@ namespace LearningFoundation.DataProviders
         /// <param name="fileName">csv file reade</param>
         /// <param name="delimeter">csvdelimiter</param>
         /// <returns></returns>
-        private static IEnumerable<object[]> LoadDataFromFile(string fileName, char delimeter)
+        public static IEnumerable<object[]> LoadDataFromFile(string fileName, char delimeter)
         {
             using (StreamReader reader = File.OpenText(fileName))
             {
@@ -68,19 +68,16 @@ namespace LearningFoundation.DataProviders
         }
 
         /// <summary>
-        /// Reading file line by line with IEnumerable collection.
+        /// Reading stream reader line by line with IEnumerable collection.
         /// </summary>
         /// <param name="reader"></param>
         /// <returns></returns>
         private static IEnumerable<string> ReadLineFromFile(StreamReader reader)
         {
-           // using (reader)
+            string currentLine;
+            while ((currentLine = reader.ReadLine()) != null)
             {
-                string currentLine;
-                while ((currentLine = reader.ReadLine()) != null)
-                {
-                    yield return currentLine;
-                }
+                yield return currentLine;
             }
         }
     }

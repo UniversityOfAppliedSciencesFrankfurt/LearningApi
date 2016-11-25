@@ -14,9 +14,12 @@ namespace LearningFoundation.DataNormalizers
     /// </summary>
     public class GaussNormalizer : IDataNormalizer
     {
-        double m_avg;
-        double m_variance;
         DataMapper m_dataMapper;
+
+        /// <summary>
+        /// Main Constructor
+        /// </summary>
+        /// <param name="mapper"></param>
         public GaussNormalizer(DataMapper mapper)
         {
             m_dataMapper = mapper;
@@ -28,7 +31,7 @@ namespace LearningFoundation.DataNormalizers
         /// </summary>
         /// <param name="normalizedData"></param>
         /// <returns></returns>
-        public double[] DeNormalize(double[] normalizedData)
+        public double[] DeNormalize(IStatistics[] statsistics, double[] normalizedData)
         {
             
             var rawData = new List<double>();
@@ -37,7 +40,7 @@ namespace LearningFoundation.DataNormalizers
                 //numeric column
                 if (m_dataMapper.Features[i].Type == 1)
                 {
-                    var value = m_avg + normalizedData[i] * m_variance;
+                    var value = statsistics[i].Mean + normalizedData[i] * statsistics[i].Variance;
                     rawData.Add(value);
                 }
                 //binary column
@@ -72,13 +75,14 @@ namespace LearningFoundation.DataNormalizers
             //
             return rawData.ToArray();
         }
+        
         /// <summary>
         /// perform process of normalization where natural data is being transformd in to normalized format
         /// x_nor=(val-average)/variance
         /// </summary>
         /// <param name="rawData"></param>
         /// <returns></returns>
-        public double[] Normalize(double[] rawData)
+        public double[] Normalize(IStatistics[] statsistics, double[] rawData)
         {
             var normData = new List<double>();
             for (int i = 0; i < rawData.Length; i++)
@@ -86,18 +90,18 @@ namespace LearningFoundation.DataNormalizers
                 //numeric column
                 if (m_dataMapper.Features[i].Type == 1)
                 {
-                    var value = (rawData[i] - m_avg) / m_variance;
+                    var value = (rawData[i] - statsistics[i].Mean) / statsistics[i].Variance;
                     normData.Add(value);
                 }
                 //binary column
-                else if (m_dataMapper.Features[i].Type == 1)
+                else if (m_dataMapper.Features[i].Type == 2)
                 {
                     //in case of binary column type real and normalized value are the same
                     normData.Add(rawData[i]);
 
                 }
                 //category column
-                else if (m_dataMapper.Features[i].Type == 1)
+                else if (m_dataMapper.Features[i].Type == 3)
                 {
                     // COnverts category numeric values in to binary values
                     // it creates array which has length of categories count.

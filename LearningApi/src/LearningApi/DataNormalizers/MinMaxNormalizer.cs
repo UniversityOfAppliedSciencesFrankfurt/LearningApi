@@ -14,19 +14,23 @@ namespace LearningFoundation.DataNormalizers
     public class MinMaxNormalizer : IDataNormalizer
     {
         DataMapper m_dataMapper;
-        double m_min;
-        double m_max;
+
+        /// <summary>
+        /// Main constructor
+        /// </summary>
+        /// <param name="mapper"></param>
         public MinMaxNormalizer(DataMapper mapper)
         {
             m_dataMapper = mapper;
         }
+
 
         /// <summary>
         /// perform process of denormalization where normalized data  is being transformed in to natural format
         /// </summary>
         /// <param name="normalizedData"></param>
         /// <returns></returns>
-        public double[] DeNormalize(double[] normalizedData)
+        public double[] DeNormalize(IStatistics[] statsistics, double[] normalizedData)
         {
             var rawData = new List<double>();
             for (int i = 0; i < normalizedData.Length; i++)
@@ -34,7 +38,7 @@ namespace LearningFoundation.DataNormalizers
                 //numeric column
                 if (m_dataMapper.Features[i].Type == 1)
                 {
-                    var value = m_min + normalizedData[i] * (m_max - m_min);
+                    var value = statsistics[i].Min + normalizedData[i] * (statsistics[i].Max - statsistics[i].Min);
                     rawData.Add(value);
                 }
                 //binary column
@@ -69,12 +73,14 @@ namespace LearningFoundation.DataNormalizers
             //
             return rawData.ToArray();
         }
+
+
         /// <summary>
         /// perform process of normalization where natural data is being transformd in to normalized format
         /// </summary>
         /// <param name="rawData"></param>
         /// <returns></returns>
-        public double[] Normalize(double[] rawData)
+        public double[] Normalize(IStatistics[] statsistics, double[] rawData)
         {
             var normData = new List<double>();
             for (int i = 0; i < rawData.Length; i++)
@@ -82,7 +88,7 @@ namespace LearningFoundation.DataNormalizers
                 //numeric column
                 if (m_dataMapper.Features[i].Type == 1)
                 {
-                    var value = (rawData[i] - m_min) / (m_max - m_min);
+                    var value = (rawData[i] - statsistics[i].Min) / (statsistics[i].Max - statsistics[i].Min);
                     normData.Add(value);
                 }
                 //binary column
@@ -104,7 +110,7 @@ namespace LearningFoundation.DataNormalizers
                     //          Blue  =  (0,0,1)  - three values which sum is 1,
                     //          Red   =  (1,0,0)
                     //          Green =  (0,1,0)
-                   var count= m_dataMapper.Features[i].Values.Length;
+                    var count= m_dataMapper.Features[i].Values.Length;
                     for(int j=0; j<count; j++)
                     {
                         if (j == rawData[i])

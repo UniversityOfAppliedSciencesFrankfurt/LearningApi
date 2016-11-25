@@ -17,6 +17,11 @@ namespace LearningFoundation.DataMappers
         public Column[] Features { get; set; }
 
         /// <summary>
+        ///basic statistics for every column
+        /// </summary>
+        public IStatistics[] Statistics { get; set; }
+
+        /// <summary>
         /// main constructor
         /// </summary>
         public DataMapper()
@@ -132,6 +137,39 @@ namespace LearningFoundation.DataMappers
         }
 
         /// <summary>
+        /// Calculates the basic statistics for each column in data set
+        /// </summary>
+        /// <param name="dp"></param>
+        public static IStatistics[] CalculateStatistics(IDataProvider dp, IDataMapper dm)
+        {
+            //
+            List<double[]> data = new List<double[]>();
+            do
+            {
+                var rawData = dp.Current;  
+
+                if (rawData != null)
+                {
+                    var row = dm.MapInputVector(rawData);
+                    data.Add(row);
+
+                }
+                else
+                    break;//if the next item is null, we reached the end of the list
+            } while (dp.MoveNext());
+
+            IStatistics[] stats = new ColumnStatistics[data[0].Length];
+
+            for (int j = 0; j < stats.Length; j++)
+            {
+                var col = new DataMappers.ColumnStatistics(j + 1, data.Select(x => x[j]).ToArray());
+                stats[j] = col;
+            }
+
+            return stats;
+        }
+
+        /// <summary>
         /// Initialize mapper from file
         /// </summary>
         /// <param name="filePath">path of the file contining mapper configuration</param>
@@ -205,7 +243,7 @@ namespace LearningFoundation.DataMappers
         public double DefaultMissingValue { get; set; }
     }
 
-
+   
     /// <summary>
     /// todo
     /// </summary>

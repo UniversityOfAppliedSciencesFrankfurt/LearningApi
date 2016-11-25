@@ -23,18 +23,23 @@ namespace UnitTests
         public bool InitNeuralBackPropagationTest()
         {
           //  InitIrisMapperInJsonFormat_helper();
+
             //mapper initialization
             var irisMapperFilePath = System.IO.Path.Combine(Directory.GetCurrentDirectory(), @"sample_data\iris\iris_mapper.txt");
+            
             //iris data file
             var path = System.IO.Path.Combine(Directory.GetCurrentDirectory(), @"sample_data\iris\iris.csv");
 
             //creates learning api object
             LearningApi api = new LearningApi();
+
             //prepares the ML Algoritm
             api.UseBackPropagation(1, 0.2, 1.0, null);
 
             //init mapper for data 
             var dm = DataMapper.Load(irisMapperFilePath);
+            //assign data mapper
+            api.DataMapper = dm;
 
             //setup normalizer to prepare data for normalization
             api.Normilizer = new MinMaxNormalizer(dm); 
@@ -42,10 +47,12 @@ namespace UnitTests
             //connect to data file for streaming the data
             api.UseCsvDataProvider(path, ',', 1);
 
-            //api.AddBlobStorageDataSourceProvider();
+            //After Data provider is initialized statistics must be created
+            var stat = DataMapper.CalculateStatistics(api.DataProvider, dm);
+            //assign statistics
+            api.DataMapper.Statistics = stat;
 
-            //
-            api.DataMapper = dm;
+
             //start process of learning
             api.TrainAsync().Wait();
 

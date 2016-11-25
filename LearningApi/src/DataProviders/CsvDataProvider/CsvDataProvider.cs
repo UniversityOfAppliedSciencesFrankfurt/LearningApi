@@ -9,12 +9,13 @@ using System.Collections;
 namespace LearningFoundation.DataProviders
 {
     /// <summary>
-    /// Implememtation of loading data from CSV file
+    /// DataProvider implementation in case data is comming from CSV file
     /// </summary>
     public class CsvDataProvider : IDataProvider
     {
         //
         IEnumerable<object[]> list = new List<object[]>();
+
         /// <summary>
         /// Respesent the loaded data
         /// </summary>
@@ -46,7 +47,10 @@ namespace LearningFoundation.DataProviders
         {
             get
             {
-                return list.ElementAtOrDefault(m_Current);
+                var val= list.ElementAtOrDefault(m_Current);
+                if (val == null)
+                    Reset();
+                return val;
             }
         }
         /// <summary>
@@ -82,6 +86,7 @@ namespace LearningFoundation.DataProviders
         /// </summary>
         public void Reset()
         {
+            m_Current = 0;
         }
     }
 }

@@ -15,14 +15,16 @@ namespace LearningFoundation
         /// Does normalization of vector in rawData
         /// </summary>
         /// <param name="rawData">Vector with raw scalar values.</param>
+        /// <param name="statsistics">Basic statistics for each feture (columns).</param>
         /// <returns></returns>
-        double[] Normalize(double[] rawData );
+        double[] Normalize(IStatistics[] statsistics, double[] rawData );
 
         /// <summary>
         /// Denormilizes normalized data.
+        /// <param name="statsistics">Basic statistics for each feture (columns).</param>
         /// </summary>
         /// <param name="normilizedData"></param>
         /// <returns></returns>
-        double[] DeNormalize(double[] normilizedData);
+        double[] DeNormalize(IStatistics[] statsistics, double[] normilizedData);
     }
 }
