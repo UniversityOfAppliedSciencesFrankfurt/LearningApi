@@ -5,7 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using LearningFoundation;
 
-namespace NeuronalNet.BackPropagation
+namespace NeuralNet.BackPropagation
 {
     public class BackPropagationNetwork : NeuralNetCore
     {

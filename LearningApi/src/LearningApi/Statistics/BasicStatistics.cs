@@ -3,19 +3,19 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace LearningFoundation.DataMappers
+namespace LearningFoundation.Statistics
 {
     /// <summary>
     /// Class repr
     /// </summary>
-    public class ColumnStatistics : IStatistics
+    public class BasicStatistics : IStatistics
     {
         /// <summary>
         /// Constructor which accept column data, and stats will be automaticaly
         /// </summary>
         /// <param name="colId">Column Id which stat is related</param>
         /// <param name="colData"> column data</param>
-        public ColumnStatistics(int colId, double[] colData)
+        public BasicStatistics(int colId, double[] colData)
         {
             ColumnId = colId;
             Min = colData.Min();
@@ -34,7 +34,7 @@ namespace LearningFoundation.DataMappers
         /// <param name="max">max value of the col data</param>
         /// <param name="mean">mean value of the col data</param>
         /// <param name="variance">variance value of the col data</param>
-        public ColumnStatistics(int colId, double min, double max, double mean, double variance)
+        public BasicStatistics(int colId, double min, double max, double mean, double variance)
         {
             ColumnId = colId;
             Min = min;
@@ -42,6 +42,33 @@ namespace LearningFoundation.DataMappers
             Mean = mean;
             Range = Max - Min;
             Variance = variance;
+        }
+
+        /// <summary>
+        /// Calculates the basic statistics for each column in dataset
+        /// </summary>
+        /// <param name="dataSet">data set</param>
+        /// <param name="dm">datamaper related to dataSet</param>
+        /// <returns></returns>
+        public static IStatistics[] CalculateStatistics(IEnumerable<object[]> dataSet, IDataMapper dm)
+        {
+            //
+            List<double[]> data = new List<double[]>();
+            foreach(var row in dataSet)
+            {
+                var r = dm.MapInputVector(row);
+                data.Add(r);
+            } 
+
+            IStatistics[] stats = new BasicStatistics[data[0].Length];
+
+            for (int j = 0; j < stats.Length; j++)
+            {
+                var col = new BasicStatistics(j + 1, data.Select(x => x[j]).ToArray());
+                stats[j] = col;
+            }
+
+            return stats;
         }
 
         /// <summary>

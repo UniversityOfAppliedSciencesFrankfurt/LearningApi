@@ -1,15 +1,17 @@
-﻿using LearningFoundation;
-using LearningFoundation.DataProviders;
+﻿
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using NeuronalNet.BackPropagation;
+using Newtonsoft.Json;
+
 using Xunit;
 using System.IO;
+using LearningFoundation;
+using LearningFoundation.DataProviders;
 using LearningFoundation.DataMappers;
-using Newtonsoft.Json;
-using LearningFoundation.DataNormalizers;
+using LearningFoundation.Statistics;
+using LearningFoundation.Normalizers;
 
 namespace UnitTests
 {
@@ -22,7 +24,7 @@ namespace UnitTests
     {
         //helper for test run
         LearningApi m_api;
-        IStatistics[] m_stats;//basic statistics of the columns data
+        BasicStatistics[] m_stats;//basic statistics of the iris data
 
         //file path for data and results data
         string m_irisNumericDataFilePath;
@@ -34,23 +36,29 @@ namespace UnitTests
         /// </summary>
         public NormalizationTests()
         {
+            //create stat for IRIS data
+            m_stats = new BasicStatistics[5]
+            {
+                new BasicStatistics(1, 4.3, 7.9, 5.84333333333, 0.681122222),
+                new BasicStatistics(2, 2.0, 4.4, 3.05733333333, 0.188712889),
+                new BasicStatistics(3, 1.0, 6.9, 3.75800000000, 3.095502667),
+                new BasicStatistics(4, 0.1, 2.5, 1.19933333333, 0.577132889),
+                new BasicStatistics(5, 0, 0, 0, 0),
+            };
             //iris data file paths
             var irisRealDataFilePath = System.IO.Path.Combine(Directory.GetCurrentDirectory(), @"sample_data\iris\iris.csv");
             m_irisNumericDataFilePath = System.IO.Path.Combine(Directory.GetCurrentDirectory(), @"sample_data\iris\iris_numeric.csv");
             m_irisMinMaxNormalizedDataFilePath = System.IO.Path.Combine(Directory.GetCurrentDirectory(), @"sample_data\iris\iris_minmax_normalized.csv");
             m_irisGaussNormalizedDataFilePath = System.IO.Path.Combine(Directory.GetCurrentDirectory(), @"sample_data\iris\iris_gauss_normalized.csv");
             //iris mapper
-            var irisMapperFilePath = System.IO.Path.Combine(Directory.GetCurrentDirectory(), @"sample_data\iris\iris_mapper.txt");
+            var irisMapperFilePath = System.IO.Path.Combine(Directory.GetCurrentDirectory(), @"sample_data\iris\iris_mapper.json");
 
             m_api = new LearningApi();
             //create datamapper 
-            m_api.DataMapper = DataMapper.Load(irisMapperFilePath);
+            m_api.DataMapper = DefaultDataMapperExtensions.Load(irisMapperFilePath);
             //create dataprovider
             m_api.UseCsvDataProvider(irisRealDataFilePath, ',', 1);
-
-            //create statistics of the data
-            m_stats = DataMapper.CalculateStatistics(m_api.DataProvider, m_api.DataMapper);
-            m_api.DataMapper.Statistics = m_stats;
+         
 
         }
 
@@ -64,7 +72,7 @@ namespace UnitTests
         [Fact]
         public bool NormalizeData_With_MinMax_Normalized_Test()
         {
-            var minmax = new MinMaxNormalizer(m_api.DataMapper as DataMapper);
+            var minmax = new MinMaxNormalizer(m_api.DataMapper as DataMapper, m_stats.Select(x=>x.Min).ToArray(), m_stats.Select(x => x.Max).ToArray());
 
             //numeric data
             var numeric = CsvDataProviderExtensions.LoadDataFromFile(m_irisNumericDataFilePath, ',');
@@ -109,7 +117,7 @@ namespace UnitTests
                     // R normalized value id (1,0,0)
                     // G normalized in to (0,1,0)
                     // B normalized int to (0,0,1)
-                    var normFeatureVector = minmax.Normalize(m_api.DataMapper.Statistics,featureVector);
+                    var normFeatureVector = minmax.Normalize(/*m_api.DataMapper.BasicStatistics,*/featureVector);
                     //test corectness of normalized data
                     var normRow = normalized.ElementAt(index);
                     for (int i = 0; i < normFeatureVector.Length; i++)
@@ -139,7 +147,7 @@ namespace UnitTests
         [Fact]
         public bool NormalizeData_With_Gauss_Test()
         {
-            var gaus = new GaussNormalizer(m_api.DataMapper as DataMapper);
+            var gaus = new GaussNormalizer(m_api.DataMapper as DataMapper,m_stats.Select(x => x.Mean).ToArray(), m_stats.Select(x => x.Variance).ToArray());
             
 
             //numeric data
@@ -188,16 +196,16 @@ namespace UnitTests
                     // R normalized value id (1,0,0)
                     // G normalized in to (0,1,0)
                     // B normalized int to (0,0,1)
-                    var normFeatureVector = gaus.Normalize(m_api.DataMapper.Statistics, featureVector);
+                    var normFeatureVector = gaus.Normalize(featureVector);
 
                     //test corectness of normalized data
                     var normRow = normalized.ElementAt(index);
-                    for (int i = 0; i < numericRow.Length; i++)
+                    for (int i = 0; i < normFeatureVector.Length; i++)
                     {
                         var testValue = double.Parse(normRow[i].ToString());
                         var normValue = double.Parse(normFeatureVector[i].ToString());
 
-                        Assert.True(Math.Round(normValue,9) == testValue, "Inconsistent data while normalization data");
+                        Assert.True(Math.Round(testValue/normValue,6) == 1, "Inconsistent data while normalization data");
 
                     }
 
