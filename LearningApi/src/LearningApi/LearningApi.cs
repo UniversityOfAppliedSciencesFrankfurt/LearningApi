@@ -16,14 +16,21 @@ namespace LearningFoundation
         /// Gets/Sets DataProvider for loading of the data.
         /// </summary>
         public IDataProvider DataProvider { get; set; }
+        
         /// <summary>
         /// Gets/Sets specifics ML algortim for training
         /// </summary>
         public IAlgorithm Algorithm { get; set; }
+
         /// <summary>
         /// Gets/Sets specifics normalization algoritm
         /// </summary>
-        public IDataNormalizer Normilizer { get; set; }
+        public IDataNormalizer Normalizer { get; set; }
+
+        /// <summary>
+        /// Gets/Sets specifics normalization algoritm
+        /// </summary>
+        public IStatistics Statistics { get; set; }
 
         /// <summary>
         /// Used to map input columns to features.
@@ -42,7 +49,33 @@ namespace LearningFoundation
         {
             return null;
         }
-        
+
+        /// <summary>
+        /// Transform numeric to normalized row 
+        /// </summary>
+        /// <param name="featureVector"></param>
+        /// <returns></returns>
+        private double[] Normalize(double[] featureVector)
+        {
+            if (Normalizer == null)
+                return featureVector;
+            else
+                return Normalizer.Normalize(featureVector);
+        }
+
+        /// <summary>
+        /// Transform normalized in to numeric row 
+        /// </summary>
+        /// <param name="featureVector"></param>
+        /// <returns></returns>
+        private double[] DeNormalize(double[] normVector)
+        {
+            if (Normalizer == null)
+                return normVector;
+            else
+                return Normalizer.DeNormalize(normVector);
+        }
+
         /// <summary>
         /// Enumerates all data and runs a single training epoch. 
         /// </summary>
@@ -67,13 +100,14 @@ namespace LearningFoundation
                         featureVector[i] = data[this.DataMapper.GetFeatureIndex(i)];
                     }
 
-                    var normFeatureVector = this.Normilizer.Normalize(this.DataMapper.Statistics,featureVector);
+                    var normFeatureVector = Normalize(featureVector);
 
+                    ///
                     await this.Algorithm.Train(normFeatureVector, data[labelIndx]);
                 }
                 else
                     break;//if the next item is null, we reached the end of the list
             } while (this.DataProvider.MoveNext());
-        }       
+        }
     }
 }

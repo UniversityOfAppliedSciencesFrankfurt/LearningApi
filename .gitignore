@@ -107,3 +107,7 @@ LearningApi/test/obj/Debug/netcoreapp1.0/dotnet-compile-csc.rsp
 /LearningApi/.vs
 /LearningApi/test/obj
 /LearningApi/test/bin
+/LearningApi/src/Normalizers/MinMaxNormalizer/bin/Debug/netstandard1.2
+/LearningApi/src/Normalizers/MinMaxNormalizer/obj/Debug/netstandard1.2
+/LearningApi/src/Normalizers/GaussNormalizer/bin/Debug/netstandard1.2
+/LearningApi/src/Normalizers/GaussNormalizer/obj/Debug/netstandard1.2

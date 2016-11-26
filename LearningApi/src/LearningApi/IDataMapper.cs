@@ -20,12 +20,7 @@ namespace LearningFoundation
         /// </summary>
         int NumOfFeatures { get; set; }
 
-        /// <summary>
-        /// Statistics for columns
-        /// </summary>
-        /// <returns></returns>
-        IStatistics[] Statistics { get; set; }
-
+        
         /// <summary>
         /// Gets the index of specified feature.
         /// Features: 
@@ -45,7 +40,6 @@ namespace LearningFoundation
         /// <param name="rawData"></param>
         /// <returns></returns>
         double[] MapInputVector(object[] rawData);
-
-       
+      
     }
 }

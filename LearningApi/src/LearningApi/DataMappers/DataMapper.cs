@@ -12,16 +12,6 @@ namespace LearningFoundation.DataMappers
     public class DataMapper : IDataMapper
     {
         /// <summary>
-        ///array of feature which play role in training 
-        /// </summary>
-        public Column[] Features { get; set; }
-
-        /// <summary>
-        ///basic statistics for every column
-        /// </summary>
-        public IStatistics[] Statistics { get; set; }
-
-        /// <summary>
         /// main constructor
         /// </summary>
         public DataMapper()
@@ -29,6 +19,12 @@ namespace LearningFoundation.DataMappers
 
         }
 
+        /// <summary>
+        ///array of feature which play role in training 
+        /// </summary>
+        public Column[] Features { get; set; }
+
+                
         private int m_LabelIndex;
         /// <summary>
         /// Position/Index of the Label column in data row
@@ -90,27 +86,35 @@ namespace LearningFoundation.DataMappers
             //transform rawData in to raw of Fetures with proper type, normalization value, and coresct binary and catogery type 
             for(int i=0; i< rawData.Length; i++)
             {
+                //check if the value is valid 
+                
+                
                
                 var col= Features[i];
-                if (col.Type == 0)
+                if (col.Type ==  ColumnType.STRING)
                     continue;
-                else if(col.Type == 1)//numeric column
+                else if(col.Type ==  ColumnType.NUMERIC)//numeric column
                 {
                     var val = rawData[col.Index];
                     double value = double.NaN;
+
+                    //in case of invalid (missing) value, value must be replaced with defaultMIssing value
                     if (!double.TryParse(val.ToString(), out value))
-                        value = double.NaN;
+                        value = col.DefaultMissingValue;
+                    
                     //
                     raw.Add(value);
                 }
-                else if(col.Type == 2)//binary column
+                else if(col.Type == ColumnType.BINARY)//binary column
                 {
                     if (col.Values[0].Equals(rawData[col.Index]))
                         raw.Add(0);
-                    else
+                    else if (col.Values[1].Equals(rawData[col.Index]))
                         raw.Add(1);
+                    else//in case of invalid (missing) value, value must be replaced with defaultMIssing value
+                        raw.Add(col.DefaultMissingValue);
                 }
-                else if(col.Type == 3)//multiclass column
+                else if(col.Type == ColumnType.CLASS)//multiclass column
                 {
                     //add as many columns as number of categories
                     //eg. red, greeen,blue -  categories
@@ -118,15 +122,20 @@ namespace LearningFoundation.DataMappers
                     // for green -> 1
                     // for blue -> 2
                     var numClass = col.Values.Length;
+                    bool isMissigValue = true;
                     for (int j=0; j<numClass; j++)
                     {
                         if(col.Values[j].Equals(rawData[col.Index]))
                         {
                             raw.Add(j);
+                            isMissigValue = false;
                             break;
-                        }
-                        
+                        }                       
                     }
+
+                    //in case of missing value
+                    if(isMissigValue)
+                        raw.Add(col.DefaultMissingValue);
                 }
 
             }
@@ -134,56 +143,6 @@ namespace LearningFoundation.DataMappers
             NumOfFeatures = raw.Count;
             //return double value feture vector
             return raw.ToArray();
-        }
-
-        /// <summary>
-        /// Calculates the basic statistics for each column in data set
-        /// </summary>
-        /// <param name="dp"></param>
-        public static IStatistics[] CalculateStatistics(IDataProvider dp, IDataMapper dm)
-        {
-            //
-            List<double[]> data = new List<double[]>();
-            do
-            {
-                var rawData = dp.Current;  
-
-                if (rawData != null)
-                {
-                    var row = dm.MapInputVector(rawData);
-                    data.Add(row);
-
-                }
-                else
-                    break;//if the next item is null, we reached the end of the list
-            } while (dp.MoveNext());
-
-            IStatistics[] stats = new ColumnStatistics[data[0].Length];
-
-            for (int j = 0; j < stats.Length; j++)
-            {
-                var col = new ColumnStatistics(j + 1, data.Select(x => x[j]).ToArray());
-                stats[j] = col;
-            }
-
-            return stats;
-        }
-
-        /// <summary>
-        /// Initialize mapper from file
-        /// </summary>
-        /// <param name="filePath">path of the file contining mapper configuration</param>
-        /// <returns>.Net data mapper object</returns>
-        public static DataMapper Load(string filePath)
-        {
-           string strContent = System.IO.File.ReadAllText(filePath);
-           //
-            var dm = JsonConvert.DeserializeObject(strContent, typeof(DataMapper));
-            //
-            if (dm is DataMapper)
-                return (DataMapper)dm;
-            else
-                return null;
         }
     }
 
@@ -208,14 +167,9 @@ namespace LearningFoundation.DataMappers
         public int Index { get; set; }
 
         /// <summary>
-        /// The Type of the feature
-        /// 0 - string (avoided in training and testing)
-        /// 1 - numeric
-        /// 2 - binary
-        /// 3 - multiclass with x categories
-        /// 
+        /// The Type of the column (feature)
         /// </summary>
-        public int Type { get; set; }
+        public ColumnType Type { get; set; }
 
         /// <summary>
         /// In case of binary and Category type, values are enumerated in ascedenting order
@@ -228,14 +182,6 @@ namespace LearningFoundation.DataMappers
         /// {Red, Green, Blue}; - mean: (Red=0, Green=1, Blue=2) normalized values: Red-> (1,0,0), Green ->(0,1,0), Blue ->(0,0,1) 
         /// </summary>
         public string[] Values { get; set; }
-        /// <summary>
-        /// Type of normalizations can be found at: https://en.wikipedia.org/wiki/Feature_scaling
-        /// 0 - none
-        /// 1 - minmax
-        /// 2 - gaus
-        /// 3 - custom
-        /// </summary>
-        public int Normalization { get; set; }
 
         /// <summary>
         /// Replaces the null value in the cell
@@ -243,7 +189,17 @@ namespace LearningFoundation.DataMappers
         public double DefaultMissingValue { get; set; }
     }
 
-   
+    /// <summary>
+    /// 
+    /// </summary>
+    public enum ColumnType
+    {
+        STRING,// 0 - string (avoided in training and testing)
+        NUMERIC,// 1 - numeric
+        BINARY,// 2 - binary
+        CLASS// 3 - multiclass with x categories
+    }
+
     /// <summary>
     /// todo
     /// </summary>
