@@ -36,11 +36,13 @@ namespace UnitTests
             //prepares the ML Algoritm
             api.UseBackPropagation(1, 0.2, 1.0, null);
 
+            //TODO: api.UseDataMapper()
             //init mapper for data 
             var dm = DataMapper.Load(irisMapperFilePath);
             //assign data mapper
             api.DataMapper = dm;
 
+            //TODO: api.UseNormalizer();
             //setup normalizer to prepare data for normalization
             api.Normilizer = new MinMaxNormalizer(dm); 
 

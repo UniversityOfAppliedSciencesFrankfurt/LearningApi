@@ -228,6 +228,7 @@ namespace LearningFoundation.DataMappers
         /// {Red, Green, Blue}; - mean: (Red=0, Green=1, Blue=2) normalized values: Red-> (1,0,0), Green ->(0,1,0), Blue ->(0,0,1) 
         /// </summary>
         public string[] Values { get; set; }
+        
         /// <summary>
         /// Type of normalizations can be found at: https://en.wikipedia.org/wiki/Feature_scaling
         /// 0 - none
