@@ -92,20 +92,20 @@ namespace UnitTests
                     // numeric data stay the same
                     //(binary data are transformed in to 0 and 1)
                     // (Category data transform in to class number, R,G,B in to 0,1,2)
-                    double[] data = m_api.DataMapper.MapInputVector(rawData);
+                    object[] data = m_api.DataMapper.RunAsync(rawData);
 
                     //test corectness of mapped data
                     var numericRow = numeric.ElementAt(index);
                     for (int i = 0; i < numericRow.Length; i++)
                     {
-                        Assert.True(double.Parse(numericRow[i].ToString()) == data[i], "Inconsistent data while transform real in to numeric data");
+                        Assert.True(double.Parse(numericRow[i].ToString()) == Convert.ToDouble(data[i]), "Inconsistent data while transform real in to numeric data");
                     }
 
 
                     double[] featureVector = new double[numOfFeatures];
                     for (int i = 0; i < numOfFeatures; i++)
                     {
-                        featureVector[i] = data[m_api.DataMapper.GetFeatureIndex(i)];
+                        featureVector[i] = (double)data[m_api.DataMapper.GetFeatureIndex(i)];
                     }
 
 
@@ -171,20 +171,20 @@ namespace UnitTests
                     // numeric data stay the same
                     //(binary data are transformed in to 0 and 1)
                     // (Category data transform in to class number, R,G,B in to 0,1,2)
-                    double[] data = m_api.DataMapper.MapInputVector(rawData);
+                    object[] data = m_api.DataMapper.RunAsync(rawData);
                     
                     //test corectness of mapped data
                     var numericRow = numeric.ElementAt(index);
                     for(int i=0; i<numericRow.Length; i++)
                     {
-                        Assert.True(double.Parse(numericRow[i].ToString()) == data[i], "Inconsistent data while transform real in to numeric data");
+                        Assert.True(double.Parse(numericRow[i].ToString()) == Convert.ToDouble(data[i]), "Inconsistent data while transform real in to numeric data");
                     }
 
                     //
                     double[] featureVector = new double[numOfFeatures];
                     for (int i = 0; i < numOfFeatures; i++)
                     {
-                        featureVector[i] = data[m_api.DataMapper.GetFeatureIndex(i)];
+                        featureVector[i] = (double)data[m_api.DataMapper.GetFeatureIndex(i)];
                     }
 
 

@@ -76,11 +76,15 @@ namespace LearningFoundation
                 return Normalizer.DeNormalize(normVector);
         }
 
+        public async Task TrainAsync()
+        {
+        }
+
         /// <summary>
         /// Enumerates all data and runs a single training epoch. 
         /// </summary>
         /// <returns></returns>
-        public async Task TrainAsync()
+        public async Task TrainAsync2()
         {
             int numOfFeatures = this.DataMapper.NumOfFeatures;
             int labelIndx = this.DataMapper.LabelIndex;
@@ -91,19 +95,19 @@ namespace LearningFoundation
 
                 if (rawData != null)
                 {
-                    double[] data = this.DataMapper.MapInputVector(rawData);
+                    object[] data = this.DataMapper.RunAsync(rawData);
 
                     double[] featureVector = new double[numOfFeatures];
 
                     for (int i = 0; i < numOfFeatures; i++)
                     {
-                        featureVector[i] = data[this.DataMapper.GetFeatureIndex(i)];
+                        featureVector[i] = (double)data[this.DataMapper.GetFeatureIndex(i)];
                     }
 
                     var normFeatureVector = Normalize(featureVector);
 
                     ///
-                    await this.Algorithm.Train(normFeatureVector, data[labelIndx]);
+                    await this.Algorithm.Train(normFeatureVector, (double)data[labelIndx]);
                 }
                 else
                     break;//if the next item is null, we reached the end of the list

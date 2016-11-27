@@ -15,15 +15,15 @@ namespace LearningFoundation.Statistics
         /// </summary>
         /// <param name="colId">Column Id which stat is related</param>
         /// <param name="colData"> column data</param>
-        public BasicStatistics(int colId, double[] colData)
+        public BasicStatistics(int colId, object[] colData)
         {
             ColumnId = colId;
-            Min = colData.Min();
-            Max = colData.Max();
-            Mean = colData.Average();
+            Min = colData.Min(a=>(double)a);
+            Max = colData.Max(a => (double)a);
+            Mean = colData.Average(a => (double)a);
             Median = (int)(colData.Length + 1 / 2);
             Range = Max - Min;
-            Variance = colData.Sum(x => (x - Mean) * (x - Mean) / colData.Length);
+            Variance = colData.Sum(x => ((double)x - Mean) * ((double)x - Mean) / colData.Length);
         }
 
         /// <summary>
@@ -53,10 +53,10 @@ namespace LearningFoundation.Statistics
         public static IStatistics[] CalculateStatistics(IEnumerable<object[]> dataSet, IDataMapper dm)
         {
             //
-            List<double[]> data = new List<double[]>();
+            List<object[]> data = new List<object[]>();
             foreach(var row in dataSet)
             {
-                var r = dm.MapInputVector(row);
+                var r = dm.RunAsync(row);
                 data.Add(r);
             } 
 

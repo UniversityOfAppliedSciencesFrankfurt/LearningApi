@@ -8,7 +8,7 @@ namespace LearningFoundation
     /// <summary>
     /// Used to map data from input values to features and label.
     /// </summary>
-    public interface IDataMapper
+    public interface IDataMapper : IPipelineModule
     {
         /// <summary>
         /// Index of the label.
@@ -39,7 +39,7 @@ namespace LearningFoundation
         /// </summary>
         /// <param name="rawData"></param>
         /// <returns></returns>
-        double[] MapInputVector(object[] rawData);
+        object[] RunAsync(object[] rawData);
       
     }
 }

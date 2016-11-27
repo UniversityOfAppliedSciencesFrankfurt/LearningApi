@@ -70,6 +70,7 @@ namespace LearningFoundation.DataMappers
             return Features[feature].Index;
         }
 
+
         /// <summary>
         /// Transform the featureVector from natural format in to double format.
         /// If the data is loaded from the file, all data are in string format regadless of the type of the column.
@@ -79,9 +80,11 @@ namespace LearningFoundation.DataMappers
         /// </summary>
         /// <param name="rawData"></param>
         /// <returns></returns>
-        public double[] MapInputVector(object[] rawData)
+
+     
+        public object[] RunAsync(object[] rawData)
         {
-            List<double> raw = new List<double>();
+            List<object> raw = new List<object>();
 
             //transform rawData in to raw of Fetures with proper type, normalization value, and coresct binary and catogery type 
             for(int i=0; i< rawData.Length; i++)
@@ -144,6 +147,18 @@ namespace LearningFoundation.DataMappers
             //return double value feture vector
             return raw.ToArray();
         }
+
+        public object[] RynAsync(object[] data)
+        {
+            throw new NotImplementedException();
+        }
+
+        public double[] RynAsync(double[] data)
+        {
+            throw new NotImplementedException();
+        }
+
+        
     }
 
     /// <summary>
