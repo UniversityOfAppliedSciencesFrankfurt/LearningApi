@@ -11,9 +11,8 @@ namespace LearningFoundation.DataProviders
     /// <summary>
     /// DataProvider implementation in case data is comming from CSV file
     /// </summary>
-    public class CsvDataProvider : IDataProvider
+    public class CsvDataProvider : IDataProvider<object[]>
     {
-        //
         IEnumerable<object[]> list = new List<object[]>();
 
         /// <summary>
@@ -31,6 +30,7 @@ namespace LearningFoundation.DataProviders
                     list = value;
             }
         }
+
         int m_Current = 0;
 
         /// <summary>
@@ -53,6 +53,8 @@ namespace LearningFoundation.DataProviders
                 return val;
             }
         }
+        
+
         /// <summary>
         /// Current item of the enumerator
         /// </summary>
@@ -88,5 +90,11 @@ namespace LearningFoundation.DataProviders
         {
             m_Current = 0;
         }
+
+        public object[] RynAsync(object data)
+        {
+            throw new NotImplementedException();
+        }
+
     }
 }

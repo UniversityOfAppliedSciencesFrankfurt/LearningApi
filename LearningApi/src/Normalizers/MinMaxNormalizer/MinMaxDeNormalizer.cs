@@ -12,7 +12,7 @@ namespace LearningFoundation.Normalizers
     /// nor=(val - min)/(max-min)
     /// Type of normalizations can be found at: https://en.wikipedia.org/wiki/Feature_scaling
     /// </summary>
-    public class MinMaxNormalizer : IDataNormalizer
+    public class MinMaxDeNormalizer : IDataNormalizer
     {
         private DataMapper m_DataMapper { get; set; }
         private double[] m_Min;
@@ -25,7 +25,7 @@ namespace LearningFoundation.Normalizers
         /// <param name="mapper">data mapper for the related data</param>
         /// <param name="min">min for each column in the dataset</param>
         /// <param name="max">max for each column in the dataset</param>
-        public MinMaxNormalizer(DataMapper mapper, double[] min, double[] max)
+        public MinMaxDeNormalizer(DataMapper mapper, double[] min, double[] max)
         {
             m_DataMapper = mapper;
             m_Min = min;
@@ -86,63 +86,14 @@ namespace LearningFoundation.Normalizers
             return rawData.ToArray();
         }
 
-
-        /// <summary>
-        /// perform process of normalization where natural data is being transformd in to normalized format
-        /// </summary>
-        /// <param name="rawData"></param>
-        /// <returns></returns>
         public double[] Normalize(double[] rawData)
         {
-            //
-            var normData = new List<double>();
-            for (int i = 0; i < rawData.Length; i++)
-            {
-                //get feature index
-                var fi = m_DataMapper.GetFeatureIndex(i);
-
-                //numeric column
-                if (m_DataMapper.Features[i].Type ==  ColumnType.NUMERIC)
-                {
-                    var value = (rawData[i] - m_Min[fi]) / (m_Max[fi] - m_Min[fi]);
-                    normData.Add(value);
-                }
-                //binary column
-                else if (m_DataMapper.Features[i].Type == ColumnType.BINARY)
-                {
-                    //in case of binary column type real and normalized value are the same
-                    normData.Add(rawData[i]);
-
-                }
-                //category column
-                else if (m_DataMapper.Features[i].Type ==  ColumnType.CLASS)
-                {
-                    // Converts category numeric values in to binary values
-                    // it creates array which has length of categories count.
-                    // Example: Red, Gree, Blue - 3 categories  - real values
-                    //             0,  1,  2    - 3 numbers     - numeric values
-                    //             
-                    // Normalized values for Blues category:
-                    //          Blue  =  (0,0,1)  - three values which sum is 1,
-                    //          Red   =  (1,0,0)
-                    //          Green =  (0,1,0)
-                    var count = m_DataMapper.Features[i].Values.Length;
-                    for (int j = 0; j < count; j++)
-                    {
-                        if (j == rawData[i])
-                            normData.Add(1);
-                        else
-                            normData.Add(0);
-                    }
-                }
-            }
-            //
-            return normData.ToArray();
+            throw new NotImplementedException();
         }
 
         public double[] RynAsync(double[] data)
         {
-            return Normalize(data);
+            return DeNormalize(data);
         }
     }
 }

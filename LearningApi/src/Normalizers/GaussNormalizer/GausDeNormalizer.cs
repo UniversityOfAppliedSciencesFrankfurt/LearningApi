@@ -13,7 +13,7 @@ namespace LearningFoundation.Normalizers
     /// val= average + m_nor*variance;
     /// Type of normalizations can be found at: https://en.wikipedia.org/wiki/Feature_scaling
     /// </summary>
-    public class GaussNormalizer : IDataNormalizer
+    public class GaussDeNormalizer : IDataDeNormalizer
     {
         DataMapper m_DataMapper;
         private double[] m_Mean;
@@ -25,28 +25,24 @@ namespace LearningFoundation.Normalizers
         /// <param name="mapper">related data mapper</param>
         /// <param name="mean">mean for each column in the dataset</param>
         /// <param name="var">variance for each column in the dataset</param>
-        public GaussNormalizer(DataMapper mapper, double[] mean, double[] var)
+        public GaussDeNormalizer(DataMapper mapper, double[] mean, double[] var)
         {
             m_DataMapper = mapper;
             m_Mean = mean;
             m_Var = var;
         }
-        public double[] RynAsync(double[] data)
-        {
-            return Normalize(data);
-        }
 
         /// <summary>
-        /// perform process of normalization where natural data is being transformd in to normalized format
-        /// x_nor=(val-average)/variance
+        /// perform process of denormalization where normalized data  is being transformed in to natural format
+        /// val= average + m_nor*variance;
         /// </summary>
-        /// <param name="rawData"></param>
+        /// <param name="normalizedData"></param>
         /// <returns></returns>
-        public double[] Normalize(double[] rawData)
+        public double[] DeNormalize(double[] normalizedData)
         {
-            //
-            var normData = new List<double>();
-            for (int i = 0; i < rawData.Length; i++)
+             //
+            var rawData = new List<double>();
+            for (int i = 0; i < normalizedData.Length; i++)
             {
                 //get feature index
                 var fi = m_DataMapper.GetFeatureIndex(i);
@@ -56,40 +52,46 @@ namespace LearningFoundation.Normalizers
                 //numeric column
                 else if (m_DataMapper.Features[i].Type == LearningFoundation.DataMappers.ColumnType.NUMERIC)
                 {
-                    var value = (rawData[i] - m_Mean[fi]) / m_Var[fi];
-                    normData.Add(value);
+                    var value = m_Mean[fi] + normalizedData[i] * m_Var[fi];
+                    rawData.Add(value);
                 }
                 //binary column
                 else if (m_DataMapper.Features[i].Type == LearningFoundation.DataMappers.ColumnType.BINARY)
                 {
                     //in case of binary column type real and normalized value are the same
-                    normData.Add(rawData[i]);
+                    rawData.Add(rawData[i]);
 
                 }
                 //category column
                 else if (m_DataMapper.Features[i].Type == LearningFoundation.DataMappers.ColumnType.CLASS)
                 {
-                    // Converts category numeric values in to binary values
-                    // it creates array which has length of categories count.
-                    // Example: Red, Gree, Blue - 3 categories  - real values
-                    //             0,  1,  2    - 3 numbers     - numeric values
-                    //             
+                    // COnverts set of binary values in to one category 
                     // Normalized values for Blues category:
                     //          Blue  =  (0,0,1)  - three values which sum is 1,
                     //          Red   =  (1,0,0)
                     //          Green =  (0,1,0)
+                    // Example: Red, Gree, Blue - 3 categories  - real values
+                    //             0,  1,  2    - 3 numbers     - numeric values
+                    //             
+
                     var count = m_DataMapper.Features[i].Values.Length;
                     for (int j = 0; j < count; j++)
                     {
-                        if (j == rawData[i])
-                            normData.Add(1);
-                        else
-                            normData.Add(0);
+                        if (rawData[i + j] == 1)
+                            rawData.Add(j);
                     }
+                    //
+                    i += count;
                 }
             }
             //
-            return normData.ToArray();
+            return rawData.ToArray();
         }
+
+
+        public double[] RynAsync(double[] data)
+        {
+            return DeNormalize(data);
+        }       
     }
 }

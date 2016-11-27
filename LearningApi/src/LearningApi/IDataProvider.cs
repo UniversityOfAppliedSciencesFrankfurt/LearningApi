@@ -8,9 +8,9 @@ namespace LearningFoundation
     /// <summary>
     /// Defines the status of the trained model.
     /// </summary>
-    public interface IDataProvider : IEnumerator<object[]>
+    public interface IDataProvider<TOut> : IEnumerator<TOut>, IPipelineModule<object, TOut>
     {
-        //IEnumerable<double[]> LoadData();
+    
 
     }
 

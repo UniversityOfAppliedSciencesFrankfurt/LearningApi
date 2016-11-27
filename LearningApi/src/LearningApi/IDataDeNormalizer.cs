@@ -9,14 +9,13 @@ namespace LearningFoundation
     /// <summary>
     /// Performs data normalization and denormalization.
     /// </summary>
-    public interface IDataNormalizer : IPipelineModule<double[], double[]>
+    public interface IDataDeNormalizer : IPipelineModule<double[], double[]>
     {
         /// <summary>
-        /// Does normalization of vector in rawData
+        /// Denormilizes normalized data.
         /// </summary>
-        /// <param name="rawData">Vector with raw scalar values.</param>
+        /// <param name="normilizedData"></param>
         /// <returns></returns>
-        double[] Normalize(double[] rawData );
-
+        double[] DeNormalize(double[] normilizedData);
     }
 }

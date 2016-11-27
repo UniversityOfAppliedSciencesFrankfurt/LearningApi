@@ -9,7 +9,7 @@ namespace LearningFoundation.DataMappers
     /// <summary>
     /// Class for asigning set of properties for each feature (data column)
     /// </summary>
-    public class DataMapper : IDataMapper
+    public class DataMapper : IDataMapper<double[], double[]>
     {
         /// <summary>
         /// main constructor
@@ -81,17 +81,19 @@ namespace LearningFoundation.DataMappers
         /// <param name="rawData"></param>
         /// <returns></returns>
 
-     
-        public object[] RunAsync(object[] rawData)
+        public double[] RynAsync(double[] data)
         {
-            List<object> raw = new List<object>();
+            throw new NotImplementedException();
+        }
+
+        public double[] RunAsync(double[] rawData)
+        {
+            List<double> raw = new List<double>();
 
             //transform rawData in to raw of Fetures with proper type, normalization value, and coresct binary and catogery type 
             for(int i=0; i< rawData.Length; i++)
             {
                 //check if the value is valid 
-                
-                
                
                 var col= Features[i];
                 if (col.Type ==  ColumnType.STRING)
@@ -144,21 +146,12 @@ namespace LearningFoundation.DataMappers
             }
             //callculate number of features
             NumOfFeatures = raw.Count;
+
             //return double value feture vector
             return raw.ToArray();
         }
 
-        public object[] RynAsync(object[] data)
-        {
-            throw new NotImplementedException();
-        }
-
-        public double[] RynAsync(double[] data)
-        {
-            throw new NotImplementedException();
-        }
-
-        
+       
     }
 
     /// <summary>

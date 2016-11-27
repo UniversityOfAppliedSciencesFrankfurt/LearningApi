@@ -12,6 +12,7 @@ namespace LearningFoundation.Normalizers
     /// </summary>
     public static class GaussNormalizerExtensions
     {
+
         /// <summary>
         /// Extension method for using GaussNormalizer in LearningAPI
         /// In case of using Gauss normalize you have to provide mean and variace values for all data columns (feature)
@@ -22,20 +23,21 @@ namespace LearningFoundation.Normalizers
         /// <returns></returns>
         public static LearningApi UseGaussNormalizer(this LearningApi api, double[] mean, double[] var)       
         {
-            if (api.DataMapper == null)
-                throw new Exception("Data Mapper must be initialized before Data Normalizer.");
+            // Normalizer should not require DataMapper.
+            //if (api.DataMapper == null)
+            //    throw new Exception("Data Mapper must be initialized before Data Normalizer.");
 
-            if (api.DataMapper is DataMappers.DataMapper)
-            {
+            //if (api.DataMapper is DataMappers.DataMapper)
+            //{
                 //create minmax object
-                var gn = new GaussNormalizer(api.DataMapper as DataMappers.DataMapper, mean, var);
+                var gn = new GaussNormalizer(null/* TODO datamapper not needed!! */, mean, var);
                 // assign to LearningAPI property
-                api.Normalizer = gn;
+                api.AddModule(gn);
 
                 return api;
-            }
-            else
-                throw new Exception("Data Mapper must be of \"DataMapper\" type.");
+            //}
+            //else
+            //    throw new Exception("Data Mapper must be of \"DataMapper\" type.");
 
         }
 

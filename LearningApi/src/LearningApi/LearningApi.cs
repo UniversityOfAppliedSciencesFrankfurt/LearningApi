@@ -12,10 +12,12 @@ namespace LearningFoundation
     /// </summary>
     public class LearningApi
     {
+        public Dictionary<string, IPipelineModule> Modules { get; internal set; }
+
         /// <summary>
         /// Gets/Sets DataProvider for loading of the data.
         /// </summary>
-        public IDataProvider DataProvider { get; set; }
+        //public IDataProvider DataProvider { get; set; }
         
         /// <summary>
         /// Gets/Sets specifics ML algortim for training
@@ -35,7 +37,7 @@ namespace LearningFoundation
         /// <summary>
         /// Used to map input columns to features.
         /// </summary>
-        public IDataMapper DataMapper { get;set;}
+        //public IDataMapper DataMapper { get;set;}
 
         /// <summary>
         /// main constructor
@@ -43,6 +45,32 @@ namespace LearningFoundation
         public LearningApi()
         {
 
+        }
+
+
+        /// <summary>
+        /// Gets the module of specified type and name.
+        /// </summary>
+        /// <typeparam name="T">Type of the module.</typeparam>
+        /// <param name="name">[Optional]: Name opf the module.</param>
+        /// <returns>The module instance.</returns>
+        public T GetModule<T>(string name = null)  where T : IPipelineModule
+        {
+            if (name == null)
+                return (T)this.Modules.FirstOrDefault(m => m.GetType().Name == typeof(T).Name).Value;
+            else
+                return (T)this.Modules.FirstOrDefault(m => m.GetType().Name == name).Value;
+        }
+
+        public LearningApi AddModule(IPipelineModule module, string name = null)
+        {
+            // TODO: Need few checks here. Dbl key name, module == null,..
+            if (name == null)
+                name = module.GetType().Name;
+
+            this.Modules.Add(name, module);
+
+            return this;
         }
 
         public IScore GetScore()
@@ -57,6 +85,7 @@ namespace LearningFoundation
         /// <returns></returns>
         private double[] Normalize(double[] featureVector)
         {
+            var Normalizer = GetModule<IDataNormalizer>();
             if (Normalizer == null)
                 return featureVector;
             else
@@ -70,22 +99,35 @@ namespace LearningFoundation
         /// <returns></returns>
         private double[] DeNormalize(double[] normVector)
         {
+            IDataDeNormalizer Normalizer = GetModule<IDataDeNormalizer>() as IDataDeNormalizer;
             if (Normalizer == null)
-                return normVector;
+                throw new MLException("There is no module registered of type 'IDataDeNormalizer'");
             else
                 return Normalizer.DeNormalize(normVector);
         }
 
         public async Task TrainAsync()
         {
+            if (this.Modules.Count <= 1)
+                throw new MLException("Uninitialised pipeline.");
+
+            if(!(this.Modules.First() is IDataProvider<object[]>))
+                throw new MLException("Uninitialised pipeline.");
+
+            foreach (var module in this.Modules)
+            {
+
+            }
         }
 
+        /*
         /// <summary>
         /// Enumerates all data and runs a single training epoch. 
         /// </summary>
         /// <returns></returns>
         public async Task TrainAsync2()
         {
+           
             int numOfFeatures = this.DataMapper.NumOfFeatures;
             int labelIndx = this.DataMapper.LabelIndex;
 
@@ -112,6 +154,6 @@ namespace LearningFoundation
                 else
                     break;//if the next item is null, we reached the end of the list
             } while (this.DataProvider.MoveNext());
-        }
+        }*/
     }
 }

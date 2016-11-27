@@ -20,8 +20,9 @@ namespace LearningFoundation.DataMappers
         public static LearningApi UseDefaultDataMapper(this LearningApi api, string dmFilePath)       
         {
             var dm = DefaultDataMapperExtensions.Load(dmFilePath);
-            //assign data mapper
-            api.DataMapper = dm;
+           
+            api.AddModule(dm);
+           
             return api;
         }
 

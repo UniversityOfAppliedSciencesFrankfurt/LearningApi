@@ -29,10 +29,14 @@ namespace LearningFoundation.DataProviders
 
             //create dataset
             dp.DataSet = rawData.Skip(skipRows);
-            api.DataProvider = dp;
+
+            api.AddModule(dp);
+
+           // api.DataProvider = dp;
 
             return api;
         }
+
 
         /// <summary>
         /// Creating dataset row by row
@@ -45,7 +49,7 @@ namespace LearningFoundation.DataProviders
             using (StreamReader reader = File.OpenText(fileName))
             {
                 //
-                foreach (string line in ReadLineFromFile(reader))
+                foreach (string line in readLineFromFile(reader))
                 {
 
                     //split line in to column
@@ -72,7 +76,7 @@ namespace LearningFoundation.DataProviders
         /// </summary>
         /// <param name="reader"></param>
         /// <returns></returns>
-        private static IEnumerable<string> ReadLineFromFile(StreamReader reader)
+        private static IEnumerable<string> readLineFromFile(StreamReader reader)
         {
             string currentLine;
             while ((currentLine = reader.ReadLine()) != null)

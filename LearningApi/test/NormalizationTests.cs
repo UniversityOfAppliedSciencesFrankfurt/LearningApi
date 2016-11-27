@@ -23,8 +23,8 @@ namespace UnitTests
     public class NormalizationTests
     {
         //helper for test run
-        LearningApi m_api;
-        BasicStatistics[] m_stats;//basic statistics of the iris data
+        LearningApi m_Api;
+        BasicStatistics[] m_Stats;//basic statistics of the iris data
 
         //file path for data and results data
         string m_irisNumericDataFilePath;
@@ -37,7 +37,7 @@ namespace UnitTests
         public NormalizationTests()
         {
             //create stat for IRIS data
-            m_stats = new BasicStatistics[5]
+            m_Stats = new BasicStatistics[5]
             {
                 new BasicStatistics(1, 4.3, 7.9, 5.84333333333, 0.681122222),
                 new BasicStatistics(2, 2.0, 4.4, 3.05733333333, 0.188712889),
@@ -45,6 +45,7 @@ namespace UnitTests
                 new BasicStatistics(4, 0.1, 2.5, 1.19933333333, 0.577132889),
                 new BasicStatistics(5, 0, 0, 0, 0),
             };
+
             //iris data file paths
             var irisRealDataFilePath = System.IO.Path.Combine(Directory.GetCurrentDirectory(), @"sample_data\iris\iris.csv");
             m_irisNumericDataFilePath = System.IO.Path.Combine(Directory.GetCurrentDirectory(), @"sample_data\iris\iris_numeric.csv");
@@ -53,13 +54,12 @@ namespace UnitTests
             //iris mapper
             var irisMapperFilePath = System.IO.Path.Combine(Directory.GetCurrentDirectory(), @"sample_data\iris\iris_mapper.json");
 
-            m_api = new LearningApi();
+            m_Api = new LearningApi();
             //create datamapper 
-            m_api.DataMapper = DefaultDataMapperExtensions.Load(irisMapperFilePath);
+            m_Api.UseDefaultDataMapper(irisMapperFilePath);
+          
             //create dataprovider
-            m_api.UseCsvDataProvider(irisRealDataFilePath, ',', 1);
-         
-
+            m_Api.UseCsvDataProvider(irisRealDataFilePath, ',', 1);
         }
 
 
@@ -72,19 +72,23 @@ namespace UnitTests
         [Fact]
         public bool NormalizeData_With_MinMax_Normalized_Test()
         {
-            var minmax = new MinMaxNormalizer(m_api.DataMapper as DataMapper, m_stats.Select(x=>x.Min).ToArray(), m_stats.Select(x => x.Max).ToArray());
+            //TODO: We need to make this test simpler. It should test normalization only without of need to 
+            // use data source provider sand data mapper.
+            throw new NotImplementedException("TODO");
+            /*
+            var minmax = new MinMaxNormalizer(m_Api.DataMapper as DataMapper, m_Stats.Select(x=>x.Min).ToArray(), m_Stats.Select(x => x.Max).ToArray());
 
             //numeric data
             var numeric = CsvDataProviderExtensions.LoadDataFromFile(m_irisNumericDataFilePath, ',');
             var normalized = CsvDataProviderExtensions.LoadDataFromFile(m_irisMinMaxNormalizedDataFilePath, ',');
 
             //
-            int numOfFeatures = m_api.DataMapper.NumOfFeatures;
-            int labelIndx = m_api.DataMapper.LabelIndex;
+            int numOfFeatures = m_Api.DataMapper.NumOfFeatures;
+            int labelIndx = m_Api.DataMapper.LabelIndex;
             int index = 1;//first row is header
             do
             {
-                var rawData = m_api.DataProvider.Current;
+                var rawData = m_Api.DataProvider.Current;
 
                 if (rawData != null)
                 {
@@ -92,7 +96,7 @@ namespace UnitTests
                     // numeric data stay the same
                     //(binary data are transformed in to 0 and 1)
                     // (Category data transform in to class number, R,G,B in to 0,1,2)
-                    object[] data = m_api.DataMapper.RunAsync(rawData);
+                    object[] data = m_Api.DataMapper.RunAsync(rawData);
 
                     //test corectness of mapped data
                     var numericRow = numeric.ElementAt(index);
@@ -105,7 +109,7 @@ namespace UnitTests
                     double[] featureVector = new double[numOfFeatures];
                     for (int i = 0; i < numOfFeatures; i++)
                     {
-                        featureVector[i] = (double)data[m_api.DataMapper.GetFeatureIndex(i)];
+                        featureVector[i] = (double)data[m_Api.DataMapper.GetFeatureIndex(i)];
                     }
 
 
@@ -117,7 +121,7 @@ namespace UnitTests
                     // R normalized value id (1,0,0)
                     // G normalized in to (0,1,0)
                     // B normalized int to (0,0,1)
-                    var normFeatureVector = minmax.Normalize(/*m_api.DataMapper.BasicStatistics,*/featureVector);
+                    var normFeatureVector = minmax.Normalize(featureVector);
                     //test corectness of normalized data
                     var normRow = normalized.ElementAt(index);
                     for (int i = 0; i < normFeatureVector.Length; i++)
@@ -133,9 +137,10 @@ namespace UnitTests
                     break;//if the next item is null, we reached the end of the list
 
                 index++;
-            } while (m_api.DataProvider.MoveNext());
-
+            } while (m_Api.DataProvider.MoveNext());
+            */
             return true;
+        
         }
 
         //Tests MinMax noramlizer 
@@ -147,7 +152,12 @@ namespace UnitTests
         [Fact]
         public bool NormalizeData_With_Gauss_Test()
         {
-            var gaus = new GaussNormalizer(m_api.DataMapper as DataMapper,m_stats.Select(x => x.Mean).ToArray(), m_stats.Select(x => x.Variance).ToArray());
+            //TODO: We need to make this test simpler. It should test normalization only without of need to 
+            // use data source provider sand data mapper.
+            throw new NotImplementedException("TODO");
+
+            /*
+            var gaus = new GaussNormalizer(m_Api.DataMapper as DataMapper,m_Stats.Select(x => x.Mean).ToArray(), m_Stats.Select(x => x.Variance).ToArray());
             
 
             //numeric data
@@ -156,14 +166,14 @@ namespace UnitTests
 
             
             //
-            int numOfFeatures = m_api.DataMapper.NumOfFeatures;
-            int labelIndx = m_api.DataMapper.LabelIndex;
+            int numOfFeatures = m_Api.DataMapper.NumOfFeatures;
+            int labelIndx = m_Api.DataMapper.LabelIndex;
             int index = 1;//first row is header
 
             ///
             do
             {
-                var rawData = m_api.DataProvider.Current;
+                var rawData = m_Api.DataProvider.Current;
 
                 if (rawData != null)
                 {
@@ -171,7 +181,7 @@ namespace UnitTests
                     // numeric data stay the same
                     //(binary data are transformed in to 0 and 1)
                     // (Category data transform in to class number, R,G,B in to 0,1,2)
-                    object[] data = m_api.DataMapper.RunAsync(rawData);
+                    object[] data = m_Api.DataMapper.RunAsync(rawData);
                     
                     //test corectness of mapped data
                     var numericRow = numeric.ElementAt(index);
@@ -184,7 +194,7 @@ namespace UnitTests
                     double[] featureVector = new double[numOfFeatures];
                     for (int i = 0; i < numOfFeatures; i++)
                     {
-                        featureVector[i] = (double)data[m_api.DataMapper.GetFeatureIndex(i)];
+                        featureVector[i] = (double)data[m_Api.DataMapper.GetFeatureIndex(i)];
                     }
 
 
@@ -215,8 +225,8 @@ namespace UnitTests
 
                 index++;
 
-            } while (m_api.DataProvider.MoveNext());
-
+            } while (m_Api.DataProvider.MoveNext());
+            */
             return true;
         }
 

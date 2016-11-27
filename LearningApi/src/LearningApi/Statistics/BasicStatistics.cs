@@ -15,7 +15,7 @@ namespace LearningFoundation.Statistics
         /// </summary>
         /// <param name="colId">Column Id which stat is related</param>
         /// <param name="colData"> column data</param>
-        public BasicStatistics(int colId, object[] colData)
+        public BasicStatistics(int colId, double[] colData)
         {
             ColumnId = colId;
             Min = colData.Min(a=>(double)a);
@@ -50,10 +50,10 @@ namespace LearningFoundation.Statistics
         /// <param name="dataSet">data set</param>
         /// <param name="dm">datamaper related to dataSet</param>
         /// <returns></returns>
-        public static IStatistics[] CalculateStatistics(IEnumerable<object[]> dataSet, IDataMapper dm)
+        public static IStatistics[] CalculateStatistics(IEnumerable<double[]> dataSet, IDataMapper<double[], double[]> dm)
         {
             //
-            List<object[]> data = new List<object[]>();
+            List<double[]> data = new List<double[]>();
             foreach(var row in dataSet)
             {
                 var r = dm.RunAsync(row);

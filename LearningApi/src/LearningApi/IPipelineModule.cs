@@ -7,7 +7,11 @@ namespace LearningFoundation
 {
     public interface IPipelineModule
     {
-        object[] RynAsync(object[] data);
 
+    }
+
+    public interface IPipelineModule<TIN, TOUT> : IPipelineModule
+    {
+        TOUT RynAsync(TIN data);
     }
 }
