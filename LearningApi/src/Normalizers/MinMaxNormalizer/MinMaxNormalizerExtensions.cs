@@ -26,10 +26,11 @@ namespace LearningFoundation.Normalizers
             //if (api.DataMapper is DataMappers.DataMapper)
             //{
             //create minmax object
-            var mn = new MinMaxNormalizer(null/* TODO datamapper not needed!! */, min, max);
+            var minMaxNorm = new MinMaxNormalizer(null/* TODO datamapper not needed!! */, min, max);
 
+            api.Modules.Add("Normilizer", minMaxNorm);
                 // assign to LearningAPI property
-                api.Normalizer = mn;
+               // api.Normalizer = mn;
 
                 return api;
             //}

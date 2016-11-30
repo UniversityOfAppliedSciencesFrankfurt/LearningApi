@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace LearningFoundation
 {
-    public interface IAlgorithm
+    public interface IAlgorithm : IPipelineModule<double[], Task<double>>
     {
         Task<double> Train(double[] featureValues, double label);
     }

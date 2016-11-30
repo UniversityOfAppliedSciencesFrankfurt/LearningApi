@@ -12,6 +12,13 @@ namespace NeuralNetworks.Core
         {
         }
 
+        public Task<double> RynAsync(double[] featureValues)
+        {
+            return Train(featureValues, 1);
+        }
+
+      
+
         public abstract Task<double> Train(double[] featureValues, double label);
     }
 }

@@ -44,7 +44,7 @@ namespace LearningFoundation
         /// </summary>
         public LearningApi()
         {
-
+            this.Modules = new Dictionary<string, LearningFoundation.IPipelineModule>();
         }
 
 
@@ -111,12 +111,25 @@ namespace LearningFoundation
             if (this.Modules.Count <= 1)
                 throw new MLException("Uninitialised pipeline.");
 
-            if(!(this.Modules.First() is IDataProvider<object[]>))
+            if(!(this.Modules.First().Value is IDataProvider<object[]>))
                 throw new MLException("Uninitialised pipeline.");
 
-            foreach (var module in this.Modules)
-            {
+            IDataProvider<object[]> dataProvider = (IDataProvider<object[]>)this.Modules.First().Value;
 
+            while(dataProvider.MoveNext())
+            {  
+                int k = 0;
+
+                foreach (var item in this.Modules)
+                {
+                    if (k++ == 0) continue;
+                    
+                    var res = dataProvider.Current;
+
+                    dynamic module = item.Value;
+
+                    res = module.RunAsync(res);
+                }              
             }
         }
 
@@ -125,7 +138,7 @@ namespace LearningFoundation
         /// Enumerates all data and runs a single training epoch. 
         /// </summary>
         /// <returns></returns>
-        public async Task TrainAsync2()
+        public async Task TrainAsyncOLD()
         {
            
             int numOfFeatures = this.DataMapper.NumOfFeatures;

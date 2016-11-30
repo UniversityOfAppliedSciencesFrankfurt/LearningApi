@@ -9,7 +9,7 @@ namespace LearningFoundation.DataMappers
     /// <summary>
     /// Class for asigning set of properties for each feature (data column)
     /// </summary>
-    public class DataMapper : IDataMapper<double[], double[]>
+    public class DataMapper : IDataMapper<object[], double[]>
     {
         /// <summary>
         /// main constructor
@@ -81,12 +81,12 @@ namespace LearningFoundation.DataMappers
         /// <param name="rawData"></param>
         /// <returns></returns>
 
-        public double[] RynAsync(double[] data)
+        public double[] RynAsync(object[] data)
         {
             throw new NotImplementedException();
         }
 
-        public double[] RunAsync(double[] rawData)
+        public double[] RunAsync(object[] rawData)
         {
             List<double> raw = new List<double>();
 

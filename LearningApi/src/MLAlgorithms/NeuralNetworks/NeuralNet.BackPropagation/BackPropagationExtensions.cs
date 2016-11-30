@@ -13,7 +13,8 @@ namespace NeuralNet.BackPropagation
                  IActivationFunction activationFnc)
        
         {
-            api.Algorithm = new BackPropagationNetwork(hiddenLayerCount, momentum, learningRate, activationFnc);
+            var alg = new BackPropagationNetwork(hiddenLayerCount, momentum, learningRate, activationFnc);
+            api.Modules.Add("Algorithm", alg);
             return api;
         }
     }

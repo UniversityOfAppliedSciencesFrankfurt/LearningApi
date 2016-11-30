@@ -15,6 +15,30 @@ namespace LearningFoundation.DataProviders
     {
         IEnumerable<object[]> list = new List<object[]>();
 
+        private StreamReader m_Reader;
+
+        private string m_CurrentLine;
+
+        private string m_FileName;
+
+        private char m_Delimiter;
+
+        private int m_SkipRows;
+
+        public CsvDataProvider(string fileName, char delimiter, int skipRows = 0)
+        {
+            m_FileName = fileName;
+            m_Delimiter = delimiter;
+            m_SkipRows = skipRows;
+            // TODO.. check if file exists.
+            m_Reader = File.OpenText(m_FileName);
+            for (int i = 0; i < m_SkipRows; i++)
+            {
+                m_CurrentLine = m_Reader.ReadLine();
+            }
+        }
+
+
         /// <summary>
         /// Respesent the loaded data
         /// </summary>
@@ -47,13 +71,22 @@ namespace LearningFoundation.DataProviders
         {
             get
             {
-                var val= list.ElementAtOrDefault(m_Current);
-                if (val == null)
-                    Reset();
-                return val;
+                var strCols = m_CurrentLine.Split(m_Delimiter);
+
+                //
+                // Transform data from row->col in to col->row
+                var rawData = new object[strCols.Length];
+
+                // Read columns
+                for (int i = 0; i < strCols.Length; i++)
+                {
+                    rawData[i] = strCols[i];
+                }
+
+                return rawData;               
             }
         }
-        
+
 
         /// <summary>
         /// Current item of the enumerator
@@ -62,7 +95,7 @@ namespace LearningFoundation.DataProviders
         {
             get
             {
-                throw new NotImplementedException();
+                return m_CurrentLine;
             }
         }
 
@@ -71,7 +104,7 @@ namespace LearningFoundation.DataProviders
         /// </summary>
         public void Dispose()
         {
-         
+            m_Reader.Dispose();
         }
 
         /// <summary>
@@ -80,20 +113,25 @@ namespace LearningFoundation.DataProviders
         /// <returns></returns>
         public bool MoveNext()
         {
-            m_Current++;
-            return true;//m_Current < list.Count();
+            m_CurrentLine = m_Reader.ReadLine();
+            if (m_CurrentLine != null)
+                return true;
+            else
+                return false;
         }
+        
         /// <summary>
         /// reset index of the enumerator
         /// </summary>
         public void Reset()
         {
-            m_Current = 0;
+            m_CurrentLine = null;
+            m_Reader.BaseStream.Position = 0;
         }
 
         public object[] RynAsync(object data)
         {
-            throw new NotImplementedException();
+            throw new MLException("IDataProvider does not support Run method.");           
         }
 
     }

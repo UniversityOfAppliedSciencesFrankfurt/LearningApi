@@ -44,29 +44,26 @@ namespace UnitTests
         {
           //  InitIrisMapperInJsonFormat_helper();
 
-            //creates learning api object
+            // Creates learning api object
             LearningApi api = new LearningApi();
 
-            
-            //prepares the ML Algoritm and setup parameters
-            api.UseBackPropagation(1, 0.2, 1.0, null);
-
-
-            //connect to data file for streaming the data
+            // Initialize data provider
             api.UseCsvDataProvider(m_iris_data_path, ',', 1);
 
-
-            //use mapper for data 
+            // Use mapper for data, which will extract (map) required columns 
             api.UseDefaultDataMapper(m_iris_mapper_path);
 
-            //provide basic data statistic
-            //api.UseBasicDataStatistics(new BasicStatistics());
-
-            //use MinMax data normalizer
+            // Use MinMax data normalizer
             api.UseMinMaxNormalizer(m_stats.Select(x => x.Min).ToArray(), m_stats.Select(x => x.Max).ToArray());
 
-            //use Gaus data normalizer
+            // We could also use some other normalizer like Gaus data normalizer
             //api.UseGaussNormalizer(m_stats.Select(x => x.Mean).ToArray(), m_stats.Select(x => x.Variance).ToArray());
+
+            // Prepares the ML Algoritm and setup parameters
+            api.UseBackPropagation(1, 0.2, 1.0, null);
+            
+            //provide basic data statistic
+            //api.UseBasicDataStatistics(new BasicStatistics());
 
 
             //start process of learning

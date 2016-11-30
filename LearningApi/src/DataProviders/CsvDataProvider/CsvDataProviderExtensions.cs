@@ -22,18 +22,10 @@ namespace LearningFoundation.DataProviders
         /// <returns></returns>
         public static LearningApi UseCsvDataProvider(this LearningApi api, string fileName, char delimiter, int skipRows = 0)       
         {
-            //
-            var dp = new CsvDataProvider();
-            //
-            var rawData = LoadDataFromFile(fileName, delimiter);
-
-            //create dataset
-            dp.DataSet = rawData.Skip(skipRows);
-
-            api.AddModule(dp);
-
-           // api.DataProvider = dp;
-
+            var dp = new CsvDataProvider(fileName, delimiter, skipRows);
+          
+            api.AddModule(dp, "DataProvider");
+            
             return api;
         }
 
@@ -62,7 +54,6 @@ namespace LearningFoundation.DataProviders
                     for (int i = 0; i < strCols.Length; i++)
                     {
                         rawData[i] = strCols[i];
-
                     }
 
                     yield return rawData;

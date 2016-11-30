@@ -31,7 +31,7 @@ namespace LearningFoundation.DataMappers
         /// </summary>
         /// <param name="filePath">path of the file contining mapper configuration</param>
         /// <returns>.Net data mapper object</returns>
-        public static DataMapper Load(string filePath)
+        internal static DataMapper Load(string filePath)
         {
             string strContent = System.IO.File.ReadAllText(filePath);
             //
