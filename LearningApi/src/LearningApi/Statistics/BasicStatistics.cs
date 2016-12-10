@@ -50,13 +50,14 @@ namespace LearningFoundation.Statistics
         /// <param name="dataSet">data set</param>
         /// <param name="dm">datamaper related to dataSet</param>
         /// <returns></returns>
-        public static IStatistics[] CalculateStatistics(IEnumerable<double[]> dataSet, IDataMapper<double[], double[]> dm)
+        public static IStatistics[] CalculateStatistics(IEnumerable<double[]> dataSet, IDataMapper<double[], double[]> dm, IDataDescriptor desc)
         {
+            IContext ctx = new Context() { DataDescriptor = desc };
             //
             List<double[]> data = new List<double[]>();
             foreach(var row in dataSet)
             {
-                var r = dm.RunAsync(row);
+                var r = dm.Run(row, ctx);
                 data.Add(r);
             } 
 
@@ -75,35 +76,43 @@ namespace LearningFoundation.Statistics
         /// Column Id
         /// </summary>
         public int ColumnId { get; set; }
+
+
         /// <summary>
         /// Minimum value of the list
         /// </summary>
         public double Min { get; set; }
+
+
         /// <summary>
         /// Maximum value of the list
         /// </summary>
         public double Max { get; set; }
+
+
         /// <summary>
         /// Average or Mean value in the list
         /// </summary>
         public double Mean { get; set; }
+
+
         /// <summary>
         /// Value of the middle position in the list
         ///  "( [the number of data points] + 1) ÷ 2"
         /// </summary>
         public double Median { get; set; }
 
+
         /// <summary>
         /// Maximum - Min = Range
         /// </summary>
         public double Range { get; set; }
+
 
         /// <summary>
         /// Variance = 1/n S(xi-Mean)^2
         /// S - sum
         /// </summary>
         public double Variance { get; set; }
-
-
     }
 }

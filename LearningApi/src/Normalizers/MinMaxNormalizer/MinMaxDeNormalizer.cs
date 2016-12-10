@@ -14,7 +14,6 @@ namespace LearningFoundation.Normalizers
     /// </summary>
     public class MinMaxDeNormalizer : IDataNormalizer
     {
-        private DataMapper m_DataMapper { get; set; }
         private double[] m_Min;
         private double[] m_Max;
 
@@ -22,12 +21,10 @@ namespace LearningFoundation.Normalizers
         /// /// <summary>
         /// Main constructor
         /// </summary>
-        /// <param name="mapper">data mapper for the related data</param>
         /// <param name="min">min for each column in the dataset</param>
         /// <param name="max">max for each column in the dataset</param>
-        public MinMaxDeNormalizer(DataMapper mapper, double[] min, double[] max)
+        public MinMaxDeNormalizer(double[] min, double[] max)
         {
-            m_DataMapper = mapper;
             m_Min = min;
             m_Max = max;
         }
@@ -38,30 +35,29 @@ namespace LearningFoundation.Normalizers
         /// </summary>
         /// <param name="normalizedData"></param>
         /// <returns></returns>
-        public double[] DeNormalize(double[] normalizedData)
+        public double[] DeNormalize(double[] normalizedData, IContext ctx)
         {
             //
             var rawData = new List<double>();
             for (int i = 0; i < normalizedData.Length; i++)
             {
                 //get feature index
-                var fi = m_DataMapper.GetFeatureIndex(i);
+                var fi = ctx.DataDescriptor.Features[i].Index;
 
                 //numeric column
-                if (m_DataMapper.Features[i].Type == ColumnType.NUMERIC)
+                if (ctx.DataDescriptor.Features[i].Type == ColumnType.NUMERIC)
                 {
                     var value = m_Min[fi] + normalizedData[i] * (m_Max[fi] - m_Min[fi]);
                     rawData.Add(value);
                 }
                 //binary column
-                else if (m_DataMapper.Features[i].Type == ColumnType.BINARY)
+                else if (ctx.DataDescriptor.Features[i].Type == ColumnType.BINARY)
                 {
                     //in case of binary column type real and normalized value are the same
                     rawData.Add(rawData[i]);
-
                 }
                 //category column
-                else if (m_DataMapper.Features[i].Type == ColumnType.CLASS)
+                else if (ctx.DataDescriptor.Features[i].Type == ColumnType.CLASS)
                 {
                     // COnverts set of binary values in to one category 
                     // Normalized values for Blues category:
@@ -72,7 +68,7 @@ namespace LearningFoundation.Normalizers
                     //             0,  1,  2    - 3 numbers     - numeric values
                     //             
 
-                    var count = m_DataMapper.Features[i].Values.Length;
+                    var count = ctx.DataDescriptor.Features[i].Values.Length;
                     for (int j = 0; j < count; j++)
                     {
                         if (rawData[i + j] == 1)
@@ -86,14 +82,10 @@ namespace LearningFoundation.Normalizers
             return rawData.ToArray();
         }
 
-        public double[] Normalize(double[] rawData)
+        public double[] Run(double[] rawData, IContext ctx)
         {
-            throw new NotImplementedException();
+            return DeNormalize(rawData, ctx);
         }
 
-        public double[] RynAsync(double[] data)
-        {
-            return DeNormalize(data);
-        }
     }
 }

@@ -16,6 +16,6 @@ namespace LearningFoundation
         /// </summary>
         /// <param name="normilizedData"></param>
         /// <returns></returns>
-        double[] DeNormalize(double[] normilizedData);
+        double[] DeNormalize(double[] normilizedData, IContext ctx);
     }
 }

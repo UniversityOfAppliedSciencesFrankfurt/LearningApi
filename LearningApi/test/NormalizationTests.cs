@@ -12,6 +12,7 @@ using LearningFoundation.DataProviders;
 using LearningFoundation.DataMappers;
 using LearningFoundation.Statistics;
 using LearningFoundation.Normalizers;
+using test;
 
 namespace UnitTests
 {
@@ -54,9 +55,10 @@ namespace UnitTests
             //iris mapper
             var irisMapperFilePath = System.IO.Path.Combine(Directory.GetCurrentDirectory(), @"sample_data\iris\iris_mapper.json");
 
-            m_Api = new LearningApi();
+            m_Api = new LearningApi(TestHelpers.GetDescriptor());
+            
             //create datamapper 
-            m_Api.UseDefaultDataMapper(irisMapperFilePath);
+            m_Api.UseDefaultDataMapper();
           
             //create dataprovider
             m_Api.UseCsvDataProvider(irisRealDataFilePath, ',', 1);

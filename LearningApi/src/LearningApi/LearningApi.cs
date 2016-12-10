@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-
+using System.Reflection;
 
 
 namespace LearningFoundation
@@ -12,6 +12,8 @@ namespace LearningFoundation
     /// </summary>
     public class LearningApi
     {
+        public IContext Context { get; set; }
+
         public Dictionary<string, IPipelineModule> Modules { get; internal set; }
 
         /// <summary>
@@ -42,8 +44,11 @@ namespace LearningFoundation
         /// <summary>
         /// main constructor
         /// </summary>
-        public LearningApi()
+        /// <param name="desc">Describes the data and features.</param>
+        public LearningApi(DataDescriptor desc)
         {
+            this.Context = new Context() { DataDescriptor = desc };
+
             this.Modules = new Dictionary<string, LearningFoundation.IPipelineModule>();
         }
 
@@ -89,7 +94,7 @@ namespace LearningFoundation
             if (Normalizer == null)
                 return featureVector;
             else
-                return Normalizer.Normalize(featureVector);
+                return Normalizer.Run(featureVector, this.Context);
         }
 
         /// <summary>
@@ -103,7 +108,7 @@ namespace LearningFoundation
             if (Normalizer == null)
                 throw new MLException("There is no module registered of type 'IDataDeNormalizer'");
             else
-                return Normalizer.DeNormalize(normVector);
+                return Normalizer.DeNormalize(normVector, this.Context);
         }
 
         public async Task TrainAsync()
@@ -115,20 +120,29 @@ namespace LearningFoundation
                 throw new MLException("Uninitialised pipeline.");
 
             IDataProvider<object[]> dataProvider = (IDataProvider<object[]>)this.Modules.First().Value;
+            
+           
+            /*
+            
+             Exit Criteria:
+             1. Num of iterations
+             2. err < some min err
 
-            while(dataProvider.MoveNext())
+            */
+
+            while(dataProvider.MoveNext() /* ||  exitStrategy.ShouldExit(this.Modules.GetModule<IAlgorithm>().GetResult()) */)
             {  
                 int k = 0;
 
+                dynamic vector = dataProvider.Current;
+             
                 foreach (var item in this.Modules)
                 {
-                    if (k++ == 0) continue;
-                    
-                    var res = dataProvider.Current;
-
+                    if (k++ == 0) continue;                    
+                   
                     dynamic module = item.Value;
-
-                    res = module.RunAsync(res);
+                
+                    vector = module.Run(vector, this.Context);
                 }              
             }
         }

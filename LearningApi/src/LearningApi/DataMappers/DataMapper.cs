@@ -11,6 +11,8 @@ namespace LearningFoundation.DataMappers
     /// </summary>
     public class DataMapper : IDataMapper<object[], double[]>
     {
+        IDataDescriptor m_DataContext = new DataDescriptor();
+
         /// <summary>
         /// main constructor
         /// </summary>
@@ -19,56 +21,57 @@ namespace LearningFoundation.DataMappers
 
         }
 
-        /// <summary>
-        ///array of feature which play role in training 
-        /// </summary>
-        public Column[] Features { get; set; }
+        ///// <summary>
+        /////array of feature which play role in training 
+        ///// </summary>
+        //public Column[] Features { get; set; }
 
                 
-        private int m_LabelIndex;
-        /// <summary>
-        /// Position/Index of the Label column in data row
-        /// </summary>
-        public int LabelIndex
-        {
-            get
-            {
-                return m_LabelIndex;
-            }
+        //private int m_LabelIndex;
 
-            set
-            {
-                m_LabelIndex = value;
-            }
-        }
+        ///// <summary>
+        ///// Position/Index of the Label column in data row
+        ///// </summary>
+        //public int LabelIndex
+        //{
+        //    get
+        //    {
+        //        return m_LabelIndex;
+        //    }
 
-        private int m_NumOfFeatures;
+        //    set
+        //    {
+        //        m_LabelIndex = value;
+        //    }
+        //}
 
-        /// <summary>
-        /// Number of feature used in training of label
-        /// </summary>
-        public int NumOfFeatures
-        {
-            get
-            {
-                return m_NumOfFeatures;
-            }
+        //private int m_NumOfFeatures;
 
-            set
-            {
-                this.m_NumOfFeatures = value;
-            }
-        }
+        ///// <summary>
+        ///// Number of feature used in training of label
+        ///// </summary>
+        //public int NumOfFeatures
+        //{
+        //    get
+        //    {
+        //        return m_NumOfFeatures;
+        //    }
 
-        /// <summary>
-        /// returns the rawData index of specific feature
-        /// </summary>
-        /// <param name="feature"></param>
-        /// <returns></returns>
-        public int GetFeatureIndex(int feature)
-        {
-            return Features[feature].Index;
-        }
+        //    set
+        //    {
+        //        this.m_NumOfFeatures = value;
+        //    }
+        //}
+
+        ///// <summary>
+        ///// returns the rawData index of specific feature
+        ///// </summary>
+        ///// <param name="feature"></param>
+        ///// <returns></returns>
+        //public int GetFeatureIndex(int feature)
+        //{
+        //    return Features[feature].Index;
+        //}
 
 
         /// <summary>
@@ -81,12 +84,8 @@ namespace LearningFoundation.DataMappers
         /// <param name="rawData"></param>
         /// <returns></returns>
 
-        public double[] RynAsync(object[] data)
-        {
-            throw new NotImplementedException();
-        }
 
-        public double[] RunAsync(object[] rawData)
+        public double[] Run(object[] rawData, IContext ctx)
         {
             List<double> raw = new List<double>();
 
@@ -95,7 +94,7 @@ namespace LearningFoundation.DataMappers
             {
                 //check if the value is valid 
                
-                var col= Features[i];
+                var col= ctx.DataDescriptor.Features[i];
                 if (col.Type ==  ColumnType.STRING)
                     continue;
                 else if(col.Type ==  ColumnType.NUMERIC)//numeric column
@@ -144,8 +143,9 @@ namespace LearningFoundation.DataMappers
                 }
 
             }
+
             //callculate number of features
-            NumOfFeatures = raw.Count;
+            ctx.DataDescriptor.NumOfFeatures = raw.Count;
 
             //return double value feture vector
             return raw.ToArray();
@@ -209,7 +209,7 @@ namespace LearningFoundation.DataMappers
     }
 
     /// <summary>
-    /// todo
+    /// 
     /// </summary>
     public class ResultMapping
     {

@@ -12,6 +12,6 @@ namespace LearningFoundation
 
     public interface IPipelineModule<TIN, TOUT> : IPipelineModule
     {
-        TOUT RynAsync(TIN data);
+        TOUT Run(TIN data, IContext ctx);
     }
 }

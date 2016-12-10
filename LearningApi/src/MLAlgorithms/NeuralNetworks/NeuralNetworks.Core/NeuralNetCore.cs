@@ -12,13 +12,13 @@ namespace NeuralNetworks.Core
         {
         }
 
-        public Task<double> RynAsync(double[] featureValues)
+        public Task<double> Run(double[] featureValues, IContext ctx)
         {
-            return Train(featureValues, 1);
+            return Train(featureValues, 1, ctx:ctx);
         }
 
       
 
-        public abstract Task<double> Train(double[] featureValues, double label);
+        public abstract Task<double> Train(double[] featureValues, double label, IContext ctx);
     }
 }

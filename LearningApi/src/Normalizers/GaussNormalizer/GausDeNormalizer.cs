@@ -38,32 +38,34 @@ namespace LearningFoundation.Normalizers
         /// </summary>
         /// <param name="normalizedData"></param>
         /// <returns></returns>
-        public double[] DeNormalize(double[] normalizedData)
+        public double[] DeNormalize(double[] normalizedData, IContext ctx)
         {
              //
             var rawData = new List<double>();
             for (int i = 0; i < normalizedData.Length; i++)
             {
                 //get feature index
-                var fi = m_DataMapper.GetFeatureIndex(i);
+                var fi = ctx.DataDescriptor.Features[i].Index;
 
-                if (m_DataMapper.Features[i].Type == LearningFoundation.DataMappers.ColumnType.STRING)
+                if (ctx.DataDescriptor.Features[i].Type == LearningFoundation.DataMappers.ColumnType.STRING)
                     continue;
+
                 //numeric column
-                else if (m_DataMapper.Features[i].Type == LearningFoundation.DataMappers.ColumnType.NUMERIC)
+                else if (ctx.DataDescriptor.Features[i].Type == LearningFoundation.DataMappers.ColumnType.NUMERIC)
                 {
                     var value = m_Mean[fi] + normalizedData[i] * m_Var[fi];
                     rawData.Add(value);
                 }
+
                 //binary column
-                else if (m_DataMapper.Features[i].Type == LearningFoundation.DataMappers.ColumnType.BINARY)
+                else if (ctx.DataDescriptor.Features[i].Type == LearningFoundation.DataMappers.ColumnType.BINARY)
                 {
                     //in case of binary column type real and normalized value are the same
                     rawData.Add(rawData[i]);
 
                 }
                 //category column
-                else if (m_DataMapper.Features[i].Type == LearningFoundation.DataMappers.ColumnType.CLASS)
+                else if (ctx.DataDescriptor.Features[i].Type == LearningFoundation.DataMappers.ColumnType.CLASS)
                 {
                     // COnverts set of binary values in to one category 
                     // Normalized values for Blues category:
@@ -74,7 +76,7 @@ namespace LearningFoundation.Normalizers
                     //             0,  1,  2    - 3 numbers     - numeric values
                     //             
 
-                    var count = m_DataMapper.Features[i].Values.Length;
+                    var count = ctx.DataDescriptor.Features[i].Values.Length;
                     for (int j = 0; j < count; j++)
                     {
                         if (rawData[i + j] == 1)
@@ -89,9 +91,9 @@ namespace LearningFoundation.Normalizers
         }
 
 
-        public double[] RynAsync(double[] data)
+        public double[] Run(double[] data, IContext ctx)
         {
-            return DeNormalize(data);
+            return DeNormalize(data, ctx);
         }       
     }
 }

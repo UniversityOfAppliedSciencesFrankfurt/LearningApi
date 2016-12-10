@@ -129,7 +129,7 @@ namespace LearningFoundation.DataProviders
             m_Reader.BaseStream.Position = 0;
         }
 
-        public object[] RynAsync(object data)
+        public object[] Run(object data, IContext ctx)
         {
             throw new MLException("IDataProvider does not support Run method.");           
         }

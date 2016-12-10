@@ -7,6 +7,6 @@ namespace LearningFoundation
 {
     public interface IAlgorithm : IPipelineModule<double[], Task<double>>
     {
-        Task<double> Train(double[] featureValues, double label);
+        Task<double> Train(double[] featureValues, double label, IContext ctx);
     }
 }

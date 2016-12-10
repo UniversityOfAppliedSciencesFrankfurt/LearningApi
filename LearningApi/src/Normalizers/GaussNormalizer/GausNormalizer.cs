@@ -15,26 +15,19 @@ namespace LearningFoundation.Normalizers
     /// </summary>
     public class GaussNormalizer : IDataNormalizer
     {
-        DataMapper m_DataMapper;
         private double[] m_Mean;
         private double[] m_Var;
 
         /// <summary>
         /// Main Constructor
         /// </summary>
-        /// <param name="mapper">related data mapper</param>
         /// <param name="mean">mean for each column in the dataset</param>
         /// <param name="var">variance for each column in the dataset</param>
-        public GaussNormalizer(DataMapper mapper, double[] mean, double[] var)
+        public GaussNormalizer(double[] mean, double[] var)
         {
-            m_DataMapper = mapper;
             m_Mean = mean;
             m_Var = var;
-        }
-        public double[] RynAsync(double[] data)
-        {
-            return Normalize(data);
-        }
+        }    
 
         /// <summary>
         /// perform process of normalization where natural data is being transformd in to normalized format
@@ -42,32 +35,32 @@ namespace LearningFoundation.Normalizers
         /// </summary>
         /// <param name="rawData"></param>
         /// <returns></returns>
-        public double[] Normalize(double[] rawData)
+        public double[] Run(double[] rawData, IContext ctx)
         {
             //
             var normData = new List<double>();
             for (int i = 0; i < rawData.Length; i++)
             {
                 //get feature index
-                var fi = m_DataMapper.GetFeatureIndex(i);
+                var fi = ctx.DataDescriptor.Features[i].Index;
 
-                if (m_DataMapper.Features[i].Type == LearningFoundation.DataMappers.ColumnType.STRING)
+                if (ctx.DataDescriptor.Features[i].Type == LearningFoundation.DataMappers.ColumnType.STRING)
                     continue;
                 //numeric column
-                else if (m_DataMapper.Features[i].Type == LearningFoundation.DataMappers.ColumnType.NUMERIC)
+                else if (ctx.DataDescriptor.Features[i].Type == LearningFoundation.DataMappers.ColumnType.NUMERIC)
                 {
                     var value = (rawData[i] - m_Mean[fi]) / m_Var[fi];
                     normData.Add(value);
                 }
                 //binary column
-                else if (m_DataMapper.Features[i].Type == LearningFoundation.DataMappers.ColumnType.BINARY)
+                else if (ctx.DataDescriptor.Features[i].Type == LearningFoundation.DataMappers.ColumnType.BINARY)
                 {
                     //in case of binary column type real and normalized value are the same
                     normData.Add(rawData[i]);
 
                 }
                 //category column
-                else if (m_DataMapper.Features[i].Type == LearningFoundation.DataMappers.ColumnType.CLASS)
+                else if (ctx.DataDescriptor.Features[i].Type == LearningFoundation.DataMappers.ColumnType.CLASS)
                 {
                     // Converts category numeric values in to binary values
                     // it creates array which has length of categories count.
@@ -78,7 +71,7 @@ namespace LearningFoundation.Normalizers
                     //          Blue  =  (0,0,1)  - three values which sum is 1,
                     //          Red   =  (1,0,0)
                     //          Green =  (0,1,0)
-                    var count = m_DataMapper.Features[i].Values.Length;
+                    var count = ctx.DataDescriptor.Features[i].Values.Length;
                     for (int j = 0; j < count; j++)
                     {
                         if (j == rawData[i])

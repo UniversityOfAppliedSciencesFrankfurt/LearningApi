@@ -26,7 +26,7 @@ namespace NeuralNet.BackPropagation
             this.activationFnc = activationFnc;
         }
 
-        public override Task<double> Train(double[] featureValues, double label)
+        public override Task<double> Train(double[] featureValues, double label, IContext ctx)
         {
            
             return Task.FromResult<double>(0.7);

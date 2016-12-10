@@ -12,14 +12,22 @@ using LearningFoundation.DataMappers;
 using LearningFoundation.Normalizers;
 using LearningFoundation.Statistics;
 using NeuralNet.BackPropagation;
+using test;
 
 namespace UnitTests
 {
+    //TODO: Implement module for calculation of mean vealue
+    //TODO: Implement module for calculation of median vealue
+    //TODO: Implement module for calculation of variance
+    //TODO: Implement module for calculation of covariance
+    // public class XyModule : IPipeline<double[], double[]> .. Run(double[], ctx)
+
     public class ApiInitializationTests
-    {
-        string m_iris_mapper_path;
+    {      
         string m_iris_data_path;
+
         BasicStatistics[] m_stats;//basic statistics of the iris data
+        
         public ApiInitializationTests()
         {
             //create stat for IRIS data
@@ -32,26 +40,25 @@ namespace UnitTests
                 new BasicStatistics(5, 0, 0, 0, 0),
             };
 
-            //mapper initialization
-            m_iris_mapper_path = System.IO.Path.Combine(Directory.GetCurrentDirectory(), @"sample_data\iris\iris_mapper.json");
-
+          
             //iris data file
             m_iris_data_path = System.IO.Path.Combine(Directory.GetCurrentDirectory(), @"sample_data\iris\iris.csv");
-
         }
+
+
         [Fact]
         public bool InitNeuralBackPropagationTest()
         {
           //  InitIrisMapperInJsonFormat_helper();
 
             // Creates learning api object
-            LearningApi api = new LearningApi();
+            LearningApi api = new LearningApi(TestHelpers.GetDescriptor());
 
             // Initialize data provider
             api.UseCsvDataProvider(m_iris_data_path, ',', 1);
 
             // Use mapper for data, which will extract (map) required columns 
-            api.UseDefaultDataMapper(m_iris_mapper_path);
+            api.UseDefaultDataMapper();
 
             // Use MinMax data normalizer
             api.UseMinMaxNormalizer(m_stats.Select(x => x.Min).ToArray(), m_stats.Select(x => x.Max).ToArray());
@@ -78,7 +85,7 @@ namespace UnitTests
             return true;
         }
 
-        
+     
 
         public void LoadModelNeuralBackPropagationTest()
         {
@@ -86,20 +93,19 @@ namespace UnitTests
             //api.LoadData();
 
         }
-
-
+        
         public string InitIrisMapperInJsonFormat_helper()
         {
+            var descriptor = TestHelpers.GetDescriptor();
 
             var dm = new DataMapper();
 
-            dm.Features = new Column[4];
-            dm.Features[0] = new Column { Id = 1, Name = "sepal_length", Index = 0,  Type =  ColumnType.NUMERIC, Values = null, DefaultMissingValue = 5.5 };
-            dm.Features[1] = new Column { Id = 2, Name = "sepal_width", Index = 1,  Type = ColumnType.NUMERIC, Values = null, DefaultMissingValue = 4.2 };
-            dm.Features[2] = new Column { Id = 3, Name = "petal_length", Index = 2,  Type = ColumnType.NUMERIC, Values = null, DefaultMissingValue = 1.4 };
-            dm.Features[3] = new Column { Id = 4, Name = "petal_width", Index = 3,  Type = ColumnType.NUMERIC, Values = null, DefaultMissingValue = 0.5 };
-            dm.Features[4] = new Column { Id = 5, Name = "species", Index = 4,  Type = ColumnType.CLASS, Values = null, DefaultMissingValue = 1 };
-
+            descriptor.Features = new Column[4];
+            descriptor.Features[0] = new Column { Id = 1, Name = "sepal_length", Index = 0,  Type =  ColumnType.NUMERIC, Values = null, DefaultMissingValue = 5.5 };
+            descriptor.Features[1] = new Column { Id = 2, Name = "sepal_width", Index = 1,  Type = ColumnType.NUMERIC, Values = null, DefaultMissingValue = 4.2 };
+            descriptor.Features[2] = new Column { Id = 3, Name = "petal_length", Index = 2,  Type = ColumnType.NUMERIC, Values = null, DefaultMissingValue = 1.4 };
+            descriptor.Features[3] = new Column { Id = 4, Name = "petal_width", Index = 3,  Type = ColumnType.NUMERIC, Values = null, DefaultMissingValue = 0.5 };
+            descriptor.Features[4] = new Column { Id = 5, Name = "species", Index = 4,  Type = ColumnType.CLASS, Values = null, DefaultMissingValue = 1 };
 
             var jsonString = JsonConvert.SerializeObject(dm);
             return jsonString;

@@ -16,7 +16,7 @@ namespace LearningFoundation
         /// </summary>
         /// <param name="rawData">Vector with raw scalar values.</param>
         /// <returns></returns>
-        double[] Normalize(double[] rawData );
+        double[] Run(double[] rawData, IContext ctx);
 
     }
 }

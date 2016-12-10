@@ -18,7 +18,7 @@ namespace LearningFoundation.DataProviders
         /// <param name="api">instance of the LearningAPI</param>
         /// <param name="fileName">csv file path</param>
         /// <param name="delimiter">csv delimiter</param>
-        /// <param name="skipRows">firs several rows which should be skiped in parsing</param>
+        /// <param name="skipRows">firs several rows which should be skiped in parsing.</param>
         /// <returns></returns>
         public static LearningApi UseCsvDataProvider(this LearningApi api, string fileName, char delimiter, int skipRows = 0)       
         {

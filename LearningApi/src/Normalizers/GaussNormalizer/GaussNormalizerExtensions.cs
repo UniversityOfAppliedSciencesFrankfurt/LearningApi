@@ -30,7 +30,7 @@ namespace LearningFoundation.Normalizers
             //if (api.DataMapper is DataMappers.DataMapper)
             //{
                 //create minmax object
-                var gn = new GaussNormalizer(null/* TODO datamapper not needed!! */, mean, var);
+                var gn = new GaussNormalizer(mean, var);
                 // assign to LearningAPI property
                 api.AddModule(gn);
 
