@@ -16,6 +16,7 @@ using test;
 
 namespace UnitTests
 {
+    //Complete UnitTests as discussed.
     //TODO: Implement module for calculation of mean vealue
     //TODO: Implement module for calculation of median vealue
     //TODO: Implement module for calculation of variance
