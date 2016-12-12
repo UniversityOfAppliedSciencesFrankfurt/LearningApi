@@ -38,7 +38,7 @@ Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "GaussNormalizer", "src\Norm
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DataPreProcessing", "DataPreProcessing", "{484E9B38-A4A9-4ED6-849B-6E7AC3766F71}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "CannyEdgeDetector", "CannyEdgeDetector\CannyEdgeDetector.xproj", "{0C98AAB8-042D-4219-96FD-D3EF0CF84F5D}"
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "CannyEdgeDetector", "src\DataProviders\CannyEdgeDetector\CannyEdgeDetector.xproj", "{0C98AAB8-042D-4219-96FD-D3EF0CF84F5D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

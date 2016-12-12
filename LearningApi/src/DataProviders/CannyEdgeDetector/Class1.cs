@@ -8,7 +8,7 @@ namespace CannyEdgeDetector
     public class Class1
     {
         public Class1()
-        {
+        { 
         }
     }
 }
