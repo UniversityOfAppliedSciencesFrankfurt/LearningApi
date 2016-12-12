@@ -24,11 +24,12 @@ namespace UnitTests
     // public class XyModule : IPipeline<double[], double[]> .. Run(double[], ctx)
 
     public class ApiInitializationTests
-    {      
+    {
         string m_iris_data_path;
 
         BasicStatistics[] m_stats;//basic statistics of the iris data
-        
+
+     
         public ApiInitializationTests()
         {
             //create stat for IRIS data
@@ -46,6 +47,46 @@ namespace UnitTests
             m_iris_data_path = System.IO.Path.Combine(Directory.GetCurrentDirectory(), @"sample_data\iris\iris.csv");
         }
 
+        /// <summary>
+        /// Demonstrates how to inject a data provider as an action.
+        /// </summary>
+        [Fact]
+        public void ActionModuleTest()
+        {
+            LearningApi api = new LearningApi(null);
+            api.UseActionModule<double[], double[]>((input, ctx) =>
+            {
+                return new double[] { 1.1, 2.2, 3.3, 4.4};
+            });
+
+            var result = api.Run();
+
+            Assert.Equal(1.1, ((double[])result)[0]);
+            Assert.Equal(4.4, ((double[])result)[3]);
+        }
+
+        /// <summary>
+        /// Demonstrates ho to setup a chain of action modules.
+        /// </summary>
+        [Fact]
+        public void ActionModuleChainTest()
+        {
+            LearningApi api = new LearningApi(null);
+            api.UseActionModule<double[], double[]>((input, ctx) =>
+            {
+                return new double[] { 1.1, 2.2, 3.3, 4.4 };
+            });
+
+            api.UseActionModule<double[], double[]>((input, ctx) =>
+            {
+                return new double[] { input[0] + 1, input[1] + 1, input[2] + 1, input[3] + 1 };
+            });
+
+            var result = api.Run();
+
+            Assert.Equal(2.1, ((double[])result)[0]);
+            Assert.Equal(5.4, ((double[])result)[3]);
+        }
 
         [Fact]
         public bool InitNeuralBackPropagationTest()

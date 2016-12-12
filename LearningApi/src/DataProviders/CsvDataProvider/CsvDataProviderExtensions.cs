@@ -58,8 +58,7 @@ namespace LearningFoundation.DataProviders
 
                     yield return rawData;
                 }
-            }
-                
+            }                
         }
 
         /// <summary>

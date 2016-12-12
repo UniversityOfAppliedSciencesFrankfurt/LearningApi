@@ -119,6 +119,7 @@ namespace LearningFoundation.DataProviders
             else
                 return false;
         }
+
         
         /// <summary>
         /// reset index of the enumerator
@@ -128,6 +129,7 @@ namespace LearningFoundation.DataProviders
             m_CurrentLine = null;
             m_Reader.BaseStream.Position = 0;
         }
+
 
         public object[] Run(object data, IContext ctx)
         {

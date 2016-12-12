@@ -10,5 +10,6 @@
     "netstandard1.2": {
       "imports": "dnxcore50"
     }
+   
   }
 }
