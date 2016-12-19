@@ -10,7 +10,24 @@ namespace test.statistics
 {
     public class BasicStatisticsTests
     {
+        [Fact]
+        public void MeanOfTest()
+        {
+            var dataSample1 = new double[] { 6, 11, 7, 20 };
+            var result = dataSample1.MeanOf();
+            Assert.Equal(result, 11);
+        }
 
+        [Theory]
+        [InlineData(new double[] { 6, 11, 7, 20 })]
+        [InlineData(new double[] { 2, 3, 1 })]
+        public void MeanOfTest1(double[] data)
+        {
+            var result = data.MeanOf();
+            Assert.True(result == 11 || result == 2);
+        }
+
+      
         [Fact]
         public bool MeanTest()
         {

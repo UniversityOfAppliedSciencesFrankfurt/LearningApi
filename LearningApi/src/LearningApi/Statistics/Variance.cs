@@ -7,9 +7,9 @@ namespace LearningFoundation.Statistics
 {
     /// <summary>
     /// Modul calculate variance value of array of numbers. 
-    ///The variance(σ2) is a measure of how far each value in the data set is from the mean.
-    ///The variance (σ2), is defined as the sum of the squared distances of each
-    ///value in the data from the mean (μ), divided by the number of elements in the data (N).
+    /// The variance(σ2) is a measure of how far each value in the data set is from the mean.
+    /// The variance (σ2), is defined as the sum of the squared distances of each
+    /// value in the data from the mean (μ), divided by the number of elements in the data (N).
     /// </summary>
     public class Variance : IStatistics
     {
