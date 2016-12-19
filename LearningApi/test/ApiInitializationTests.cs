@@ -27,20 +27,20 @@ namespace UnitTests
     {
         string m_iris_data_path;
 
-        BasicStatistics[] m_stats;//basic statistics of the iris data
+        Mean[] m_stats;//basic statistics of the iris data
 
      
         public ApiInitializationTests()
         {
             //create stat for IRIS data
-            m_stats = new BasicStatistics[5]
-            {
-                new BasicStatistics(1, 4.3, 7.9, 5.84333333333, 0.681122222),
-                new BasicStatistics(2, 2.0, 4.4, 3.05733333333, 0.188712889),
-                new BasicStatistics(3, 1.0, 6.9, 3.75800000000, 3.095502667),
-                new BasicStatistics(4, 0.1, 2.5, 1.19933333333, 0.577132889),
-                new BasicStatistics(5, 0, 0, 0, 0),
-            };
+            //m_stats = new Mean[5]
+            //{
+            //    new BasicStatistics(1, 4.3, 7.9, 5.84333333333, 0.681122222),
+            //    new BasicStatistics(2, 2.0, 4.4, 3.05733333333, 0.188712889),
+            //    new BasicStatistics(3, 1.0, 6.9, 3.75800000000, 3.095502667),
+            //    new BasicStatistics(4, 0.1, 2.5, 1.19933333333, 0.577132889),
+            //    new BasicStatistics(5, 0, 0, 0, 0),
+            //};
 
           
             //iris data file
@@ -103,7 +103,7 @@ namespace UnitTests
             api.UseDefaultDataMapper();
 
             // Use MinMax data normalizer
-            api.UseMinMaxNormalizer(m_stats.Select(x => x.Min).ToArray(), m_stats.Select(x => x.Max).ToArray());
+          //  api.UseMinMaxNormalizer(m_stats.Select(x => x.Min).ToArray(), m_stats.Select(x => x.Max).ToArray());
 
             // We could also use some other normalizer like Gaus data normalizer
             //api.UseGaussNormalizer(m_stats.Select(x => x.Mean).ToArray(), m_stats.Select(x => x.Variance).ToArray());
