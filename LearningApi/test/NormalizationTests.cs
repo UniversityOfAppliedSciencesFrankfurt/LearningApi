@@ -25,7 +25,7 @@ namespace UnitTests
     {
         //helper for test run
         LearningApi m_Api;
-        BasicStatistics[] m_Stats;//basic statistics of the iris data
+       // Mean[] m_Stats;//basic statistics of the iris data
 
         //file path for data and results data
         string m_irisNumericDataFilePath;
@@ -38,14 +38,14 @@ namespace UnitTests
         public NormalizationTests()
         {
             //create stat for IRIS data
-            m_Stats = new BasicStatistics[5]
-            {
-                new BasicStatistics(1, 4.3, 7.9, 5.84333333333, 0.681122222),
-                new BasicStatistics(2, 2.0, 4.4, 3.05733333333, 0.188712889),
-                new BasicStatistics(3, 1.0, 6.9, 3.75800000000, 3.095502667),
-                new BasicStatistics(4, 0.1, 2.5, 1.19933333333, 0.577132889),
-                new BasicStatistics(5, 0, 0, 0, 0),
-            };
+            //m_Stats = new Mean[5]
+            //{
+            //    new BasicStatistics(1, 4.3, 7.9, 5.84333333333, 0.681122222),
+            //    new BasicStatistics(2, 2.0, 4.4, 3.05733333333, 0.188712889),
+            //    new BasicStatistics(3, 1.0, 6.9, 3.75800000000, 3.095502667),
+            //    new BasicStatistics(4, 0.1, 2.5, 1.19933333333, 0.577132889),
+            //    new BasicStatistics(5, 0, 0, 0, 0),
+            //};
 
             //iris data file paths
             var irisRealDataFilePath = System.IO.Path.Combine(Directory.GetCurrentDirectory(), @"sample_data\iris\iris.csv");

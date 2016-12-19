@@ -6,15 +6,16 @@ using System.Threading.Tasks;
 namespace LearningFoundation
 {
     /// <summary>
-    /// Basic statistics of column (feature).
+    /// Performs data statistics on provided data.
     /// </summary>
-    public interface IStatistics
+    public interface IStatistics : IPipelineModule<double[], double>
     {
-
-        double Max { get; set; }
-        double Min { get; set; }
-        double Mean { get; set; }
-        double Variance { get; set; }
+        /// <summary>
+        /// Does calculation of vector of column data
+        /// </summary>
+        /// <param name="rawData">Vector with raw scalar values.</param>
+        /// <returns></returns>
+        double Run(double[] colData, IContext ctx);
 
     }
 
