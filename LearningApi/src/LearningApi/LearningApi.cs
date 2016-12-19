@@ -86,15 +86,15 @@ namespace LearningFoundation
         /// <summary>
         /// Transform numeric to normalized row 
         /// </summary>
-        /// <param name="featureVector"></param>
+        /// <param name="data"></param>
         /// <returns></returns>
-        private double[] Normalize(double[] featureVector)
+        private double[][] Normalize(double[][] data)
         {
             var Normalizer = GetModule<IDataNormalizer>();
             if (Normalizer == null)
-                return featureVector;
+                return data;
             else
-                return Normalizer.Run(featureVector, this.Context);
+                return Normalizer.Run(data, this.Context);
         }
 
         /// <summary>
@@ -102,7 +102,7 @@ namespace LearningFoundation
         /// </summary>
         /// <param name="featureVector"></param>
         /// <returns></returns>
-        private double[] DeNormalize(double[] normVector)
+        private double[][] DeNormalize(double[][] normVector)
         {
             IDataDeNormalizer Normalizer = GetModule<IDataDeNormalizer>() as IDataDeNormalizer;
             if (Normalizer == null)

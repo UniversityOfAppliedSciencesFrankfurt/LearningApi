@@ -131,9 +131,45 @@ namespace LearningFoundation.DataProviders
         }
 
 
-        public object[] Run(object data, IContext ctx)
+        public object[][] Run(object data, IContext ctx)
         {
-            throw new MLException("IDataProvider does not support Run method.");           
+            List<object[]> rawData = new List<object[]>();
+
+            using (StreamReader reader = File.OpenText(m_FileName))
+            {  
+                foreach (string line in readLineFromFile(reader))
+                {
+                    //split line in to column
+                    var strCols = line.Split(m_Delimiter);
+
+                    //Transform data from row->col in to col->row
+                    var singleRow = new object[strCols.Length];
+
+                    //define columns
+                    for (int i = 0; i < strCols.Length; i++)
+                    {
+                        singleRow[i] = strCols[i];
+                    }
+
+                    rawData.Add(singleRow);
+                }
+
+                return rawData.ToArray();
+            }
+        }
+
+        /// <summary>
+        /// Reading stream reader line by line with IEnumerable collection.
+        /// </summary>
+        /// <param name="reader"></param>
+        /// <returns></returns>
+        private static IEnumerable<string> readLineFromFile(StreamReader reader)
+        {
+            string currentLine;
+            while ((currentLine = reader.ReadLine()) != null)
+            {
+                yield return currentLine;
+            }
         }
 
     }

@@ -38,62 +38,69 @@ namespace LearningFoundation.Normalizers
         /// </summary>
         /// <param name="normalizedData"></param>
         /// <returns></returns>
-        public double[] DeNormalize(double[] normalizedData, IContext ctx)
+        public double[][] DeNormalize(double[][] data, IContext ctx)
         {
-             //
-            var rawData = new List<double>();
-            for (int i = 0; i < normalizedData.Length; i++)
+            var normData = new List<List<double>>();
+
+            for (int k = 0; k < data.Length; k++)
             {
-                //get feature index
-                var fi = ctx.DataDescriptor.Features[i].Index;
+                var normalizedData = new List<double>();
 
-                if (ctx.DataDescriptor.Features[i].Type == LearningFoundation.DataMappers.ColumnType.STRING)
-                    continue;
+                double[] rawData = data[k];
 
-                //numeric column
-                else if (ctx.DataDescriptor.Features[i].Type == LearningFoundation.DataMappers.ColumnType.NUMERIC)
+                for (int i = 0; i < rawData.Length; i++)
                 {
-                    var value = m_Mean[fi] + normalizedData[i] * m_Var[fi];
-                    rawData.Add(value);
-                }
+                    //get feature index
+                    var fi = ctx.DataDescriptor.Features[i].Index;
 
-                //binary column
-                else if (ctx.DataDescriptor.Features[i].Type == LearningFoundation.DataMappers.ColumnType.BINARY)
-                {
-                    //in case of binary column type real and normalized value are the same
-                    rawData.Add(rawData[i]);
+                    if (ctx.DataDescriptor.Features[i].Type == LearningFoundation.DataMappers.ColumnType.STRING)
+                        continue;
 
-                }
-                //category column
-                else if (ctx.DataDescriptor.Features[i].Type == LearningFoundation.DataMappers.ColumnType.CLASS)
-                {
-                    // COnverts set of binary values in to one category 
-                    // Normalized values for Blues category:
-                    //          Blue  =  (0,0,1)  - three values which sum is 1,
-                    //          Red   =  (1,0,0)
-                    //          Green =  (0,1,0)
-                    // Example: Red, Gree, Blue - 3 categories  - real values
-                    //             0,  1,  2    - 3 numbers     - numeric values
-                    //             
-
-                    var count = ctx.DataDescriptor.Features[i].Values.Length;
-                    for (int j = 0; j < count; j++)
+                    //numeric column
+                    else if (ctx.DataDescriptor.Features[i].Type == LearningFoundation.DataMappers.ColumnType.NUMERIC)
                     {
-                        if (rawData[i + j] == 1)
-                            rawData.Add(j);
+                        var value = m_Mean[fi] + normalizedData[i] * m_Var[fi];
+                        normalizedData.Add(value);
                     }
-                    //
-                    i += count;
+
+                    //binary column
+                    else if (ctx.DataDescriptor.Features[i].Type == LearningFoundation.DataMappers.ColumnType.BINARY)
+                    {
+                        //in case of binary column type real and normalized value are the same
+                        normalizedData.Add(rawData[i]);
+
+                    }
+                    //category column
+                    else if (ctx.DataDescriptor.Features[i].Type == LearningFoundation.DataMappers.ColumnType.CLASS)
+                    {
+                        // COnverts set of binary values in to one category 
+                        // Normalized values for Blues category:
+                        //          Blue  =  (0,0,1)  - three values which sum is 1,
+                        //          Red   =  (1,0,0)
+                        //          Green =  (0,1,0)
+                        // Example: Red, Gree, Blue - 3 categories  - real values
+                        //             0,  1,  2    - 3 numbers     - numeric values
+                        //             
+
+                        var count = ctx.DataDescriptor.Features[i].Values.Length;
+                        for (int j = 0; j < count; j++)
+                        {
+                            if (rawData[i + j] == 1)
+                                normalizedData.Add(j);
+                        }
+                       
+                        i += count;
+                    }
                 }
             }
-            //
-            return rawData.ToArray();
+
+            return normData.Select(r => r.ToArray()).ToArray();
         }
 
 
-        public double[] Run(double[] data, IContext ctx)
+        public double[][] Run(double[][] data, IContext ctx)
         {
             return DeNormalize(data, ctx);
-        }       
+        }
     }
 }

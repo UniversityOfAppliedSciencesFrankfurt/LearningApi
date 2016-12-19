@@ -9,7 +9,7 @@ namespace LearningFoundation.DataMappers
     /// <summary>
     /// Class for asigning set of properties for each feature (data column)
     /// </summary>
-    public class DataMapper : IDataMapper<object[], double[]>
+    public class DataMapper : IDataMapper<object[][], double[][]>
     {
         IDataDescriptor m_DataContext = new DataDescriptor();
 
@@ -85,73 +85,78 @@ namespace LearningFoundation.DataMappers
         /// <returns></returns>
 
 
-        public double[] Run(object[] rawData, IContext ctx)
+        public double[][] Run(object[][] rawData, IContext ctx)
         {
-            List<double> raw = new List<double>();
+            List<List<double>> rows = new List<List<double>>();
 
-            //transform rawData in to raw of Fetures with proper type, normalization value, and coresct binary and catogery type 
-            for(int i=0; i< rawData.Length; i++)
+            for (int i = 0; i < rawData.Length; i++)
             {
-                //check if the value is valid 
-               
-                var col= ctx.DataDescriptor.Features[i];
-                if (col.Type ==  ColumnType.STRING)
-                    continue;
-                else if(col.Type ==  ColumnType.NUMERIC)//numeric column
-                {
-                    var val = rawData[col.Index];
-                    double value = double.NaN;
+                List<double> raw = new List<double>();
 
-                    //in case of invalid (missing) value, value must be replaced with defaultMIssing value
-                    if (!double.TryParse(val.ToString(), out value))
-                        value = col.DefaultMissingValue;
-                    
-                    //
-                    raw.Add(value);
-                }
-                else if(col.Type == ColumnType.BINARY)//binary column
+                object[] data = ((object[])rawData[i]);
+
+                //
+                // Transform rawData in to raw of Fetures with proper type, normalization value, and coresct binary and catogery type 
+                for (int featureIndx = 0; featureIndx < data.Length; featureIndx++)
                 {
-                    if (col.Values[0].Equals(rawData[col.Index]))
-                        raw.Add(0);
-                    else if (col.Values[1].Equals(rawData[col.Index]))
-                        raw.Add(1);
-                    else//in case of invalid (missing) value, value must be replaced with defaultMIssing value
-                        raw.Add(col.DefaultMissingValue);
-                }
-                else if(col.Type == ColumnType.CLASS)//multiclass column
-                {
-                    //add as many columns as number of categories
-                    //eg. red, greeen,blue -  categories
-                    // for red -> 0
-                    // for green -> 1
-                    // for blue -> 2
-                    var numClass = col.Values.Length;
-                    bool isMissigValue = true;
-                    for (int j=0; j<numClass; j++)
+                    var col = ctx.DataDescriptor.Features[featureIndx];
+                    if (col.Type == ColumnType.STRING)
+                        continue;
+                    else if (col.Type == ColumnType.NUMERIC)//numeric column
                     {
-                        if(col.Values[j].Equals(rawData[col.Index]))
-                        {
-                            raw.Add(j);
-                            isMissigValue = false;
-                            break;
-                        }                       
-                    }
+                        var val = data[col.Index];
+                        double value = double.NaN;
 
-                    //in case of missing value
-                    if(isMissigValue)
-                        raw.Add(col.DefaultMissingValue);
+                        //in case of invalid (missing) value, value must be replaced with defaultMIssing value
+                        if (!double.TryParse(val.ToString(), out value))
+                            value = col.DefaultMissingValue;
+
+                        //
+                        raw.Add(value);
+                    }
+                    else if (col.Type == ColumnType.BINARY)//binary column
+                    {
+                        if (col.Values[0].Equals(data[col.Index]))
+                            raw.Add(0);
+                        else if (col.Values[1].Equals(data[col.Index]))
+                            raw.Add(1);
+                        else//in case of invalid (missing) value, value must be replaced with defaultMIssing value
+                            raw.Add(col.DefaultMissingValue);
+                    }
+                    else if (col.Type == ColumnType.CLASS)//multiclass column
+                    {
+                        //add as many columns as number of categories
+                        //eg. red, greeen,blue -  categories
+                        // for red -> 0
+                        // for green -> 1
+                        // for blue -> 2
+                        var numClass = col.Values.Length;
+                        bool isMissigValue = true;
+                        for (int j = 0; j < numClass; j++)
+                        {
+                            if (col.Values[j].Equals(data[col.Index]))
+                            {
+                                raw.Add(j);
+                                isMissigValue = false;
+                                break;
+                            }
+                        }
+
+                        //in case of missing value
+                        if (isMissigValue)
+                            raw.Add(col.DefaultMissingValue);
+                    }                   
                 }
 
+                rows.Add(raw);
             }
 
-            //callculate number of features
-            ctx.DataDescriptor.NumOfFeatures = raw.Count;
+          
+            ctx.DataDescriptor.NumOfFeatures = rows.FirstOrDefault().Count;
 
-            //return double value feture vector
-            return raw.ToArray();
+            // Returns rows of double value feture vectors
+            return rows.Select(r => r.ToArray()).ToArray();
         }
-
-       
     }
 
     /// <summary>
