@@ -16,32 +16,15 @@ using test;
 
 namespace UnitTests
 {
-    //Complete UnitTests as discussed.
-    //TODO: Implement module for calculation of mean vealue
-    //TODO: Implement module for calculation of median vealue
-    //TODO: Implement module for calculation of variance
-    //TODO: Implement module for calculation of covariance
-    // public class XyModule : IPipeline<double[], double[]> .. Run(double[], ctx)
-
+    
     public class ApiInitializationTests
     {
         string m_iris_data_path;
 
-        Mean[] m_stats;//basic statistics of the iris data
-
-
+      
         public ApiInitializationTests()
         {
-            //create stat for IRIS data
-            //m_stats = new Mean[5]
-            //{
-            //    new BasicStatistics(1, 4.3, 7.9, 5.84333333333, 0.681122222),
-            //    new BasicStatistics(2, 2.0, 4.4, 3.05733333333, 0.188712889),
-            //    new BasicStatistics(3, 1.0, 6.9, 3.75800000000, 3.095502667),
-            //    new BasicStatistics(4, 0.1, 2.5, 1.19933333333, 0.577132889),
-            //    new BasicStatistics(5, 0, 0, 0, 0),
-            //};
-
+            
 
             //iris data file
             m_iris_data_path = System.IO.Path.Combine(Directory.GetCurrentDirectory(), @"sample_data\iris\iris.csv");

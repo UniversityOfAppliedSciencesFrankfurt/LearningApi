@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 namespace LearningFoundation.Statistics
 {
     /// <summary>
-    /// Implement extension methods for statistics clculation eg. mean, median, variance,... 
+    /// Implement extension methods for statistics clculation on one data set eg. mean, median, variance,... 
     /// Modul calculate mean value of array of numbers. 
     /// The mean is the average of the numbers.
     /// </summary>

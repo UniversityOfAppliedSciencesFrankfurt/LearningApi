@@ -21,6 +21,7 @@ namespace test.statistics
             Assert.Equal(result, 11);
         }
 
+       
         [Theory]
         [InlineData(new double[] { 6, 11, 7, 20 })]
         [InlineData(new double[] { 2, 3, 1 })]
@@ -36,25 +37,20 @@ namespace test.statistics
         {
             //define stats modul 
             
-            //test 1
-            var dataSample1 = new double[]{ 6, 11, 7, 20 };
-            var result = dataSample1.MeanOf();
-            Assert.Equal(result, 11);
-
             //Test 2
-            dataSample1 = new double[] { 6, 11, 7, 20, 34, 56, 2, 4, 56, 78, 65, 23, 456, 56 };
-            result = result = dataSample1.MeanOf();
+            var dataSample1 = new double[] { 6, 11, 7, 20, 34, 56, 2, 4, 56, 78, 65, 23, 456, 56 };
+            var result = dataSample1.MeanOf();
             Assert.Equal(Math.Round(result,2), 62.43);
 
 
             //Test 3
             dataSample1 = new double[] { 6.54, 11.45, 7.523, 20, 0.534, 2.56, 2, 4, 56, 78, 65, 23, 456.0987, 56.071, 789.0987 };
-            result = result = dataSample1.MeanOf();
+            result =  dataSample1.MeanOf();
             Assert.Equal(Math.Round(result, 2), 105.19);
 
             //Test 4
             dataSample1 = new double[] { 6.54, 122.45, 11.45, 7.523, 20, 0.534, 0.534, 2.56, 2, 4, 56, 78, 65, 23, 456.0987, 56.071, 789.0987 };
-            result = result = dataSample1.MeanOf();
+            result =  dataSample1.MeanOf();
             Assert.Equal(Math.Round(result, 2), 100.05);
 
 
@@ -72,18 +68,18 @@ namespace test.statistics
 
             //Test 2
             dataSample1 = new double[] { 6, 11, 7, 20, 34, 56, 2, 4, 56, 78, 65, 23, 456, 56 };
-            result = result = dataSample1.MedianOf();
+            result =  dataSample1.MedianOf();
             Assert.Equal(Math.Round(result, 2), 28.5);
 
 
             //Test 3
             dataSample1 = new double[] { 6.54, 11.45, 7.523, 20, 0.534, 2.56, 2, 4, 56, 78, 65, 23, 456.0987, 56.071, 789.0987 };
-            result = result = dataSample1.MedianOf();
+            result =  dataSample1.MedianOf();
             Assert.Equal(Math.Round(result, 2), 20);
 
             //Test 4
             dataSample1 = new double[] { 6.54, 122.45, 11.45, 7.523, 20, 0.534, 0.534, 2.56, 2, 4, 56, 78, 65, 23, 456.0987, 56.071, 789.0987 };
-            result = result = dataSample1.MedianOf();
+            result =  dataSample1.MedianOf();
             Assert.Equal(Math.Round(result, 2), 20);
 
 
