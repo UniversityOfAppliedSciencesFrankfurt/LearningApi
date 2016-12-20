@@ -7,6 +7,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{4366E8AF-8F4
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{90B6EC65-E430-4B10-A110-76CD4ADCA58C}"
 	ProjectSection(SolutionItems) = preProject
+		..\.gitignore = ..\.gitignore
 		global.json = global.json
 	EndProjectSection
 EndProject
@@ -28,7 +29,7 @@ Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "CsvDataProvider", "src\Data
 EndProject
 Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "UnitTests", "test\UnitTests.xproj", "{EFB4F6BE-A506-4AFD-A2DF-58FB5198A30B}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{9C130877-8AE6-46F0-83EE-813C2E8144A2}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{9C130877-8AE6-46F0-83EE-813C2E8144A2}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Normalizers", "Normalizers", "{55C39C13-DCA9-413C-A143-77FB88952267}"
 EndProject
@@ -36,9 +37,7 @@ Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "MinMaxNormalizer", "src\Nor
 EndProject
 Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "GaussNormalizer", "src\Normalizers\GaussNormalizer\GaussNormalizer.xproj", "{D6ABFF9A-18A3-4980-ACA7-770A53C59684}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DataPreProcessing", "DataPreProcessing", "{484E9B38-A4A9-4ED6-849B-6E7AC3766F71}"
-EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "CannyEdgeDetector", "src\DataProviders\CannyEdgeDetector\CannyEdgeDetector.xproj", "{0C98AAB8-042D-4219-96FD-D3EF0CF84F5D}"
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "CannyEdgeDetector", "src\CannyEdgeDetector\CannyEdgeDetector.xproj", "{0C98AAB8-042D-4219-96FD-D3EF0CF84F5D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -99,7 +98,6 @@ Global
 		{55C39C13-DCA9-413C-A143-77FB88952267} = {4366E8AF-8F45-46BB-9FF7-6D67AA4171FA}
 		{9D8E58CC-49F0-4A65-B610-E6E2F2036151} = {55C39C13-DCA9-413C-A143-77FB88952267}
 		{D6ABFF9A-18A3-4980-ACA7-770A53C59684} = {55C39C13-DCA9-413C-A143-77FB88952267}
-		{484E9B38-A4A9-4ED6-849B-6E7AC3766F71} = {4366E8AF-8F45-46BB-9FF7-6D67AA4171FA}
-		{0C98AAB8-042D-4219-96FD-D3EF0CF84F5D} = {484E9B38-A4A9-4ED6-849B-6E7AC3766F71}
+		{0C98AAB8-042D-4219-96FD-D3EF0CF84F5D} = {4366E8AF-8F45-46BB-9FF7-6D67AA4171FA}
 	EndGlobalSection
 EndGlobal

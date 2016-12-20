@@ -9,13 +9,13 @@ namespace LearningFoundation
     /// <summary>
     /// Performs data normalization and denormalization.
     /// </summary>
-    public interface IDataDeNormalizer : IPipelineModule<double[], double[]>
+    public interface IDataDeNormalizer : IPipelineModule<double[][], double[][]>
     {
         /// <summary>
         /// Denormilizes normalized data.
         /// </summary>
         /// <param name="normilizedData"></param>
         /// <returns></returns>
-        double[] DeNormalize(double[] normilizedData, IContext ctx);
+        double[][] DeNormalize(double[][] normilizedData, IContext ctx);
     }
 }

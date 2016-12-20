@@ -88,55 +88,64 @@ namespace LearningFoundation.Normalizers
         /// <summary>
         /// perform process of normalization where natural data is being transformd in to normalized format
         /// </summary>
-        /// <param name="rawData"></param>
+        /// <param name="data"></param>
         /// <returns></returns>
-        public double[] Run(double[] rawData, IContext ctx)
+        public double[][] Run(double[][] data, IContext ctx)
         {
-            //
-            var normData = new List<double>();
-            for (int i = 0; i < rawData.Length; i++)
+            var normData = new List<List<double>>();
+
+            for (int k = 0; k < data.Length; k++)
             {
-                //get feature index
-                var fi = ctx.DataDescriptor.Features[i].Index;
+                var normalizedRow = new List<double>();
 
-                //numeric column
-                if (ctx.DataDescriptor.Features[i].Type ==  ColumnType.NUMERIC)
-                {
-                    var value = (rawData[i] - m_Min[fi]) / (m_Max[fi] - m_Min[fi]);
-                    normData.Add(value);
-                }
-                //binary column
-                else if (ctx.DataDescriptor.Features[i].Type == ColumnType.BINARY)
-                {
-                    //in case of binary column type real and normalized value are the same
-                    normData.Add(rawData[i]);
+                double[] rawData = data[k];
 
-                }
-                //category column
-                else if (ctx.DataDescriptor.Features[i].Type ==  ColumnType.CLASS)
+                for (int i = 0; i < rawData.Length; i++)
                 {
-                    //TODO:
-                    // Converts category numeric values in to binary values
-                    // it creates array which has length of categories count.
-                    // Example: Red, Gree, Blue - 3 categories  - real values
-                    //             0,  1,  2    - 3 numbers     - numeric values
-                    //             
-                    // Normalized values for Blues category:
-                    //          Blue  =  (0,0,1)  - three values which sum is 1,
-                    //          Red   =  (1,0,0)
-                    //          Green =  (0,1,0)
-                    var count = ctx.DataDescriptor.Features[i].Values.Length;
-                    for (int j = 0; j < count; j++)
+                    //get feature index
+                    var fi = ctx.DataDescriptor.Features[i].Index;
+
+                    //numeric column
+                    if (ctx.DataDescriptor.Features[i].Type == ColumnType.NUMERIC)
                     {
-                        if (j == rawData[i])
-                            normData.Add(1);
-                        else
-                            normData.Add(0);
+                        var value = (rawData[i] - m_Min[fi]) / (m_Max[fi] - m_Min[fi]);
+                        normalizedRow.Add(value);
+                    }
+                    //binary column
+                    else if (ctx.DataDescriptor.Features[i].Type == ColumnType.BINARY)
+                    {
+                        //in case of binary column type real and normalized value are the same
+                        normalizedRow.Add(rawData[i]);
+
+                    }
+                    //category column
+                    else if (ctx.DataDescriptor.Features[i].Type == ColumnType.CLASS)
+                    {
+                        //TODO:
+                        // Converts category numeric values in to binary values
+                        // it creates array which has length of categories count.
+                        // Example: Red, Gree, Blue - 3 categories  - real values
+                        //             0,  1,  2    - 3 numbers     - numeric values
+                        //             
+                        // Normalized values for Blues category:
+                        //          Blue  =  (0,0,1)  - three values which sum is 1,
+                        //          Red   =  (1,0,0)
+                        //          Green =  (0,1,0)
+                        var count = ctx.DataDescriptor.Features[i].Values.Length;
+                        for (int j = 0; j < count; j++)
+                        {
+                            if (j == rawData[i])
+                                normalizedRow.Add(1);
+                            else
+                                normalizedRow.Add(0);
+                        }
                     }
                 }
+
+                normData.Add(normalizedRow);
             }
-            //
-            return normData.ToArray();
+          
+            return normData.Select(r => r.ToArray()).ToArray();
         }
 
     }
