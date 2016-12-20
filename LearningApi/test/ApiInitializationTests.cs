@@ -16,20 +16,11 @@ using test;
 
 namespace UnitTests
 {
-    //Complete UnitTests as discussed.
-    //TODO: Implement module for calculation of mean vealue
-    //TODO: Implement module for calculation of median vealue
-    //TODO: Implement module for calculation of variance
-    //TODO: Implement module for calculation of covariance
-    // public class XyModule : IPipeline<double[], double[]> .. Run(double[], ctx)
-
     public class ApiInitializationTests
     {
         string m_iris_data_path;
 
-        Mean[] m_stats;//basic statistics of the iris data
-
-     
+           
         public ApiInitializationTests()
         {
             //create stat for IRIS data
