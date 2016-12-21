@@ -12,7 +12,7 @@ namespace LearningFoundation.Normalizers
     /// nor=(val - min)/(max-min)
     /// Type of normalizations can be found at: https://en.wikipedia.org/wiki/Feature_scaling
     /// </summary>
-    public class MinMaxDeNormalizer : IDataNormalizer
+    public class MinMaxDeNormalizer : IDataDeNormalizer
     {
         private double[] m_Min;
         private double[] m_Max;
