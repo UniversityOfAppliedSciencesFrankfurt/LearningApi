@@ -12,21 +12,17 @@ namespace LearningFoundation.Normalizers
     /// nor=(val - min)/(max-min)
     /// Type of normalizations can be found at: https://en.wikipedia.org/wiki/Feature_scaling
     /// </summary>
-    public class MinMaxDeNormalizer : IDataNormalizer
+    public class MinMaxDeNormalizer : IDataDeNormalizer
     {
-        private double[] m_Min;
-        private double[] m_Max;
-
         /// <summary>
         /// /// <summary>
         /// Main constructor
         /// </summary>
         /// <param name="min">min for each column in the dataset</param>
         /// <param name="max">max for each column in the dataset</param>
-        public MinMaxDeNormalizer(double[] min, double[] max)
+        public MinMaxDeNormalizer()
         {
-            m_Min = min;
-            m_Max = max;
+
         }
 
 
@@ -53,7 +49,7 @@ namespace LearningFoundation.Normalizers
                     //numeric column
                     if (ctx.DataDescriptor.Features[i].Type == ColumnType.NUMERIC)
                     {
-                        var value = m_Min[fi] + normalizedRow[i] * (m_Max[fi] - m_Min[fi]);
+                        var value = 5.7;//m_Min[fi] + normalizedRow[i] * (m_Max[fi] - m_Min[fi]);
                         normalizedRow.Add(value);
                     }
                     //binary column

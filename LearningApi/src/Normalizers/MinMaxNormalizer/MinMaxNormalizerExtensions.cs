@@ -17,12 +17,18 @@ namespace LearningFoundation.Normalizers
         /// </summary>
         /// <param name="api">LearningAPI</param>
         /// <returns></returns>
-        public static LearningApi UseMinMaxNormalizer(this LearningApi api, double[] min, double[] max)
+        public static LearningApi UseMinMaxNormalizer(this LearningApi api)
         {           
-            var minMaxNorm = new MinMaxNormalizer(min, max);
-
+            var minMaxNorm = new MinMaxNormalizer();
             api.Modules.Add("Normilizer", minMaxNorm);
+            
+            return api;
+        }
 
+        public static LearningApi UseMinMaxDeNormalizer(this LearningApi api)
+        {
+            var minMaxDeNorm = new MinMaxNormalizer();
+            api.Modules.Add("Denormilizer", minMaxDeNorm);
             return api;
         }
     }

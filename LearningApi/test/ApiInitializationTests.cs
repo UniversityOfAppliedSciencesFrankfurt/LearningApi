@@ -1,9 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
+﻿using test;
 using Xunit;
+using System;
+using System.Linq;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using System.IO;
 using Newtonsoft.Json;
 using LearningFoundation;
@@ -12,7 +12,6 @@ using LearningFoundation.DataMappers;
 using LearningFoundation.Normalizers;
 using LearningFoundation.Statistics;
 using NeuralNet.BackPropagation;
-using test;
 
 namespace UnitTests
 {

@@ -14,20 +14,12 @@ namespace LearningFoundation.Normalizers
     /// </summary>
     public class MinMaxNormalizer : IDataNormalizer
     {
-        private double[] m_Min;
-        private double[] m_Max;
-
         /// <summary>
         /// /// <summary>
         /// Main constructor
         /// </summary>
-        /// <param name="mapper">data mapper for the related data</param>
-        /// <param name="min">min for each column in the dataset</param>
-        /// <param name="max">max for each column in the dataset</param>
-        public MinMaxNormalizer(double[] min, double[] max)
+        public MinMaxNormalizer()
         {
-            m_Min = min;
-            m_Max = max;
         }
 
 
@@ -93,7 +85,7 @@ namespace LearningFoundation.Normalizers
         public double[][] Run(double[][] data, IContext ctx)
         {
             var normData = new List<List<double>>();
-
+            
             for (int k = 0; k < data.Length; k++)
             {
                 var normalizedRow = new List<double>();
@@ -104,11 +96,11 @@ namespace LearningFoundation.Normalizers
                 {
                     //get feature index
                     var fi = ctx.DataDescriptor.Features[i].Index;
-
+ 
                     //numeric column
                     if (ctx.DataDescriptor.Features[i].Type == ColumnType.NUMERIC)
                     {
-                        var value = (rawData[i] - m_Min[fi]) / (m_Max[fi] - m_Min[fi]);
+                        var value = 4.5; //(rawData[i] - m_Min[fi]) / (m_Max[fi] - m_Min[fi]);
                         normalizedRow.Add(value);
                     }
                     //binary column

@@ -233,10 +233,33 @@ namespace UnitTests
         }
 
         [Fact]
-        public bool DeNormalizeData_With_MinMax_Test()
+        public void NormalizeData_With_MinMax_Test()
         {
+            // Creates learning api object
+            LearningApi api = new LearningApi(loadMetaData1());
 
-            return false;
+            
+            api.UseActionModule<double[][], double[][]>((input, ctx) =>
+            {
+                var data = new double[3][] {    new double[] { 4.1220,7.9604,6.7976,-7.9072,-7.0811,-4.0402,-9.8642,8.8309,-1.3059,1.8402,-5.7267,9.8819,7.6187,-4.8319,-2.2049,5.1604,1.3601,0.0278,1.4859,6.4121,0.7234,-8.9924,-8.8250,4.5408 },
+                                                new double[] {  - 0.6311,-6.1778,-9.6096,-6.6549,9.8941,-6.5070,-6.9916,8.4876,6.9565,-2.1157,-5.1274,9.4306,-2.8375,-8.4378,1.4018,-8.8909,6.1779,2.5092,-0.1368,0.1903,-4.6747,-1.9434,9.1215,-8.5883},
+                                                new double[] { -8.9094, 9.7382, 5.0934, -6.6783, -0.1264, 9.4502, -3.0204, 0.3037, -2.2412, 9.9416, -8.9425, 5.5934, 6.0380, -3.8157, -3.3739, -0.7496, 7.5032, -9.3939, -0.8585, -7.5184, 0.9666, -2.0678, 5.5358, -9.7556 }
+                                            };
+                //
+                return data;
+            });
+
+            //this call must be first in the pipeline
+            api.UseDefaultDataMapper();
+
+            //
+            api.UseMinMaxNormalizer();
+
+            //
+             api.Run();
+
+            //
+            return;
         }
 
         [Fact]
@@ -245,6 +268,35 @@ namespace UnitTests
 
             return false;
         }
+
+
+        private DataDescriptor loadMetaData1()
+        {  
+            var des = new DataDescriptor();
+            
+            des.Features = new Column[4];
+            des.Features[0] = new Column { Id = 1, Name = "col1", Index = 0, Type = ColumnType.NUMERIC, Values = null, DefaultMissingValue = 5.5 };
+            des.Features[1] = new Column { Id = 2, Name = "col2", Index = 1, Type = ColumnType.NUMERIC, Values = null, DefaultMissingValue = 4.2 };
+            des.Features[2] = new Column { Id = 3, Name = "col3", Index = 2, Type = ColumnType.NUMERIC, Values = null, DefaultMissingValue = 1.4 };
+           
+            return des;
+        }
+
+        //private DataDescriptor loadMetaData1()
+        //{
+        //    var des = new DataDescriptor();
+        //    des.Features = new Column[4];
+        //    des.Features[0] = new Column { Id = 1, Name = "sepal_length", Index = 0, Type = ColumnType.NUMERIC, Values = null, DefaultMissingValue = 5.5 };
+        //    des.Features[1] = new Column { Id = 2, Name = "sepal_width", Index = 1, Type = ColumnType.NUMERIC, Values = null, DefaultMissingValue = 4.2 };
+        //    des.Features[2] = new Column { Id = 3, Name = "petal_length", Index = 2, Type = ColumnType.NUMERIC, Values = null, DefaultMissingValue = 1.4 };
+        //    des.Features[3] = new Column { Id = 4, Name = "petal_width", Index = 3, Type = ColumnType.NUMERIC, Values = null, DefaultMissingValue = 0.5 };
+        //    des.Features[4] = new Column { Id = 5, Name = "species", Index = 4, Type = ColumnType.CLASS, Values = null, DefaultMissingValue = 1 };
+
+        //    des.
+
+        //    return des;
+        //}
+
 
     }
 }
