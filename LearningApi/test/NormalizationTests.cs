@@ -37,16 +37,7 @@ namespace UnitTests
         /// </summary>
         public NormalizationTests()
         {
-            //create stat for IRIS data
-            //m_Stats = new Mean[5]
-            //{
-            //    new BasicStatistics(1, 4.3, 7.9, 5.84333333333, 0.681122222),
-            //    new BasicStatistics(2, 2.0, 4.4, 3.05733333333, 0.188712889),
-            //    new BasicStatistics(3, 1.0, 6.9, 3.75800000000, 3.095502667),
-            //    new BasicStatistics(4, 0.1, 2.5, 1.19933333333, 0.577132889),
-            //    new BasicStatistics(5, 0, 0, 0, 0),
-            //};
-
+            
             //iris data file paths
             var irisRealDataFilePath = System.IO.Path.Combine(Directory.GetCurrentDirectory(), @"sample_data\iris\iris.csv");
             m_irisNumericDataFilePath = System.IO.Path.Combine(Directory.GetCurrentDirectory(), @"sample_data\iris\iris_numeric.csv");
@@ -238,12 +229,29 @@ namespace UnitTests
             // Creates learning api object
             LearningApi api = new LearningApi(loadMetaData1());
 
-            
-            api.UseActionModule<double[][], double[][]>((input, ctx) =>
+            //Real dataset must be defined as object type, because data can be numeric, binary and classification
+            api.UseActionModule<object[][], object[][]>((input, ctx) =>
             {
-                var data = new double[3][] {    new double[] { 4.1220,7.9604,6.7976,-7.9072,-7.0811,-4.0402,-9.8642,8.8309,-1.3059,1.8402,-5.7267,9.8819,7.6187,-4.8319,-2.2049,5.1604,1.3601,0.0278,1.4859,6.4121,0.7234,-8.9924,-8.8250,4.5408 },
-                                                new double[] {  - 0.6311,-6.1778,-9.6096,-6.6549,9.8941,-6.5070,-6.9916,8.4876,6.9565,-2.1157,-5.1274,9.4306,-2.8375,-8.4378,1.4018,-8.8909,6.1779,2.5092,-0.1368,0.1903,-4.6747,-1.9434,9.1215,-8.5883},
-                                                new double[] { -8.9094, 9.7382, 5.0934, -6.6783, -0.1264, 9.4502, -3.0204, 0.3037, -2.2412, 9.9416, -8.9425, 5.5934, 6.0380, -3.8157, -3.3739, -0.7496, 7.5032, -9.3939, -0.8585, -7.5184, 0.9666, -2.0678, 5.5358, -9.7556 }
+                var data = new object[20][] {   new object[] {4.1220,-0.6311,-8.9094 },
+                                                new object[] { 7.9604,-6.1778,9.7382 },
+                                                new object[] { 6.7976,-9.6096,5.0934},
+                                                new object[] { -7.9072,-6.6549,-6.6783},
+                                                new object[] { -7.0811,9.8941,-0.1264 },
+                                                new object[] { -4.0402,-6.5070,9.4502},
+                                                new object[] { -9.8642,-6.9916,-3.0204},
+                                                new object[] { 8.8309,8.4876,0.3037},
+                                                new object[] { -1.3059,6.9565,-2.2412},
+                                                new object[] { 1.8402,-2.1157,9.9416},
+                                                new object[] { -5.7267,-5.1274,-8.9425 },
+                                                new object[] { 9.8819,9.4306,5.5934 },
+                                                new object[] { 7.6187,-2.8375,6.0380},
+                                                new object[] { -4.8319,-8.4378,-3.8157},
+                                                new object[] {-2.2049,1.4018,-3.3739 },
+                                                new object[] { 5.1604,-8.8909,-0.7496},
+                                                new object[] { 1.3601,6.1779,7.5032},
+                                                new object[] { 0.0278,2.5092,-9.3939},
+                                                new object[] { 1.4859,-0.1368,-0.8585},
+                                                new object[] { 6.4121,0.1903,-7.5184},
                                             };
                 //
                 return data;
@@ -274,7 +282,7 @@ namespace UnitTests
         {  
             var des = new DataDescriptor();
             
-            des.Features = new Column[4];
+            des.Features = new Column[3];
             des.Features[0] = new Column { Id = 1, Name = "col1", Index = 0, Type = ColumnType.NUMERIC, Values = null, DefaultMissingValue = 5.5 };
             des.Features[1] = new Column { Id = 2, Name = "col2", Index = 1, Type = ColumnType.NUMERIC, Values = null, DefaultMissingValue = 4.2 };
             des.Features[2] = new Column { Id = 3, Name = "col3", Index = 2, Type = ColumnType.NUMERIC, Values = null, DefaultMissingValue = 1.4 };

@@ -85,26 +85,26 @@ namespace LearningFoundation.DataMappers
         /// <returns></returns>
 
 
-        public double[][] Run(object[][] rawData, IContext ctx)
+        public double[][] Run(object[][] data, IContext ctx)
         {
             List<List<double>> rows = new List<List<double>>();
 
-            for (int i = 0; i < rawData.Length; i++)
+            for (int i = 0; i < data.Length; i++)
             {
                 List<double> raw = new List<double>();
 
-                object[] data = ((object[])rawData[i]);
+                object[] vector = ((object[])data[i]);
 
                 //
                 // Transform rawData in to raw of Fetures with proper type, normalization value, and coresct binary and catogery type 
-                for (int featureIndx = 0; featureIndx < data.Length; featureIndx++)
+                for (int featureIndx = 0; featureIndx < data[0].Length; featureIndx++)
                 {
                     var col = ctx.DataDescriptor.Features[featureIndx];
                     if (col.Type == ColumnType.STRING)
                         continue;
                     else if (col.Type == ColumnType.NUMERIC)//numeric column
                     {
-                        var val = data[col.Index];
+                        var val = vector[col.Index];
                         double value = double.NaN;
 
                         //in case of invalid (missing) value, value must be replaced with defaultMIssing value
