@@ -11,7 +11,7 @@ namespace LearningFoundation.DataMappers
     /// </summary>
     public class DataMapper : IDataMapper<object[][], double[][]>
     {
-        IDataDescriptor m_DataContext = new DataDescriptor();
+       // IDataDescriptor m_DataContext = new DataDescriptor();
 
         /// <summary>
         /// main constructor

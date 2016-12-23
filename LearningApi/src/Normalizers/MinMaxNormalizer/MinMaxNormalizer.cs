@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using LearningFoundation;
 using LearningFoundation.DataMappers;
-
+using LearningFoundation.Statistics;
 namespace LearningFoundation.Normalizers
 {
     /// <summary>
@@ -23,69 +23,27 @@ namespace LearningFoundation.Normalizers
         }
 
 
-        /// <summary>
-        /// perform process of denormalization where normalized data  is being transformed in to natural format
-        /// </summary>
-        /// <param name="normalizedData"></param>
-        /// <returns></returns>
-        //public double[] DeNormalize(double[] normalizedData)
-        //{
-        //    //
-        //    var rawData = new List<double>();
-        //    for (int i = 0; i < normalizedData.Length; i++)
-        //    {
-        //        //get feature index
-        //        var fi = m_DataMapper.GetFeatureIndex(i);
-
-        //        //numeric column
-        //        if (m_DataMapper.Features[i].Type == ColumnType.NUMERIC)
-        //        {
-        //            var value = m_Min[fi] + normalizedData[i] * (m_Max[fi] - m_Min[fi]);
-        //            rawData.Add(value);
-        //        }
-        //        //binary column
-        //        else if (m_DataMapper.Features[i].Type == ColumnType.BINARY)
-        //        {
-        //            //in case of binary column type real and normalized value are the same
-        //            rawData.Add(rawData[i]);
-
-        //        }
-        //        //category column
-        //        else if (m_DataMapper.Features[i].Type == ColumnType.CLASS)
-        //        {
-        //            // COnverts set of binary values in to one category 
-        //            // Normalized values for Blues category:
-        //            //          Blue  =  (0,0,1)  - three values which sum is 1,
-        //            //          Red   =  (1,0,0)
-        //            //          Green =  (0,1,0)
-        //            // Example: Red, Gree, Blue - 3 categories  - real values
-        //            //             0,  1,  2    - 3 numbers     - numeric values
-        //            //             
-
-        //            var count = m_DataMapper.Features[i].Values.Length;
-        //            for (int j = 0; j < count; j++)
-        //            {
-        //                if (rawData[i + j] == 1)
-        //                    rawData.Add(j);
-        //            }
-        //            //
-        //            i += count;
-        //        }
-        //    }
-        //    //
-        //    return rawData.ToArray();
-        //}
-
+        
 
         /// <summary>
-        /// perform process of normalization where natural data is being transformd in to normalized format
+        /// perform process of normalization where natural data is being transformd 
+        /// in to normalized format
         /// </summary>
         /// <param name="data"></param>
         /// <returns></returns>
         public double[][] Run(double[][] data, IContext ctx)
         {
             var normData = new List<List<double>>();
-            
+
+            // calculate min and max value for each column vector
+            var tuple = data.calculateMinMax();
+            var desc = ctx.DataDescriptor as DataDescriptor;
+
+            //store values for denormalizer
+            desc.m_Min = tuple.Item1;
+            desc.m_Max = tuple.Item2;
+
+            //
             for (int k = 0; k < data.Length; k++)
             {
                 var normalizedRow = new List<double>();
@@ -100,7 +58,7 @@ namespace LearningFoundation.Normalizers
                     //numeric column
                     if (ctx.DataDescriptor.Features[i].Type == ColumnType.NUMERIC)
                     {
-                        var value = 4.5; //(rawData[i] - m_Min[fi]) / (m_Max[fi] - m_Min[fi]);
+                        var value = (rawData[i] - tuple.Item1[fi]) / (tuple.Item2[fi] - tuple.Item1[fi]);
                         normalizedRow.Add(value);
                     }
                     //binary column
@@ -139,6 +97,5 @@ namespace LearningFoundation.Normalizers
           
             return normData.Select(r => r.ToArray()).ToArray();
         }
-
     }
 }

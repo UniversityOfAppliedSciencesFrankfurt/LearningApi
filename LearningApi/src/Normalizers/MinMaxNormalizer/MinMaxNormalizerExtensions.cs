@@ -27,7 +27,7 @@ namespace LearningFoundation.Normalizers
 
         public static LearningApi UseMinMaxDeNormalizer(this LearningApi api)
         {
-            var minMaxDeNorm = new MinMaxNormalizer();
+            var minMaxDeNorm = new MinMaxDeNormalizer();
             api.Modules.Add("Denormilizer", minMaxDeNorm);
             return api;
         }

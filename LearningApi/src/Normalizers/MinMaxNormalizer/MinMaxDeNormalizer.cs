@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using LearningFoundation;
 using LearningFoundation.DataMappers;
-
+using LearningFoundation.Statistics;
 namespace LearningFoundation.Normalizers
 {
     /// <summary>
@@ -14,6 +14,9 @@ namespace LearningFoundation.Normalizers
     /// </summary>
     public class MinMaxDeNormalizer : IDataDeNormalizer
     {
+        private double[] m_Min;
+        private double[] m_Max;
+
         /// <summary>
         /// /// <summary>
         /// Main constructor
@@ -33,11 +36,14 @@ namespace LearningFoundation.Normalizers
         /// <returns></returns>
         public double[][] DeNormalize(double[][] data, IContext ctx)
         {
-            var normData = new List<List<double>>();
+            var deNormData = new List<List<double>>();
+
+            //get data desrptior
+            var desc = ctx.DataDescriptor as DataDescriptor;
 
             for (int k = 0; k < data.Length; k++)
             {
-                var normalizedRow = new List<double>();
+                var deNormRow = new List<double>();
 
                 double[] rawData = data[k];
 
@@ -49,14 +55,14 @@ namespace LearningFoundation.Normalizers
                     //numeric column
                     if (ctx.DataDescriptor.Features[i].Type == ColumnType.NUMERIC)
                     {
-                        var value = 5.7;//m_Min[fi] + normalizedRow[i] * (m_Max[fi] - m_Min[fi]);
-                        normalizedRow.Add(value);
+                        var value = desc.m_Min[fi] + rawData[i] * (desc.m_Max[fi] - desc.m_Min[fi]);
+                        deNormRow.Add(value);
                     }
                     //binary column
                     else if (ctx.DataDescriptor.Features[i].Type == ColumnType.BINARY)
                     {
                         //in case of binary column type real and normalized value are the same
-                        normalizedRow.Add(normalizedRow[i]);
+                        deNormRow.Add(rawData[i]);
                     }
                     //category column
                     else if (ctx.DataDescriptor.Features[i].Type == ColumnType.CLASS)
@@ -73,16 +79,19 @@ namespace LearningFoundation.Normalizers
                         var count = ctx.DataDescriptor.Features[i].Values.Length;
                         for (int j = 0; j < count; j++)
                         {
-                            if (normalizedRow[i + j] == 1)
-                                normalizedRow.Add(j);
+                            if (deNormRow[i + j] == 1)
+                                deNormRow.Add(j);
                         }
                         //
                         i += count;
                     }
                 }
+
+                //
+                deNormData.Add(deNormRow);
             }
             
-            return normData.Select(r => r.ToArray()).ToArray();
+            return deNormData.Select(r => r.ToArray()).ToArray();
         }
 
         public double[][] Run(double[][] rawData, IContext ctx)

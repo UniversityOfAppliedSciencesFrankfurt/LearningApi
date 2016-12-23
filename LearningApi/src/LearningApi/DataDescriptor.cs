@@ -16,5 +16,9 @@ namespace LearningFoundation
         /// </summary>
         public DataMappers.Column[] Features { get; set; }
 
+        //Used across data transformations
+        public double[] m_Min { get; set; }
+        public double[] m_Max { get; set; }
+
     }
 }

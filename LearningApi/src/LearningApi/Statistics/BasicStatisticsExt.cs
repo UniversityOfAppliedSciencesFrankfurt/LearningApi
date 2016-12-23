@@ -147,5 +147,34 @@ namespace LearningFoundation.Statistics
 
             return parSum / count;
         }
+
+        /// <summary>
+        /// Calculates the minimum and maximum value for each column in dataset
+        /// </summary>
+        /// <param name="dataset"></param>
+        /// <returns>tuple wher the first value is MIN, and second value is MAX</returns>
+        public static Tuple<double[], double[]> calculateMinMax(this double[][] dataset)
+        {
+            //
+            if (dataset == null || dataset.Length == 0)
+                throw new MLException("data cannot be null or empty!");
+
+            var minMax = new Tuple<double[], double[]>( new double[dataset[0].Length], new double[dataset[0].Length]);
+
+
+            for (int i = 0; i < dataset.Length; i++)
+            {
+                for (int j = 0; j < dataset[0].Length; j++)
+                {
+                    if (dataset[i][j] > minMax.Item2[j])
+                        minMax.Item2[j] = dataset[i][j];
+
+                    if (dataset[i][j] < minMax.Item1[j])
+                        minMax.Item1[j] = dataset[i][j];
+                }
+            }
+
+            return minMax;
+        }
     }
 }
