@@ -34,3 +34,4 @@ LearningApi/test/obj/*
 /LearningApi/src/Normalizers/GaussNormalizer/obj/*
 /LearningApi/src/CannyEdgeDetector/obj/*
 /LearningApi/src/CannyEdgeDetector/bin/*
+/LearningApi/test/scaling features/~$precalculated_samples.xlsx

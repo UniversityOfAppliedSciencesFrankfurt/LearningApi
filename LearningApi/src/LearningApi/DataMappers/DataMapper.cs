@@ -116,9 +116,9 @@ namespace LearningFoundation.DataMappers
                     }
                     else if (col.Type == ColumnType.BINARY)//binary column
                     {
-                        if (col.Values[0].Equals(data[col.Index]))
+                        if (col.Values[0].Equals(vector[col.Index]))
                             raw.Add(0);
-                        else if (col.Values[1].Equals(data[col.Index]))
+                        else if (col.Values[1].Equals(vector[col.Index]))
                             raw.Add(1);
                         else//in case of invalid (missing) value, value must be replaced with defaultMIssing value
                             raw.Add(col.DefaultMissingValue);
@@ -130,29 +130,43 @@ namespace LearningFoundation.DataMappers
                         // for red -> 0
                         // for green -> 1
                         // for blue -> 2
-                        var numClass = col.Values.Length;
-                        bool isMissigValue = true;
-                        for (int j = 0; j < numClass; j++)
+
+                        //
+                        var numClasses = col.Values.Length;
+                        //current value
+                        var val = vector[featureIndx];
+                        //find index of the class
+                        var index = Array.IndexOf(col.Values, val);
+
+                        //missing value for class column must be index of the class value
+                        // DefaultMissingValue = 0 -> red
+                        // DefaultMissingValue = 1 -> green, ...
+                        if (index < 0)
+                            index = (int)col.DefaultMissingValue;
+
+                        for (int j = 0; j < numClasses; j++)
                         {
-                            if (col.Values[j].Equals(data[col.Index]))
+                            //when the indexes are equal this column assign to 1 , otherwize 0
+                            if (index == j)
                             {
-                                raw.Add(j);
-                                isMissigValue = false;
-                                break;
+                                raw.Add(1);
+                            }
+                            else
+                            {
+                                raw.Add(0);
                             }
                         }
-
-                        //in case of missing value
-                        if (isMissigValue)
-                            raw.Add(col.DefaultMissingValue);
                     }                   
                 }
 
                 rows.Add(raw);
             }
 
-          
+            //after real data is transformed in to numeric format, then we can calculate number of feature
             ctx.DataDescriptor.NumOfFeatures = rows.FirstOrDefault().Count;
+
+            //also the index label must be rectified
+            
 
             // Returns rows of double value feture vectors
             return rows.Select(r => r.ToArray()).ToArray();
