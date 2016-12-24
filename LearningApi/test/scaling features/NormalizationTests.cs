@@ -13,45 +13,19 @@ using LearningFoundation.DataMappers;
 using LearningFoundation.Statistics;
 using LearningFoundation.Normalizers;
 
-namespace UnitTests
+namespace test.scalers
 {
     /// <summary>
     /// Test class for testing Normalizers in LearningAPI.
-    /// The test contains two test methods for normalization: one for MinMax and One for Gaus (Stanardized) normalizer
-    /// The test contains two test methods for denormalization: one for MinMax and One for Gaus (Stanardized) normalizer 
     /// </summary>
     public class NormalizationTests
     {
-        //helper for test run
-       // LearningApi m_Api;
-       // Mean[] m_Stats;//basic statistics of the iris data
-
-        //file path for data and results data
-        //string m_irisNumericDataFilePath;
-        //string m_irisMinMaxNormalizedDataFilePath;
-        //string m_irisGaussNormalizedDataFilePath;
-
         /// <summary>
         /// COnstructor which initializes all neccessery data for test
         /// </summary>
         public NormalizationTests()
         {
             
-            //iris data file paths
-            //var irisRealDataFilePath = System.IO.Path.Combine(Directory.GetCurrentDirectory(), @"sample_data\iris\iris.csv");
-            //m_irisNumericDataFilePath = System.IO.Path.Combine(Directory.GetCurrentDirectory(), @"sample_data\iris\iris_numeric.csv");
-            //m_irisMinMaxNormalizedDataFilePath = System.IO.Path.Combine(Directory.GetCurrentDirectory(), @"sample_data\iris\iris_minmax_normalized.csv");
-            //m_irisGaussNormalizedDataFilePath = System.IO.Path.Combine(Directory.GetCurrentDirectory(), @"sample_data\iris\iris_gauss_normalized.csv");
-            ////iris mapper
-            //var irisMapperFilePath = System.IO.Path.Combine(Directory.GetCurrentDirectory(), @"sample_data\iris\iris_mapper.json");
-
-            //m_Api = new LearningApi(TestHelpers.GetDescriptor());
-            
-            ////create datamapper 
-            //m_Api.UseDefaultDataMapper();
-          
-            ////create dataprovider
-            //m_Api.UseCsvDataProvider(irisRealDataFilePath, ',', 1);
         }
 
   

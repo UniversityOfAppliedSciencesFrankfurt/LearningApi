@@ -13,7 +13,7 @@ using LearningFoundation.Normalizers;
 using LearningFoundation.Statistics;
 using NeuralNet.BackPropagation;
 
-namespace UnitTests
+namespace test.csvdataprovider
 {
 
     public class CSVDataProviderTast

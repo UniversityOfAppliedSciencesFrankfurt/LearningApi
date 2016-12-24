@@ -13,7 +13,7 @@ using LearningFoundation.DataMappers;
 using LearningFoundation.Statistics;
 using LearningFoundation.Normalizers;
 
-namespace UnitTests
+namespace test.datamapper
 {
     /// <summary>
     /// Test class for testing data mapper - transformation of the RealData in to numeric ML ready data.
