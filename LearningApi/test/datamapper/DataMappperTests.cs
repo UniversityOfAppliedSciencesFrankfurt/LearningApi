@@ -75,8 +75,9 @@ namespace UnitTests
             des.Features[0] = new Column { Id = 1, Name = "col1", Index = 0, Type = ColumnType.NUMERIC, Values = null, DefaultMissingValue = 5.5 };
             des.Features[1] = new Column { Id = 2, Name = "col2", Index = 1, Type = ColumnType.BINARY, Values = new string[] { "no", "yes" }, DefaultMissingValue = 0 };
             des.Features[2] = new Column { Id = 3, Name = "col3", Index = 2, Type = ColumnType.STRING, Values = null, DefaultMissingValue = 1.4 };
-            des.Features[3] = new Column { Id = 1, Name = "col4", Index = 0, Type = ColumnType.CLASS, Values = new string[] {"red", "green", "blue" }, DefaultMissingValue = 1 };
+            des.Features[3] = new Column { Id = 4, Name = "col4", Index = 3, Type = ColumnType.CLASS, Values = new string[] {"red", "green", "blue" }, DefaultMissingValue = 1 };
 
+            des.LabelIndex = 4;
             return des;
         }
 

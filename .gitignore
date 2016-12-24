@@ -35,3 +35,4 @@ LearningApi/test/obj/*
 /LearningApi/src/CannyEdgeDetector/obj/*
 /LearningApi/src/CannyEdgeDetector/bin/*
 /LearningApi/test/scaling features/~$precalculated_samples.xlsx
+/LearningApi/test/sample_data/iris/~$iris.xlsx
