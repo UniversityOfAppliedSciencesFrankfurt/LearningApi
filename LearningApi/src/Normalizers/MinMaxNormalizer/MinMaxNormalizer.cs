@@ -40,8 +40,8 @@ namespace LearningFoundation.Normalizers
             var desc = ctx.DataDescriptor as DataDescriptor;
 
             //store values for denormalizer
-            desc.m_Min = tuple.Item1;
-            desc.m_Max = tuple.Item2;
+            desc.Min = tuple.Item1;
+            desc.Max = tuple.Item2;
 
             //
             for (int k = 0; k < data.Length; k++)
@@ -50,45 +50,57 @@ namespace LearningFoundation.Normalizers
 
                 double[] rawData = data[k];
 
-                for (int i = 0; i < rawData.Length; i++)
+                //get all columns including labelcolumn
+                var features = ctx.DataDescriptor.Features;
+
+                //index of numericDataSet
+                var dataIndex = 0;
+                
+                //enumerate all feature columns
+                foreach (var column in features)
                 {
-                    //get feature index
-                    var fi = ctx.DataDescriptor.Features[i].Index;
- 
+                    
                     //numeric column
-                    if (ctx.DataDescriptor.Features[i].Type == ColumnType.NUMERIC)
+                    if (column.Type == ColumnType.NUMERIC)
                     {
-                        var value = (rawData[i] - tuple.Item1[fi]) / (tuple.Item2[fi] - tuple.Item1[fi]);
-                        normalizedRow.Add(value);
+                        //in case the colum is constant
+                        if (desc.Max[dataIndex] == desc.Min[dataIndex])
+                        {
+                            if (desc.Max[dataIndex] == 0) //zero column 
+                                normalizedRow.Add(rawData[dataIndex]);
+                            else if (desc.Max[dataIndex] > 1 || desc.Max[dataIndex] < -1)//nonzero column
+                                normalizedRow.Add(rawData[dataIndex] * desc.Max[dataIndex]);
+                            else
+                                normalizedRow.Add(rawData[dataIndex]);
+                        }
+                        else
+                        {
+                            var value = (rawData[dataIndex] - desc.Min[dataIndex]) / (desc.Max[dataIndex] - desc.Min[dataIndex]);
+                            normalizedRow.Add(value);
+                        }
+                        //change the index
+                        dataIndex++;
                     }
                     //binary column
-                    else if (ctx.DataDescriptor.Features[i].Type == ColumnType.BINARY)
+                    else if (column.Type == ColumnType.BINARY)
                     {
                         //in case of binary column type real and normalized value are the same
-                        normalizedRow.Add(rawData[i]);
+                        normalizedRow.Add(rawData[dataIndex]);
 
+                        //change the index
+                        dataIndex++;
                     }
                     //category column
-                    else if (ctx.DataDescriptor.Features[i].Type == ColumnType.CLASS)
+                    else if (column.Type == ColumnType.CLASS)
                     {
-                        //TODO:
-                        // Converts category numeric values in to binary values
-                        // it creates array which has length of categories count.
-                        // Example: Red, Gree, Blue - 3 categories  - real values
-                        //             0,  1,  2    - 3 numbers     - numeric values
-                        //             
-                        // Normalized values for Blues category:
-                        //          Blue  =  (0,0,1)  - three values which sum is 1,
-                        //          Red   =  (1,0,0)
-                        //          Green =  (0,1,0)
-                        var count = ctx.DataDescriptor.Features[i].Values.Length;
-                        for (int j = 0; j < count; j++)
+                        //in case of class column type real and normalized value are the same
+                        for(int i=0; i < column.Values.Length; i++)
                         {
-                            if (j == rawData[i])
-                                normalizedRow.Add(1);
-                            else
-                                normalizedRow.Add(0);
+                            //change the index
+                            dataIndex += i;
+                            normalizedRow.Add(rawData[dataIndex]);
                         }
+                            
                     }
                 }
 

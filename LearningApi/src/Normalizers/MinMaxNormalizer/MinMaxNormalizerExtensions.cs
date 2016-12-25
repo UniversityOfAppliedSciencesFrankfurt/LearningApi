@@ -25,6 +25,11 @@ namespace LearningFoundation.Normalizers
             return api;
         }
 
+        /// <summary>
+        /// Extension methods of LearningAPI for using MinMax denormalizer
+        /// </summary>
+        /// <param name="api"></param>
+        /// <returns></returns>
         public static LearningApi UseMinMaxDeNormalizer(this LearningApi api)
         {
             var minMaxDeNorm = new MinMaxDeNormalizer();

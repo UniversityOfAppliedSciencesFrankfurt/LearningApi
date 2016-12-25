@@ -18,30 +18,30 @@ namespace test.csvdataprovider
 
     public class CSVDataProviderTast
     {
-        string m_iris_data_path = "";
-
-
+        
         public CSVDataProviderTast()
         {
 
 
-            //iris data file
-            m_iris_data_path = System.IO.Path.Combine(Directory.GetCurrentDirectory(), @"sample_data\iris\iris.csv");
         }
 
         /// <summary>
         /// Demonstrates how to inject a data provider as an action.
         /// </summary>
         [Fact]
-        public void CSVDataProviderTest1()
+        public void CSVDataProviderTest_IrisData()
         {
+            //
+            //iris data file
+            var isris_path = System.IO.Path.Combine(Directory.GetCurrentDirectory(), @"sample_data\iris\iris.csv");
+
             LearningApi api = new LearningApi(TestHelpers.GetDescriptor());
-            api.UseCsvDataProvider(m_iris_data_path, ',', 1);
+            api.UseCsvDataProvider(isris_path, ',', 1);
 
             var result = api.Run() as object[][];
 
             //get expected result
-            var expected = GetRealDataSet();
+            var expected = GetReal_Iris_DataSet();
 
             for (int i = 0; i < result.Length; i++)
             {
@@ -74,8 +74,80 @@ namespace test.csvdataprovider
 
         }
 
-      
-        private object[][] GetRealDataSet()
+
+        /// <summary>
+        /// Demonstrates how to inject a data provider as an action.
+        /// </summary>
+        [Fact]
+        public void CSVDataProviderTest_SecomData()
+        {
+            //
+            //iris data file
+            var isris_path = System.IO.Path.Combine(Directory.GetCurrentDirectory(), @"sample_data\secom\SECOM_Dataset_AllFeatures.csv");
+
+            LearningApi api = new LearningApi(TestHelpers.GetDescriptor(@"sample_data\secom\SECOM_data_mapper.json"));
+            api.UseCsvDataProvider(isris_path, ',', 1);
+
+            var result = api.Run() as object[][];
+
+            //get expected result
+            var expected = GetReal_Secom_DataSet();
+
+            for (int i = 0; i < result.Length; i++)
+            {
+                for (int j = 0; j < result[0].Length; j++)
+                {
+                    var col = api.Context.DataDescriptor.Features[j];
+                    if (col.Type == ColumnType.STRING)
+                        Assert.Equal(result[i][j], expected[i][j]);
+                    else if (col.Type == ColumnType.NUMERIC)//numeric column
+                    {
+                        //var val1 = double.Parse(result[i][j].ToString());
+                        //var val2 = double.Parse(expected[i][j].ToString());
+
+                        Assert.Equal(result[i][j], expected[i][j]);
+                    }
+                    else if (col.Type == ColumnType.BINARY)//binary column
+                    {
+                        Assert.Equal(result[i][j].ToString(), expected[i][j].ToString());
+                    }
+                    else if (col.Type == ColumnType.CLASS)//class column
+                    {
+                        Assert.Equal(result[i][j].ToString(), expected[i][j].ToString());
+                    }
+
+
+                }
+            }
+
+            return;
+
+        }
+
+        private object[][] GetReal_Secom_DataSet()
+        {
+            var secomPath = System.IO.Path.Combine(Directory.GetCurrentDirectory(), @"sample_data\secom\SECOM_Dataset_AllFeatures.csv");
+            var lines = File.ReadAllLines(secomPath);
+
+            var o = new List<object[]>();
+            for (int ll=1; ll< lines.Length; ll++)
+            {
+                var c = lines[ll];
+                var l = new object[592];
+                var cols = c.Split(',');
+
+                for(int i=0; i<592; i++)
+                {
+                    l[i] = cols[i];
+                }
+                o.Add(l);
+            }
+
+            return o.ToArray<object[]>();
+        }
+
+
+        private object[][] GetReal_Iris_DataSet()
         {
             var data = new object[150][] {
             new object[]{5.1,3.5,1.4,0.2,"setosa"},

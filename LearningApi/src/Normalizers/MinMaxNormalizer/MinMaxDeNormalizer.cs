@@ -47,43 +47,57 @@ namespace LearningFoundation.Normalizers
 
                 double[] rawData = data[k];
 
-                for (int i = 0; i < rawData.Length; i++)
-                {
-                    //get feature index
-                    var fi = ctx.DataDescriptor.Features[i].Index;
+                //get all columns 
+                var features = ctx.DataDescriptor.Features;
 
-                    //numeric column
-                    if (ctx.DataDescriptor.Features[i].Type == ColumnType.NUMERIC)
+                //index of numericDataSet.In case of Class column type vector element count is greater than Feature coune
+                var dataIndex = 0;
+
+                //enumerate all feature columns
+                foreach (var column in features)
+                {
+                     //numeric column
+                    if (column.Type == ColumnType.NUMERIC)
                     {
-                        var value = desc.m_Min[fi] + rawData[i] * (desc.m_Max[fi] - desc.m_Min[fi]);
-                        deNormRow.Add(value);
+                        //in case the colum is constant
+                        if (desc.Max[dataIndex] == desc.Min[dataIndex])
+                        {
+                            if (desc.Max[dataIndex] == 0) //zero column 
+                                deNormRow.Add(rawData[dataIndex]);
+                            else if (desc.Max[dataIndex] > 1 || desc.Max[dataIndex] < -1)//nonzero column
+                                deNormRow.Add(rawData[dataIndex] / desc.Max[dataIndex]);
+                            else
+                                deNormRow.Add(rawData[dataIndex]);
+                        }
+                        else
+                        {
+                            var value = desc.Min[dataIndex] + rawData[dataIndex] * (desc.Max[dataIndex] - desc.Min[dataIndex]);
+                            deNormRow.Add(value);
+                        }
+
+                        //change the index
+                        dataIndex++;
+
                     }
                     //binary column
-                    else if (ctx.DataDescriptor.Features[i].Type == ColumnType.BINARY)
+                    else if (column.Type == ColumnType.BINARY)
                     {
                         //in case of binary column type real and normalized value are the same
-                        deNormRow.Add(rawData[i]);
+                        deNormRow.Add(rawData[dataIndex]);
+
+                        //change the index
+                        dataIndex++;
+
                     }
                     //category column
-                    else if (ctx.DataDescriptor.Features[i].Type == ColumnType.CLASS)
+                    else if (column.Type == ColumnType.CLASS)
                     {
-                        // COnverts set of binary values in to one category 
-                        // Normalized values for Blues category:
-                        //          Blue  =  (0,0,1)  - three values which sum is 1,
-                        //          Red   =  (1,0,0)
-                        //          Green =  (0,1,0)
-                        // Example: Red, Gree, Blue - 3 categories  - real values
-                        //             0,  1,  2    - 3 numbers     - numeric values
-                        //             
-
-                        var count = ctx.DataDescriptor.Features[i].Values.Length;
-                        for (int j = 0; j < count; j++)
+                        //in case of class column type real and normalized value are the same
+                        for (int i = 0; i < column.Values.Length; i++)
                         {
-                            if (deNormRow[i + j] == 1)
-                                deNormRow.Add(j);
+                            dataIndex += i;
+                            deNormRow.Add(rawData[dataIndex]);
                         }
-                        //
-                        i += count;
                     }
                 }
 

@@ -36,3 +36,4 @@ LearningApi/test/obj/*
 /LearningApi/src/CannyEdgeDetector/bin/*
 /LearningApi/test/scaling features/~$precalculated_samples.xlsx
 /LearningApi/test/sample_data/iris/~$iris.xlsx
+/LearningApi/src/MLAlgorithms/LogisticRegression/bin/Debug/netstandard1.2
