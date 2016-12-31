@@ -13,22 +13,31 @@ namespace test.statistics
     /// </summary>
     public class AdvancedStatisticsTests
     {
-
         [Fact]
-        public bool CorrelatioCoefficientTests()
+        public void CorrelationCoefficientTests()
         {
             //define stats modul 
-            
+
             //test 1
-            var dataSample1 = new double[]{ 180, 176, 144, 195, 159, 185, 166, 173, 149, 168 };
-            var dataSample2 = new double[] { 87,  65,  52,  94,  87,  79,  59,  64,  45,  77 };
+            var dataSample1 = new double[] { 180, 176, 144, 195, 159, 185, 166, 173, 149, 168 };
+            var dataSample2 = new double[] { 87, 65, 52, 94, 87, 79, 59, 64, 45, 77 };
 
             var result = dataSample1.CorrCoeffOf(dataSample2);
             Assert.Equal(Math.Round(result, 4), 0.7294);
+        }
 
-            
 
-            return true;
+        [Fact]
+        public void CorrelationCoefficientTests2()
+        {
+            //define stats modul 
+
+            //test 1
+            var dataSample1 = new double[] { 180, 176, 144, 195, 159, 185, 166, 173, 149, 168 };
+            var dataSample2 = new double[] { 178, 171, 149, 195, 162, 181, 160, 175, 159, 168 };
+
+            var result = dataSample1.CorrCoeffOf(dataSample2);
+            Assert.Equal(Math.Round(result, 4), 0.9584);           
         }
     }
 }
