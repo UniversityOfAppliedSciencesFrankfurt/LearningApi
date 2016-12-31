@@ -5,8 +5,8 @@ using System.Threading.Tasks;
 
 namespace LearningFoundation
 {
-    public interface IAlgorithm : IPipelineModule<double[][], Task<IScore>>
+    public interface IAlgorithm : IPipelineModule<double[][], IScore>
     {
-        Task<double> Train(double[] featureValues, double label, IContext ctx);
+        IScore Train(double[][] data, IContext ctx);
     }
 }

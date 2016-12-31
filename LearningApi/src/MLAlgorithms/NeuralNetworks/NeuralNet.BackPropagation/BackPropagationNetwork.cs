@@ -26,10 +26,14 @@ namespace NeuralNet.BackPropagation
             this.activationFnc = activationFnc;
         }
 
-        public override Task<double> Train(double[] featureValues, double label, IContext ctx)
+    
+        public override IScore Run(double[][] data, IContext ctx)
         {
-           
-            return Task.FromResult<double>(0.7);
+            if (ctx.Score == null)
+                ctx.Score = new NeuralNetScore() { Weights = null, Errors = null };
+
+            throw new NotImplementedException();
         }
+
     }
 }

@@ -23,10 +23,8 @@ namespace UnitTests
       
         public ApiInitializationTests()
         {
-            
-
             //iris data file
-            m_iris_data_path = System.IO.Path.Combine(Directory.GetCurrentDirectory(), @"sample_data\iris\iris.csv");
+            m_iris_data_path = System.IO.Path.Combine(Directory.GetCurrentDirectory(), @"SampleData\iris\iris.csv");
         }
 
         /// <summary>
@@ -46,6 +44,7 @@ namespace UnitTests
             Assert.Equal(1.1, ((double[])result)[0]);
             Assert.Equal(4.4, ((double[])result)[3]);
         }
+
 
         /// <summary>
         /// Demonstrates ho to setup a chain of action modules.
@@ -92,7 +91,7 @@ namespace UnitTests
             api.UseDefaultDataMapper();
 
             // Use MinMax data normalizer
-            api.UseMinMaxNormalizer();
+            //api.UseMinMaxNormalizer();
 
             // We could also use some other normalizer like Gaus data normalizer
             //api.UseGaussNormalizer(m_stats.Select(x => x.Mean).ToArray(), m_stats.Select(x => x.Variance).ToArray());
@@ -100,15 +99,7 @@ namespace UnitTests
             // Prepares the ML Algoritm and setup parameters
             api.UseBackPropagation(1, 0.2, 1.0, null);
 
-            //provide basic data statistic
-            //api.UseBasicDataStatistics(new BasicStatistics());
-
-
-            //start process of learning
             api.Run();
-
-            //  api.Train();
-            //   api.TrainSample();
 
             IScore status = api.GetScore();
 

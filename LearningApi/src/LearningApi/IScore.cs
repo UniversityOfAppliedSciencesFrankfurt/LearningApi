@@ -13,6 +13,7 @@ namespace LearningFoundation
 
         //
         double [] Errors { get;set;}
+
         double [] Weights { get; set;}
 
     }

@@ -33,7 +33,7 @@ namespace test.csvdataprovider
         {
             //
             //iris data file
-            var isris_path = System.IO.Path.Combine(Directory.GetCurrentDirectory(), @"sample_data\iris\iris.csv");
+            var isris_path = System.IO.Path.Combine(Directory.GetCurrentDirectory(), @"SampleData\iris\iris.csv");
 
             LearningApi api = new LearningApi(TestHelpers.GetDescriptor());
             api.UseCsvDataProvider(isris_path, ',', 1);
@@ -83,9 +83,9 @@ namespace test.csvdataprovider
         {
             //
             //iris data file
-            var isris_path = System.IO.Path.Combine(Directory.GetCurrentDirectory(), @"sample_data\secom\SECOM_Dataset_AllFeatures.csv");
+            var isris_path = System.IO.Path.Combine(Directory.GetCurrentDirectory(), @"SampleData\secom\SECOM_Dataset_AllFeatures.csv");
 
-            LearningApi api = new LearningApi(TestHelpers.GetDescriptor(@"sample_data\secom\SECOM_data_mapper.json"));
+            LearningApi api = new LearningApi(TestHelpers.GetDescriptor(@"SampleData\secom\SECOM_data_mapper.json"));
             api.UseCsvDataProvider(isris_path, ',', 1);
 
             var result = api.Run() as object[][];
@@ -126,7 +126,7 @@ namespace test.csvdataprovider
 
         private object[][] GetReal_Secom_DataSet()
         {
-            var secomPath = System.IO.Path.Combine(Directory.GetCurrentDirectory(), @"sample_data\secom\SECOM_Dataset_AllFeatures.csv");
+            var secomPath = System.IO.Path.Combine(Directory.GetCurrentDirectory(), @"SampleData\secom\SECOM_Dataset_AllFeatures.csv");
             var lines = File.ReadAllLines(secomPath);
 
             var o = new List<object[]>();

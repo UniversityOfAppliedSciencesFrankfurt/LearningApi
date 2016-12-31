@@ -12,12 +12,11 @@ namespace NeuralNetworks.Core
         {
         }
 
-        public Task<IScore> Run(double[][] featureValues, IContext ctx)
+        public abstract IScore Run(double[][] featureValues, IContext ctx);
+     
+        public IScore Train(double[][] featureValues, IContext ctx)
         {
-            var score = new NeuralNetScore() { Weights = null, Errors = null };
-            return Task.FromResult<IScore>(score);//Train(featureValues, 1, ctx:ctx);
+            return Run(featureValues, ctx);
         }
-             
-        public abstract Task<double> Train(double[] featureValues, double label, IContext ctx);
     }
 }

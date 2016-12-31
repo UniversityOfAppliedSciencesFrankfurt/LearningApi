@@ -1,28 +1,30 @@
-﻿using System;
+﻿using LogisticRegression;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-using LearningFoundation;
-namespace LogisticRegression
+
+namespace LearningFoundation
 {
     public class LogisticRegression: IAlgorithm
     {
-        private bool useSGD= false;
-        private double alpha;//learning rates
-        //private double[] weights;//learning weights
-        private double l1, l2; //regularization
-        private Random rnd;
-        public int Iterations { get; set; }
+        private bool m_UseSGD= false;
 
-        private LogisticRegressionScore Score;
+        private double m_Alpha;//learning rates
+      
+        private double m_L1, m_L2; //regularization
+
+        private Random m_Rnd;
+
+        internal int Iterations { get; set; }
 
         public LogisticRegression(double learningrate)
         {
-            alpha = learningrate;
-            rnd = new Random((int)DateTime.Now.Ticks);
-            Score = new LogisticRegressionScore();
+            m_Alpha = learningrate;
+            m_Rnd = new Random((int)DateTime.Now.Ticks);          
         }
+
 
         /// <summary>
         /// Training logistic regression algortim for specified dataset
@@ -30,8 +32,11 @@ namespace LogisticRegression
         /// <param name="data"></param>
         /// <param name="ctx"></param>
         /// <returns>Errors during each iteration</returns>
-        public Task<IScore> Run(double[][] data, IContext ctx)
+        public IScore Run(double[][] data, IContext ctx)
         {
+            if(ctx.Score as LogisticRegressionScore == null)
+                ctx.Score = new LogisticRegressionScore();
+
             var trainData = data;
 
             //construct weights acording to features count
@@ -45,8 +50,6 @@ namespace LogisticRegression
             double[] errors = new double[Iterations];
             while (epoch < Iterations)//Todo: termination criteria is not implemented yet.
             {
-               
-
                 Shuffle(sequence); // process data in random order
 
                 // batch/offline standard approach
@@ -58,10 +61,12 @@ namespace LogisticRegression
 
             } // while
 
-            Score.Weights = weights;
-            Score.Errors = errors;
-            return Task.FromResult<IScore>(Score);
+            ctx.Score.Weights = weights;
+            ctx.Score.Errors = errors;
+            
+            return ctx.Score;
         }
+
 
         /// <summary>
         /// TODO: We should think about separate all Learner from the ML Algortim
@@ -91,10 +96,11 @@ namespace LogisticRegression
             }
 
             for (int j = 0; j < weights.Length; ++j) // update
-                weights[j] += alpha * accumulatedGradients[j];
+                weights[j] += m_Alpha * accumulatedGradients[j];
 
             return weights;
         }
+
 
         /// <summary>
         /// For currently weights calculate the output values
@@ -122,7 +128,7 @@ namespace LogisticRegression
         {
             for (int i = 0; i < sequence.Length; ++i)
             {
-                int r = rnd.Next(i, sequence.Length);
+                int r = m_Rnd.Next(i, sequence.Length);
                 int tmp = sequence[r];
                 sequence[r] = sequence[i];
                 sequence[i] = tmp;
@@ -169,13 +175,9 @@ namespace LogisticRegression
 
         }
 
-
-
-
-        //
-        public Task<double> Train(double[] featureValues, double label, IContext ctx)
+        public IScore Train(double[][] featureValues, IContext ctx)
         {
-            throw new NotImplementedException();
+            return Run(featureValues, ctx);
         }
     }
 }

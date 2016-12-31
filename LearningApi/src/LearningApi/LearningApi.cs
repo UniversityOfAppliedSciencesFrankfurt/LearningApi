@@ -35,9 +35,9 @@ namespace LearningFoundation
         /// main constructor
         /// </summary>
         /// <param name="desc">Describes the data and features.</param>
-        public LearningApi(DataDescriptor desc = null)
+        public LearningApi(DataDescriptor desc = null, IScore score = null)
         {
-            this.Context = new Context() { DataDescriptor = desc };
+            this.Context = new Context() { DataDescriptor = desc, Score = score };
 
             this.Modules = new Dictionary<string, LearningFoundation.IPipelineModule>();
         }
@@ -68,9 +68,14 @@ namespace LearningFoundation
             return this;
         }
 
+
+        /// <summary>
+        /// Gets the score.
+        /// </summary>
+        /// <returns></returns>
         public IScore GetScore()
         {
-            return null;
+            return Context.Score;
         }
 
         

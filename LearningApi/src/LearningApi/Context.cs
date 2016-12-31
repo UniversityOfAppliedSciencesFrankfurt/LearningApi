@@ -17,5 +17,7 @@ namespace LearningFoundation
         /// before any processing.
         /// </summary>
         public IDataDescriptor DataDescriptor { get; set; }
+
+        public IScore Score { get; set; }
     }
 }
