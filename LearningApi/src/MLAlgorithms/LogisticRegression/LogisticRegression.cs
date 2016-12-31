@@ -179,5 +179,10 @@ namespace LearningFoundation
         {
             return Run(featureValues, ctx);
         }
+
+        public double[] Predict(double[][] data, IContext ctx)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

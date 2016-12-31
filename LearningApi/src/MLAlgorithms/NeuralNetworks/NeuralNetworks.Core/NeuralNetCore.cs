@@ -12,11 +12,18 @@ namespace NeuralNetworks.Core
         {
         }
 
+
         public abstract IScore Run(double[][] featureValues, IContext ctx);
      
         public IScore Train(double[][] featureValues, IContext ctx)
         {
             return Run(featureValues, ctx);
+        }
+
+
+        public double[] Predict(double[][] data, IContext ctx)
+        {
+            throw new NotImplementedException();
         }
     }
 }
