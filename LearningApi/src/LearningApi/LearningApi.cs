@@ -78,16 +78,16 @@ namespace LearningFoundation
 
         public object Run()
         {
-            dynamic vector = null;
+            dynamic data = null;
 
             foreach (var item in this.Modules)
             {
                 dynamic module = item.Value;
 
-                vector = module.Run(vector, this.Context);
+                data = module.Run(data, this.Context);
             }
 
-            return vector;
+            return data;
         }
 
         public async Task TrainAsync()

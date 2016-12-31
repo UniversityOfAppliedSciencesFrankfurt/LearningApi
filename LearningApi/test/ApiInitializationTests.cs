@@ -72,6 +72,11 @@ namespace UnitTests
             Assert.Equal(5.4, ((double[])result)[3]);
         }
 
+
+        /// <summary>
+        /// Runs BackPropagation algorithm.
+        /// </summary>
+        /// <returns></returns>
         [Fact]
         public bool InitNeuralBackPropagationTest()
         {
@@ -87,7 +92,7 @@ namespace UnitTests
             api.UseDefaultDataMapper();
 
             // Use MinMax data normalizer
-          //  api.UseMinMaxNormalizer(m_stats.Select(x => x.Min).ToArray(), m_stats.Select(x => x.Max).ToArray());
+            api.UseMinMaxNormalizer();
 
             // We could also use some other normalizer like Gaus data normalizer
             //api.UseGaussNormalizer(m_stats.Select(x => x.Mean).ToArray(), m_stats.Select(x => x.Variance).ToArray());
@@ -100,7 +105,7 @@ namespace UnitTests
 
 
             //start process of learning
-            api.TrainAsync().Wait();
+            api.Run();
 
             //  api.Train();
             //   api.TrainSample();
