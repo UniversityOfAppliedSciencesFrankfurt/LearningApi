@@ -15,7 +15,8 @@
     "NeuralNetworks.Core": "1.0.0-*",
     "Newtonsoft.Json": "9.0.1",
     "GaussNormalizer": "1.0.0-*",
-    "MinMaxNormalizer": "1.0.0-*"
+    "MinMaxNormalizer": "1.0.0-*",
+    "LogisticRegression": "1.0.0-*"
   },
   "testRunner": "xunit",
   "frameworks": {

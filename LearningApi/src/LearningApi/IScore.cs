@@ -11,14 +11,11 @@ namespace LearningFoundation
     public interface IScore
     {
 
-        //Trained,
+        //
+        double [] Errors { get;set;}
+        double [] Weights { get; set;}
 
     }
 
-    public interface INeuralNetScore : IScore
-    {
-         
-        //Trained,
-
-    }
+    
 }

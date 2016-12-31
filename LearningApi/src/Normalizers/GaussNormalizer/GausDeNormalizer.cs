@@ -15,21 +15,16 @@ namespace LearningFoundation.Normalizers
     /// </summary>
     public class GaussDeNormalizer : IDataDeNormalizer
     {
-        DataMapper m_DataMapper;
-        private double[] m_Mean;
-        private double[] m_Var;
+        //DataMapper m_DataMapper;
+        //private double[] m_Mean;
+        //private double[] m_Var;
 
         /// <summary>
         /// Main Constructor
         /// </summary>
-        /// <param name="mapper">related data mapper</param>
-        /// <param name="mean">mean for each column in the dataset</param>
-        /// <param name="var">variance for each column in the dataset</param>
-        public GaussDeNormalizer(DataMapper mapper, double[] mean, double[] var)
+        public GaussDeNormalizer()
         {
-            m_DataMapper = mapper;
-            m_Mean = mean;
-            m_Var = var;
+           
         }
 
         /// <summary>
@@ -59,7 +54,7 @@ namespace LearningFoundation.Normalizers
                     //numeric column
                     else if (ctx.DataDescriptor.Features[i].Type == LearningFoundation.DataMappers.ColumnType.NUMERIC)
                     {
-                        var value = m_Mean[fi] + normalizedData[i] * m_Var[fi];
+                        var value = 23;// m_Mean[fi] + normalizedData[i] * m_Var[fi];
                         normalizedData.Add(value);
                     }
 

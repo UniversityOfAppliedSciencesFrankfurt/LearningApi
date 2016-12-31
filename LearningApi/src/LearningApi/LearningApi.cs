@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Reflection;
-
+using LearningFoundation.DataMappers;
 
 namespace LearningFoundation
 {
@@ -25,17 +25,7 @@ namespace LearningFoundation
         /// Gets/Sets specifics ML algortim for training
         /// </summary>
         public IAlgorithm Algorithm { get; set; }
-
-        /// <summary>
-        /// Gets/Sets specifics normalization algoritm
-        /// </summary>
-        public IDataNormalizer Normalizer { get; set; }
-
-        /// <summary>
-        /// Gets/Sets specifics normalization algoritm
-        /// </summary>
-        public IStatistics Statistics { get; set; }
-
+        
         /// <summary>
         /// Used to map input columns to features.
         /// </summary>
@@ -83,33 +73,8 @@ namespace LearningFoundation
             return null;
         }
 
-        /// <summary>
-        /// Transform numeric to normalized row 
-        /// </summary>
-        /// <param name="data"></param>
-        /// <returns></returns>
-        private double[][] Normalize(double[][] data)
-        {
-            var Normalizer = GetModule<IDataNormalizer>();
-            if (Normalizer == null)
-                return data;
-            else
-                return Normalizer.Run(data, this.Context);
-        }
-
-        /// <summary>
-        /// Transform normalized in to numeric row 
-        /// </summary>
-        /// <param name="featureVector"></param>
-        /// <returns></returns>
-        private double[][] DeNormalize(double[][] normVector)
-        {
-            IDataDeNormalizer Normalizer = GetModule<IDataDeNormalizer>() as IDataDeNormalizer;
-            if (Normalizer == null)
-                throw new MLException("There is no module registered of type 'IDataDeNormalizer'");
-            else
-                return Normalizer.DeNormalize(normVector, this.Context);
-        }
+        
+        
 
         public object Run()
         {

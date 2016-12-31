@@ -15,18 +15,15 @@ namespace LearningFoundation.Normalizers
     /// </summary>
     public class GaussNormalizer : IDataNormalizer
     {
-        private double[] m_Mean;
-        private double[] m_Var;
+        //private double[] m_Mean;
+        //private double[] m_Var;
 
         /// <summary>
         /// Main Constructor
         /// </summary>
-        /// <param name="mean">mean for each column in the dataset</param>
-        /// <param name="var">variance for each column in the dataset</param>
-        public GaussNormalizer(double[] mean, double[] var)
+        public GaussNormalizer()
         {
-            m_Mean = mean;
-            m_Var = var;
+           
         }
 
         /// <summary>
@@ -55,7 +52,7 @@ namespace LearningFoundation.Normalizers
                     //numeric column
                     else if (ctx.DataDescriptor.Features[i].Type == LearningFoundation.DataMappers.ColumnType.NUMERIC)
                     {
-                        var value = (rawData[i] - m_Mean[fi]) / m_Var[fi];
+                        var value = 12;// (rawData[i] - m_Mean[fi]) / m_Var[fi];
                         normalizedRow.Add(value);
                     }
                     //binary column
@@ -68,23 +65,8 @@ namespace LearningFoundation.Normalizers
                     //category column
                     else if (ctx.DataDescriptor.Features[i].Type == LearningFoundation.DataMappers.ColumnType.CLASS)
                     {
-                        // Converts category numeric values in to binary values
-                        // it creates array which has length of categories count.
-                        // Example: Red, Gree, Blue - 3 categories  - real values
-                        //             0,  1,  2    - 3 numbers     - numeric values
-                        //             
-                        // Normalized values for Blues category:
-                        //          Blue  =  (0,0,1)  - three values which sum is 1,
-                        //          Red   =  (1,0,0)
-                        //          Green =  (0,1,0)
-                        var count = ctx.DataDescriptor.Features[i].Values.Length;
-                        for (int j = 0; j < count; j++)
-                        {
-                            if (j == rawData[i])
-                                normalizedRow.Add(1);
-                            else
-                                normalizedRow.Add(0);
-                        }
+                        //in case of class column type real and normalized value are the same
+                        normalizedRow.Add(rawData[i]);
                     }
                 }
             }

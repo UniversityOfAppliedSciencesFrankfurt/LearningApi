@@ -17,10 +17,11 @@ namespace LearningFoundation
         int LabelIndex { get; set; }
 
         /// <summary>
-        /// Number of features in input vactor (dimension).
+        /// Number of features in input vector (dimension).
         /// </summary>
-        int NumOfFeatures { get; set; }
+       // int NumOfFeatures { get; set; }
 
+        //feature description: feature type, missingvalue, 
         DataMappers.Column[] Features { get; set; }
     }
 }

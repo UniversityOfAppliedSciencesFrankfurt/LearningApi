@@ -14,33 +14,30 @@ namespace LearningFoundation.Normalizers
     {
 
         /// <summary>
-        /// Extension method for using GaussNormalizer in LearningAPI
-        /// In case of using Gauss normalize you have to provide mean and variace values for all data columns (feature)
+        /// Extension methods of LearningAPI for Gauss MinMax normalizer
         /// </summary>
-        /// <param name="api"></param>
-        /// <param name="mean"> min for each column in the data set</param>
-        /// <param name="var"> variance for each column in the data set</param>
+        /// <param name="api">LearningAPI</param>
         /// <returns></returns>
-        public static LearningApi UseGaussNormalizer(this LearningApi api, double[] mean, double[] var)       
+        public static LearningApi UseGaussNormalizer(this LearningApi api)
         {
-            // Normalizer should not require DataMapper.
-            //if (api.DataMapper == null)
-            //    throw new Exception("Data Mapper must be initialized before Data Normalizer.");
+            var minMaxNorm = new GaussNormalizer();
+            api.Modules.Add("GaussNormilizer", minMaxNorm);
 
-            //if (api.DataMapper is DataMappers.DataMapper)
-            //{
-                //create minmax object
-                var gn = new GaussNormalizer(mean, var);
-                // assign to LearningAPI property
-                api.AddModule(gn);
-
-                return api;
-            //}
-            //else
-            //    throw new Exception("Data Mapper must be of \"DataMapper\" type.");
-
+            return api;
         }
 
-        
+        /// <summary>
+        /// Extension methods of LearningAPI for using Gauss denormalizer
+        /// </summary>
+        /// <param name="api"></param>
+        /// <returns></returns>
+        public static LearningApi UseGaussDeNormalizer(this LearningApi api)
+        {
+            var minMaxDeNorm = new GaussDeNormalizer();
+            api.Modules.Add("GaussDenormilizer", minMaxDeNorm);
+            return api;
+        }
+
+
     }
 }

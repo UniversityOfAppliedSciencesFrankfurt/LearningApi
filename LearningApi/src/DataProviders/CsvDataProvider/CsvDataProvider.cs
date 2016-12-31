@@ -136,11 +136,19 @@ namespace LearningFoundation.DataProviders
             List<object[]> rawData = new List<object[]>();
 
             using (StreamReader reader = File.OpenText(m_FileName))
-            {  
+            {
+                int linenum = 0;
                 foreach (string line in readLineFromFile(reader))
                 {
                     //split line in to column
                     var strCols = line.Split(m_Delimiter);
+
+                    //skip first ... rows
+                    if(linenum < m_SkipRows)
+                    {
+                        linenum++;
+                        continue;
+                    }
 
                     //Transform data from row->col in to col->row
                     var singleRow = new object[strCols.Length];
