@@ -108,7 +108,7 @@ namespace UnitTests
         }
 
         [Fact]
-        public bool RunPipelineTest()
+        public void RunPipelineTest()
         {
             // Creates learning api object
             LearningApi api = new LearningApi(TestHelpers.GetDescriptor());
@@ -137,7 +137,7 @@ namespace UnitTests
             IScore status = api.GetScore();
 
             //api.Train(vector)
-            return true;
+            return;
         }
 
 
@@ -160,6 +160,7 @@ namespace UnitTests
             descriptor.Features[2] = new Column { Id = 3, Name = "petal_length", Index = 2, Type = ColumnType.NUMERIC, Values = null, DefaultMissingValue = 1.4 };
             descriptor.Features[3] = new Column { Id = 4, Name = "petal_width", Index = 3, Type = ColumnType.NUMERIC, Values = null, DefaultMissingValue = 0.5 };
             descriptor.Features[4] = new Column { Id = 5, Name = "species", Index = 4, Type = ColumnType.CLASS, Values = null, DefaultMissingValue = 1 };
+            descriptor.LabelIndex = 1;
 
             var jsonString = JsonConvert.SerializeObject(dm);
             return jsonString;
