@@ -103,7 +103,11 @@ namespace LearningFoundation.Statistics
                 
             return parSum/(count-1);
         }
-
+        /// <summary>
+        /// Calculate StandardDeviation
+        /// </summary>
+        /// <param name="colData"></param>
+        /// <returns></returns>
         public static double Stdev(this double[] colData)
         {
             if (colData == null || colData.Length < 4)
@@ -175,6 +179,54 @@ namespace LearningFoundation.Statistics
             }
 
             return minMax;
+        }
+
+        /// <summary>
+        /// Calculate Mean and Standard deviation
+        /// </summary>
+        /// <param name="dataset"></param>
+        /// <returns>return tuple of mean and StDev</returns>
+        public static Tuple<double[], double[]> calculateMeanStDev(this double[][] dataset)
+        {
+            //
+            if (dataset == null || dataset.Length <= 1)
+                throw new MLException("data cannot be null or empty!");
+
+            var meanStdev = new Tuple<double[], double[]>(new double[dataset[0].Length], new double[dataset[0].Length]);
+            double[] means = new double[dataset[0].Length];
+            double[] stdevs = new double[dataset[0].Length];
+
+            //first calculate means
+            for (int i = 0; i < dataset.Length; i++)
+            {
+                for (int j = 0; j < dataset[0].Length; j++)
+                { 
+                    means[j] += dataset[i][j];
+                }
+            }
+            //devide by number of rows
+            for (int i = 0; i < means.Length; i++)
+            {
+                means[i] = means[i]/ dataset.Length;
+            }
+
+            //calculate standard deviation
+            for (int i = 0; i < dataset.Length; i++)
+            {
+                for (int j = 0; j < dataset[0].Length; j++)
+                {
+                    var v = dataset[i][j] - means[j];
+                    stdevs[j] += v*v;
+                }
+            }
+
+            //calculate stdev
+            for (int i = 0; i < means.Length; i++)
+            {
+                stdevs[i] = Math.Sqrt(stdevs[i]/( dataset.Length - 1));
+            }
+
+            return new Tuple<double[], double[]>(means, stdevs);
         }
     }
 }

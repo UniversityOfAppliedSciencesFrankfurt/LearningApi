@@ -94,7 +94,7 @@ namespace UnitTests
             //api.UseMinMaxNormalizer();
 
             // We could also use some other normalizer like Gaus data normalizer
-            //api.UseGaussNormalizer(m_stats.Select(x => x.Mean).ToArray(), m_stats.Select(x => x.Variance).ToArray());
+            //api.UseGaussNormalizer(m_stats.Select(x => x.Mean).ToArray(), m_stats.Select(x => x.StDev).ToArray());
 
             // Prepares the ML Algoritm and setup parameters
             api.UseBackPropagation(1, 0.2, 1.0, null);
@@ -123,7 +123,7 @@ namespace UnitTests
             //api.UseMinMaxNormalizer(m_stats.Select(x => x.Min).ToArray(), m_stats.Select(x => x.Max).ToArray());
 
             // We could also use some other normalizer like Gaus data normalizer
-            //api.UseGaussNormalizer(m_stats.Select(x => x.Mean).ToArray(), m_stats.Select(x => x.Variance).ToArray());
+            //api.UseGaussNormalizer(m_stats.Select(x => x.Mean).ToArray(), m_stats.Select(x => x.StDev).ToArray());
 
             // Prepares the ML Algoritm and setup parameters
             api.UseBackPropagation(1, 0.2, 1.0, null);

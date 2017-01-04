@@ -35,61 +35,71 @@ namespace LearningFoundation.Normalizers
         /// <returns></returns>
         public double[][] DeNormalize(double[][] data, IContext ctx)
         {
-            var normData = new List<List<double>>();
+            var deNormData = new List<List<double>>();
+
+            //get data desrptior
+            var desc = ctx.DataDescriptor as DataDescriptor;
 
             for (int k = 0; k < data.Length; k++)
             {
-                var normalizedData = new List<double>();
+                var deNormRow = new List<double>();
 
                 double[] rawData = data[k];
 
-                for (int i = 0; i < rawData.Length; i++)
+                //get all columns 
+                var features = ctx.DataDescriptor.Features;
+
+                //index of numericDataSet.In case of Class column type vector element count is greater than Feature coune
+                var dataIndex = 0;
+
+                //enumerate all feature columns
+                foreach (var column in features)
                 {
-                    //get feature index
-                    var fi = ctx.DataDescriptor.Features[i].Index;
-
-                    if (ctx.DataDescriptor.Features[i].Type == LearningFoundation.DataMappers.ColumnType.STRING)
-                        continue;
-
                     //numeric column
-                    else if (ctx.DataDescriptor.Features[i].Type == LearningFoundation.DataMappers.ColumnType.NUMERIC)
+                    if (column.Type == ColumnType.NUMERIC)
                     {
-                        var value = 23;// m_Mean[fi] + normalizedData[i] * m_Var[fi];
-                        normalizedData.Add(value);
-                    }
+                        //in case the colum is constant
+                        if (desc.StDev[dataIndex] == 0)
+                        {
+                           deNormRow.Add(rawData[dataIndex]);
+                        }
+                        else
+                        {
+                            var value = desc.Mean[dataIndex] + rawData[dataIndex] * desc.StDev[dataIndex];
+                            deNormRow.Add(value);
+                        }
 
+                        //change the index
+                        dataIndex++;
+
+                    }
                     //binary column
-                    else if (ctx.DataDescriptor.Features[i].Type == LearningFoundation.DataMappers.ColumnType.BINARY)
+                    else if (column.Type == ColumnType.BINARY)
                     {
                         //in case of binary column type real and normalized value are the same
-                        normalizedData.Add(rawData[i]);
+                        deNormRow.Add(rawData[dataIndex]);
+
+                        //change the index
+                        dataIndex++;
 
                     }
                     //category column
-                    else if (ctx.DataDescriptor.Features[i].Type == LearningFoundation.DataMappers.ColumnType.CLASS)
+                    else if (column.Type == ColumnType.CLASS)
                     {
-                        // COnverts set of binary values in to one category 
-                        // Normalized values for Blues category:
-                        //          Blue  =  (0,0,1)  - three values which sum is 1,
-                        //          Red   =  (1,0,0)
-                        //          Green =  (0,1,0)
-                        // Example: Red, Gree, Blue - 3 categories  - real values
-                        //             0,  1,  2    - 3 numbers     - numeric values
-                        //             
-
-                        var count = ctx.DataDescriptor.Features[i].Values.Length;
-                        for (int j = 0; j < count; j++)
+                        //in case of class column type real and normalized value are the same
+                        for (int i = 0; i < column.Values.Length; i++)
                         {
-                            if (rawData[i + j] == 1)
-                                normalizedData.Add(j);
+                            dataIndex += i;
+                            deNormRow.Add(rawData[dataIndex]);
                         }
-                       
-                        i += count;
                     }
                 }
+
+                //
+                deNormData.Add(deNormRow);
             }
 
-            return normData.Select(r => r.ToArray()).ToArray();
+            return deNormData.Select(r => r.ToArray()).ToArray();
         }
 
 

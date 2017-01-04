@@ -14,8 +14,6 @@ namespace LearningFoundation.Normalizers
     /// </summary>
     public class MinMaxDeNormalizer : IDataDeNormalizer
     {
-        private double[] m_Min;
-        private double[] m_Max;
 
         /// <summary>
         /// /// <summary>
