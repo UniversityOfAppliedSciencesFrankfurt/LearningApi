@@ -1,11 +1,12 @@
-﻿using LogisticRegression;
+﻿using LearningFoundation;
+using LogisticRegression;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
 
-namespace LearningFoundation
+namespace LogisticRegression
 {
     public class LogisticRegression: IAlgorithm
     {

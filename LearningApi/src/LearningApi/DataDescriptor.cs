@@ -40,7 +40,7 @@ namespace LearningFoundation
         public double[] Min { get; set; }
         public double[] Max { get; set; }
         public double[] Mean { get; set; }
-        public double[] Variance { get; set; }
+        public double[] StDev { get; set; }
 
 
 

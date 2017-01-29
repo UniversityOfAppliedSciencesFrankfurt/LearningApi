@@ -21,59 +21,7 @@ namespace LearningFoundation.DataMappers
 
         }
 
-        ///// <summary>
-        /////array of feature which play role in training 
-        ///// </summary>
-        //public Column[] Features { get; set; }
-
-
-        //private int m_LabelIndex;
-
-        ///// <summary>
-        ///// Position/Index of the Label column in data row
-        ///// </summary>
-        //public int LabelIndex
-        //{
-        //    get
-        //    {
-        //        return m_LabelIndex;
-        //    }
-
-        //    set
-        //    {
-        //        m_LabelIndex = value;
-        //    }
-        //}
-
-        //private int m_NumOfFeatures;
-
-        ///// <summary>
-        ///// Number of feature used in training of label
-        ///// </summary>
-        //public int NumOfFeatures
-        //{
-        //    get
-        //    {
-        //        return m_NumOfFeatures;
-        //    }
-
-        //    set
-        //    {
-        //        this.m_NumOfFeatures = value;
-        //    }
-        //}
-
-        ///// <summary>
-        ///// returns the rawData index of specific feature
-        ///// </summary>
-        ///// <param name="feature"></param>
-        ///// <returns></returns>
-        //public int GetFeatureIndex(int feature)
-        //{
-        //    return Features[feature].Index;
-        //}
-
-
+        
         /// <summary>
         /// Transform the featureVector from natural format in to double format. 
         /// ** AFTER MAPPING:  'LABEL COLUMN IS THE LAST ELEMENT IN ARRAY'**
@@ -235,7 +183,7 @@ namespace LearningFoundation.DataMappers
         }
 
         /// <summary>
-        /// Mapping label column in to numerica representation
+        /// Mapping label column in to numerical representation
         /// </summary>
         /// <param name="val"> real value</param>
         /// <param name="col"> column metadata</param>

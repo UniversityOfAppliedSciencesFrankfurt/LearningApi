@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 using LearningFoundation;
 
-namespace LearningFoundation
+namespace LogisticRegression
 {
     public static class LogistiRegressionExtensions
     {

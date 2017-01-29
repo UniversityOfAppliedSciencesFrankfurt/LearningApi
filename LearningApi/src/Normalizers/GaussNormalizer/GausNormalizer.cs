@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using LearningFoundation;
 using LearningFoundation.DataMappers;
+using LearningFoundation.Statistics;
 
 namespace LearningFoundation.Normalizers
 {
@@ -15,8 +16,6 @@ namespace LearningFoundation.Normalizers
     /// </summary>
     public class GaussNormalizer : IDataNormalizer
     {
-        //private double[] m_Mean;
-        //private double[] m_Var;
 
         /// <summary>
         /// Main Constructor
@@ -36,39 +35,71 @@ namespace LearningFoundation.Normalizers
         {
             var normData = new List<List<double>>();
 
+            // calculate min and max value for each column vector
+            var tuple = data.calculateMeanStDev();
+            var desc = ctx.DataDescriptor as DataDescriptor;
+
+            //store values for denormalizer
+            desc.Mean = tuple.Item1;
+            desc.StDev = tuple.Item2;
+
+            //
             for (int k = 0; k < data.Length; k++)
             {
                 var normalizedRow = new List<double>();
 
                 double[] rawData = data[k];
 
-                for (int i = 0; i < rawData.Length; i++)
-                {
-                    //get feature index
-                    var fi = ctx.DataDescriptor.Features[i].Index;
+                //get all columns including labelcolumn
+                var features = ctx.DataDescriptor.Features;
 
-                    if (ctx.DataDescriptor.Features[i].Type == LearningFoundation.DataMappers.ColumnType.STRING)
-                        continue;
+                //index of numericDataSet
+                var dataIndex = 0;
+
+                //enumerate all feature columns
+                foreach (var column in features)
+                {
+
                     //numeric column
-                    else if (ctx.DataDescriptor.Features[i].Type == LearningFoundation.DataMappers.ColumnType.NUMERIC)
+                    if (column.Type == ColumnType.NUMERIC)
                     {
-                        var value = 12;// (rawData[i] - m_Mean[fi]) / m_Var[fi];
-                        normalizedRow.Add(value);
+                        //in case the colum is constant
+                        if (desc.StDev[dataIndex] == 0)
+                        {
+                            normalizedRow.Add(rawData[dataIndex]);
+                        }
+                        else
+                        {
+                            var value = (rawData[dataIndex] - desc.Mean[dataIndex]) / desc.StDev[dataIndex];
+                            normalizedRow.Add(value);
+                        }
+                        //change the index
+                        dataIndex++;
                     }
                     //binary column
-                    else if (ctx.DataDescriptor.Features[i].Type == LearningFoundation.DataMappers.ColumnType.BINARY)
+                    else if (column.Type == ColumnType.BINARY)
                     {
                         //in case of binary column type real and normalized value are the same
-                        normalizedRow.Add(rawData[i]);
+                        normalizedRow.Add(rawData[dataIndex]);
 
+                        //change the index
+                        dataIndex++;
                     }
                     //category column
-                    else if (ctx.DataDescriptor.Features[i].Type == LearningFoundation.DataMappers.ColumnType.CLASS)
+                    else if (column.Type == ColumnType.CLASS)
                     {
                         //in case of class column type real and normalized value are the same
-                        normalizedRow.Add(rawData[i]);
+                        for (int i = 0; i < column.Values.Length; i++)
+                        {
+                            //change the index
+                            dataIndex += i;
+                            normalizedRow.Add(rawData[dataIndex]);
+                        }
+
                     }
                 }
+
+                normData.Add(normalizedRow);
             }
 
             return normData.Select(r => r.ToArray()).ToArray();

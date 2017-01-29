@@ -94,7 +94,7 @@ namespace UnitTests
             //api.UseMinMaxNormalizer();
 
             // We could also use some other normalizer like Gaus data normalizer
-            //api.UseGaussNormalizer(m_stats.Select(x => x.Mean).ToArray(), m_stats.Select(x => x.Variance).ToArray());
+            //api.UseGaussNormalizer(m_stats.Select(x => x.Mean).ToArray(), m_stats.Select(x => x.StDev).ToArray());
 
             // Prepares the ML Algoritm and setup parameters
             api.UseBackPropagation(1, 0.2, 1.0, null);
@@ -108,7 +108,7 @@ namespace UnitTests
         }
 
         [Fact]
-        public bool RunPipelineTest()
+        public void RunPipelineTest()
         {
             // Creates learning api object
             LearningApi api = new LearningApi(TestHelpers.GetDescriptor());
@@ -123,7 +123,7 @@ namespace UnitTests
             //api.UseMinMaxNormalizer(m_stats.Select(x => x.Min).ToArray(), m_stats.Select(x => x.Max).ToArray());
 
             // We could also use some other normalizer like Gaus data normalizer
-            //api.UseGaussNormalizer(m_stats.Select(x => x.Mean).ToArray(), m_stats.Select(x => x.Variance).ToArray());
+            //api.UseGaussNormalizer(m_stats.Select(x => x.Mean).ToArray(), m_stats.Select(x => x.StDev).ToArray());
 
             // Prepares the ML Algoritm and setup parameters
             api.UseBackPropagation(1, 0.2, 1.0, null);
@@ -137,7 +137,7 @@ namespace UnitTests
             IScore status = api.GetScore();
 
             //api.Train(vector)
-            return true;
+            return;
         }
 
 
@@ -160,6 +160,7 @@ namespace UnitTests
             descriptor.Features[2] = new Column { Id = 3, Name = "petal_length", Index = 2, Type = ColumnType.NUMERIC, Values = null, DefaultMissingValue = 1.4 };
             descriptor.Features[3] = new Column { Id = 4, Name = "petal_width", Index = 3, Type = ColumnType.NUMERIC, Values = null, DefaultMissingValue = 0.5 };
             descriptor.Features[4] = new Column { Id = 5, Name = "species", Index = 4, Type = ColumnType.CLASS, Values = null, DefaultMissingValue = 1 };
+            descriptor.LabelIndex = 1;
 
             var jsonString = JsonConvert.SerializeObject(dm);
             return jsonString;

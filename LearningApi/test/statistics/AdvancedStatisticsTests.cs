@@ -40,5 +40,53 @@ namespace test.statistics
             var result = dataSample1.CorrCoeffOf(dataSample2);
             Assert.Equal(Math.Round(result, 4), 0.9584);           
         }
+        [Fact]
+        public void CalculateMeanStDev_Tests2()
+        {
+            //define stats modul 
+
+            //test 1
+            var dataset = getSampleDataSet();
+
+            var result = dataset.calculateMeanStDev();
+            //mean
+            Assert.Equal(Math.Round(result.Item1[0], 4), -0.2916);
+            Assert.Equal(Math.Round(result.Item1[1], 4), 0.55);
+            Assert.Equal(Math.Round(result.Item1[2], 4), 1);
+
+            //stdev
+            Assert.Equal(Math.Round(result.Item2[0], 4), 2.6234);
+            Assert.Equal(Math.Round(result.Item2[1], 4), 0.5104);
+            Assert.Equal(Math.Round(result.Item2[2], 4), 0.7947);
+        }
+
+
+        private double[][] getSampleDataSet()
+        {
+            var data = new double[20][] {
+                                    new double[]{+1.283,1,0},
+                                    new double[]{-0.843,1,1},
+                                    new double[]{+2.364,0,0},
+                                    new double[]{+4.279,1,1},
+                                    new double[]{+3.383,0,2},
+                                    new double[]{-1.624,1,2},
+                                    new double[]{-2.628,1,0},
+                                    new double[]{+2.847,1,2},
+                                    new double[]{+1.362,0,1},
+                                    new double[]{+2.640,0,1},
+                                    new double[]{-4.188,1,2},
+                                    new double[]{-1.161,0,1},
+                                    new double[]{+0.825,1,0},
+                                    new double[]{-0.253,0,1},
+                                    new double[]{-2.286,0,2},
+                                    new double[]{-3.162,1,2},
+                                    new double[]{-4.714,1,1},
+                                    new double[]{-0.242,0,1},
+                                    new double[]{-0.400,0,0},
+                                    new double[]{-3.315,1,0},
+                                         };
+            //
+            return data;
+        }
     }
 }
