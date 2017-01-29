@@ -22,6 +22,7 @@ namespace test.statistics
             var dataSample1 = new double[] { 180, 176, 144, 195, 159, 185, 166, 173, 149, 168 };
             var dataSample2 = new double[] { 87, 65, 52, 94, 87, 79, 59, 64, 45, 77 };
 
+
             var result = dataSample1.CorrCoeffOf(dataSample2);
             Assert.Equal(Math.Round(result, 4), 0.7294);
         }
