@@ -14,7 +14,7 @@ namespace NeuralNet.BackPropagation
        
         {
             var alg = new BackPropagationNetwork(hiddenLayerCount, momentum, learningRate, activationFnc);
-            api.Modules.Add("Algorithm", alg);
+            api.AddModule(alg, "Algorithm");
             return api;
         }
     }

@@ -14,7 +14,7 @@ namespace LearningFoundation
     {
         public IContext Context { get; set; }
 
-        public Dictionary<string, IPipelineModule> Modules { get; internal set; }
+        protected Dictionary<string, IPipelineModule> Modules { get; set; }
 
         /// <summary>
         /// Gets/Sets DataProvider for loading of the data.
@@ -64,6 +64,9 @@ namespace LearningFoundation
                 name = module.GetType().Name;
 
             this.Modules.Add(name, module);
+
+            if (module is IAlgorithm)
+                this.Algorithm = module as IAlgorithm;
 
             return this;
         }

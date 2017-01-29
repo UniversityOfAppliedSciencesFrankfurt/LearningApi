@@ -20,7 +20,7 @@ namespace LogisticRegression
         {
             var alg = new LogisticRegression(learningRate);
             alg.Iterations = iterations;
-            api.Modules.Add("Logistic Regression", alg);
+            api.AddModule(alg, "Logistic Regression");
             return api;
         }
     }

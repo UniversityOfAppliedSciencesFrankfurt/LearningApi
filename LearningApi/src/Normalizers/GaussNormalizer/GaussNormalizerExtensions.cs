@@ -21,7 +21,7 @@ namespace LearningFoundation.Normalizers
         public static LearningApi UseGaussNormalizer(this LearningApi api)
         {
             var minMaxNorm = new GaussNormalizer();
-            api.Modules.Add("GaussNormilizer", minMaxNorm);
+            api.AddModule(minMaxNorm, "GaussNormilizer");
 
             return api;
         }
@@ -34,7 +34,7 @@ namespace LearningFoundation.Normalizers
         public static LearningApi UseGaussDeNormalizer(this LearningApi api)
         {
             var minMaxDeNorm = new GaussDeNormalizer();
-            api.Modules.Add("GaussDenormilizer", minMaxDeNorm);
+            api.AddModule(minMaxDeNorm, "GaussDenormilizer");
             return api;
         }
 

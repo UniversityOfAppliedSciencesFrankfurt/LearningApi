@@ -7,6 +7,15 @@ namespace LearningFoundation
 {
     public static class FuctionModuleExtensions
     {
+        /// <summary>
+        /// Enables simplified implementation of some module functionality in a form
+        /// of injected function.
+        /// </summary>
+        /// <typeparam name="TIN">Input value.</typeparam>
+        /// <typeparam name="TOUT">Function output value.</typeparam>
+        /// <param name="api"></param>
+        /// <param name="moduleFunction">Function, which implements the module functionality.</param>
+        /// <returns>Output value of the module defined by <see cref="TOUT"/></returns>
         public static LearningApi UseActionModule<TIN, TOUT>(this LearningApi api, Func<TIN, IContext, TOUT> moduleFunction)
         {
            var mod = new FunctionModule<TIN, TOUT>(moduleFunction);
