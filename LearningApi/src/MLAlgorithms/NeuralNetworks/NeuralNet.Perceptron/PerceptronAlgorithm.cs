@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using LearningFoundation;
+using System.Diagnostics;
 
 namespace NeuralNet.Perceptron
 {
@@ -23,6 +24,8 @@ namespace NeuralNet.Perceptron
 
         private double m_Threshold;
 
+        private bool m_PersistConvergenceData = false;
+
         public PerceptronAlgorithm(double threshold, double learningRate, int iterations, Func<double, double> activationFunction = null)
         {
             this.m_Threshold = threshold;
@@ -32,8 +35,7 @@ namespace NeuralNet.Perceptron
             if (activationFunction != null)
                 this.m_ActivationFunction = activationFunction;
         }
-
-
+        
       
         public override IScore Run(double[][] featureValues, IContext ctx)
         {
@@ -48,6 +50,8 @@ namespace NeuralNet.Perceptron
             initializeWeights();
 
             double totalError = 0;
+
+            var score = new PerceptronAlgorithmScore();
 
             for (int i = 0; i < m_Iterations; i++)
             {
@@ -89,18 +93,22 @@ namespace NeuralNet.Perceptron
                     this.m_Threshold += this.m_LearningRate * error;
                 }
 
+               // Debug.WriteLine($"{m_Weights[0]}, {m_Threshold}");
+
                 if (totalError == 0)
+                {
+                    score.Iterations = i;
                     break;
+                }
             }
 
-            ctx.Score = new PerceptronAlgorithmScore()
-            {
-                Weights = this.m_Weights,
+            score.Weights = this.m_Weights;
+            
+            score.Errors = this.m_Errors;
+            
+            score.TotolEpochError = totalError;
 
-                Errors = this.m_Errors,
-
-                TotolEpochError = totalError
-            };
+            ctx.Score = score;
 
             return ctx.Score;
         }
