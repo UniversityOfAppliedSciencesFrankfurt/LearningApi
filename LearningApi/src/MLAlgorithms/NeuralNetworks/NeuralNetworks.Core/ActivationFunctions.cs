@@ -12,5 +12,10 @@ namespace NeuralNetworks.Core
         {
             return (val >= 0) ? 1 : 0;
         }
+
+        public static double Sigmoid(double val)
+        {
+            return 1 / (1 + Math.Exp(-val));
+        }
     }
 }
