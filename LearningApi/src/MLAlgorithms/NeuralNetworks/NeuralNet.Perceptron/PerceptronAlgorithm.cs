@@ -14,7 +14,7 @@ namespace NeuralNet.Perceptron
 
         private int m_Iterations;
 
-        private Func<double, double> m_ActivationFunction = ActivationFunctions.Sigmoid;
+        private Func<double, double> m_ActivationFunction = ActivationFunctions.Boolean;
 
         private int m_Dimensions;
 

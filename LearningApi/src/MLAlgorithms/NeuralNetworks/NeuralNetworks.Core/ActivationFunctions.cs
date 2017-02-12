@@ -8,7 +8,7 @@ namespace NeuralNetworks.Core
 {
     public class ActivationFunctions 
     {
-        public static double Sigmoid(double val)
+        public static double Boolean(double val)
         {
             return (val >= 0) ? 1 : 0;
         }
