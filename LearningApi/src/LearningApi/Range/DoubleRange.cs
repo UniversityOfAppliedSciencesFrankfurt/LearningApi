@@ -1,10 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using LearningFoundation.;
+﻿
 
-namespace LearningApi.Range
+namespace LearningFoundation
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Text;
+    using LearningFoundation;
+
     public struct DoubleRange : IRange<double>, IEquatable<DoubleRange>
     {
         private double min, max;

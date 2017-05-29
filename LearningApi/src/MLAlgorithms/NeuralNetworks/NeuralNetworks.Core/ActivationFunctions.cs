@@ -1,12 +1,14 @@
-﻿using LearningFoundation;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using LearningFoundation.Math;
+﻿
 
 namespace NeuralNetworks.Core
+
 {
+    using LearningFoundation;
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Threading.Tasks;
+    using LearningFoundation.Math.Random;
     public class ActivationFunctions
     {
         private double alpha;

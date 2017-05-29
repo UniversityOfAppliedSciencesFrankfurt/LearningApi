@@ -12,7 +12,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Accord" Version="3.5.0" />
     <PackageReference Include="Newtonsoft.Json" Version="9.0.1" />
     <PackageReference Include="System.Threading.Thread" Version="4.0.0" />  
   </ItemGroup>
