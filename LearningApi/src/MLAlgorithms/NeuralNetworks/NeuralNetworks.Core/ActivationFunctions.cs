@@ -1,10 +1,9 @@
 ﻿
 
 namespace NeuralNetworks.Core
-
 {
     using LearningFoundation;
-    using System;
+    using System;    
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
@@ -53,7 +52,7 @@ namespace NeuralNetworks.Core
         public double Generate(double x)
         {
             double y = Function(x);
-            return y > Generator.Random.NextDouble() ? 1 : 0;
+          return y > Generator.Random.NextDouble() ? 1 : 0;
         }
         public double Generate2(double y)
         {

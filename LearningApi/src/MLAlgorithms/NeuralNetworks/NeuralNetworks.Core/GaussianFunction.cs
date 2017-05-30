@@ -14,6 +14,7 @@ namespace NeuralNetworks.Core
     using System.Collections.Generic;
     using System.Text;
     using LearningFoundation;
+    using LearningFoundation.Statistics;
     public class GaussianFunction : IStochasticFunction
     {
 

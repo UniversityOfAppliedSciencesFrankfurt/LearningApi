@@ -11,6 +11,7 @@ namespace LearningFoundation.Math.Random
     public static class Generator
     {
         private static Random sourceRandom = new Random();
+
         private static readonly object sourceRandomLock = new Object();
 
         private static int? sourceSeed;
@@ -63,6 +64,7 @@ namespace LearningFoundation.Math.Random
         public static long LastUpdateTicks
         {
             get { return sourceLastUpdateTicks; }
+            
         }
 
         public static long ThreadLastUpdateTicks
