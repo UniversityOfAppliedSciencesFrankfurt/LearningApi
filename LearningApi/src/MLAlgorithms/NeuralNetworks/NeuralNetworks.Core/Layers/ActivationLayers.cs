@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using LearningFoundation;
+using NeuralNetworks.Core.Neurons;
 
 namespace NeuralNetworks.Core.Layers
 {

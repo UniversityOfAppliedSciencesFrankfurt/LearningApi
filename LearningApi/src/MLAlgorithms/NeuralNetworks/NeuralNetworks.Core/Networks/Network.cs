@@ -4,6 +4,9 @@ using System.Text;
 using System.IO;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters;
+using NeuralNetworks.Core.Layers;
+using NeuralNetworks.Core.Neurons;
+using NeuralNetworks.Core;
 
 namespace NeuralNetworks.Core
 {

@@ -1,6 +1,6 @@
 ﻿using System;
 using NeuralNetworks.Core;
-using LearningFoundation.Function;
+using NeuralNetworks.Core.Neurons;
 using LearningFoundation;
 
 namespace NeuralNetworks.Core.Layers
