@@ -1,13 +1,10 @@
-﻿
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace NeuralNetworks.Core
 {
-    using LearningFoundation;
-    using System;    
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Threading.Tasks;
-    using LearningFoundation.Math.Random;
     public class ActivationFunctions
     {
         private double alpha;
@@ -24,17 +21,15 @@ namespace NeuralNetworks.Core
         public static double Sigmoid(double val)
         {
             return 1 / (1 + Math.Exp(-val));
+          
         }
+
 
         public double SigmoidFunction(double alpha)
         {
             return alpha;
         }
-        public double BernoulliFunction(double alpha)
-        {
-            return alpha;
-        }
-
+       
         public double Function(double x)
         {
             return (1 / (1 + Math.Exp(-alpha * x)));
@@ -49,15 +44,8 @@ namespace NeuralNetworks.Core
         {
             return (alpha * y * (1 - y));
         }
-        public double Generate(double x)
-        {
-            double y = Function(x);
-          return y > Generator.Random.NextDouble() ? 1 : 0;
-        }
-        public double Generate2(double y)
-        {
-            return y > Generator.Random.NextDouble() ? 1 : 0;
-        }
+       
 
+      
     }
 }

@@ -1,20 +1,12 @@
-﻿
-//using System;
-//using AForge;
-//using Accord.Neuro.Neurons;
-//using Accord.Neuro.Networks;
-//using Accord.Neuro.Learning;
-//using Accord.Statistics.Distributions.Univariate;
-//using Accord.Math.Random;
-//using Accord.Math;
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
+using LearningFoundation;
+using LearningFoundation.Statistics;
 
 namespace NeuralNetworks.Core
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Text;
-    using LearningFoundation;
-    using LearningFoundation.Statistics;
+   
     public class GaussianFunction : IStochasticFunction
     {
 
