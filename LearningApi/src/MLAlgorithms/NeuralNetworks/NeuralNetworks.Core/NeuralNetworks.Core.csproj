@@ -15,8 +15,4 @@
     <ProjectReference Include="..\..\..\LearningApi\LearningApi.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Neurons\" />
-  </ItemGroup>
-
 </Project>

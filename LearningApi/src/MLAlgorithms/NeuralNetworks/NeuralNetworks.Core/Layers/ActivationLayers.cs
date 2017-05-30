@@ -5,12 +5,8 @@ using LearningFoundation;
 
 namespace NeuralNetworks.Core.Layers
 {
+ 
   
-    /// <summary>
-    /// Activation layer.
-    /// </summary>
-    /// 
-   
     public class ActivationLayer : Layer
     {
 

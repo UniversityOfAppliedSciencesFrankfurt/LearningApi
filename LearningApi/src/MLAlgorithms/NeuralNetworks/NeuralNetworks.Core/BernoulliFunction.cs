@@ -32,7 +32,7 @@ namespace NeuralNetworks.Core
 
         public double Function(double x)
         {
-            return (1 / (1 + System.Math.Exp(-alpha * x))); //Can we use system math here?
+            return (1 / (1 + Math.Exp(-alpha * x))); //Can we use system math here?
 
         }
 
