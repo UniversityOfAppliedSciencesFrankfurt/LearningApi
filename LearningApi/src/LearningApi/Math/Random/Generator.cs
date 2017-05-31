@@ -1,6 +1,6 @@
 ﻿
 
-namespace LearningFoundation.Math.Random
+namespace LearningFoundation.Math
 {
     using System;
     using System.Diagnostics;

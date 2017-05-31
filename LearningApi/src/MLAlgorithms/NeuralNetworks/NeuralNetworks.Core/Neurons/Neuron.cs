@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using LearningFoundation.Math.Random;
+using LearningFoundation.Math;
+using LearningFoundation.Statistics;
 namespace NeuralNetworks.Core.Neurons
 {
+[Serializable]
     public abstract class Neuron
     {
         /// <summary>

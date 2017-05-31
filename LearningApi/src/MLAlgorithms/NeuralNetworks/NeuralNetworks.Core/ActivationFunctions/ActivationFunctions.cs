@@ -16,6 +16,7 @@ namespace NeuralNetworks.Core
         public static double Sigmoid(double val)
         {
             return 1 / (1 + Math.Exp(-val));
+           
           
         }
         

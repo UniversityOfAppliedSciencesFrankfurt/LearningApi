@@ -11,13 +11,13 @@ namespace NeuralNetworks.Core.Neurons
         private double sample;
         private new IStochasticFunction function;
 
-       
+
         public double Sample
         {
             get { return sample; }
         }
 
-      
+
         public new IStochasticFunction ActivationFunction
         {
             get { return function; }
@@ -25,7 +25,7 @@ namespace NeuralNetworks.Core.Neurons
         }
 
 
-      
+
         public StochasticNeuron(int inputs, IStochasticFunction function)
             : base(inputs, function)
         {
@@ -34,7 +34,7 @@ namespace NeuralNetworks.Core.Neurons
                                 // also start with zero thresholds
         }
 
-       
+
         public override double Compute(double[] input)
         {
             double sum = threshold;
@@ -49,7 +49,7 @@ namespace NeuralNetworks.Core.Neurons
         }
 
 
-    
+
         public double Generate(double[] input)
         {
             double sum = threshold;
@@ -65,7 +65,7 @@ namespace NeuralNetworks.Core.Neurons
             return sample;
         }
 
-        
+
         public double Generate(double output)
         {
             double sample = function.Generate2(output);

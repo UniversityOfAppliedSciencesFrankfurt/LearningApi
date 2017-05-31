@@ -6,8 +6,8 @@ using NeuralNetworks.Core.Neurons;
 
 namespace NeuralNetworks.Core.Layers
 {
- 
-  
+
+
     public class ActivationLayer : Layer
     {
 

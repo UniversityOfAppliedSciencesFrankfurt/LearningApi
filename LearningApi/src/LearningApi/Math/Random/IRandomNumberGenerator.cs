@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace LearningFoundation.Math.Random
+namespace LearningFoundation.Math
 {
     public interface IRandomNumberGenerator<T>
     {

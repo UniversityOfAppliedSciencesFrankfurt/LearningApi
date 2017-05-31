@@ -1,19 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using System.IO;
-using System.Runtime.Serialization;
-using System.Runtime.Serialization.Formatters;
 using NeuralNetworks.Core.Layers;
-using NeuralNetworks.Core.Neurons;
-using NeuralNetworks.Core;
+
 
 namespace NeuralNetworks.Core
 {
+    [Serializable]
     public abstract class Network
     {
-       
-    
+          
         /// <summary>
         /// Network's inputs count.
         /// </summary>
@@ -129,7 +124,8 @@ namespace NeuralNetworks.Core
         {
             FileStream stream = new FileStream(fileName, FileMode.Create, FileAccess.Write, FileShare.None);
             Save(stream);
-            stream.Close();
+            // stream.Close(); for Net standard 2
+            stream.Dispose();
         }
 
         /// <summary>
@@ -160,8 +156,8 @@ namespace NeuralNetworks.Core
         {
             FileStream stream = new FileStream(fileName, FileMode.Open, FileAccess.Read, FileShare.Read);
             Network network = Load(stream);
-            stream.Close();
-
+            // stream.Close(); for Net standard 2
+            stream.Dispose();
             return network;
         }
 
