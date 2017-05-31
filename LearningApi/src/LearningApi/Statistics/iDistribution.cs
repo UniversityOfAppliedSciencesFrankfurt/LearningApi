@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-
+using LearningFoundation.Fitting;
 namespace LearningFoundation.Statistics
 {
     public interface IDistribution // : ICloneable

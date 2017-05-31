@@ -4,6 +4,7 @@ using LearningFoundation.Attributes;
 using LearningFoundation.Statistics;
 using LearningFoundation.Fitting;
 
+
 namespace LearningFoundation.Statistics
 {
     [Serializable]
