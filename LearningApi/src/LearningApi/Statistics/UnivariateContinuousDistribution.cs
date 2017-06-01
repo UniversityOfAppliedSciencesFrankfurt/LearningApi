@@ -5,52 +5,14 @@ using System.ComponentModel.DataAnnotations;
 using LearningFoundation.Statistics;
 using LearningFoundation.Fitting;
 using LearningFoundation.Math;
-
+using System.Runtime.Serialization.Formatters;
 namespace LearningFoundation.Statistics
 {
-    
-    
-
-    /// <summary>
-    ///   Abstract class for univariate continuous probability Distributions.
-    /// </summary>
-    /// 
-    /// <remarks>
-    /// <para>
-    ///   A probability distribution identifies either the probability of each value of an
-    ///   unidentified random variable (when the variable is discrete), or the probability
-    ///   of the value falling within a particular interval (when the variable is continuous).</para>
-    /// <para>
-    ///   The probability distribution describes the range of possible values that a random
-    ///   variable can attain and the probability that the value of the random variable is
-    ///   within any (measurable) subset of that range.</para>  
-    /// <para>
-    ///   The function describing the probability that a given value will occur is called
-    ///   the probability function (or probability density function, abbreviated PDF), and
-    ///   the function describing the cumulative probability that a given value or any value
-    ///   smaller than it will occur is called the distribution function (or cumulative
-    ///   distribution function, abbreviated CDF).</para>  
-    ///   
-    /// <para>    
-    ///   References:
-    ///   <list type="bullet">
-    ///     <item><description><a href="http://en.wikipedia.org/wiki/Probability_distribution">
-    ///       Wikipedia, The Free Encyclopedia. Probability distribution. Available on:
-    ///       http://en.wikipedia.org/wiki/Probability_distribution </a></description></item>
-    ///     <item><description><a href="http://mathworld.wolfram.com/StatisticalDistribution.html">
-    ///       Weisstein, Eric W. "Statistical Distribution." From MathWorld--A Wolfram Web Resource.
-    ///       http://mathworld.wolfram.com/StatisticalDistribution.html </a></description></item>
-    ///   </list></para>
-    /// </remarks>
-    /// 
-    /// <seealso cref="NormalDistribution"/>
-    /// <seealso cref="GammaDistribution"/>
-    /// 
     [Serializable]
     public abstract class UnivariateContinuousDistribution : DistributionBase,
         IDistribution, IUnivariateDistribution, IUnivariateDistribution<double>,
         ISampleableDistribution<double>,
-        IFormattable
+       IFormattable
     {
         [NonSerialized]
         private double? median;
@@ -63,54 +25,14 @@ namespace LearningFoundation.Statistics
 
         [NonSerialized]
         private DoubleRange? quartiles;
-
-        /// <summary>
-        ///   Constructs a new UnivariateDistribution class.
-        /// </summary>
-        /// 
         protected UnivariateContinuousDistribution()
         {
         }
-
-        /// <summary>
-        ///   Gets the mean for this distribution.
-        /// </summary>
-        /// 
-        /// <value>The distribution's mean value.</value>
-        /// 
         public abstract double Mean { get; }
-
-        /// <summary>
-        ///   Gets the variance for this distribution.
-        /// </summary>
-        /// 
-        /// <value>The distribution's variance.</value>
-        /// 
         public abstract double Variance { get; }
 
-        /// <summary>
-        ///   Gets the entropy for this distribution.
-        /// </summary>
-        /// 
-        /// <value>The distribution's entropy.</value>
-        /// 
         public abstract double Entropy { get; }
-
-        /// <summary>
-        ///   Gets the support interval for this distribution.
-        /// </summary>
-        /// 
-        /// <value>A <see cref="DoubleRange"/> containing
-        ///  the support interval for this distribution.</value>
-        ///  
         public abstract DoubleRange Support { get; }
-
-        /// <summary>
-        ///   Gets the mode for this distribution.
-        /// </summary>
-        /// 
-        /// <value>The distribution's mode value.</value>
-        /// 
         public virtual double Mode
         {
             get
@@ -121,14 +43,6 @@ namespace LearningFoundation.Statistics
                 return mode.Value;
             }
         }
-
-        /// <summary>
-        ///   Gets the Quartiles for this distribution.
-        /// </summary>
-        /// 
-        /// <value>A <see cref="DoubleRange"/> object containing the first quartile
-        /// (Q1) as its minimum value, and the third quartile (Q2) as the maximum.</value>
-        /// 
         public virtual DoubleRange Quartiles
         {
             get
@@ -143,22 +57,6 @@ namespace LearningFoundation.Statistics
                 return quartiles.Value;
             }
         }
-
-        /// <summary>
-        ///   Gets the distribution range within a given percentile.
-        /// </summary>
-        /// 
-        /// <remarks>
-        ///   If <c>0.25</c> is passed as the <paramref name="percentile"/> argument, 
-        ///   this function returns the same as the <see cref="Quartiles"/> function.
-        /// </remarks>
-        /// 
-        /// <param name="percentile">
-        ///   The percentile at which the distribution ranges will be returned.</param>
-        /// 
-        /// <value>A <see cref="DoubleRange"/> object containing the minimum value
-        /// for the distribution value, and the third quartile (Q2) as the maximum.</value>
-        /// 
         public virtual DoubleRange GetRange(double percentile)
         {
             if (percentile <= 0 || percentile > 1)
@@ -171,13 +69,6 @@ namespace LearningFoundation.Statistics
                 return new DoubleRange(a, b);
             return new DoubleRange(b, a);
         }
-
-        /// <summary>
-        ///   Gets the median for this distribution.
-        /// </summary>
-        /// 
-        /// <value>The distribution's median value.</value>
-        /// 
         public virtual double Median
         {
             get
@@ -188,281 +79,56 @@ namespace LearningFoundation.Statistics
                 return median.Value;
             }
         }
-
-        /// <summary>
-        ///   Gets the Standard Deviation (the square root of
-        ///   the variance) for the current distribution.
-        /// </summary>
-        /// 
-        /// <value>The distribution's standard deviation.</value>
-        /// 
         public virtual double StandardDeviation
         {
             get
             {
                 if (!stdDev.HasValue)
-                    stdDev = Math.Sqrt(this.Variance);
+                    stdDev = System.Math.Sqrt(this.Variance);
                 return stdDev.Value;
             }
         }
-
-
         #region IDistribution explicit members
-
-        /// <summary>
-        ///   Gets the probability density function (pdf) for
-        ///   this distribution evaluated at point <c>x</c>.
-        /// </summary>
-        /// 
-        /// <param name="x">
-        ///   A single point in the distribution range. For a 
-        ///   univariate distribution, this should be a single
-        ///   double value. For a multivariate distribution,
-        ///   this should be a double array.</param>
-        ///   
-        /// <remarks>
-        ///   The Probability Density Function (PDF) describes the
-        ///   probability that a given value <c>x</c> will occur.
-        /// </remarks>
-        /// 
-        /// <returns>
-        ///   The probability of <c>x</c> occurring
-        ///   in the current distribution.</returns>
-        ///   
         double IDistribution.DistributionFunction(double[] x)
         {
             return DistributionFunction(x[0]);
         }
-
-        /// <summary>
-        ///   Gets the complementary cumulative distribution function
-        ///   (ccdf) for this distribution evaluated at point <c>x</c>.
-        ///   This function is also known as the Survival function.
-        /// </summary>
-        /// 
-        /// <remarks>
-        ///   The Complementary Cumulative Distribution Function (CCDF) is
-        ///   the complement of the Cumulative Distribution Function, or 1
-        ///   minus the CDF.
-        /// </remarks>
-        /// 
         double IDistribution.ComplementaryDistributionFunction(double[] x)
         {
             return ComplementaryDistributionFunction(x[0]);
         }
-
-        /// <summary>
-        ///   Gets the probability density function (pdf) for
-        ///   this distribution evaluated at point <c>x</c>.
-        /// </summary>
-        /// 
-        /// <param name="x">
-        ///   A single point in the distribution range. For a 
-        ///   univariate distribution, this should be a single
-        ///   double value. For a multivariate distribution,
-        ///   this should be a double array.</param>
-        ///   
-        /// <remarks>
-        ///   The Probability Density Function (PDF) describes the
-        ///   probability that a given value <c>x</c> will occur.
-        /// </remarks>
-        /// 
-        /// <returns>
-        ///   The probability of <c>x</c> occurring
-        ///   in the current distribution.</returns>
-        ///   
         double IDistribution.ProbabilityFunction(double[] x)
         {
             return ProbabilityDensityFunction(x[0]);
         }
-
-        /// <summary>
-        ///   Gets the probability density function (pdf) for
-        ///   this distribution evaluated at point <c>x</c>.
-        /// </summary>
-        /// 
-        /// <param name="x">A single point in the distribution range. For a
-        ///   univariate distribution, this should be a single
-        ///   double value. For a multivariate distribution,
-        ///   this should be a double array.</param>
-        ///   
-        /// <returns>
-        ///   The probability of <c>x</c> occurring
-        ///   in the current distribution.
-        /// </returns>
-        /// 
-        /// <remarks>
-        ///   The Probability Density Function (PDF) describes the
-        ///   probability that a given value <c>x</c> will occur.
-        /// </remarks>
-        /// 
         double IUnivariateDistribution.ProbabilityFunction(double x)
         {
             return ProbabilityDensityFunction(x);
         }
-
-        /// <summary>
-        ///   Gets the log-probability density function (pdf) for
-        ///   this distribution evaluated at point <c>x</c>.
-        /// </summary>
-        /// 
-        /// <param name="x">
-        ///   A single point in the distribution range. For a 
-        ///   univariate distribution, this should be a single
-        ///   double value. For a multivariate distribution,
-        ///   this should be a double array.</param>
-        ///   
-        /// <remarks>
-        ///   The Probability Density Function (PDF) describes the
-        ///   probability that a given value <c>x</c> will occur.
-        /// </remarks>
-        /// 
-        /// <returns>
-        ///   The logarithm of the probability of <c>x</c> 
-        ///   occurring in the current distribution.</returns>
-        ///   
         double IDistribution.LogProbabilityFunction(double[] x)
         {
             return LogProbabilityDensityFunction(x[0]);
         }
-
-        /// <summary>
-        ///   Gets the log-probability density function (pdf) for
-        ///   this distribution evaluated at point <c>x</c>.
-        /// </summary>
-        /// 
-        /// <param name="x">
-        ///   A single point in the distribution range. For a 
-        ///   univariate distribution, this should be a single
-        ///   double value. For a multivariate distribution,
-        ///   this should be a double array.</param>
-        ///   
-        /// <remarks>
-        ///   The Probability Density Function (PDF) describes the
-        ///   probability that a given value <c>x</c> will occur.
-        /// </remarks>
-        /// 
-        /// <returns>
-        ///   The logarithm of the probability of <c>x</c> 
-        ///   occurring in the current distribution.</returns>
-        ///   
         double IUnivariateDistribution.LogProbabilityFunction(double x)
         {
             return LogProbabilityDensityFunction(x);
         }
-
-        /// <summary>
-        ///   Fits the underlying distribution to a given set of observations.
-        /// </summary>
-        /// 
-        /// <param name="observations">
-        ///   The array of observations to fit the model against. The array
-        ///   elements can be either of type double (for univariate data) or
-        ///   type double[] (for multivariate data).</param>
-        ///   
-        /// <remarks>
-        ///   Although both double[] and double[][] arrays are supported,
-        ///   providing a double[] for a multivariate distribution or a
-        ///   double[][] for a univariate distribution may have a negative
-        ///   impact in performance.
-        /// </remarks>
-        ///   
         void IDistribution.Fit(Array observations)
         {
             (this as IDistribution).Fit(observations, (IFittingOptions)null);
         }
-
-        /// <summary>
-        ///   Fits the underlying distribution to a given set of observations.
-        /// </summary>
-        /// 
-        /// <param name="observations">
-        ///   The array of observations to fit the model against. The array
-        ///   elements can be either of type double (for univariate data) or
-        ///   type double[] (for multivariate data).</param>
-        /// <param name="weights">
-        ///   The weight vector containing the weight for each of the samples.</param>
-        ///   
-        /// <remarks>
-        ///   Although both double[] and double[][] arrays are supported,
-        ///   providing a double[] for a multivariate distribution or a
-        ///   double[][] for a univariate distribution may have a negative
-        ///   impact in performance.
-        /// </remarks>
-        /// 
         void IDistribution.Fit(Array observations, double[] weights)
         {
             (this as IDistribution).Fit(observations, weights, (IFittingOptions)null);
         }
-
-        /// <summary>
-        ///   Fits the underlying distribution to a given set of observations.
-        /// </summary>
-        /// 
-        /// <param name="observations">
-        ///   The array of observations to fit the model against. The array
-        ///   elements can be either of type double (for univariate data) or
-        ///   type double[] (for multivariate data).</param>
-        /// <param name="weights">
-        ///   The weight vector containing the weight for each of the samples.</param>
-        ///   
-        /// <remarks>
-        ///   Although both double[] and double[][] arrays are supported,
-        ///   providing a double[] for a multivariate distribution or a
-        ///   double[][] for a univariate distribution may have a negative
-        ///   impact in performance.
-        /// </remarks>
-        /// 
         void IDistribution.Fit(Array observations, int[] weights)
         {
             (this as IDistribution).Fit(observations, weights, (IFittingOptions)null);
         }
-
-        /// <summary>
-        ///   Fits the underlying distribution to a given set of observations.
-        /// </summary>
-        /// 
-        /// <param name="observations">
-        ///   The array of observations to fit the model against. The array
-        ///   elements can be either of type double (for univariate data) or
-        ///   type double[] (for multivariate data).</param>
-        /// <param name="options">
-        ///   Optional arguments which may be used during fitting, such
-        ///   as regularization constants and additional parameters.</param>
-        ///   
-        /// <remarks>
-        ///   Although both double[] and double[][] arrays are supported,
-        ///   providing a double[] for a multivariate distribution or a
-        ///   double[][] for a univariate distribution may have a negative
-        ///   impact in performance.
-        /// </remarks>
-        /// 
         void IDistribution.Fit(Array observations, IFittingOptions options)
         {
             (this as IDistribution).Fit(observations, (double[])null, options);
         }
-
-        /// <summary>
-        ///   Fits the underlying distribution to a given set of observations.
-        /// </summary>
-        /// 
-        /// <param name="observations">
-        ///   The array of observations to fit the model against. The array
-        ///   elements can be either of type double (for univariate data) or
-        ///   type double[] (for multivariate data). </param>
-        /// <param name="weights">
-        ///   The weight vector containing the weight for each of the samples. </param>
-        /// <param name="options">
-        ///   Optional arguments which may be used during fitting, such
-        ///   as regularization constants and additional parameters.</param>
-        ///   
-        /// <remarks>
-        ///   Although both double[] and double[][] arrays are supported,
-        ///   providing a double[] for a multivariate distribution or a
-        ///   double[][] for a univariate distribution may have a negative
-        ///   impact in performance.
-        /// </remarks>
-        /// 
         void IDistribution.Fit(Array observations, double[] weights, IFittingOptions options)
         {
             double[] univariate = observations as double[];
@@ -481,28 +147,6 @@ namespace LearningFoundation.Statistics
 
             throw new ArgumentException("Invalid input type.", "observations");
         }
-
-        /// <summary>
-        ///   Fits the underlying distribution to a given set of observations.
-        /// </summary>
-        /// 
-        /// <param name="observations">
-        ///   The array of observations to fit the model against. The array
-        ///   elements can be either of type double (for univariate data) or
-        ///   type double[] (for multivariate data). </param>
-        /// <param name="weights">
-        ///   The weight vector containing the weight for each of the samples. </param>
-        /// <param name="options">
-        ///   Optional arguments which may be used during fitting, such
-        ///   as regularization constants and additional parameters.</param>
-        ///   
-        /// <remarks>
-        ///   Although both double[] and double[][] arrays are supported,
-        ///   providing a double[] for a multivariate distribution or a
-        ///   double[][] for a univariate distribution may have a negative
-        ///   impact in performance.
-        /// </remarks>
-        /// 
         void IDistribution.Fit(Array observations, int[] weights, IFittingOptions options)
         {
             double[] univariate = observations as double[];
@@ -523,35 +167,7 @@ namespace LearningFoundation.Statistics
         }
         #endregion
 
-
-        /// <summary>
-        ///   Gets the cumulative distribution function (cdf) for
-        ///   this distribution evaluated at point <c>x</c>.
-        /// </summary>
-        /// 
-        /// <param name="x">
-        ///   A single point in the distribution range.</param>
-        ///   
-        /// <remarks>
-        ///   The Cumulative Distribution Function (CDF) describes the cumulative
-        ///   probability that a given value or any value smaller than it will occur.
-        /// </remarks>
-        /// 
         public abstract double DistributionFunction(double x);
-
-        /// <summary>
-        ///   Gets the cumulative distribution function (cdf) for this
-        ///   distribution in the semi-closed interval (a; b] given as
-        ///   <c>P(a &lt; X ≤ b)</c>.
-        /// </summary>
-        /// 
-        /// <param name="a">The start of the semi-closed interval (a; b].</param>
-        /// <param name="b">The end of the semi-closed interval (a; b].</param>
-        /// 
-        /// <remarks>
-        ///   The Cumulative Distribution Function (CDF) describes the cumulative
-        ///   probability that a given value or any value smaller than it will occur.
-        /// </remarks>
         /// 
         public virtual double DistributionFunction(double a, double b)
         {
@@ -567,48 +183,12 @@ namespace LearningFoundation.Statistics
 
             return DistributionFunction(b) - DistributionFunction(a);
         }
-
-        /// <summary>
-        ///   Gets the complementary cumulative distribution function
-        ///   (ccdf) for this distribution evaluated at point <c>x</c>.
-        ///   This function is also known as the Survival function.
-        /// </summary>
-        /// 
-        /// <param name="x">
-        ///   A single point in the distribution range.</param>
-        ///   
-        /// <remarks>
-        ///   The Complementary Cumulative Distribution Function (CCDF) is
-        ///   the complement of the Cumulative Distribution Function, or 1
-        ///   minus the CDF.
-        /// </remarks>
-        /// 
         public virtual double ComplementaryDistributionFunction(double x)
         {
             return 1.0 - DistributionFunction(x);
         }
-
-        /// <summary>
-        ///   Gets the inverse of the cumulative distribution function (icdf) for
-        ///   this distribution evaluated at probability <c>p</c>. This function 
-        ///   is also known as the Quantile function.
-        /// </summary>
-        /// 
-        /// <remarks>
-        ///   The Inverse Cumulative Distribution Function (ICDF) specifies, for
-        ///   a given probability, the value which the random variable will be at,
-        ///   or below, with that probability.
-        /// </remarks>
-        /// 
-        /// <param name="p">A probability value between 0 and 1.</param>
-        /// 
-        /// <returns>A sample which could original the given probability 
-        ///   value when applied in the <see cref="DistributionFunction(double)"/>.</returns>
-        /// 
         public virtual double InverseDistributionFunction(
-#if !NET35
-[RangeAttribute(0, 1)]
-#endif 
+
             double p)
         {
             if (p < 0.0 || p > 1.0)
@@ -725,79 +305,21 @@ namespace LearningFoundation.Statistics
             return value;
         }
 
-        /// <summary>
-        ///   Gets the first derivative of the <see cref="InverseDistributionFunction">
-        ///   inverse distribution function</see> (icdf) for this distribution evaluated
-        ///   at probability <c>p</c>. 
-        /// </summary>
-        /// 
-        /// <param name="p">A probability value between 0 and 1.</param>
-        /// 
+         
         public virtual double QuantileDensityFunction(double p)
         {
             return 1.0 / ProbabilityDensityFunction(InverseDistributionFunction(p));
         }
 
-        /// <summary>
-        ///   Gets the probability density function (pdf) for
-        ///   this distribution evaluated at point <c>x</c>.
-        /// </summary>
-        /// 
-        /// <param name="x">
-        ///   A single point in the distribution range.</param>
-        ///   
-        /// <remarks>
-        ///   The Probability Density Function (PDF) describes the
-        ///   probability that a given value <c>x</c> will occur.
-        /// </remarks>
-        /// 
-        /// <returns>
-        ///   The probability of <c>x</c> occurring
-        ///   in the current distribution.</returns>
-        ///   
+     
         public abstract double ProbabilityDensityFunction(double x);
-
-
-        /// <summary>
-        ///   Gets the log-probability density function (pdf) for
-        ///   this distribution evaluated at point <c>x</c>.
-        /// </summary>
-        /// 
-        /// <param name="x">
-        ///   A single point in the distribution range.</param>
-        ///   
-        /// <remarks>
-        ///   The Probability Density Function (PDF) describes the
-        ///   probability that a given value <c>x</c> will occur.
-        /// </remarks>
-        /// 
-        /// <returns>
-        ///   The logarithm of the probability of <c>x</c> 
-        ///   occurring in the current distribution.</returns>
-        ///   
+      
         public virtual double LogProbabilityDensityFunction(double x)
         {
-            return Math.Log(ProbabilityDensityFunction(x));
+            return System.Math.Log(ProbabilityDensityFunction(x));
         }
 
-        /// <summary>
-        ///   Gets the hazard function, also known as the failure rate or
-        ///   the conditional failure density function for this distribution
-        ///   evaluated at point <c>x</c>.
-        /// </summary>
-        /// 
-        /// <remarks>
-        ///   The hazard function is the ratio of the probability
-        ///   density function f(x) to the survival function, S(x).
-        /// </remarks>
-        /// 
-        /// <param name="x">
-        ///   A single point in the distribution range.</param>
-        ///   
-        /// <returns>
-        ///   The conditional failure density function <c>h(x)</c>
-        ///   evaluated at <c>x</c> in the current distribution.</returns>
-        /// 
+      
         public virtual double HazardFunction(double x)
         {
             double f = ProbabilityDensityFunction(x);
@@ -808,180 +330,49 @@ namespace LearningFoundation.Statistics
             return f / s;
         }
 
-        /// <summary>
-        ///   Gets the cumulative hazard function for this
-        ///   distribution evaluated at point <c>x</c>.
-        /// </summary>
-        /// 
-        /// <param name="x">
-        ///   A single point in the distribution range.</param>
-        /// 
-        /// <returns>
-        ///   The cumulative hazard function <c>H(x)</c>  
-        ///   evaluated at <c>x</c> in the current distribution.</returns>
-        /// 
+       
         public virtual double CumulativeHazardFunction(double x)
         {
-            return -Math.Log(ComplementaryDistributionFunction(x));
+            return -System.Math.Log(ComplementaryDistributionFunction(x));
         }
 
-        /// <summary>
-        ///   Gets the log of the cumulative hazard function for this
-        ///   distribution evaluated at point <c>x</c>.
-        /// </summary>
-        /// 
-        /// <param name="x">
-        ///   A single point in the distribution range.</param>
-        /// 
-        /// <returns>
-        ///   The cumulative hazard function <c>H(x)</c>  
-        ///   evaluated at <c>x</c> in the current distribution.</returns>
-        /// 
+        
         public virtual double LogCumulativeHazardFunction(double x)
         {
-            return Math.Log(-Math.Log(ComplementaryDistributionFunction(x)));
+            return System.Math.Log(-System.Math.Log(ComplementaryDistributionFunction(x)));
         }
 
-        /// <summary>
-        ///   Fits the underlying distribution to a given set of observations.
-        /// </summary>
-        /// 
-        /// <param name="observations">
-        ///   The array of observations to fit the model against. The array
-        ///   elements can be either of type double (for univariate data) or
-        ///   type double[] (for multivariate data).</param>
-        ///   
-        /// <remarks>
-        ///   Although both double[] and double[][] arrays are supported,
-        ///   providing a double[] for a multivariate distribution or a
-        ///   double[][] for a univariate distribution may have a negative
-        ///   impact in performance.
-        /// </remarks>
-        ///   
+        
         public virtual void Fit(double[] observations)
         {
             Fit(observations, (IFittingOptions)null);
         }
 
-        /// <summary>
-        ///   Fits the underlying distribution to a given set of observations.
-        /// </summary>
-        /// 
-        /// <param name="observations">
-        ///   The array of observations to fit the model against. The array
-        ///   elements can be either of type double (for univariate data) or
-        ///   type double[] (for multivariate data).</param>
-        /// <param name="weights">
-        ///   The weight vector containing the weight for each of the samples.</param>
-        ///   
-        /// <remarks>
-        ///   Although both double[] and double[][] arrays are supported,
-        ///   providing a double[] for a multivariate distribution or a
-        ///   double[][] for a univariate distribution may have a negative
-        ///   impact in performance.
-        /// </remarks>
-        /// 
+        
         public virtual void Fit(double[] observations, double[] weights)
         {
             Fit(observations, weights, (IFittingOptions)null);
         }
 
-        /// <summary>
-        ///   Fits the underlying distribution to a given set of observations.
-        /// </summary>
-        /// 
-        /// <param name="observations">
-        ///   The array of observations to fit the model against. The array
-        ///   elements can be either of type double (for univariate data) or
-        ///   type double[] (for multivariate data).</param>
-        /// <param name="weights">
-        ///   The weight vector containing the weight for each of the samples.</param>
-        ///   
-        /// <remarks>
-        ///   Although both double[] and double[][] arrays are supported,
-        ///   providing a double[] for a multivariate distribution or a
-        ///   double[][] for a univariate distribution may have a negative
-        ///   impact in performance.
-        /// </remarks>
-        /// 
+       
         public virtual void Fit(double[] observations, int[] weights)
         {
             Fit(observations, weights, (IFittingOptions)null);
         }
 
-        /// <summary>
-        ///   Fits the underlying distribution to a given set of observations.
-        /// </summary>
-        /// 
-        /// <param name="observations">
-        ///   The array of observations to fit the model against. The array
-        ///   elements can be either of type double (for univariate data) or
-        ///   type double[] (for multivariate data).</param>
-        /// <param name="options">
-        ///   Optional arguments which may be used during fitting, such
-        ///   as regularization constants and additional parameters.</param>
-        ///   
-        /// <remarks>
-        ///   Although both double[] and double[][] arrays are supported,
-        ///   providing a double[] for a multivariate distribution or a
-        ///   double[][] for a univariate distribution may have a negative
-        ///   impact in performance.
-        /// </remarks>
-        /// 
+        
         public virtual void Fit(double[] observations, IFittingOptions options)
         {
             Fit(observations, (double[])null, options);
         }
 
-        /// <summary>
-        ///   Fits the underlying distribution to a given set of observations.
-        /// </summary>
-        /// 
-        /// <param name="observations">
-        ///   The array of observations to fit the model against. The array
-        ///   elements can be either of type double (for univariate data) or
-        ///   type double[] (for multivariate data).
-        /// </param>
-        /// <param name="weights">
-        ///   The weight vector containing the weight for each of the samples.</param>
-        /// <param name="options">
-        ///   Optional arguments which may be used during fitting, such
-        ///   as regularization constants and additional parameters.</param>
-        ///   
-        /// <remarks>
-        ///   Although both double[] and double[][] arrays are supported,
-        ///   providing a double[] for a multivariate distribution or a
-        ///   double[][] for a univariate distribution may have a negative
-        ///   impact in performance.
-        /// </remarks>
-        /// 
+       
         public virtual void Fit(double[] observations, double[] weights, IFittingOptions options)
         {
             throw new NotSupportedException();
         }
 
-        /// <summary>
-        ///   Fits the underlying distribution to a given set of observations.
-        /// </summary>
-        /// 
-        /// <param name="observations">
-        ///   The array of observations to fit the model against. The array
-        ///   elements can be either of type double (for univariate data) or
-        ///   type double[] (for multivariate data).
-        /// </param>
-        /// <param name="weights">
-        ///   The weight vector containing the weight for each of the samples.</param>
-        /// <param name="options">
-        ///   Optional arguments which may be used during fitting, such
-        ///   as regularization constants and additional parameters.</param>
-        ///   
-        /// <remarks>
-        ///   Although both double[] and double[][] arrays are supported,
-        ///   providing a double[] for a multivariate distribution or a
-        ///   double[][] for a univariate distribution may have a negative
-        ///   impact in performance.
-        /// </remarks>
-        /// 
+       
         public virtual void Fit(double[] observations, int[] weights, IFittingOptions options)
         {
             if (weights != null)
@@ -989,43 +380,22 @@ namespace LearningFoundation.Statistics
 
             Fit(observations, (double[])null, options);
         }
-
-
-        /// <summary>
-        ///   Generates a random vector of observations from the current distribution.
-        /// </summary>
-        /// 
-        /// <param name="samples">The number of samples to generate.</param>
-        /// <returns>A random vector of observations drawn from this distribution.</returns>
-        /// 
+     
         public double[] Generate(int samples)
         {
             return Generate(samples, new double[samples]);
         }
 
-        /// <summary>
-        ///   Generates a random vector of observations from the current distribution.
-        /// </summary>
-        /// 
-        /// <param name="samples">The number of samples to generate.</param>
-        /// <param name="result">The location where to store the samples.</param>
-        ///
-        /// <returns>A random vector of observations drawn from this distribution.</returns>
-        /// 
+        
         public virtual double[] Generate(int samples, double[] result)
         {
-            var random = Accord.Math.Random.Generator.Random;
+            var random = LearningFoundation.Math.Generator.Random;
             for (int i = 0; i < samples; i++)
                 result[i] = InverseDistributionFunction(random.NextDouble());
             return result;
         }
 
-        /// <summary>
-        ///   Generates a random observation from the current distribution.
-        /// </summary>
-        /// 
-        /// <returns>A random observations drawn from this distribution.</returns>
-        /// 
+      
         public virtual double Generate()
         {
             return InverseDistributionFunction(Generator.Random.NextDouble());
@@ -1035,8 +405,6 @@ namespace LearningFoundation.Statistics
         {
             return Generate();
         }
-
-
 
         double IDistribution<double>.ProbabilityFunction(double x)
         {

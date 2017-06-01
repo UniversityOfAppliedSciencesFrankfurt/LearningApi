@@ -151,12 +151,12 @@ namespace LearningFoundation.Statistics
             return LearningFoundation.Math.Generator.Random.NextDouble() * (b - a) + a;
         }
 
-        public override string ToString(string format, IFormatProvider formatProvider)
-        {
-            return String.Format(formatProvider, "U(x; a = {0}, b = {1})",
-                a.ToString(format, formatProvider),
-                b.ToString(format, formatProvider));
-        }
+        //public override string ToString(string format, IFormatProvider formatProvider)
+        //{
+        //    return String.Format(formatProvider, "U(x; a = {0}, b = {1})",
+        //        a.ToString(format, formatProvider),
+        //        b.ToString(format, formatProvider));
+        //}
 
     }
 }
