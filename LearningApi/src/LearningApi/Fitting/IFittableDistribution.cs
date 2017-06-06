@@ -32,8 +32,7 @@ namespace LearningFoundation.Statistics
     }
     public interface IFittable<in TObservations>
     {
-        /// <summary>
-
+        
         void Fit(TObservations[] observations);
         void Fit(TObservations[] observations, double[] weights);
 
