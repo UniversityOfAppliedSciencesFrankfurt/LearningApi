@@ -1,9 +1,11 @@
-﻿namespace NeuralNetworks.Core
+﻿ using System;
+using System.Collections.Generic;
+using System.Text;
+using LearningFoundation;
+using NeuralNetworks.Core.Layers;
+namespace NeuralNetworks.Core.Networks
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Text;
-    using LearningFoundation;
+    [Serializable]
     public class ActivationNetwork : Network
     {
         

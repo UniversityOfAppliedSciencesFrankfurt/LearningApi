@@ -6,7 +6,7 @@ using LearningFoundation.Statistics;
 
 namespace NeuralNetworks.Core.ActivationFunctions
 {
-   
+    [Serializable]
     public class GaussianFunction : IStochasticFunction
     {
 

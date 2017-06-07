@@ -5,6 +5,7 @@ using LearningFoundation;
 
 namespace NeuralNetworks.Core.Neurons
 {
+    [Serializable]
     public class StochasticNeuron : ActivationNeuron
     {
 

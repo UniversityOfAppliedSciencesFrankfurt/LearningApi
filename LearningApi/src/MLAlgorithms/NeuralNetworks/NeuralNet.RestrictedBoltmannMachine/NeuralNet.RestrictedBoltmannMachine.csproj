@@ -5,6 +5,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="10.0.2" />
+    <PackageReference Include="NUnit" Version="3.7.1" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\..\..\LearningApi\LearningApi.csproj" />
     <ProjectReference Include="..\NeuralNetworks.Core\NeuralNetworks.Core.csproj" />
   </ItemGroup>

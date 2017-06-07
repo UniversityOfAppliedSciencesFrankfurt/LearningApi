@@ -3,6 +3,8 @@ using LearningFoundation;
 using NeuralNetworks.Core;
 using NeuralNetworks.Core.Layers;
 using NeuralNetworks.Core.Neurons;
+using NeuralNetworks.Core.ActivationFunctions;
+using NeuralNetworks.Core.Networks;
 
 namespace NeuralNet.RestrictedBoltmannMachine
 {
