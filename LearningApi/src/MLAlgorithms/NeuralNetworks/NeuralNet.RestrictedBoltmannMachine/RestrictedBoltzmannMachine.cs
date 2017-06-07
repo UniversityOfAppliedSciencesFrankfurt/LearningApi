@@ -11,39 +11,33 @@ namespace NeuralNet.RestrictedBoltmannMachine
 
         private StochasticLayer visible;
         private StochasticLayer hidden;
-
-        /// <summary>
+              
         ///   Gets the visible layer of the machine.
-        /// </summary>
-        /// 
+       
         public StochasticLayer Visible
         {
             get { return visible; }
         }
 
-        /// <summary>
+        
         ///   Gets the hidden layer of the machine.
-        /// </summary>
-        /// 
+        
         public StochasticLayer Hidden
         {
             get { return hidden; }
         }
 
 
-        /// <summary>
-        ///   Creates a new <see cref="RestrictedBoltzmannMachine"/>.
-        /// </summary>
-        /// 
+       
+        ///   Creates a new RBM Class with input number and hidden neuron number      
         /// <param name="inputsCount">The number of inputs for the machine.</param>
         /// <param name="hiddenNeurons">The number of hidden neurons in the machine.</param>
-        /// 
+      
         public RestrictedBoltzmannMachine(int inputsCount, int hiddenNeurons)
             : this(new BernoulliFunction(alpha: 1), inputsCount, hiddenNeurons) { }
 
-        /// <summary>
-        ///   Creates a new <see cref="RestrictedBoltzmannMachine"/>.
-        /// </summary>
+       
+        ///   Creates a new RBM class with hiden layer and visible layer     
         /// 
         /// <param name="hidden">The hidden layer to be added in the machine.</param>
         /// <param name="visible">The visible layer to be added in the machine.</param>
@@ -53,14 +47,12 @@ namespace NeuralNet.RestrictedBoltmannMachine
         {
             this.hidden = hidden;
             this.visible = visible;
-
             base.layers[0] = hidden;
         }
 
-        /// <summary>
-        ///   Creates a new <see cref="RestrictedBoltzmannMachine"/>.
-        /// </summary>
-        /// 
+       
+        ///   Creates a new RBM class
+        
         /// <param name="function">The activation function to use in the network neurons.</param>
         /// <param name="inputsCount">The number of inputs for the machine.</param>
         /// <param name="hiddenNeurons">The number of hidden neurons in the machine.</param>
@@ -70,71 +62,31 @@ namespace NeuralNet.RestrictedBoltmannMachine
         {
             this.visible = new StochasticLayer(function, inputsCount, hiddenNeurons);
             this.hidden = new StochasticLayer(function, hiddenNeurons, inputsCount);
-
             base.layers[0] = hidden;
         }
-
-
-        /// <summary>
-        ///   Compute output vector of the network.
-        /// </summary>
-        /// 
-        /// <param name="input">Input vector.</param>
-        /// 
-        /// <returns>
-        ///   Returns network's output vector.
-        /// </returns>
-        /// 
+        
+            ///Compute the network output vector using the input vector
         public override double[] Compute(double[] input)
         {
             return hidden.Compute(input);
         }
-
-        /// <summary>
-        ///   Reconstructs a input vector for a given output.
-        /// </summary>
-        /// 
-        /// <param name="output">The output vector.</param>
-        /// 
-        /// <returns>
-        ///   Returns a probable input vector which may 
-        ///   have originated the given output.
-        /// </returns>
-        /// 
+        
+        /// Resconstruc an input vector using a given output
         public double[] Reconstruct(double[] output)
         {
             return visible.Compute(output);
         }
-
-        /// <summary>
-        ///   Samples an output vector from the network
-        ///   given an input vector.
-        /// </summary>
-        /// 
-        /// <param name="input">An input vector.</param>
-        /// 
-        /// <returns>
-        ///   A possible output considering the
-        ///   stochastic activations of the network.
-        /// </returns>
-        /// 
+///   Samples an output vector from the network with an input vector.
+        ///   Output is A possible output considering the stochastic activations of the network.
         public double[] GenerateOutput(double[] input)
         {
             return hidden.Generate(input);
         }
 
-        /// <summary>
-        ///   Samples an input vector from the network
-        ///   given an output vector.
-        /// </summary>
-        /// 
-        /// <param name="output">An output vector.</param>
-        /// 
-        /// <returns>
-        ///   A possible reconstruction considering the
-        ///   stochastic activations of the network.
-        /// </returns>
-        /// 
+       
+        ///   Samples an input vector from the network        ///   given an output vector.
+        ///   Output is         ///   A possible reconstruction considering the        ///   stochastic activations of the network.
+      
         public double[] GenerateInput(double[] output)
         {
             return visible.Generate(output);

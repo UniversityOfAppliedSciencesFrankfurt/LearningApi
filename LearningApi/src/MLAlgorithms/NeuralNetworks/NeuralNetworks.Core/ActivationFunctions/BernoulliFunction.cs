@@ -1,11 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using LearningFoundation.Math.Random;
+using LearningFoundation.Math;
 using LearningFoundation;
 
-namespace NeuralNetworks.Core
+namespace NeuralNetworks.Core.ActivationFunctions
 {
+    [Serializable]
     public class BernoulliFunction : IStochasticFunction
     {
 
@@ -28,11 +27,10 @@ namespace NeuralNetworks.Core
         public BernoulliFunction()
             : this(alpha: 1) { }
 
-
-
+        
         public double Function(double x)
         {
-            return (1 / (1 + Math.Exp(-alpha * x))); //Can we use system math here?
+            return (1 / (1 + Math.Exp(-alpha * x))); 
 
         }
 
@@ -43,8 +41,7 @@ namespace NeuralNetworks.Core
             return y > Generator.Random.NextDouble() ? 1 : 0;
         }
 
-
-
+        
         public double Generate2(double y)
         {
             return y > Generator.Random.NextDouble() ? 1 : 0;

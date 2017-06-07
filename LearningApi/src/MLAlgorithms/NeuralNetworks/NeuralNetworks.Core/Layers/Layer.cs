@@ -1,5 +1,5 @@
 ﻿using System;
-
+using NeuralNetworks.Core.Neurons;
 namespace NeuralNetworks.Core.Layers
 {   
     /// <summary>

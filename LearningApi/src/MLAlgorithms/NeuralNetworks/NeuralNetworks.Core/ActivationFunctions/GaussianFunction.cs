@@ -4,7 +4,7 @@ using System.Text;
 using LearningFoundation;
 using LearningFoundation.Statistics;
 
-namespace NeuralNetworks.Core
+namespace NeuralNetworks.Core.ActivationFunctions
 {
    
     public class GaussianFunction : IStochasticFunction
@@ -46,8 +46,7 @@ namespace NeuralNetworks.Core
             this.Alpha = alpha;
             this.Range = range;
         }
-
-
+        
 
         public double Function(double x)
         {
