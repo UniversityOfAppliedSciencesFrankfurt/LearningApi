@@ -1,11 +1,11 @@
-﻿
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
+
 
 namespace LearningFoundation
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Text;
-
+    
     public struct Range : IRange<float>, IEquatable<Range>
     {
         private float min, max;
@@ -58,7 +58,7 @@ namespace LearningFoundation
       
         public Range Intersection(Range range)
         {
-            return new Range(System.Math.Max(this.Min, range.Min), System.Math.Min(this.Max, range.Max));
+            return new Range(Math.Max(this.Min, range.Min), Math.Min(this.Max, range.Max));
         }
 
         /// <summary>
@@ -127,13 +127,13 @@ namespace LearningFoundation
 
             if (provideInnerRange)
             {
-                iMin = (int)System.Math.Ceiling(min);
-                iMax = (int)System.Math.Floor(max);
+                iMin = (int)Math.Ceiling(min);
+                iMax = (int)Math.Floor(max);
             }
             else
             {
-                iMin = (int)System.Math.Floor(min);
-                iMax = (int)System.Math.Ceiling(max);
+                iMin = (int)Math.Floor(min);
+                iMax = (int)Math.Ceiling(max);
             }
 
             return new IntRange(iMin, iMax);

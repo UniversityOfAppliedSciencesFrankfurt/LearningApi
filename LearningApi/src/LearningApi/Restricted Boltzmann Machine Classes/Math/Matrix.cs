@@ -3,7 +3,7 @@
 
 
 
-namespace LearningFoundation.Math
+namespace LearningFoundation.MathFunction
 {
     public enum MatrixOrder
     {

@@ -1,12 +1,10 @@
-﻿
+﻿using System;
+using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
+using System.Threading;
 
-namespace LearningFoundation.Math
-{
-    using System;
-    using System.Diagnostics;
-    using System.Diagnostics.CodeAnalysis;
-    using System.Threading;
-    
+namespace LearningFoundation.MathFunction
+{    
 
     public static class Generator
     {

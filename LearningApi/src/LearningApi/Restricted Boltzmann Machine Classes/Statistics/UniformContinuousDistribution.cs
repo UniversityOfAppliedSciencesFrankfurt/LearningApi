@@ -2,7 +2,7 @@
 using System.ComponentModel;
 using LearningFoundation.Attributes;
 using LearningFoundation.Statistics;
-using LearningFoundation.Math;
+using LearningFoundation.MathFunction;
 using LearningFoundation.Fitting;
 
 
@@ -53,7 +53,7 @@ namespace LearningFoundation.Statistics
         }
         public override double Entropy
         {
-            get { return System.Math.Log(b - a); }
+            get { return Math.Log(b - a); }
         }
         public override DoubleRange Support
         {
@@ -78,7 +78,7 @@ namespace LearningFoundation.Statistics
         public override double LogProbabilityDensityFunction(double x)
         {
             if (x >= a && x <= b)
-                return -System.Math.Log(b - a);
+                return Math.Log(b - a);
             else return double.NegativeInfinity;
         }
         public override void Fit(double[] observations, double[] weights, Fitting.IFittingOptions options)
@@ -126,7 +126,7 @@ namespace LearningFoundation.Statistics
         }
         public static double[] Random(double a, double b, int samples, double[] result)
         {
-            var rand = LearningFoundation.Math.Generator.Random;
+            var rand = Generator.Random;
             for (int i = 0; i < samples; i++)
                 result[i] = rand.NextDouble() * (b - a) + a;
             return result;
@@ -138,18 +138,18 @@ namespace LearningFoundation.Statistics
         }
         public static double[] Random(int samples, double[] result)
         {
-            var random = LearningFoundation.Math.Generator.Random;
+            var random = Generator.Random;
             for (int i = 0; i < samples; i++)
                 result[i] = random.NextDouble();
             return result;
         }
         public static double Random()
         {
-            return LearningFoundation.Math.Generator.Random.NextDouble();
+            return Generator.Random.NextDouble();
         }
         public static double Random(double a, double b)
         {
-            return LearningFoundation.Math.Generator.Random.NextDouble() * (b - a) + a;
+            return Generator.Random.NextDouble() * (b - a) + a;
         }
 
         public override string ToString(string format, IFormatProvider formatProvider)

@@ -2,7 +2,7 @@
 
 
 
-namespace LearningFoundation.Math
+namespace LearningFoundation.MathFunction
 {
 
 

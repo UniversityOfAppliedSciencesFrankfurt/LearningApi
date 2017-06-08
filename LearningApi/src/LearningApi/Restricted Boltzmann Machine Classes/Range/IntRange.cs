@@ -1,11 +1,10 @@
-﻿
+﻿using LearningFoundation;
+using System;
+using System.Collections.Generic;
+using System.Collections;
 namespace LearningFoundation
 {
-    using LearningFoundation;
-    using System;
-    using System.Collections.Generic;
-
-    public struct IntRange : IRange<int>, IEquatable<IntRange>, IEnumerable<int>
+       public struct IntRange : IRange<int>, IEquatable<IntRange>, IEnumerable<int>
     {
         private int min, max;
 
@@ -45,7 +44,7 @@ namespace LearningFoundation
 
         public IntRange Intersection(IntRange range)
         {
-            return new IntRange(System.Math.Max(this.Min, range.Min), System.Math.Min(this.Max, range.Max));
+            return new IntRange(Math.Max(this.Min, range.Min), Math.Min(this.Max, range.Max));
         }
 
 
@@ -131,7 +130,7 @@ namespace LearningFoundation
         }
 
 
-        System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
+     IEnumerator IEnumerable.GetEnumerator()
         {
             for (int i = min; i < max; i++)
                 yield return i;

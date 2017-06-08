@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using LearningFoundation.Math;
+using LearningFoundation.MathFunction;
 using LearningFoundation.Statistics;
 
 namespace NeuralNetworks.Core.Neurons
@@ -64,6 +64,7 @@ namespace NeuralNetworks.Core.Neurons
         public virtual void Randomize()
         {
             rand.Generate(weights.Length, weights);
+            
         }
 
 

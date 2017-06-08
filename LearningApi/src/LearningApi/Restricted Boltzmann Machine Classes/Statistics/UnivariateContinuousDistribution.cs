@@ -4,7 +4,7 @@ using System.Text;
 using System.ComponentModel.DataAnnotations;
 using LearningFoundation.Statistics;
 using LearningFoundation.Fitting;
-using LearningFoundation.Math;
+using LearningFoundation.MathFunction;
 using System.Runtime.Serialization.Formatters;
 namespace LearningFoundation.Statistics
 {
@@ -316,7 +316,7 @@ namespace LearningFoundation.Statistics
       
         public virtual double LogProbabilityDensityFunction(double x)
         {
-            return System.Math.Log(ProbabilityDensityFunction(x));
+            return Math.Log(ProbabilityDensityFunction(x));
         }
 
       
@@ -333,13 +333,13 @@ namespace LearningFoundation.Statistics
        
         public virtual double CumulativeHazardFunction(double x)
         {
-            return -System.Math.Log(ComplementaryDistributionFunction(x));
+            return Math.Log(ComplementaryDistributionFunction(x));
         }
 
         
         public virtual double LogCumulativeHazardFunction(double x)
         {
-            return System.Math.Log(-System.Math.Log(ComplementaryDistributionFunction(x)));
+            return Math.Log(-System.Math.Log(ComplementaryDistributionFunction(x)));
         }
 
         
@@ -389,7 +389,7 @@ namespace LearningFoundation.Statistics
         
         public virtual double[] Generate(int samples, double[] result)
         {
-            var random = LearningFoundation.Math.Generator.Random;
+            var random = Generator.Random;
             for (int i = 0; i < samples; i++)
                 result[i] = InverseDistributionFunction(random.NextDouble());
             return result;

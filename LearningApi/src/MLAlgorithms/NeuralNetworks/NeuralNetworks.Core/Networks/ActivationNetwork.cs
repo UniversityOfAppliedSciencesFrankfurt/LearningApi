@@ -1,6 +1,5 @@
-﻿ using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System;
+
 using LearningFoundation;
 using NeuralNetworks.Core.Layers;
 namespace NeuralNetworks.Core.Networks

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace LearningFoundation.Math
+namespace LearningFoundation.MathFunction
 {
     public static class Constants
     {

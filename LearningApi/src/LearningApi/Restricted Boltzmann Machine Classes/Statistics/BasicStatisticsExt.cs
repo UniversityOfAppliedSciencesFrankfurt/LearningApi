@@ -120,7 +120,7 @@ namespace LearningFoundation.Statistics
             var vars = colData.VarianceOfS();
 
             //calculate summ of square 
-            return Math.Sqrt(vars);
+            return System.Math.Sqrt(vars);
         }
 
         /// <summary>
@@ -223,7 +223,7 @@ namespace LearningFoundation.Statistics
             //calculate stdev
             for (int i = 0; i < means.Length; i++)
             {
-                stdevs[i] = Math.Sqrt(stdevs[i]/( dataset.Length - 1));
+                stdevs[i] = System.Math.Sqrt(stdevs[i]/( dataset.Length - 1));
             }
 
             return new Tuple<double[], double[]>(means, stdevs);

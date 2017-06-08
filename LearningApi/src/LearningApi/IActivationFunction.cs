@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
 namespace LearningFoundation
 {
     public interface IActivationFunction
@@ -11,4 +7,4 @@ namespace LearningFoundation
         double Derivative2(double y);
         double Function(double x);
     }
-}
+}  

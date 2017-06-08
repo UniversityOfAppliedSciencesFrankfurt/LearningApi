@@ -1,5 +1,5 @@
 ﻿using System;
-using LearningFoundation.Math;
+using LearningFoundation.MathFunction;
 using LearningFoundation;
 
 namespace NeuralNetworks.Core.ActivationFunctions

@@ -14,13 +14,13 @@ namespace LearningFoundation
             base(message)
         { }
 
-        public ConvergenceException(string message, Exception innerException) :
-            base(message, innerException)
-        { }
+        //public ConvergenceException(string message, Exception innerException) :
+        //    base(message, innerException)
+        //{ }
 
 
         //protected ConvergenceException(SerializationInfo info, StreamingContext context) :
-        //    base(info, context)
+        //   base(info, context)
         //{ }
 
     }

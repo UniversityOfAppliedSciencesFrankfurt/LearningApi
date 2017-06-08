@@ -1,13 +1,7 @@
-﻿
-using System;
-using System.Collections.Generic;
-using System.Text;
-using LearningFoundation;
+﻿using System;
 
 namespace LearningFoundation
 {
-   
-
     public struct DoubleRange : IRange<double>, IEquatable<DoubleRange>
     {
         private double min, max;
@@ -60,7 +54,7 @@ namespace LearningFoundation
     
         public DoubleRange Intersection(DoubleRange range)
         {
-            return new DoubleRange(System.Math.Max(this.Min, range.Min), System.Math.Min(this.Max, range.Max));
+            return new DoubleRange(Math.Max(this.Min, range.Min), Math.Min(this.Max, range.Max));
         }
 
        
@@ -121,13 +115,13 @@ namespace LearningFoundation
 
             if (provideInnerRange)
             {
-                iMin = (int)System.Math.Ceiling(min);
-                iMax = (int)System.Math.Floor(max);
+                iMin = (int)Math.Ceiling(min);
+                iMax = (int)Math.Floor(max);
             }
             else
             {
-                iMin = (int)System.Math.Floor(min);
-                iMax = (int)System.Math.Ceiling(max);
+                iMin = (int)Math.Floor(min);
+                iMax = (int)Math.Ceiling(max);
             }
 
             return new IntRange(iMin, iMax);

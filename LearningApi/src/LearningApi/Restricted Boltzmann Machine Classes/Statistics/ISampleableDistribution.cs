@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using LearningFoundation.Math;
+using LearningFoundation.MathFunction;
 namespace LearningFoundation.Statistics
 {
     public interface ISampleableDistribution<TObservations> : IDistribution<TObservations>,

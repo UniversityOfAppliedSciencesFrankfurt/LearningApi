@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using LearningFoundation.Statistics;
 using LearningFoundation.Fitting;
 
 namespace LearningFoundation.Statistics
@@ -32,7 +29,6 @@ namespace LearningFoundation.Statistics
     }
     public interface IFittable<in TObservations>
     {
-        
         void Fit(TObservations[] observations);
         void Fit(TObservations[] observations, double[] weights);
 

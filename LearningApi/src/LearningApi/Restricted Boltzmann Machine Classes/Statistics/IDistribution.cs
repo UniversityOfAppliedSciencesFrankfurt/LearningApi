@@ -4,7 +4,7 @@ using System.Text;
 using LearningFoundation.Fitting;
 namespace LearningFoundation.Statistics
 {
-    public interface IDistribution // : ICloneable
+    public interface IDistribution  : ICloneable
     {
        
 

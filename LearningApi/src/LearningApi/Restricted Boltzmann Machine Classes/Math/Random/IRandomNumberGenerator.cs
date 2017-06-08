@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 
-namespace LearningFoundation.Math
+
+namespace LearningFoundation.MathFunction
 {
     public interface IRandomNumberGenerator<T>
     {

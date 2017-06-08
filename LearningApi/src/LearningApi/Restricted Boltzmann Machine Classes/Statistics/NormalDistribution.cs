@@ -1,13 +1,8 @@
 ﻿
+using System;
 namespace LearningFoundation.Statistics
 {
-    using System;
-    //using Accord.Math;
-    //using Accord.Statistics.Distributions;
-    //using Accord.Statistics.Distributions.Fitting;
-    //using Accord.Statistics.Distributions.Multivariate;
-    //using AForge;
-    
+   
     public class NormalDistribution 
     {
 
@@ -28,49 +23,17 @@ namespace LearningFoundation.Statistics
         private const double p95 = 1.95996398454005423552;
 
      
-        /// <summary>
-        ///   Generates a single random observation from the 
-        ///   Normal distribution with the given parameters.
-        /// </summary>
-        /// 
-        /// <param name="mean">The mean value μ (mu).</param>
-        /// <param name="stdDev">The standard deviation σ (sigma).</param>
-        ///
-        /// <returns>An double value sampled from the specified Normal distribution.</returns>
-        /// 
+       
         public static double Random(double mean, double stdDev)
         {
             return Random() * stdDev + mean;
         }
 
-        /// <summary>
-        ///   Generates a random vector of observations from the 
-        ///   Normal distribution with the given parameters.
-        /// </summary>
-        /// 
-        /// <param name="mean">The mean value μ (mu).</param>
-        /// <param name="stdDev">The standard deviation σ (sigma).</param>
-        /// <param name="samples">The number of samples to generate.</param>
-        ///
-        /// <returns>An array of double values sampled from the specified Normal distribution.</returns>
-        /// 
         public static double[] Random(double mean, double stdDev, int samples)
         {
             return Random(mean, stdDev, samples, new double[samples]);
         }
 
-        /// <summary>
-        ///   Generates a random vector of observations from the 
-        ///   Normal distribution with the given parameters.
-        /// </summary>
-        /// 
-        /// <param name="mean">The mean value μ (mu).</param>
-        /// <param name="stdDev">The standard deviation σ (sigma).</param>
-        /// <param name="samples">The number of samples to generate.</param>
-        /// <param name="result">The location where to store the samples.</param>
-        ///
-        /// <returns>An array of double values sampled from the specified Normal distribution.</returns>
-        /// 
         public static double[] Random(double mean, double stdDev, int samples, double[] result)
         {
             Random(samples, result);
@@ -85,20 +48,11 @@ namespace LearningFoundation.Statistics
         [ThreadStatic]
         private static double secondValue = 0;
 
-        /// <summary>
-        ///   Generates a random vector of observations from the standard
-        ///   Normal distribution (zero mean and unit standard deviation).
-        /// </summary>
-        /// 
-        /// <param name="samples">The number of samples to generate.</param>
-        /// <param name="result">The location where to store the samples.</param>
-        ///
-        /// <returns>An array of double values sampled from the specified Normal distribution.</returns>
-        /// 
+       
         public static double[] Random(int samples, double[] result)
         {
             
-            var rand = LearningFoundation.Math.Random.Generator.Random;
+            var rand = MathFunction.Generator.Random;
 
             bool useSecond = NormalDistribution.useSecond;
             double secondValue = NormalDistribution.secondValue;
@@ -153,7 +107,7 @@ namespace LearningFoundation.Statistics
         /// 
         public static double Random()
         {
-            var rand = LearningFoundation.Math.Random.Generator.Random;
+            var rand = MathFunction.Generator.Random;
 
             // check if we can use second value
             if (useSecond)
