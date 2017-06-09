@@ -13,6 +13,7 @@
 
   <ItemGroup>
     <Compile Remove="NeuronNetwork\DeepBeliefNetworkTest.cs" />
+    <Compile Remove="NeuronNetwork\TestApi.cs" />
   </ItemGroup>
 
   <ItemGroup>

@@ -1,8 +1,7 @@
 ﻿using System;
-using System.IO;
 using NeuralNetworks.Core.Layers;
-using System.Runtime.Serialization.Formatters;
-using BinaryFormatter;
+
+
 
 namespace NeuralNetworks.Core.Networks
 {
@@ -88,38 +87,38 @@ namespace NeuralNetworks.Core.Networks
         }
 
         #region :Stream management
-        public void Save(string fileName)
-        {
-            FileStream stream = new FileStream(fileName, FileMode.Create, FileAccess.Write, FileShare.None);
-            Save(stream);
-            // stream.Close(); for Net standard 2
-            stream.Dispose();
-        }
+        //public void Save(string fileName)
+        //{
+        //    FileStream stream = new FileStream(fileName, FileMode.Create, FileAccess.Write, FileShare.None);
+        //    Save(stream);
+        //    // stream.Close(); for Net standard 2
+        //    stream.Dispose();
+        //}
 
 
-        public void Save(Stream stream)
-        {
-            IFormatter formatter = new BinaryFormatter();
-            formatter.Serialize(stream, this);
-        }
+        //public void Save(Stream stream)
+        //{
+        //    IFormatter formatter = new BinaryFormatter();
+        //    formatter.Serialize(stream, this);
+        //}
 
 
-        public static Network Load(string fileName)
-        {
-            FileStream stream = new FileStream(fileName, FileMode.Open, FileAccess.Read, FileShare.Read);
-            Network network = Load(stream);
-            // stream.Close(); for Net standard 2
-            stream.Dispose();
-            return network;
-        }
+        //public static Network Load(string fileName)
+        //{
+        //    FileStream stream = new FileStream(fileName, FileMode.Open, FileAccess.Read, FileShare.Read);
+        //    Network network = Load(stream);
+        //    // stream.Close(); for Net standard 2
+        //    stream.Dispose();
+        //    return network;
+        //}
 
 
-        public static Network Load(Stream stream)
-        {
-            IFormatter formatter = new BinaryFormatter();
-            Network network = (Network)formatter.Deserialize(stream);
-            return network;
-        }
+        //public static Network Load(Stream stream)
+        //{
+        //    IFormatter formatter = new BinaryFormatter();
+        //    Network network = (Network)formatter.Deserialize(stream);
+        //    return network;
+        //}
         #endregion
     }
 }
