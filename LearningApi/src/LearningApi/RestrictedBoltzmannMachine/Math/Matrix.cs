@@ -1,8 +1,4 @@
 ﻿using System;
-
-
-
-
 namespace LearningFoundation.MathFunction
 {
     public enum MatrixOrder
@@ -14,8 +10,7 @@ namespace LearningFoundation.MathFunction
 
         Default = CRowMajor
     }
-
-
+    
     public static partial class Matrix
     {
         static T cast<T>(this object value)
@@ -53,6 +48,47 @@ namespace LearningFoundation.MathFunction
             return X;
         }
 
+        public static bool HasNaN(this double[,] matrix)
+        {
+            foreach (var e in matrix)
+                if (Double.IsNaN(e)) return true;
+            return false;
+        }
+
+        /// <summary>
+        ///   Returns a value indicating whether the specified
+        ///   matrix contains a value that is not a number (NaN).
+        /// </summary>
+        /// 
+        /// <param name="matrix">A double-precision multidimensional matrix.</param>
+        /// 
+        /// <returns>True if the matrix contains a value that is not a number, false otherwise.</returns>
+        /// 
+        public static bool HasNaN(this double[] matrix)
+        {
+            foreach (var e in matrix)
+                if (Double.IsNaN(e))
+                    return true;
+            return false;
+        }
+
+        /// <summary>
+        ///   Returns a value indicating whether the specified
+        ///   matrix contains a value that is not a number (NaN).
+        /// </summary>
+        /// 
+        /// <param name="matrix">A double-precision multidimensional matrix.</param>
+        /// 
+        /// <returns>True if the matrix contains a value that is not a number, false otherwise.</returns>
+        /// 
+        public static bool HasNaN(this double[][] matrix)
+        {
+            for (int i = 0; i < matrix.Length; i++)
+                for (int j = 0; j < matrix[i].Length; j++)
+                    if (Double.IsNaN(matrix[i][j]))
+                        return true;
+            return false;
+        }
 
 
 

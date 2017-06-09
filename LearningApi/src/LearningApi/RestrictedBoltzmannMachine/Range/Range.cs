@@ -61,10 +61,7 @@ namespace LearningFoundation
             return new Range(Math.Max(this.Min, range.Min), Math.Min(this.Max, range.Max));
         }
 
-        /// <summary>
-        ///   Determines whether two instances are equal.
-        /// </summary>
-        /// 
+      
         public static bool operator ==(Range range1, Range range2)
         {
             return ((range1.min == range2.min) && (range1.max == range2.max));
@@ -119,7 +116,7 @@ namespace LearningFoundation
             return new DoubleRange(range.Min, range.Max);
         }
 
-        /// <summary>
+     
     
         public IntRange ToIntRange(bool provideInnerRange)
         {

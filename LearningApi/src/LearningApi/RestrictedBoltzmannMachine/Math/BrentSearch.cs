@@ -124,11 +124,11 @@ namespace LearningFoundation.MathFunction
                 double range = upperBound - lowerBound; // Range over which the minimum
 
                 double middle_range = lowerBound / 2.0 + upperBound / 2.0;
-                double tol_act = System.Math.Sqrt(Constants.DoubleEpsilon) * System.Math.Abs(x) + tol / 3;
+                double tol_act = Math.Sqrt(Constants.DoubleEpsilon) * Math.Abs(x) + tol / 3;
                 double new_step; // Step at this iteration
 
                 // Check if an acceptable solution has been found
-                if (System.Math.Abs(x - middle_range) + range / 2 <= 2 * tol_act)
+                if (Math.Abs(x - middle_range) + range / 2 <= 2 * tol_act)
                     return x;
 
                 // Obtain the gold section step
@@ -137,7 +137,7 @@ namespace LearningFoundation.MathFunction
 
                 // Decide if the interpolation can be tried:
                 // Check if x and w are distinct.
-                if (System.Math.Abs(x - w) >= tol_act)
+                if (Math.Abs(x - w) >= tol_act)
                 {
                     // Yes, they are. Interpolation may be tried. The
                     // interpolation step is calculated as p/q, but the
@@ -153,7 +153,7 @@ namespace LearningFoundation.MathFunction
                     if (q > 0) { p = -p; } else { q = -q; }
 
 
-                    if (System.Math.Abs(p) < System.Math.Abs(new_step * q) && // If x+p/q falls in [a,b]
+                    if (Math.Abs(p) < Math.Abs(new_step * q) && // If x+p/q falls in [a,b]
                         p > q * (lowerBound - x + 2 * tol_act) &&        // not too close to a and 
                         p < q * (upperBound - x - 2 * tol_act))          // b, and isn't too large
                     {
@@ -164,7 +164,7 @@ namespace LearningFoundation.MathFunction
                 }
 
                 // Adjust the step to be not less than tolerance
-                if (System.Math.Abs(new_step) < tol_act)
+                if (Math.Abs(new_step) < tol_act)
                 {
                     new_step = (new_step > 0) ? tol_act : -tol_act;
                 }
@@ -253,7 +253,7 @@ namespace LearningFoundation.MathFunction
                 // division operations are delayed until the last moment.
 
 
-                if (System.Math.Abs(fc) < System.Math.Abs(fb))
+                if (Math.Abs(fc) < Math.Abs(fb))
                 {
                     // Swap data for b to be the best approximation
                     lowerBound = upperBound; fa = fb;
@@ -261,16 +261,16 @@ namespace LearningFoundation.MathFunction
                     c = lowerBound; fc = fa;
                 }
 
-                tol_act = 2 * Constants.DoubleEpsilon * System.Math.Abs(upperBound) + tol / 2;
+                tol_act = 2 * Constants.DoubleEpsilon * Math.Abs(upperBound) + tol / 2;
                 new_step = (c - upperBound) / 2;
 
                 // Check if an acceptable solution has been found
-                if (System.Math.Abs(new_step) <= tol_act || fb == 0)
+                if (Math.Abs(new_step) <= tol_act || fb == 0)
                     return upperBound;
 
                 // Decide if the interpolation can be tried
-                if (System.Math.Abs(prev_step) >= tol_act  // If prev_step was large enough
-                    && System.Math.Abs(fa) > System.Math.Abs(fb)) // and was in the true direction,
+                if (Math.Abs(prev_step) >= tol_act  // If prev_step was large enough
+                    && Math.Abs(fa) > Math.Abs(fb)) // and was in the true direction,
                 {
                     // Then interpolation may be tried   
 
@@ -300,8 +300,8 @@ namespace LearningFoundation.MathFunction
                     if (p > 0) q = -q; else p = -p;
 
                     // If b+p/q falls in [b,c] and isn't too large, then
-                    if (p < (0.75 * cb * q - System.Math.Abs(tol_act * q) / 2)
-                        && p < System.Math.Abs(prev_step * q / 2))
+                    if (p < (0.75 * cb * q - Math.Abs(tol_act * q) / 2)
+                        && p < Math.Abs(prev_step * q / 2))
                     {
                         // It is accepted.
                         new_step = p / q;
@@ -313,7 +313,7 @@ namespace LearningFoundation.MathFunction
                 }
 
 
-                if (System.Math.Abs(new_step) < tol_act)
+                if (Math.Abs(new_step) < tol_act)
                 {
                     // Adjust the step to be not less than tolerance
                     new_step = (new_step > 0) ? tol_act : -tol_act;

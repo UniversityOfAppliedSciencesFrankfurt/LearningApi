@@ -1,5 +1,4 @@
 ﻿using System;
-
 using LearningFoundation;
 using NeuralNetworks.Core.Layers;
 namespace NeuralNetworks.Core.Networks

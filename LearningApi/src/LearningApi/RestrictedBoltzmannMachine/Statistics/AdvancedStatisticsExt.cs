@@ -11,12 +11,7 @@ namespace LearningFoundation.Statistics
     /// </summary>
     public static class AdvancedStatistics
     {
-        /// <summary>
-        /// Calculates sum of squares residuals of the two datasets
-        /// </summary>
-        /// <param name="data1">first data set</param>
-        /// <param name="data2">second dataset</param>
-        /// <returns></returns>
+       
         public static double SSROf(this double[] data1, double[] data2)
         {
             if (data1 == null || data1.Length < 2)
@@ -40,12 +35,7 @@ namespace LearningFoundation.Statistics
             return ssr;
         }
 
-        /// <summary>
-        /// Calculates Pearson corellation coefficient of two data sets
-        /// </summary>
-        /// <param name="data1"> first data set</param>
-        /// <param name="data2">second data set </param>
-        /// <returns></returns>
+        
         public static double CorrCoeffOf(this double[] data1, double[] data2)
         {
             if (data1 == null || data1.Length < 2)

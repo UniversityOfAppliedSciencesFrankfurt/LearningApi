@@ -10,7 +10,7 @@ namespace LearningFoundation.Fitting
     [SuppressMessage("Microsoft.Design", "CA1040:AvoidEmptyInterfaces")]
     public interface IFittingOptions : ICloneable
     {
-        object Clone();        
+        new object Clone();        
 
     }
 }

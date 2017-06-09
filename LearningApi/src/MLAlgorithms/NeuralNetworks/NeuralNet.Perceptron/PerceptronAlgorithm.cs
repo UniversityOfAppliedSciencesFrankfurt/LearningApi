@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using LearningFoundation;
 using System.Diagnostics;
+using NeuralNetworks.Core.ActivationFunctions;
 
 namespace NeuralNet.Perceptron
 {
