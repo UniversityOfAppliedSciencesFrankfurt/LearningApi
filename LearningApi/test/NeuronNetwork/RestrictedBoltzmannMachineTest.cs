@@ -1,17 +1,16 @@
 ﻿using NeuralNetworks.Core.ActivationFunctions;
 using NeuralNet.RestrictedBoltmannMachine;
+using NeuralNetworks.Core;
 using NUnit.Framework;
+using NeuralNetworks.Core.Networks;
+//using Xunit;
 
 namespace test.NeuronNetwork
 {
     [TestFixture]
     public class RestrictedBoltzmannNetworkTest
     {
-
-        [Test]
-
-
-        private static RestrictedBoltzmannMachine createNetwork(double[][] inputs)
+        private static RestrictedBoltzmannMachine CreateNetworkRBM(double[][] inputs)
         {
             RestrictedBoltzmannMachine network = new RestrictedBoltzmannMachine(6, 2);
 
@@ -52,7 +51,57 @@ namespace test.NeuronNetwork
         }
 
         [Test]
-        public void NetworkTest2()
+        public void CreateActivationNetworkTest()
+        {
+            double[][] inputs =
+            {
+                new double[] { 1,1,1,0,0,0 },
+                new double[] { 1,0,1,0,0,0 },
+                new double[] { 1,1,1,0,0,0 },
+                new double[] { 0,0,1,1,1,0 },
+                new double[] { 0,0,1,1,0,0 },
+                new double[] { 0,0,1,1,1,0 }
+            };
+
+            double[][] outputs =
+            {
+                new double[] { 0 },
+                new double[] { 0 },
+                new double[] { 0 },
+                new double[] { 1 },
+                new double[] { 1 },
+                new double[] { 1 },
+            };
+
+            RestrictedBoltzmannMachine network = CreateNetworkRBM(inputs);
+
+            ActivationNetwork ann = network.ToActivationNetwork(new SigmoidFunction(1), outputs: 1);
+            #region
+            // ParallelResilientBackpropagationLearning teacher = new ParallelResilientBackpropagationLearning(ann);
+
+            //for (int i = 0; i < 100; i++)
+            //{
+            //    teacher.RunEpoch(inputs, outputs);
+            //}
+
+            //double[] actual = new double[outputs.Length];
+            //for (int i = 0; i < inputs.Length; i++)
+            //    actual[i] = ann.Compute(inputs[i])[0];
+
+            //Assert.AreEqual(0, actual[0], 1e-10);
+            //Assert.AreEqual(0, actual[1], 1e-10);
+            //Assert.AreEqual(0, actual[2], 1e-10);
+            //Assert.AreEqual(1, actual[3], 1e-10);
+            //Assert.AreEqual(1, actual[4], 1e-10);
+            //Assert.AreEqual(1, actual[5], 1e-10);
+#endregion
+        }
+      
+       
+
+        [Test]
+        //[Theory]
+        public void NetworkTestRBM()
         {
             // Create some sample inputs and outputs. Note that the
             // first four vectors belong to one class, and the other
@@ -117,7 +166,9 @@ namespace test.NeuronNetwork
             // neuron and the second class.
 
             Assert.IsTrue(((a[0] > a[1]) && (b[0] < b[1]))
-                        ^ ((a[0] < a[1]) && (b[0] > b[1])));
+                      ^ ((a[0] < a[1]) && (b[0] > b[1])));
+           // Assert.IsFalse(((a[0] > a[1]) && (b[0] < b[1]))
+           //           ^ ((a[0] < a[1]) && (b[0] > b[1])));
         }
     }
 }

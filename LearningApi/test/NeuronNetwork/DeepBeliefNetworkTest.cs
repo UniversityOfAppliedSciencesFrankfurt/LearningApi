@@ -27,7 +27,7 @@ namespace test.NeuronNetwork
 
 
         [Test]
-        public void PushPopTest()
+        public void PushPopTestDBN()
         {
             DeepBeliefNetwork network = new DeepBeliefNetwork(6, 2, 9);
 
@@ -74,7 +74,7 @@ namespace test.NeuronNetwork
         }
 
         [Test]
-        public void ConstructorTest()
+        public void ConstructorTestDBN()
         {
             DeepBeliefNetwork network = new DeepBeliefNetwork(6, 2, 1);
 
