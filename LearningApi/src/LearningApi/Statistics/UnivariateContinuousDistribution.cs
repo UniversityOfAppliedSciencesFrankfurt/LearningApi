@@ -12,16 +12,16 @@ namespace LearningFoundation.Statistics
     public abstract class UnivariateContinuousDistribution : DistributionBase,
         IDistribution, IUnivariateDistribution, IUnivariateDistribution<double>,
         ISampleableDistribution<double>,
-       IFormattable
+       IFormattable //TODO remove
     {
         [NonSerialized]
-        private double? median;
+        private double? m_Median;
 
         [NonSerialized]
         private double? stdDev;
 
         [NonSerialized]
-        private double? mode;
+        private double? m_Mode;
 
         [NonSerialized]
         private DoubleRange? quartiles;
@@ -37,10 +37,10 @@ namespace LearningFoundation.Statistics
         {
             get
             {
-                if (mode == null)
-                    mode = BrentSearch.Maximize(ProbabilityDensityFunction, Quartiles.Min, Quartiles.Max, 1e-10);
+                if (m_Mode == null)
+                    m_Mode = BrentSearch.Maximize(ProbabilityDensityFunction, Quartiles.Min, Quartiles.Max, 1e-10);
 
-                return mode.Value;
+                return m_Mode.Value;
             }
         }
         public virtual DoubleRange Quartiles
@@ -73,10 +73,10 @@ namespace LearningFoundation.Statistics
         {
             get
             {
-                if (median == null)
-                    median = InverseDistributionFunction(0.5);
+                if (m_Median == null)
+                    m_Median = InverseDistributionFunction(0.5);
 
-                return median.Value;
+                return m_Median.Value;
             }
         }
         public virtual double StandardDeviation

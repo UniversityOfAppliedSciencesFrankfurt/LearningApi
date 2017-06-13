@@ -11,7 +11,12 @@ namespace LearningFoundation.Statistics
     /// </summary>
     public static class AdvancedStatistics
     {
-       
+       /// <summary>
+       /// TODO....comments
+       /// </summary>
+       /// <param name="data1"></param>
+       /// <param name="data2"></param>
+       /// <returns></returns>
         public static double SSROf(this double[] data1, double[] data2)
         {
             if (data1 == null || data1.Length < 2)

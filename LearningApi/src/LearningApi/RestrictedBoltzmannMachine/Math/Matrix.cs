@@ -11,7 +11,7 @@ namespace LearningFoundation.MathFunction
         Default = CRowMajor
     }
     
-    public static partial class Matrix
+    public static class Matrix
     {
         static T cast<T>(this object value)
         {

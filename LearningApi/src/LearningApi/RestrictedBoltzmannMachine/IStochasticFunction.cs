@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace LearningFoundation
 {
-    public interface IStochasticFunction: IActivationFunction
+    public interface IStochasticFunction : IActivationFunction
     {
         double Generate(double x);
-              
+
         double Generate2(double y);
     }
 }

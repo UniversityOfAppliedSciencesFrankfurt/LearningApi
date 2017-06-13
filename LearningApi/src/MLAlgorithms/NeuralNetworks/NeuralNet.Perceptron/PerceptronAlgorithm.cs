@@ -15,7 +15,7 @@ namespace NeuralNet.Perceptron
 
         private int m_Iterations;
 
-        private Func<double, double> m_ActivationFunction = ActivationFunctions.Boolean;
+        private Func<double, double> m_ActivationFunction = new BooleanActivationFunction().Function;
 
         private int m_Dimensions;
 

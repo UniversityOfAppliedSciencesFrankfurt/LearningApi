@@ -4,7 +4,7 @@ using System.Text;
 
 namespace LearningFoundation.Statistics
 {
-    /// 
+    /// TODO: remove IFormattable
     [Serializable]
     public abstract class DistributionBase : IFormattable
     {

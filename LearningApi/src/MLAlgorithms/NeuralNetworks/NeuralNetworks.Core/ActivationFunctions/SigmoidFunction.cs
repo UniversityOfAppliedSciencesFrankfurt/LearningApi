@@ -4,7 +4,7 @@ using LearningFoundation;
 namespace NeuralNetworks.Core.ActivationFunctions
 {
     [Serializable]
-    public class SigmoidFunction : IActivationFunction, ICloneable
+    public class SigmoidFunction : IActivationFunction
     {
         private double alpha = 2;
 
@@ -42,9 +42,5 @@ namespace NeuralNetworks.Core.ActivationFunctions
         }
 
 
-        public object Clone()
-        {
-            return new SigmoidFunction(alpha);
-        }
     }
 }

@@ -103,6 +103,8 @@ namespace LearningFoundation.Statistics
                 
             return parSum/(count-1);
         }
+
+
         /// <summary>
         /// Calculate StandardDeviation
         /// </summary>
