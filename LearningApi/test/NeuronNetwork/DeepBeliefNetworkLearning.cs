@@ -84,7 +84,10 @@ namespace test.NeuronNetwork
         ///   <see cref="RunEpoch(double[][])"/> to actually run a learning epoch.
         /// </summary>
         /// 
-        /// <param name="input">The batch of input data.</param>
+        /// <param name="input">The 
+        /// 
+        /// 
+        /// of input data.</param>
         /// 
         /// <returns>The learning data for the current layer.</returns>
         /// 
@@ -185,7 +188,8 @@ namespace test.NeuronNetwork
         ///   multiple mini-batches to improve speed.
         /// </summary>
         /// 
-        /// <param name="batches">Array of input batches.</param>
+        /// <param name="batches">Array of input 
+        /// es.</param>
         /// 
         /// <returns>
         ///   Returns sum of learning errors.

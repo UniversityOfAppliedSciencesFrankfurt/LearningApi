@@ -10,94 +10,95 @@ namespace test.NeuronNetwork
     [TestFixture]
     public class RestrictedBoltzmannNetworkTest
     {
-        private static RestrictedBoltzmannMachine CreateNetworkRBM(double[][] inputs)
-        {
-            RestrictedBoltzmannMachine network = new RestrictedBoltzmannMachine(6, 2);
+        #region test1
+        //private static RestrictedBoltzmannMachine CreateNetworkRBM(double[][] inputs)
+        //{
+        //    RestrictedBoltzmannMachine network = new RestrictedBoltzmannMachine(6, 2);
 
-            network.Hidden.Neurons[0].Weights[0] = 0.00461421;
-            network.Hidden.Neurons[0].Weights[1] = 0.04337112;
-            network.Hidden.Neurons[0].Weights[2] = -0.10839599;
-            network.Hidden.Neurons[0].Weights[3] = -0.06234004;
-            network.Hidden.Neurons[0].Weights[4] = -0.03017057;
-            network.Hidden.Neurons[0].Weights[5] = 0.09520391;
-            network.Hidden.Neurons[0].Threshold = 0;
+        //    network.Hidden.Neurons[0].Weights[0] = 0.00461421;
+        //    network.Hidden.Neurons[0].Weights[1] = 0.04337112;
+        //    network.Hidden.Neurons[0].Weights[2] = -0.10839599;
+        //    network.Hidden.Neurons[0].Weights[3] = -0.06234004;
+        //    network.Hidden.Neurons[0].Weights[4] = -0.03017057;
+        //    network.Hidden.Neurons[0].Weights[5] = 0.09520391;
+        //    network.Hidden.Neurons[0].Threshold = 0;
 
-            network.Hidden.Neurons[1].Weights[0] = 0.08263872;
-            network.Hidden.Neurons[1].Weights[1] = -0.118437;
-            network.Hidden.Neurons[1].Weights[2] = -0.21710971;
-            network.Hidden.Neurons[1].Weights[3] = 0.02332903;
-            network.Hidden.Neurons[1].Weights[4] = 0.00953116;
-            network.Hidden.Neurons[1].Weights[5] = 0.09870652;
-            network.Hidden.Neurons[1].Threshold = 0;
+        //    network.Hidden.Neurons[1].Weights[0] = 0.08263872;
+        //    network.Hidden.Neurons[1].Weights[1] = -0.118437;
+        //    network.Hidden.Neurons[1].Weights[2] = -0.21710971;
+        //    network.Hidden.Neurons[1].Weights[3] = 0.02332903;
+        //    network.Hidden.Neurons[1].Weights[4] = 0.00953116;
+        //    network.Hidden.Neurons[1].Weights[5] = 0.09870652;
+        //    network.Hidden.Neurons[1].Threshold = 0;
 
-            network.Visible.Neurons[0].Threshold = 0;
-            network.Visible.Neurons[1].Threshold = 0;
-            network.Visible.Neurons[2].Threshold = 0;
-            network.Visible.Neurons[3].Threshold = 0;
-            network.Visible.Neurons[4].Threshold = 0;
-            network.Visible.Neurons[5].Threshold = 0;
+        //    network.Visible.Neurons[0].Threshold = 0;
+        //    network.Visible.Neurons[1].Threshold = 0;
+        //    network.Visible.Neurons[2].Threshold = 0;
+        //    network.Visible.Neurons[3].Threshold = 0;
+        //    network.Visible.Neurons[4].Threshold = 0;
+        //    network.Visible.Neurons[5].Threshold = 0;
 
-            network.Visible.CopyReversedWeightsFrom(network.Hidden);
+        //    network.Visible.CopyReversedWeightsFrom(network.Hidden);
 
 
-            ContrastiveDivergenceLearning target = new ContrastiveDivergenceLearning(network);
+        //    ContrastiveDivergenceLearning target = new ContrastiveDivergenceLearning(network);
 
-            int iterations = 5000;
-            double[] errors = new double[iterations];
-            for (int i = 0; i < iterations; i++)
-                errors[i] = target.RunEpoch(inputs);
+        //    int iterations = 5000;
+        //    double[] errors = new double[iterations];
+        //    for (int i = 0; i < iterations; i++)
+        //        errors[i] = target.RunEpoch(inputs);
 
-            return network;
-        }
+        //    return network;
+        //}
 
-        [Test]
-        public void CreateActivationNetworkTest()
-        {
-            double[][] inputs =
-            {
-                new double[] { 1,1,1,0,0,0 },
-                new double[] { 1,0,1,0,0,0 },
-                new double[] { 1,1,1,0,0,0 },
-                new double[] { 0,0,1,1,1,0 },
-                new double[] { 0,0,1,1,0,0 },
-                new double[] { 0,0,1,1,1,0 }
-            };
+        //[Test]
+        //public void CreateActivationNetworkTest()
+        //{
+        //    double[][] inputs =
+        //    {
+        //        new double[] { 1,1,1,0,0,0 },
+        //        new double[] { 1,0,1,0,0,0 },
+        //        new double[] { 1,1,1,0,0,0 },
+        //        new double[] { 0,0,1,1,1,0 },
+        //        new double[] { 0,0,1,1,0,0 },
+        //        new double[] { 0,0,1,1,1,0 }
+        //    };
 
-            double[][] outputs =
-            {
-                new double[] { 0 },
-                new double[] { 0 },
-                new double[] { 0 },
-                new double[] { 1 },
-                new double[] { 1 },
-                new double[] { 1 },
-            };
+        //    double[][] outputs =
+        //    {
+        //        new double[] { 0 },
+        //        new double[] { 0 },
+        //        new double[] { 0 },
+        //        new double[] { 1 },
+        //        new double[] { 1 },
+        //        new double[] { 1 },
+        //    };
 
-            RestrictedBoltzmannMachine network = CreateNetworkRBM(inputs);
+        //    RestrictedBoltzmannMachine network = CreateNetworkRBM(inputs);
 
-            ActivationNetwork ann = network.ToActivationNetwork(new SigmoidFunction(1), outputs: 1);
-            #region
-            // ParallelResilientBackpropagationLearning teacher = new ParallelResilientBackpropagationLearning(ann);
+        //    ActivationNetwork ann = network.ToActivationNetwork(new SigmoidFunction(1), outputs: 1);
+        //    #region
+        //    // ParallelResilientBackpropagationLearning teacher = new ParallelResilientBackpropagationLearning(ann);
 
-            //for (int i = 0; i < 100; i++)
-            //{
-            //    teacher.RunEpoch(inputs, outputs);
-            //}
+        //    //for (int i = 0; i < 100; i++)
+        //    //{
+        //    //    teacher.RunEpoch(inputs, outputs);
+        //    //}
 
-            //double[] actual = new double[outputs.Length];
-            //for (int i = 0; i < inputs.Length; i++)
-            //    actual[i] = ann.Compute(inputs[i])[0];
+        //    //double[] actual = new double[outputs.Length];
+        //    //for (int i = 0; i < inputs.Length; i++)
+        //    //    actual[i] = ann.Compute(inputs[i])[0];
 
-            //Assert.AreEqual(0, actual[0], 1e-10);
-            //Assert.AreEqual(0, actual[1], 1e-10);
-            //Assert.AreEqual(0, actual[2], 1e-10);
-            //Assert.AreEqual(1, actual[3], 1e-10);
-            //Assert.AreEqual(1, actual[4], 1e-10);
-            //Assert.AreEqual(1, actual[5], 1e-10);
-#endregion
-        }
-      
-       
+        //    //Assert.AreEqual(0, actual[0], 1e-10);
+        //    //Assert.AreEqual(0, actual[1], 1e-10);
+        //    //Assert.AreEqual(0, actual[2], 1e-10);
+        //    //Assert.AreEqual(1, actual[3], 1e-10);
+        //    //Assert.AreEqual(1, actual[4], 1e-10);
+        //    //Assert.AreEqual(1, actual[5], 1e-10);
+        //    #endregion
+        //}
+        #endregion
+
 
         [Test]
         //[Theory]
@@ -146,6 +147,7 @@ namespace test.NeuronNetwork
             // learn 5000 iterations
             for (int i = 0; i < 5000; i++)
                 teacher.RunEpoch(inputs);
+         
 
             // Compute the machine answers for the given inputs:
             double[] a = rbm.Compute(new double[] { 1, 1, 1, 0, 0, 0 }); // { 0.99, 0.00 }
@@ -167,8 +169,8 @@ namespace test.NeuronNetwork
 
             Assert.IsTrue(((a[0] > a[1]) && (b[0] < b[1]))
                       ^ ((a[0] < a[1]) && (b[0] > b[1])));
-           // Assert.IsFalse(((a[0] > a[1]) && (b[0] < b[1]))
-           //           ^ ((a[0] < a[1]) && (b[0] > b[1])));
+            // Assert.IsFalse(((a[0] > a[1]) && (b[0] < b[1]))
+            //           ^ ((a[0] < a[1]) && (b[0] > b[1])));
         }
     }
 }
