@@ -6,26 +6,9 @@ namespace LearningFoundation.Statistics
 {
     /// TODO: remove IFormattable
     [Serializable]
-    public abstract class DistributionBase : IFormattable
-    {
-             
-        public override string ToString()
-        {
-            return ToString(null, null);
-        }
-
-        public string ToString(IFormatProvider formatProvider)
-        {
-            return ToString(null, formatProvider);
-        }
-               
-        public string ToString(string format)
-        {
-            return ToString(format, null);
-        }
-                
-        public abstract string ToString(string format, IFormatProvider formatProvider);
-
+    public abstract class DistributionBase 
+    {            
+       
         public abstract object Clone();
 
     }

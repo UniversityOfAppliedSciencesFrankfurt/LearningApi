@@ -8,13 +8,13 @@ namespace NeuralNet.Perceptron
 {
     public static class PerceptronExtensions
     {
-        public static LearningApi UsePerceptron(this LearningApi api,
+        public static LearningApi UsePerceptron( this LearningApi api,
            double learningRate, int iterations,
-                IActivationFunction activationFnc = null)
+                IActivationFunction activationFnc = null )
 
         {
-            var alg = new PerceptronAlgorithm(0, learningRate, iterations);
-            api.AddModule(alg, "PerceptronAlgorithm");
+            var alg = new PerceptronAlgorithm( 0, learningRate, iterations );
+            api.AddModule( alg, "PerceptronAlgorithm" );
             return api;
         }
     }

@@ -2,7 +2,7 @@
 
 namespace LearningFoundation
 {
-    public interface IRange<T> : IFormattable
+    public interface IRange<T>
     {
         T Min { get; set; }
 

@@ -1,22 +1,23 @@
 ﻿using System;
 using System.Threading;
 using NeuralNetworks.Core.Layers;
-using NeuralNet.RestrictedBoltmannMachine;
+using NeuralNet.RestrictedBoltzmannMachine;
 using NeuralNetworks.Core.Neurons;
 using System.Threading.Tasks;
 using NeuralNetworks.Core.ActivationFunctions;
 using LearningFoundation;
 using LearningFoundation.MathFunction;
 
-namespace test.NeuronNetwork
+namespace NeuralNet.RestrictedBoltzmannMachine
 {
-    public class ContrastiveDivergenceLearning : IUnsupervisedLearning, IDisposable
+    public class ContrastiveDivergenceLearning //: IUnsupervisedLearning//, IDisposable
     {
 
-        private double momentum = 0.9;
-        private double learningRate = 0.1;
-        private double decay = 0.01;
+        private double momentum= 0.9;
+        private double learningRate= 0.1;
+        private double decay= 0.01;
         private int steps = 1;
+        private int iteration;
 
         private double[][] weightsGradient;
         private double[] visibleBiasGradient;
@@ -44,9 +45,13 @@ namespace test.NeuronNetwork
         /// 
         /// <param name="network">The network to be trained.</param>
         /// 
-        public ContrastiveDivergenceLearning(RestrictedBoltzmannMachine network)
+        public ContrastiveDivergenceLearning( RestrictedBoltzmannMachine network, int iteration, double[][] inputs, double learningrate )
         {
-            init(network.Hidden, network.Visible);
+            //LearningRate = learningrate;
+            learningRate = learningrate;
+            init( network.Hidden, network.Visible );           
+            for (int i = 0; i < iteration; i++)
+               RunEpoch( inputs );
         }
 
         /// <summary>
@@ -56,12 +61,12 @@ namespace test.NeuronNetwork
         /// <param name="hidden">The hidden layer of the hidden-visible layer pair to be trained.</param>
         /// <param name="visible">The visible layer of the hidden-visible layer pair to be trained.</param>
         /// 
-        public ContrastiveDivergenceLearning(StochasticLayer hidden, StochasticLayer visible)
+        public ContrastiveDivergenceLearning( StochasticLayer hidden, StochasticLayer visible )
         {
-            init(hidden, visible);
+            init( hidden, visible );
         }
 
-        private void init(StochasticLayer hidden, StochasticLayer visible)
+        private void init( StochasticLayer hidden, StochasticLayer visible )
         {
             this.hidden = hidden;
             this.visible = visible;
@@ -83,10 +88,10 @@ namespace test.NeuronNetwork
             visibleBiasUpdates = new double[inputsCount];
             hiddenBiasUpdates = new double[hiddenCount];
 
-            storage = new ThreadLocal<ParallelStorage>(() =>
-                new ParallelStorage(inputsCount, hiddenCount));
+            storage = new ThreadLocal<ParallelStorage>( () =>
+                 new ParallelStorage( inputsCount, hiddenCount ) );
 
-            this.ParallelOptions = new ParallelOptions();
+            this.ParallelOptions = new ParallelOptions( );
         }
 
         /// <summary>
@@ -94,11 +99,11 @@ namespace test.NeuronNetwork
         ///   learning algorithm. Default is 0.1.
         /// </summary>
         /// 
-        public double LearningRate
-        {
-            get { return learningRate; }
-            set { learningRate = value; }
-        }
+        //public double LearningRate
+        //{
+        //    get { return learningRate; }
+        //    set { learningRate = value; }
+        //}
 
         /// <summary>
         ///   Gets or sets parallelization options.
@@ -113,7 +118,7 @@ namespace test.NeuronNetwork
             get
             {
                 if (parallelOptions == null)
-                    parallelOptions = new ParallelOptions();
+                    parallelOptions = new ParallelOptions( );
                 return parallelOptions;
             }
             set { parallelOptions = value; }
@@ -141,15 +146,7 @@ namespace test.NeuronNetwork
             set { decay = value; }
         }
 
-        /// <summary>
-        ///   Not supported.
-        /// </summary>
-        /// 
-        public double Run(double[] input)
-        {
-            throw new NotSupportedException();
-        }
-
+       
         /// <summary>
         ///   Runs learning epoch.
         /// </summary>
@@ -160,52 +157,47 @@ namespace test.NeuronNetwork
         ///   Returns sum of learning errors.
         /// </returns>
         /// 
-        public double RunEpoch(double[][] input)
+        public double RunEpoch( double[][] input )
         {
 
             // Initialize iteration
             for (int i = 0; i < weightsGradient.Length; i++)
-                Array.Clear(weightsGradient[i], 0, weightsGradient[i].Length);
-            Array.Clear(hiddenBiasGradient, 0, hiddenBiasGradient.Length);
-            Array.Clear(visibleBiasGradient, 0, visibleBiasGradient.Length);
+                Array.Clear( weightsGradient[i], 0, weightsGradient[i].Length );
+            Array.Clear( hiddenBiasGradient, 0, hiddenBiasGradient.Length );
+            Array.Clear( visibleBiasGradient, 0, visibleBiasGradient.Length );
 
 
             // calculate gradient and model error
-            double error = ComputeGradient(input);
+            double error = ComputeGradient( input );
 
             // calculate weights updates
-            CalculateUpdates(input);
+            CalculateUpdates( input );
 
             // update the network
-            UpdateNetwork();
+            UpdateNetwork( );
 
             return error;
         }
 
-        private double ComputeGradient(double[][] input)
+        private double ComputeGradient( double[][] input )
         {
             double errors = 0;
 
 
-#if NET35
-            var partial = storage.Value.Clear();
-            for (int i = 0; i < input.Length; i++)
-            {
-                int observationIndex = i;
-#else
-            Object lockObj = new Object();
+
+            Object lockObj = new Object( );
 
             // For each training instance
-            Parallel.For(0, input.Length,
+            Parallel.For( 0, input.Length,
 
                 ParallelOptions,
 
                 // Initialize
-                () => storage.Value.Clear(),
+                () => storage.Value.Clear( ),
 
                 // Map
-                (observationIndex, loopState, partial) =>
-#endif
+                ( observationIndex, loopState, partial ) =>
+
                 {
                     var observation = input[observationIndex];
 
@@ -223,13 +215,13 @@ namespace test.NeuronNetwork
                     //    driven by data, so we will gather activations
                     for (int j = 0; j < hidden.Neurons.Length; j++)
                     {
-                        probability[j] = hidden.Neurons[j].Compute(observation);  // output probabilities
-                        activations[j] = hidden.Neurons[j].Generate(probability[j]); // state activations
+                        probability[j] = hidden.Neurons[j].Compute( observation );  // output probabilities
+                        activations[j] = hidden.Neurons[j].Generate( probability[j] ); // state activations
                     }
 
                     // 2. Reconstruct inputs from previous outputs
                     for (int j = 0; j < visible.Neurons.Length; j++)
-                        reconstruction[j] = visible.Neurons[j].Compute(activations);
+                        reconstruction[j] = visible.Neurons[j].Compute( activations );
 
 
                     if (steps > 1)
@@ -239,9 +231,9 @@ namespace test.NeuronNetwork
                         for (int k = 0; k < steps - 1; k++)
                         {
                             for (int j = 0; j < probability.Length; j++)
-                                probability[j] = hidden.Neurons[j].Compute(current);
+                                probability[j] = hidden.Neurons[j].Compute( current );
                             for (int j = 0; j < reconstruction.Length; j++)
-                                reconstruction[j] = visible.Neurons[j].Compute(probability);
+                                reconstruction[j] = visible.Neurons[j].Compute( probability );
                             current = reconstruction;
                         }
                     }
@@ -251,7 +243,7 @@ namespace test.NeuronNetwork
                     //    is now being driven by reconstructions, so we should
                     //    gather the output probabilities without sampling
                     for (int j = 0; j < hidden.Neurons.Length; j++)
-                        reprobability[j] = hidden.Neurons[j].Compute(reconstruction);
+                        reprobability[j] = hidden.Neurons[j].Compute( reconstruction );
 
 
 
@@ -286,12 +278,12 @@ namespace test.NeuronNetwork
                         partial.ErrorSumOfSquares += e * e;
                     }
 
-#if !NET35
+
                     return partial; // Report partial solution
                 },
 
                 // Reduce
-                (partial) =>
+                ( partial ) =>
                 {
                     lock (lockObj)
                     {
@@ -308,16 +300,7 @@ namespace test.NeuronNetwork
 
                         errors += partial.ErrorSumOfSquares;
                     }
-                });
-#else
-                }
-            }
-
-            weightsGradient = partial.WeightGradient;
-            hiddenBiasGradient = partial.HiddenBiasGradient;
-            visibleBiasGradient = partial.VisibleBiasGradient;
-            errors = partial.ErrorSumOfSquares;
-#endif
+                } );
 
             return errors;
         }
@@ -332,32 +315,27 @@ namespace test.NeuronNetwork
         ///   Returns sum of learning errors.
         /// </returns>
         /// 
-        public double ComputeError(double[][] input)
+        public double ComputeError( double[][] input )
         {
             double errors = 0;
 
 
-#if NET35
-            var partial = storage.Value.Clear();
-            for (int i = 0; i < input.Length; i++)
-            {
-                int observationIndex = i;
-#else
-            Object lockObj = new Object();
+
+            Object lockObj = new Object( );
 
             // For each training instance
-            Parallel.For(0, input.Length,
+            Parallel.For( 0, input.Length,
 
 #if DEBUG
-                new ParallelOptions() { MaxDegreeOfParallelism = 1 },
+                new ParallelOptions( ) { MaxDegreeOfParallelism = 1 },
 #endif
 
                 // Initialize
-                () => storage.Value.Clear(),
+                () => storage.Value.Clear( ),
 
                 // Map
-                (observationIndex, loopState, partial) =>
-#endif
+                ( observationIndex, loopState, partial ) =>
+
                 {
                     var observation = input[observationIndex];
 
@@ -370,13 +348,13 @@ namespace test.NeuronNetwork
                     //    driven by data, so we will gather activations
                     for (int j = 0; j < hidden.Neurons.Length; j++)
                     {
-                        probability[j] = hidden.Neurons[j].Compute(observation);  // output probabilities
-                        activations[j] = hidden.Neurons[j].Generate(probability[j]); // state activations
+                        probability[j] = hidden.Neurons[j].Compute( observation );  // output probabilities
+                        activations[j] = hidden.Neurons[j].Generate( probability[j] ); // state activations
                     }
 
                     // 2. Reconstruct inputs from previous outputs
                     for (int j = 0; j < visible.Neurons.Length; j++)
-                        reconstruction[j] = visible.Neurons[j].Compute(activations);
+                        reconstruction[j] = visible.Neurons[j].Compute( activations );
 
                     if (steps > 1)
                     {
@@ -385,9 +363,9 @@ namespace test.NeuronNetwork
                         for (int k = 0; k < steps - 1; k++)
                         {
                             for (int j = 0; j < probability.Length; j++)
-                                probability[j] = hidden.Neurons[j].Compute(current);
+                                probability[j] = hidden.Neurons[j].Compute( current );
                             for (int j = 0; j < reconstruction.Length; j++)
-                                reconstruction[j] = visible.Neurons[j].Compute(probability);
+                                reconstruction[j] = visible.Neurons[j].Compute( probability );
                             current = reconstruction;
                         }
                     }
@@ -403,19 +381,19 @@ namespace test.NeuronNetwork
                 },
 
                 // Reduce
-                (partial) =>
+                ( partial ) =>
                 {
                     lock (lockObj)
                     {
                         errors += partial.ErrorSumOfSquares;
                     }
-                });
+                } );
 
 
             return errors;
         }
 
-        private void CalculateUpdates(double[][] input)
+        private void CalculateUpdates( double[][] input )
         {
             double rate = learningRate;
 
@@ -439,9 +417,9 @@ namespace test.NeuronNetwork
                 visibleBiasUpdates[i] = momentum * visibleBiasUpdates[i]
                         + (rate * visibleBiasGradient[i]);
 
-            Debug.Assert(!weightsGradient.HasNaN());
-            Debug.Assert(!visibleBiasUpdates.HasNaN());
-            Debug.Assert(!hiddenBiasUpdates.HasNaN());
+            Debug.Assert( !weightsGradient.HasNaN( ) );
+            Debug.Assert( !visibleBiasUpdates.HasNaN( ) );
+            Debug.Assert( !hiddenBiasUpdates.HasNaN( ) );
         }
 
         private void UpdateNetwork()
@@ -458,7 +436,7 @@ namespace test.NeuronNetwork
             // 6.2 Update visible layer with reverse weights
             for (int i = 0; i < visible.Neurons.Length; i++)
                 visible.Neurons[i].Threshold += visibleBiasUpdates[i];
-            visible.CopyReversedWeightsFrom(hidden);
+            visible.CopyReversedWeightsFrom( hidden );
         }
 
 
@@ -477,7 +455,7 @@ namespace test.NeuronNetwork
 
             public double ErrorSumOfSquares { get; set; }
 
-            public ParallelStorage(int inputsCount, int hiddenCount)
+            public ParallelStorage( int inputsCount, int hiddenCount )
             {
                 WeightGradient = new double[inputsCount][];
                 for (int i = 0; i < WeightGradient.Length; i++)
@@ -496,9 +474,9 @@ namespace test.NeuronNetwork
             {
                 ErrorSumOfSquares = 0;
                 for (int i = 0; i < WeightGradient.Length; i++)
-                    Array.Clear(WeightGradient[i], 0, WeightGradient[i].Length);
-                Array.Clear(VisibleBiasGradient, 0, VisibleBiasGradient.Length);
-                Array.Clear(HiddenBiasGradient, 0, HiddenBiasGradient.Length);
+                    Array.Clear( WeightGradient[i], 0, WeightGradient[i].Length );
+                Array.Clear( VisibleBiasGradient, 0, VisibleBiasGradient.Length );
+                Array.Clear( HiddenBiasGradient, 0, HiddenBiasGradient.Length );
                 return this;
             }
 
@@ -506,36 +484,36 @@ namespace test.NeuronNetwork
 
 
 
-        /// <summary>
-        ///   Performs application-defined tasks associated with 
-        ///   freeing, releasing, or resetting unmanaged resources.
-        /// </summary>
-        /// 
-        public void Dispose()
-        {
-            Dispose(true);
-            GC.SuppressFinalize(this);
-        }
+        ///// <summary>
+        /////   Performs application-defined tasks associated with 
+        /////   freeing, releasing, or resetting unmanaged resources.
+        ///// </summary>
+        ///// 
+        //public void Dispose()
+        //{
+        //    Dispose( true );
+        //    GC.SuppressFinalize( this );
+        //}
 
-        /// <summary>
-        ///   Releases unmanaged and - optionally - managed resources
-        /// </summary>
-        /// 
-        /// <param name="disposing"><c>true</c> to release both managed and unmanaged
-        /// resources; <c>false</c> to release only unmanaged resources.</param>
-        /// 
-        protected virtual void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                // free managed resources
-                if (storage != null)
-                {
-                    storage.Dispose();
-                    storage = null;
-                }
-            }
-        }
+        ///// <summary>
+        /////   Releases unmanaged and - optionally - managed resources
+        ///// </summary>
+        ///// 
+        ///// <param name="disposing"><c>true</c> to release both managed and unmanaged
+        ///// resources; <c>false</c> to release only unmanaged resources.</param>
+        ///// 
+        //protected virtual void Dispose( bool disposing )
+        //{
+        //    if (disposing)
+        //    {
+        //        // free managed resources
+        //        if (storage != null)
+        //        {
+        //            storage.Dispose( );
+        //            storage = null;
+        //        }
+        //    }
+        //}
 
 
 

@@ -26,70 +26,70 @@ namespace test.NeuronNetwork
         }
 
 
-        [Test]
-        public void PushPopTestDBN()
-        {
-            DeepBeliefNetwork network = new DeepBeliefNetwork(6, 2, 9);
+        //[Test]
+        //public void PushPopTestDBN()
+        //{
+        //    DeepBeliefNetwork network = new DeepBeliefNetwork( 6, 2, 9 );
 
-            Assert.AreEqual(2, network.Machines.Count);
-            Assert.AreEqual(6, network.InputsCount);
-            Assert.AreEqual(9, network.OutputCount);
-            Assert.AreEqual(2, network.Machines[0].Hidden.Neurons.Length);
-            Assert.AreEqual(9, network.Machines[1].Hidden.Neurons.Length);
-            Assert.AreEqual(6, network.Machines[0].Visible.Neurons.Length);
-            Assert.AreEqual(2, network.Machines[1].Visible.Neurons.Length);
+        //    Assert.AreEqual( 2, network.Machines.Count );
+        //    Assert.AreEqual( 6, network.InputsCount );
+        //    Assert.AreEqual( 9, network.OutputCount );
+        //    Assert.AreEqual( 2, network.Machines[0].Hidden.Neurons.Length );
+        //    Assert.AreEqual( 9, network.Machines[1].Hidden.Neurons.Length );
+        //    Assert.AreEqual( 6, network.Machines[0].Visible.Neurons.Length );
+        //    Assert.AreEqual( 2, network.Machines[1].Visible.Neurons.Length );
 
-            network.Pop();
+        //    network.Pop( );
 
-            Assert.AreEqual(1, network.Machines.Count);
-            Assert.AreEqual(6, network.InputsCount);
-            Assert.AreEqual(2, network.OutputCount);
-            Assert.AreEqual(2, network.Machines[0].Hidden.Neurons.Length);
-            Assert.AreEqual(6, network.Machines[0].Visible.Neurons.Length);
+        //    Assert.AreEqual( 1, network.Machines.Count );
+        //    Assert.AreEqual( 6, network.InputsCount );
+        //    Assert.AreEqual( 2, network.OutputCount );
+        //    Assert.AreEqual( 2, network.Machines[0].Hidden.Neurons.Length );
+        //    Assert.AreEqual( 6, network.Machines[0].Visible.Neurons.Length );
 
-            network.Push(4);
-            network.Push(10);
+        //    network.Push( 4 );
+        //    network.Push( 10 );
 
-            Assert.AreEqual(3, network.Machines.Count);
-            Assert.AreEqual(6, network.InputsCount);
-            Assert.AreEqual(10, network.OutputCount);
-            Assert.AreEqual(2, network.Machines[0].Hidden.Neurons.Length);
-            Assert.AreEqual(4, network.Machines[1].Hidden.Neurons.Length);
-            Assert.AreEqual(10, network.Machines[2].Hidden.Neurons.Length);
+        //    Assert.AreEqual( 3, network.Machines.Count );
+        //    Assert.AreEqual( 6, network.InputsCount );
+        //    Assert.AreEqual( 10, network.OutputCount );
+        //    Assert.AreEqual( 2, network.Machines[0].Hidden.Neurons.Length );
+        //    Assert.AreEqual( 4, network.Machines[1].Hidden.Neurons.Length );
+        //    Assert.AreEqual( 10, network.Machines[2].Hidden.Neurons.Length );
 
-            Assert.AreEqual(6, network.Machines[0].Visible.Neurons.Length);
-            Assert.AreEqual(2, network.Machines[1].Visible.Neurons.Length);
-            Assert.AreEqual(4, network.Machines[2].Visible.Neurons.Length);
+        //    Assert.AreEqual( 6, network.Machines[0].Visible.Neurons.Length );
+        //    Assert.AreEqual( 2, network.Machines[1].Visible.Neurons.Length );
+        //    Assert.AreEqual( 4, network.Machines[2].Visible.Neurons.Length );
 
-            network.Pop();
+        //    network.Pop( );
 
-            Assert.AreEqual(2, network.Machines.Count);
-            Assert.AreEqual(6, network.InputsCount);
-            Assert.AreEqual(4, network.OutputCount);
-            Assert.AreEqual(2, network.Machines[0].Hidden.Neurons.Length);
-            Assert.AreEqual(4, network.Machines[1].Hidden.Neurons.Length);
+        //    Assert.AreEqual( 2, network.Machines.Count );
+        //    Assert.AreEqual( 6, network.InputsCount );
+        //    Assert.AreEqual( 4, network.OutputCount );
+        //    Assert.AreEqual( 2, network.Machines[0].Hidden.Neurons.Length );
+        //    Assert.AreEqual( 4, network.Machines[1].Hidden.Neurons.Length );
 
-            Assert.AreEqual(6, network.Machines[0].Visible.Neurons.Length);
-            Assert.AreEqual(2, network.Machines[1].Visible.Neurons.Length);
-        }
+        //    Assert.AreEqual( 6, network.Machines[0].Visible.Neurons.Length );
+        //    Assert.AreEqual( 2, network.Machines[1].Visible.Neurons.Length );
+        //}
 
         [Test]
         public void ConstructorTestDBN()
         {
-            DeepBeliefNetwork network = new DeepBeliefNetwork(6, 2, 1);
+            DeepBeliefNetwork network = new DeepBeliefNetwork( 6, 2, 1 );
 
-            Assert.AreEqual(2, network.Machines.Count);
-            Assert.AreEqual(6, network.InputsCount);
-            Assert.AreEqual(1, network.OutputCount);
-            Assert.AreEqual(2, network.Machines[0].Hidden.Neurons.Length);
-            Assert.AreEqual(1, network.Machines[1].Hidden.Neurons.Length);
-            Assert.AreEqual(6, network.Machines[0].Visible.Neurons.Length);
-            Assert.AreEqual(2, network.Machines[1].Visible.Neurons.Length);
+            Assert.AreEqual( 2, network.Machines.Count );
+            Assert.AreEqual( 6, network.InputsCount );
+            Assert.AreEqual( 1, network.OutputCount );
+            Assert.AreEqual( 2, network.Machines[0].Hidden.Neurons.Length );
+            Assert.AreEqual( 1, network.Machines[1].Hidden.Neurons.Length );
+            Assert.AreEqual( 6, network.Machines[0].Visible.Neurons.Length );
+            Assert.AreEqual( 2, network.Machines[1].Visible.Neurons.Length );
         }
 
-        private static DeepBeliefNetwork createNetwork(double[][] inputs)
+        private static DeepBeliefNetwork createNetwork( double[][] inputs )
         {
-            DeepBeliefNetwork network = new DeepBeliefNetwork(6, 2, 1);
+            DeepBeliefNetwork network = new DeepBeliefNetwork( 6, 2, 1 );
 
             network.Machines[0].Hidden.Neurons[0].Weights[0] = 0.00461421;
             network.Machines[0].Hidden.Neurons[0].Weights[1] = 0.04337112;
@@ -114,12 +114,12 @@ namespace test.NeuronNetwork
             network.Machines[0].Visible.Neurons[4].Threshold = 0;
             network.Machines[0].Visible.Neurons[5].Threshold = 0;
 
-            network.UpdateVisibleWeights();
+            network.UpdateVisibleWeights( );
 
 
-            DeepBeliefNetworkLearning target = new DeepBeliefNetworkLearning(network)
+            DeepBeliefNetworkLearning target = new DeepBeliefNetworkLearning( network )
             {
-                Algorithm = (h, v, i) => new ContrastiveDivergenceLearning(h, v)
+                Algorithm = ( h, v, i ) => new ContrastiveDivergenceLearning( h, v )
             };
 
             for (int layer = 0; layer < 2; layer++)
@@ -127,19 +127,18 @@ namespace test.NeuronNetwork
 
                 target.LayerIndex = layer;
 
-                double[][] layerInputs = target.GetLayerInput(inputs);
+                double[][] layerInputs = target.GetLayerInput( inputs );
 
                 int iterations = 5000;
                 double[] errors = new double[iterations];
                 for (int i = 0; i < iterations; i++)
-                    errors[i] = target.RunEpoch(layerInputs);
+                    errors[i] = target.RunEpoch( layerInputs );
             }
 
             return network;
         }
 
 
-        // [Test]
         //    public void ExampleTest1()
         //    {
         //        Accord.Math.Tools.SetupGenerator(0);
@@ -200,34 +199,6 @@ namespace test.NeuronNetwork
         //        }
 
 
-
-        //        // Supervised learning on entire network, to provide output classification.
-        //        var backpropagation = new BackPropagationLearning(network)
-        //        {
-        //            LearningRate = 0.1,
-        //            Momentum = 0.5
-        //        };
-
-        //        // Run supervised learning.
-        //        for (int i = 0; i < 5000; i++)
-        //            backpropagation.RunEpoch(inputs, outputs);
-
-
-        //        // Test the resulting accuracy.
-        //        int correct = 0;
-        //        for (int i = 0; i < inputs.Length; i++)
-        //        {
-        //            double[] outputValues = network.Compute(inputs[i]);
-        //            double outputResult = outputValues.First() >= 0.5 ? 1 : 0;
-
-        //            if (outputResult == outputs[i].First())
-        //            {
-        //                correct++;
-        //            }
-        //        }
-
-        //        Assert.AreEqual(4, correct);
-        //    }
 
 
     }

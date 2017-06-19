@@ -1,12 +1,10 @@
-﻿using System;
-using LearningFoundation;
-using NeuralNetworks.Core;
-using NeuralNetworks.Core.Layers;
-using NeuralNetworks.Core.Neurons;
+﻿using LearningFoundation;
 using NeuralNetworks.Core.ActivationFunctions;
+using NeuralNetworks.Core.Layers;
 using NeuralNetworks.Core.Networks;
+using NeuralNetworks.Core.Neurons;
 
-namespace NeuralNet.RestrictedBoltmannMachine
+namespace NeuralNet.RestrictedBoltzmannMachine
 {
     public class RestrictedBoltzmannMachine : ActivationNetwork
     {
@@ -15,28 +13,24 @@ namespace NeuralNet.RestrictedBoltmannMachine
         private StochasticLayer hidden;
 
         ///   Gets the visible layer of the machine.
-
         public StochasticLayer Visible
         {
             get { return visible; }
         }
 
-
         ///   Gets the hidden layer of the machine.
-
         public StochasticLayer Hidden
         {
             get { return hidden; }
         }
 
-
-
         ///   Creates a new RBM Class with input number and hidden neuron number      
+        ///   
         /// <param name="inputsCount">The number of inputs for the machine.</param>
         /// <param name="hiddenNeurons">The number of hidden neurons in the machine.</param>
-
-        public RestrictedBoltzmannMachine(int inputsCount, int hiddenNeurons)
-            : this(new BernoulliFunction(alpha: 1), inputsCount, hiddenNeurons) { }
+        /// 
+        public RestrictedBoltzmannMachine( int inputsCount, int hiddenNeurons )
+            : this( new BernoulliFunction( alpha: 1 ), inputsCount, hiddenNeurons ) { }
 
 
         ///   Creates a new RBM class with hiden layer and visible layer     
@@ -44,103 +38,72 @@ namespace NeuralNet.RestrictedBoltmannMachine
         /// <param name="hidden">The hidden layer to be added in the machine.</param>
         /// <param name="visible">The visible layer to be added in the machine.</param>
         /// 
-        public RestrictedBoltzmannMachine(StochasticLayer hidden, StochasticLayer visible)
-            : base(null, hidden.InputsCount, 0)
+        public RestrictedBoltzmannMachine( StochasticLayer hidden, StochasticLayer visible )
+            : base( null, hidden.InputsCount, 0 )
         {
             this.hidden = hidden;
             this.visible = visible;
             base.layers[0] = hidden;
         }
-
-
-        ///   Creates a new RBM class
-
+        
+        ///   Creates a new RBM class with the activation function, inputsCount and hidden Neurons
+        ///   
         /// <param name="function">The activation function to use in the network neurons.</param>
         /// <param name="inputsCount">The number of inputs for the machine.</param>
         /// <param name="hiddenNeurons">The number of hidden neurons in the machine.</param>
         /// 
-        public RestrictedBoltzmannMachine(IStochasticFunction function, int inputsCount, int hiddenNeurons)
-            : base(function, inputsCount, 1)
+        public RestrictedBoltzmannMachine( IStochasticFunction function, int inputsCount, int hiddenNeurons )
+            : base( function, inputsCount, 1 )
         {
-            this.visible = new StochasticLayer(function, inputsCount, hiddenNeurons);
-            this.hidden = new StochasticLayer(function, hiddenNeurons, inputsCount);
+            this.visible = new StochasticLayer( function, inputsCount, hiddenNeurons );
+            this.hidden = new StochasticLayer( function, hiddenNeurons, inputsCount );
             base.layers[0] = hidden;
         }
 
         ///Compute the network output vector using the input vector
-        public override double[] Compute(double[] input)
+        public override double[] Compute( double[] input )
         {
-            return hidden.Compute(input);
+            return hidden.Compute( input );
         }
 
         /// Resconstruc an input vector using a given output
-        public double[] Reconstruct(double[] output)
+        public double[] Reconstruct( double[] output )
         {
-            return visible.Compute(output);
+            return visible.Compute( output );
         }
+
         ///   Samples an output vector from the network with an input vector.
         ///   Output is A possible output considering the stochastic activations of the network.
-        public double[] GenerateOutput(double[] input)
+        public double[] GenerateOutput( double[] input )
         {
-            return hidden.Generate(input);
+            return hidden.Generate( input );
         }
-
-
-        ///   Samples an input vector from the network        ///   given an output vector.
-        ///   Output is         ///   A possible reconstruction considering the        ///   stochastic activations of the network.
-
-        public double[] GenerateInput(double[] output)
+        
+        ///   Samples an input vector from the network  given an output vector.
+        ///   Output is a possible reconstruction considering the stochastic activations of the network.
+        public double[] GenerateInput( double[] output )
         {
-            return visible.Generate(output);
-        }
-
-
-        /// <summary>
-        ///   Constructs a Gaussian-Bernoulli network with 
-        ///   visible Gaussian units and hidden Bernoulli units.
-        /// </summary>
-        /// 
-        /// <param name="inputsCount">The number of inputs for the machine.</param>
-        /// <param name="hiddenNeurons">The number of hidden neurons in the machine.</param>
-        /// 
-        /// <returns>A Gaussian-Bernoulli Restricted Boltzmann Machine</returns>
-        /// 
-        public static RestrictedBoltzmannMachine CreateGaussianBernoulli(int inputsCount, int hiddenNeurons)
-        {
-            RestrictedBoltzmannMachine network = new RestrictedBoltzmannMachine(inputsCount, hiddenNeurons);
-
-            foreach (var neuron in network.Visible.Neurons)
-                neuron.ActivationFunction = new GaussianFunction();
-
-            return network;
+            return visible.Generate( output );
         }
 
         /// <summary>
-        ///   Creates a new <see cref="ActivationNetwork"/> from this instance.
+        ///   Creates a new Activation network from this instance.
         /// </summary>
         /// 
         /// <param name="outputs">The number of output neurons in the last layer.</param>
+        /// /// <param name="function">The activation function to use in the last layer.</param>
         /// 
-        /// <returns>An <see cref="ActivationNetwork"/> containing this network.</returns>
+        /// <returns>An Activation Network containing this network.</returns>
         /// 
-        public ActivationNetwork ToActivationNetwork(int outputs)
+        public ActivationNetwork ToActivationNetwork( int outputs )
         {
-            return ToActivationNetwork(new SigmoidFunction(alpha: 1), outputs);
-        }
-
-        /// <summary>
-        ///   Creates a new <see cref="ActivationNetwork"/> from this instance.
-        /// </summary>
+            return ToActivationNetwork( new SigmoidFunction( alpha: 1 ), outputs );
+        }       
         /// 
-        /// <param name="outputs">The number of output neurons in the last layer.</param>
-        /// <param name="function">The activation function to use in the last layer.</param>
-        /// 
-        /// <returns>An <see cref="ActivationNetwork"/> containing this network.</returns>
-        /// 
-        public ActivationNetwork ToActivationNetwork(IActivationFunction function, int outputs)
+        public ActivationNetwork ToActivationNetwork( IActivationFunction function, int outputs )
         {
-            ActivationNetwork ann = new ActivationNetwork(function,
-                inputsCount, hidden.Neurons.Length, outputs);
+            ActivationNetwork ann = new ActivationNetwork( function,
+                inputsCount, hidden.Neurons.Length, outputs );
 
             // For each neuron
             for (int i = 0; i < hidden.Neurons.Length; i++)
@@ -165,7 +128,7 @@ namespace NeuralNet.RestrictedBoltmannMachine
         /// 
         public void UpdateVisibleWeights()
         {
-            Visible.CopyReversedWeightsFrom(Hidden);
+            Visible.CopyReversedWeightsFrom( Hidden );
         }
     }
 }

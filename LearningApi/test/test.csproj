@@ -19,6 +19,8 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="NeuronNetwork\DeepBeliefNetworkLearning.cs" />
+    <Compile Remove="NeuronNetwork\DeepBeliefNetworkTest.cs" />
     <Compile Remove="NeuronNetwork\TestApi.cs" />
   </ItemGroup>
 

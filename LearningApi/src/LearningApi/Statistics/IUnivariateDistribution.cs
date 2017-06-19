@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using LearningFoundation.Statistics;
-
-namespace LearningFoundation.Statistics
+﻿namespace LearningFoundation.Statistics
 {
     public interface IUnivariateDistribution<TObservation>
         : IDistribution<TObservation>, IDistribution

@@ -1,163 +1,140 @@
-﻿using System;
-using System.ComponentModel;
-using LearningFoundation.Attributes;
-using LearningFoundation.Statistics;
+﻿using LearningFoundation.Attributes;
 using LearningFoundation.MathFunction;
-using LearningFoundation.Fitting;
-
-
+using System;
+using System.ComponentModel;
 namespace LearningFoundation.Statistics
 {
+    /// <summary>
+    ///   Continuous Uniform Distribution.
+    /// </summary>
+    /// 
+    /// <remarks>
+    /// <para>
+    ///   The continuous uniform distribution or rectangular distribution is a family of 
+    ///   symmetric probability distributions such that for each member of the family, all
+    ///   intervals of the same length on the distribution's support are equally probable.
+    ///   The support is defined by the two parameters, a and b, which are its minimum and
+    ///   maximum values. The distribution is often abbreviated U(a,b). It is the maximum
+    ///   entropy probability distribution for a random variate X under no constraint other
+    ///   than that it is contained in the distribution's support.</para>
+    ///   
+    /// 
+
     [Serializable]
-    public class UniformContinuousDistribution : UnivariateContinuousDistribution,
-        IFittableDistribution<double, IFittingOptions>,
-        ISampleableDistribution<double>
+    public class UniformContinuousDistribution : UnivariateContinuousDistribution, ISampleableDistribution<double>
     {
         private double a;
         private double b;
-        private bool immutable;
 
-        public UniformContinuousDistribution() : this(0, 1) { }
-        public UniformContinuousDistribution(DoubleRange range)
-            : this(range.Min, range.Max)
-        {
-        }
+        /// <summary>
+        ///   Creates a new uniform distribution defined in the interval [0;1].
+        /// </summary>
+        /// 
+        public UniformContinuousDistribution() : this( 0, 1 ) { }
+
+        /// <summary>
+        ///   Creates a new uniform distribution defined in the interval [a;b].
+        /// </summary>
+        /// 
+        /// <param name="a">The starting number a.</param>
+        /// <param name="b">The ending number b.</param>
+        /// 
         public UniformContinuousDistribution(
-            [Real, DefaultValue(0)] double a,
-            [Real, DefaultValue(1)] double b)
+            [Real, DefaultValue( 0 )] double a,
+            [Real, DefaultValue( 1 )] double b )
         {
             if (a > b)
             {
-                throw new ArgumentOutOfRangeException("b",
-                    "The starting number a must be lower than b.");
+                throw new ArgumentOutOfRangeException( "b",
+                    "The starting number a must be lower than b." );
             }
-
             this.a = a;
             this.b = b;
         }
-
-        public double Minimum { get { return a; } }
-        public double Maximum { get { return b; } }
-        public double Length { get { return b - a; } }
-        public override double Mean
-        {
-            get { return (a + b) / 2; }
-        }
-        public override double Variance
-        {
-            get { return ((b - a) * (b - a)) / 12.0; }
-        }
-        public override double Mode
-        {
-            get { return Mean; }
-        }
-        public override double Entropy
-        {
-            get { return Math.Log(b - a); }
-        }
+        /// <summary>
+        ///   Gets the support interval for this distribution.
+        /// </summary>
+        /// 
+        /// <value>
+        ///   A <see cref="DoubleRange" /> containing
+        ///   the support interval for this distribution.
+        /// </value>
+        /// 
         public override DoubleRange Support
         {
-            get { return new DoubleRange(a, b); }
+            get { return new DoubleRange( a, b ); }
         }
-        public override double DistributionFunction(double x)
+
+        /// <summary>
+        ///   Gets the cumulative distribution function (cdf) for
+        ///   this distribution evaluated at point <c>x</c>.
+        /// </summary>
+        /// 
+        /// <param name="x">A single point in the distribution range.</param>
+        /// 
+        /// <remarks>
+        ///   The Cumulative Distribution Function (CDF) describes the cumulative
+        ///   probability that a given value or any value smaller than it will occur.
+        /// </remarks>
+        /// 
+        public override double DistributionFunction( double x )
         {
             if (x < a)
                 return 0;
-
             if (x >= b)
                 return 1;
-
             return (x - a) / (b - a);
         }
-        public override double ProbabilityDensityFunction(double x)
-        {
-            if (x > a && x <= b)
-                return 1.0 / (b - a);
-            else return 0;
-        }
-        public override double LogProbabilityDensityFunction(double x)
-        {
-            if (x >= a && x <= b)
-                return Math.Log(b - a);
-            else return double.NegativeInfinity;
-        }
-        public override void Fit(double[] observations, double[] weights, Fitting.IFittingOptions options)
-        {
-            if (immutable)
-                throw new InvalidOperationException("This object can not be modified.");
 
-            if (options != null)
-                throw new ArgumentException("This method does not accept fitting options.");
-
-            if (weights != null)
-                throw new ArgumentException("This distribution does not support weighted samples.");
-
-            a = observations.Min();
-            b = observations.Max();
+        /// <summary>
+        ///   Generates a random vector of observations from the current distribution.
+        /// </summary>
+        /// <param name="samples">The number of samples to generate.</param>
+        /// <param name="result">The location where to store the samples.</param>
+        /// <param name="a">The starting number a.</param>
+        /// <param name="b">The ending number b.</param>
+        /// <returns>A random vector of observations drawn from this distribution.</returns>
+        /// 
+        public override double[] Generate( int samples, double[] result )
+        {
+            return Random( a, b, samples, result );//test
         }
 
-        public override object Clone()
-        {
-            return new UniformContinuousDistribution(a, b);
-        }
-
-        public static UniformContinuousDistribution Standard { get { return standard; } }
-
-        private static readonly UniformContinuousDistribution standard = new UniformContinuousDistribution() { immutable = true };
-
-        public static UniformContinuousDistribution Estimate(double[] observations)
-        {
-            var n = new UniformContinuousDistribution();
-            n.Fit(observations);
-            return n;
-        }
-        public override double[] Generate(int samples, double[] result)
-        {
-            return Random(a, b, samples, result);
-        }
-        public override double Generate()
-        {
-            return Random(a, b);
-        }
-
-        public static double[] Random(double a, double b, int samples)
-        {
-            return Random(a, b, samples, new double[samples]);
-        }
-        public static double[] Random(double a, double b, int samples, double[] result)
+        /// <summary>
+        ///   Generates a random vector of observations from the 
+        ///   Uniform distribution with the given parameters.
+        /// </summary>
+        /// <returns>An array of double values sampled from the specified Uniform distribution.</returns>
+        /// 
+        public static double[] Random( double a, double b, int samples, double[] result )
         {
             var rand = Generator.Random;
             for (int i = 0; i < samples; i++)
-                result[i] = rand.NextDouble() * (b - a) + a;
+                result[i] = rand.NextDouble( ) * (b - a) + a;
             return result;
         }
 
-        public static double[] Random(int samples)
+        /// <summary>
+        ///   Generates a random observation from the current distribution.
+        /// </summary>
+        /// <returns>A random observations drawn from this distribution.</returns>
+        /// 
+        public override double Generate()
         {
-            return Random(samples, new double[samples]);
-        }
-        public static double[] Random(int samples, double[] result)
-        {
-            var random = Generator.Random;
-            for (int i = 0; i < samples; i++)
-                result[i] = random.NextDouble();
-            return result;
-        }
-        public static double Random()
-        {
-            return Generator.Random.NextDouble();
-        }
-        public static double Random(double a, double b)
-        {
-            return Generator.Random.NextDouble() * (b - a) + a;
+            return Random( a, b );//test
         }
 
-        public override string ToString(string format, IFormatProvider formatProvider)
+        /// <summary>
+        ///   Generates a random observation from the 
+        ///   Uniform distribution with the given parameters.
+        /// </summary>
+        /// <returns>A random double value sampled from the specified Uniform distribution.</returns>
+        /// 
+        public static double Random( double a, double b )
         {
-            return String.Format(formatProvider, "U(x; a = {0}, b = {1})",
-                a.ToString(format, formatProvider),
-                b.ToString(format, formatProvider));
+            return Generator.Random.NextDouble( ) * (b - a) + a;
         }
+
 
     }
 }

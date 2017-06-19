@@ -122,7 +122,7 @@ namespace LearningFoundation.Statistics
             var vars = colData.VarianceOfS();
 
             //calculate summ of square 
-            return System.Math.Sqrt(vars);
+            return Math.Sqrt(vars);
         }
 
         /// <summary>

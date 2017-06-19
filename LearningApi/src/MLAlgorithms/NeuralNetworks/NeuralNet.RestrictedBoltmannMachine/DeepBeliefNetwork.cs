@@ -1,23 +1,37 @@
-﻿using System;
-using System.IO;
-using System.Collections.Generic;
-using System.Text;
+﻿using LearningFoundation;
 using NeuralNetworks.Core.ActivationFunctions;
 using NeuralNetworks.Core.Layers;
-using NeuralNetworks.Core.Neurons;
 using NeuralNetworks.Core.Networks;
-using LearningFoundation;
+using NeuralNetworks.Core.Neurons;
+using System;
+using System.Collections.Generic;
 
 
-namespace NeuralNet.RestrictedBoltmannMachine
+namespace NeuralNet.RestrictedBoltzmannMachine
 {
+    /// <summary>
+    ///   Deep Belief Network.
+    /// </summary>
+    /// 
+    /// <remarks>
+    ///   The Deep Belief Network can be seen as a collection of stacked
+    ///   <see cref="RestrictedBoltzmannMachine">Restricted Boltzmann
+    ///   Machines</see> disposed as layers of a network. In turn, the
+    ///   whole network can be seen as an stochastic activation network
+    ///   in which the neurons activate within some given probability.
+    /// </remarks>
+    /// 
     [Serializable]
     public class DeepBeliefNetwork : ActivationNetwork
     {
 
         private List<RestrictedBoltzmannMachine> machines;
 
-      
+        /// <summary>
+        ///   Gets the number of output neurons in the network
+        ///   (the size of the computed output vectors).
+        /// </summary>
+        /// 
         public int OutputCount
         {
             get
@@ -27,35 +41,52 @@ namespace NeuralNet.RestrictedBoltmannMachine
             }
         }
 
-       
+        /// <summary>
+        ///   Gets the Restricted Boltzmann Machines
+        ///   on each layer of this deep network.
+        /// </summary>
+        /// 
         public IList<RestrictedBoltzmannMachine> Machines
         {
             get { return machines; }
         }
 
-    
-        public DeepBeliefNetwork(int inputsCount, params int[] hiddenNeurons)
-            : this(new BernoulliFunction(alpha: 1), inputsCount, hiddenNeurons) { }
+        /// <summary>
+        ///   Creates a new <see cref="DeepBeliefNetwork"/>.
+        /// </summary>
+        /// 
+        /// <param name="inputsCount">The number of inputs for the network.</param>
+        /// <param name="hiddenNeurons">The number of hidden neurons in each layer.</param>
+        /// 
+        public DeepBeliefNetwork( int inputsCount, params int[] hiddenNeurons )
+            : this( new BernoulliFunction( alpha: 1 ), inputsCount, hiddenNeurons ) { }
 
 
-     
-        public DeepBeliefNetwork(IStochasticFunction function, int inputsCount, params int[] hiddenNeurons)
-            : base(function, inputsCount, hiddenNeurons)
+        /// <summary>
+        ///   Creates a new <see cref="DeepBeliefNetwork"/>.
+        /// </summary>
+        /// 
+        /// <param name="function">The activation function to be used in the network neurons.</param>
+        /// <param name="inputsCount">The number of inputs for the network.</param>
+        /// <param name="hiddenNeurons">The number of hidden neurons in each layer.</param>
+        /// 
+        public DeepBeliefNetwork( IStochasticFunction function, int inputsCount, params int[] hiddenNeurons )
+            : base( function, inputsCount, hiddenNeurons )
         {
-            machines = new List<RestrictedBoltzmannMachine>();
+            machines = new List<RestrictedBoltzmannMachine>( );
 
             // Create first layer
-            machines.Add(new RestrictedBoltzmannMachine(
-                hidden: new StochasticLayer(function, hiddenNeurons[0], inputsCount),
-                visible: new StochasticLayer(function, inputsCount, hiddenNeurons[0]))
+            machines.Add( new RestrictedBoltzmannMachine(
+                hidden: new StochasticLayer( function, hiddenNeurons[0], inputsCount ),
+                visible: new StochasticLayer( function, inputsCount, hiddenNeurons[0] ) )
             );
 
             // Create other layers
             for (int i = 1; i < hiddenNeurons.Length; i++)
             {
-                machines.Add(new RestrictedBoltzmannMachine(
-                    hidden: new StochasticLayer(function, hiddenNeurons[i], hiddenNeurons[i - 1]),
-                    visible: new StochasticLayer(function, hiddenNeurons[i - 1], hiddenNeurons[i])));
+                machines.Add( new RestrictedBoltzmannMachine(
+                    hidden: new StochasticLayer( function, hiddenNeurons[i], hiddenNeurons[i - 1] ),
+                    visible: new StochasticLayer( function, hiddenNeurons[i - 1], hiddenNeurons[i] ) ) );
             }
 
             // Override AForge layers
@@ -64,11 +95,17 @@ namespace NeuralNet.RestrictedBoltmannMachine
                 layers[i] = machines[i].Hidden;
         }
 
-        
-        public DeepBeliefNetwork(int inputsCount, params RestrictedBoltzmannMachine[] layers)
-            : base(null, inputsCount, new int[layers.Length])
+        /// <summary>
+        ///   Creates a new Deep Belief Network
+        /// </summary>
+        /// 
+        /// <param name="inputsCount">The number of inputs for the network.</param>
+        /// <param name="layers">The layers to add to the deep network.</param>
+        /// 
+        public DeepBeliefNetwork( int inputsCount, params RestrictedBoltzmannMachine[] layers )
+            : base( null, inputsCount, new int[layers.Length] )
         {
-            machines = new List<RestrictedBoltzmannMachine>(layers);
+            machines = new List<RestrictedBoltzmannMachine>( layers );
 
             // Override AForge layers
             base.layers = new Layer[machines.Count];
@@ -76,97 +113,191 @@ namespace NeuralNet.RestrictedBoltmannMachine
                 base.layers[i] = machines[i].Hidden;
         }
 
-       
-        public override double[] Compute(double[] input)
+        /// <summary>
+        ///   Computes the network's outputs for a given input.
+        /// </summary>
+        /// 
+        /// <param name="input">The input vector.</param>
+        /// 
+        /// <returns>
+        ///   Returns the network's output for the given input.
+        /// </returns>
+        /// 
+        public override double[] Compute( double[] input )
         {
             double[] output = input;
 
             foreach (RestrictedBoltzmannMachine layer in machines)
-                output = layer.Hidden.Compute(output);
+                output = layer.Hidden.Compute( output );
 
             return output;
         }
 
-       
-        public double[] Compute(double[] input, int layerIndex)
+        /// <summary>
+        ///   Computes the network's outputs for a given input.
+        /// </summary>
+        /// 
+        /// <param name="input">The input vector.</param>
+        /// <param name="layerIndex">The index of the layer.</param>
+        /// 
+        /// <returns>
+        ///   Returns the network's output for the given input.
+        /// </returns>
+        /// 
+        public double[] Compute( double[] input, int layerIndex )
         {
             double[] output = input;
 
             for (int i = 0; i <= layerIndex; i++)
-                output = machines[i].Hidden.Compute(output);
+                output = machines[i].Hidden.Compute( output );
 
             return output;
         }
+        /// <summary>
+        ///   Reconstructs a input vector for a given output.
+        /// </summary>
+        /// 
+        /// <param name="output">The output vector.</param>
+        /// 
+        /// <returns>
+        ///   Returns a probable input vector which may 
+        ///   have originated the given output.
+        /// </returns>
+        /// 
 
-      
-        public double[] Reconstruct(double[] output)
+        public double[] Reconstruct( double[] output )
         {
             double[] input = output;
 
             for (int i = machines.Count - 1; i >= 0; i--)
-                input = machines[i].Visible.Compute(input);
+                input = machines[i].Visible.Compute( input );
 
             return input;
         }
 
-       
-        public double[] Reconstruct(double[] output, int layerIndex)
+        /// <summary>
+        ///   Reconstructs a input vector using the output
+        ///   vector of a given layer.
+        /// </summary>
+        /// 
+        /// <param name="output">The output vector.</param>
+        /// <param name="layerIndex">The index of the layer.</param>
+        /// 
+        /// <returns>
+        ///   Returns a probable input vector which may 
+        ///   have originated the given output in the 
+        ///   indicated layer.
+        /// </returns>
+        /// 
+        public double[] Reconstruct( double[] output, int layerIndex )
         {
             double[] input = output;
 
             for (int i = layerIndex; i >= 0; i--)
-                input = machines[i].Visible.Compute(input);
+                input = machines[i].Visible.Compute( input );
 
             return input;
         }
 
-     
-        public double[] GenerateOutput(double[] input)
+        /// <summary>
+        ///   Samples an output vector from the network
+        ///   given an input vector.
+        /// </summary>
+        /// 
+        /// <param name="input">An input vector.</param>
+        /// 
+        /// <returns>
+        ///   A possible output considering the
+        ///   stochastic activations of the network.
+        /// </returns>
+        /// 
+        public double[] GenerateOutput( double[] input )
         {
             double[] output = input;
 
             foreach (RestrictedBoltzmannMachine layer in machines)
-                output = layer.Hidden.Generate(output);
+                output = layer.Hidden.Generate( output );
 
             return output;
         }
 
-      
-        public double[] GenerateOutput(double[] input, int layerIndex)
+        /// <summary>
+        ///   Samples an output vector from the network
+        ///   given an input vector.
+        /// </summary>
+        /// 
+        /// <param name="input">An input vector.</param>
+        /// <param name="layerIndex">The index of the layer.</param>
+        /// 
+        /// <returns>
+        ///   A possible output considering the
+        ///   stochastic activations of the network.
+        /// </returns>
+        /// 
+        public double[] GenerateOutput( double[] input, int layerIndex )
         {
             double[] output = input;
 
             for (int i = 0; i <= layerIndex; i++)
-                output = machines[i].Hidden.Generate(output);
+                output = machines[i].Hidden.Generate( output );
 
             return output;
         }
 
-        
-        public double[] GenerateInput(double[] output)
+        /// <summary>
+        ///   Samples an input vector from the network
+        ///   given an output vector.
+        /// </summary>
+        /// 
+        /// <param name="output">An output vector.</param>
+        /// 
+        /// <returns>
+        ///   A possible reconstruction considering the
+        ///   stochastic activations of the network.
+        /// </returns>
+        /// 
+        public double[] GenerateInput( double[] output )
         {
             double[] input = output;
 
             for (int i = layers.Length - 1; i >= 0; i--)
-                input = machines[i].Visible.Generate(input);
+                input = machines[i].Visible.Generate( input );
 
             return input;
         }
 
+        /// <summary>
+        ///   Inserts a new layer at the end of this network.
+        /// </summary>
+        /// 
+        /// <param name="neurons">The number of neurons in the new layer.</param>
+        /// 
 
-      
-        public void Push(int neurons)
+        public void Push( int neurons )
         {
-            Push(neurons, new BernoulliFunction(alpha: 1));
+            Push( neurons, new BernoulliFunction( alpha: 1 ) );
         }
 
-       
-        public void Push(int neurons, IStochasticFunction function)
+        /// <summary>
+        ///   Inserts a new layer at the end of this network.
+        /// </summary>
+        /// 
+        /// <param name="neurons">The number of neurons in the new layer.</param>
+        /// <param name="function">The activation function which should be used by the neurons.</param>
+        /// 
+        public void Push( int neurons, IStochasticFunction function )
         {
-            Push(neurons, function, function);
+            Push( neurons, function, function );
         }
-
-        public void Push(int neurons, IStochasticFunction visibleFunction, IStochasticFunction hiddenFunction)
+        /// <summary>
+        ///   Inserts a new layer at the end of this network.
+        /// </summary>
+        /// 
+        /// <param name="neurons">The number of neurons in the layer.</param>
+        /// <param name="visibleFunction">The activation function which should be used by the visible neurons.</param>
+        /// <param name="hiddenFunction">The activation function which should be used by the hidden neurons.</param>
+        /// 
+        public void Push( int neurons, IStochasticFunction visibleFunction, IStochasticFunction hiddenFunction )
         {
             int lastLayerNeurons;
 
@@ -174,9 +305,9 @@ namespace NeuralNet.RestrictedBoltmannMachine
                 lastLayerNeurons = machines[machines.Count - 1].Hidden.Neurons.Length;
             else lastLayerNeurons = inputsCount;
 
-            machines.Add(new RestrictedBoltzmannMachine(
-                hidden: new StochasticLayer(hiddenFunction, neurons, lastLayerNeurons),
-                visible: new StochasticLayer(visibleFunction, lastLayerNeurons, neurons)));
+            machines.Add( new RestrictedBoltzmannMachine(
+                hidden: new StochasticLayer( hiddenFunction, neurons, lastLayerNeurons ),
+                visible: new StochasticLayer( visibleFunction, lastLayerNeurons, neurons ) ) );
 
             // Override AForge layers
             layers = new Layer[machines.Count];
@@ -184,8 +315,13 @@ namespace NeuralNet.RestrictedBoltmannMachine
                 layers[i] = machines[i].Hidden;
         }
 
-       
-        public void Push(RestrictedBoltzmannMachine network)
+        /// <summary>
+        ///   Stacks a new Boltzmann Machine at the end of this network.
+        /// </summary>
+        /// 
+        /// <param name="network">The machine to be added to the network.</param>
+        /// 
+        public void Push( RestrictedBoltzmannMachine network )
         {
             int lastLayerNeurons;
 
@@ -193,7 +329,7 @@ namespace NeuralNet.RestrictedBoltmannMachine
                 lastLayerNeurons = machines[machines.Count - 1].Hidden.Neurons.Length;
             else lastLayerNeurons = inputsCount;
 
-            machines.Add(network);
+            machines.Add( network );
 
             // Override AForge layers
             layers = new Layer[machines.Count];
@@ -201,13 +337,16 @@ namespace NeuralNet.RestrictedBoltmannMachine
                 layers[i] = machines[i].Hidden;
         }
 
-       
+        /// <summary>
+        ///   Removes the last layer from the network.
+        /// </summary>
+        /// 
         public void Pop()
         {
             if (machines.Count == 0)
                 return;
 
-            machines.RemoveAt(machines.Count - 1);
+            machines.RemoveAt( machines.Count - 1 );
 
             // Override AForge layers
             layers = new Layer[machines.Count];
@@ -215,68 +354,15 @@ namespace NeuralNet.RestrictedBoltmannMachine
                 layers[i] = machines[i].Hidden;
         }
 
-       
+        /// <summary>
+        ///   Updates the weights of the visible layers by copying
+        ///   the reverse of the weights in the hidden layers.
+        /// </summary>
+        /// 
         public void UpdateVisibleWeights()
         {
             foreach (var machine in machines)
-                machine.UpdateVisibleWeights();
+                machine.UpdateVisibleWeights( );
         }
-
-        
-        public static DeepBeliefNetwork CreateGaussianBernoulli(int inputsCount, params int[] hiddenNeurons)
-        {
-            DeepBeliefNetwork network = new DeepBeliefNetwork(inputsCount, hiddenNeurons);
-
-            GaussianFunction gaussian = new GaussianFunction();
-            foreach (StochasticNeuron neuron in network.machines[0].Visible.Neurons)
-                neuron.ActivationFunction = gaussian;
-
-            return network;
-        }
-
-       
-        public static DeepBeliefNetwork CreateMixedNetwork(IStochasticFunction visible,
-            IStochasticFunction hidden, int inputsCount, params int[] hiddenNeurons)
-        {
-            DeepBeliefNetwork network = new DeepBeliefNetwork(hidden, inputsCount, hiddenNeurons);
-
-            foreach (StochasticNeuron neuron in network.machines[0].Visible.Neurons)
-                neuron.ActivationFunction = visible;
-
-            return network;
-        }
-
-       
-        //public new void Save(Stream stream)
-        //{
-        //    BinaryFormatter b = new BinaryFormatter();
-        //    b.Serialize(stream, this);
-        //}
-
-       
-        //public new void Save(string path)
-        //{
-        //    using (FileStream fs = new FileStream(path, FileMode.Create))
-        //    {
-        //        Save(fs);
-        //    }
-        //}
-
-       
-        //public static new DeepBeliefNetwork Load(Stream stream)
-        //{
-        //    BinaryFormatter b = new BinaryFormatter();
-        //    return (DeepBeliefNetwork)b.Deserialize(stream);
-        //}
-
-        
-        //public static new DeepBeliefNetwork Load(string path)
-        //{
-        //    using (FileStream fs = new FileStream(path, FileMode.Open))
-        //    {
-        //        return Load(fs);
-        //    }
-        //}
-
     }
 }

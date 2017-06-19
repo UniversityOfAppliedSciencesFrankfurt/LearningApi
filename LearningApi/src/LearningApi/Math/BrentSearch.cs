@@ -1,94 +1,128 @@
 ﻿using System;
 
-
-
 namespace LearningFoundation.MathFunction
 {
 
-
+    /// <summary>
+    ///   Brent's root finding and minimization algorithms.
+    /// </summary>
+    /// 
+    /// <remarks>
+    /// <para>
+    ///   In numerical analysis, Brent's method is a complicated but popular root-finding 
+    ///   algorithm combining the bisection method, the secant method and inverse quadratic
+    ///   interpolation. It has the reliability of bisection but it can be as quick as some
+    ///   of the less reliable methods. The idea is to use the secant method or inverse quadratic 
+    ///   interpolation if possible, because they converge faster, but to fall back to the more
+    ///   robust bisection method if necessary. Brent's method is due to Richard Brent (1973)
+    ///   and builds on an earlier algorithm of Theodorus Dekker (1969).</para>
+    ///      
+    /// </remarks>
+    /// 
     public sealed class BrentSearch : IOptimizationMethod<double, double>
     {
 
-
+        /// <summary>
+        ///   Gets the number of variables (free parameters)
+        ///   in the optimization problem.
+        /// </summary>
+        /// 
+        /// <value>
+        ///   The number of parameters.
+        /// </value>
+        /// 
         public int NumberOfVariables
         {
             get { return 1; }
             set
             {
                 if (value != 1)
-                    throw new InvalidOperationException("Brent Search supports only one variable.");
+                    throw new InvalidOperationException( "Brent Search supports only one variable." );
             }
         }
-
+        /// <summary>
+        ///   Gets or sets the tolerance margin when
+        ///   looking for an answer. Default is 1e-6.
+        /// </summary>
+        /// 
         public double Tolerance { get; set; }
 
-
+        /// <summary>
+        ///   Gets or sets the lower bound for the search interval <c>a</c>.
+        /// </summary>
+        /// 
         public double LowerBound { get; set; }
 
-
+        /// <summary>
+        ///   Gets or sets the upper bound for the search interval <c>a</c>.
+        /// </summary>
+        /// 
         public double UpperBound { get; set; }
 
-
+        /// <summary>
+        ///   Gets the solution found in the last call
+        /// </summary>
+        /// 
         public double Solution { get; set; }
+        /// <summary>
+        ///   Gets the value at the solution found in the last call
 
+        /// </summary>
+        /// 
 
         public double Value { get; private set; }
 
-
+        /// <summary>
+        ///   Gets the function to be searched.
+        /// </summary>
+        /// 
         public Func<double, double> Function { get; private set; }
 
-
-
-        public BrentSearch(Func<double, double> function, double a, double b)
-        {
-            this.Function = function;
-            this.LowerBound = a;
-            this.UpperBound = b;
-            this.Tolerance = 1e-6;
-        }
-
-
-
-        public bool FindRoot()
-        {
-            Solution = FindRoot(Function, LowerBound, UpperBound, Tolerance);
-            Value = Function(Solution);
-            return true;
-        }
-
-
-        public bool Find(double value)
-        {
-            Solution = Find(Function, value, LowerBound, UpperBound, Tolerance);
-            Value = Function(Solution);
-            return true;
-        }
-
-
+        /// <summary>
+        ///   Finds the minimum of the function in the interval [a;b]
+        /// </summary>
+        /// 
+        /// <returns>The location of the minimum of the function in the given interval.</returns>
+        /// 
         public bool Minimize()
         {
-            Solution = Minimize(Function, LowerBound, UpperBound, Tolerance);
-            Value = Function(Solution);
+            Solution = Minimize( Function, LowerBound, UpperBound, Tolerance );
+            Value = Function( Solution );
             return true;
         }
-
+        /// <summary>
+        ///   Finds the maximum of the function in the interval [a;b]
+        /// </summary>
+        /// 
+        /// <returns>The location of the maximum of the function in the given interval.</returns>
+        /// 
         public bool Maximize()
         {
-            Solution = Maximize(Function, LowerBound, UpperBound, Tolerance);
-            Value = Function(Solution);
+            Solution = Maximize( Function, LowerBound, UpperBound, Tolerance );
+            Value = Function( Solution );
             return true;
         }
 
+        /// <summary>
+        ///   Finds the minimum of a function in the interval [a;b]
+        /// </summary>
+        /// 
+        /// <param name="function">The function to be minimized.</param>
+        /// <param name="lowerBound">Start of search region.</param>
+        /// <param name="upperBound">End of search region.</param>
+        /// <param name="tol">The tolerance for determining the solution.</param>
+        /// 
+        /// <returns>The location of the minimum of the function in the given interval.</returns>
+        /// 
 
-
-        public static double Minimize(Func<double, double> function,
-            double lowerBound, double upperBound, double tol = 1e-6)
+        public static double Minimize( Func<double, double> function,
+            double lowerBound, double upperBound, double tol = 1e-6 )
         {
-            if (Double.IsInfinity(lowerBound))
-                throw new ArgumentOutOfRangeException("lowerBound");
+            if (Double.IsInfinity( lowerBound ))
+                throw new ArgumentOutOfRangeException( "lowerBound" );
 
-            if (Double.IsInfinity(upperBound))
-                throw new ArgumentOutOfRangeException("upperBound");
+            if (Double.IsInfinity( upperBound ))
+                throw new ArgumentOutOfRangeException( "upperBound" );
 
             double x, v, w; // Abscissas
             double fx;      // f(x)             
@@ -100,19 +134,19 @@ namespace LearningFoundation.MathFunction
 
             if (upperBound < lowerBound)
             {
-                throw new ArgumentOutOfRangeException("upperBound",
-                    "The search interval upper bound must be higher than the lower bound.");
+                throw new ArgumentOutOfRangeException( "upperBound",
+                    "The search interval upper bound must be higher than the lower bound." );
             }
 
             if (tol < 0)
             {
-                throw new ArgumentOutOfRangeException("tol",
-                    "Tolerance must be positive.");
+                throw new ArgumentOutOfRangeException( "tol",
+                    "Tolerance must be positive." );
             }
 
             // First step - always gold section
             v = lowerBound + r * (upperBound - lowerBound);
-            fv = function(v);
+            fv = function( v );
             x = v; fx = fv;
             w = v; fw = fv;
 
@@ -124,11 +158,11 @@ namespace LearningFoundation.MathFunction
                 double range = upperBound - lowerBound; // Range over which the minimum
 
                 double middle_range = lowerBound / 2.0 + upperBound / 2.0;
-                double tol_act = Math.Sqrt(Constants.DoubleEpsilon) * Math.Abs(x) + tol / 3;
+                double tol_act = Math.Sqrt( Constants.DoubleEpsilon ) * Math.Abs( x ) + tol / 3;
                 double new_step; // Step at this iteration
 
                 // Check if an acceptable solution has been found
-                if (Math.Abs(x - middle_range) + range / 2 <= 2 * tol_act)
+                if (Math.Abs( x - middle_range ) + range / 2 <= 2 * tol_act)
                     return x;
 
                 // Obtain the gold section step
@@ -137,7 +171,7 @@ namespace LearningFoundation.MathFunction
 
                 // Decide if the interpolation can be tried:
                 // Check if x and w are distinct.
-                if (Math.Abs(x - w) >= tol_act)
+                if (Math.Abs( x - w ) >= tol_act)
                 {
                     // Yes, they are. Interpolation may be tried. The
                     // interpolation step is calculated as p/q, but the
@@ -153,7 +187,7 @@ namespace LearningFoundation.MathFunction
                     if (q > 0) { p = -p; } else { q = -q; }
 
 
-                    if (Math.Abs(p) < Math.Abs(new_step * q) && // If x+p/q falls in [a,b]
+                    if (Math.Abs( p ) < Math.Abs( new_step * q ) && // If x+p/q falls in [a,b]
                         p > q * (lowerBound - x + 2 * tol_act) &&        // not too close to a and 
                         p < q * (upperBound - x - 2 * tol_act))          // b, and isn't too large
                     {
@@ -164,7 +198,7 @@ namespace LearningFoundation.MathFunction
                 }
 
                 // Adjust the step to be not less than tolerance
-                if (Math.Abs(new_step) < tol_act)
+                if (Math.Abs( new_step ) < tol_act)
                 {
                     new_step = (new_step > 0) ? tol_act : -tol_act;
                 }
@@ -174,10 +208,10 @@ namespace LearningFoundation.MathFunction
                 {
 
                     double t = x + new_step;     // Tentative point for the min
-                    double ft = function(t);     // recompute f(tentative point)
+                    double ft = function( t );     // recompute f(tentative point)
 
-                    if (Double.IsNaN(ft) || Double.IsInfinity(ft))
-                        throw new ConvergenceException("Function evaluation didn't return a finite number.");
+                    if (Double.IsNaN( ft ) || Double.IsInfinity( ft ))
+                        throw new ConvergenceException( "Function evaluation didn't return a finite number." );
 
                     if (ft <= fx)
                     {
@@ -214,22 +248,32 @@ namespace LearningFoundation.MathFunction
             }
         }
 
-
-        public static double Maximize(Func<double, double> function,
-            double lowerBound, double upperBound, double tol = 1e-6)
+        /// <summary>
+        ///   Finds the maximum of a function in the interval [a;b]
+        /// </summary>
+        /// 
+        /// <param name="function">The function to be maximized.</param>
+        /// <returns>The location of the maximum of the function in the given interval.</returns>
+        /// 
+        public static double Maximize( Func<double, double> function,
+            double lowerBound, double upperBound, double tol = 1e-6 )
         {
-            return Minimize(x => -function(x), lowerBound, upperBound, tol);
+            return Minimize( x => -function( x ), lowerBound, upperBound, tol );
         }
 
+        /// <summary>
+        ///   Finds the root of a function in the interval [a;b]
+        /// </summary>
+        /// 
 
-        public static double FindRoot(Func<double, double> function,
-            double lowerBound, double upperBound, double tol = 1e-6)
+        public static double FindRoot( Func<double, double> function,
+            double lowerBound, double upperBound, double tol = 1e-6 )
         {
-            if (Double.IsInfinity(lowerBound))
-                throw new ArgumentOutOfRangeException("lowerBound");
+            if (Double.IsInfinity( lowerBound ))
+                throw new ArgumentOutOfRangeException( "lowerBound" );
 
-            if (Double.IsInfinity(upperBound))
-                throw new ArgumentOutOfRangeException("upperBound");
+            if (Double.IsInfinity( upperBound ))
+                throw new ArgumentOutOfRangeException( "upperBound" );
 
 
             double c;               // Abscissas
@@ -237,8 +281,8 @@ namespace LearningFoundation.MathFunction
             double fb;              // f(b)
             double fc;              // f(c)
 
-            fa = function(lowerBound);
-            fb = function(upperBound);
+            fa = function( lowerBound );
+            fb = function( upperBound );
             c = lowerBound; fc = fa;
 
             // Main loop
@@ -253,7 +297,7 @@ namespace LearningFoundation.MathFunction
                 // division operations are delayed until the last moment.
 
 
-                if (Math.Abs(fc) < Math.Abs(fb))
+                if (Math.Abs( fc ) < Math.Abs( fb ))
                 {
                     // Swap data for b to be the best approximation
                     lowerBound = upperBound; fa = fb;
@@ -261,16 +305,16 @@ namespace LearningFoundation.MathFunction
                     c = lowerBound; fc = fa;
                 }
 
-                tol_act = 2 * Constants.DoubleEpsilon * Math.Abs(upperBound) + tol / 2;
+                tol_act = 2 * Constants.DoubleEpsilon * Math.Abs( upperBound ) + tol / 2;
                 new_step = (c - upperBound) / 2;
 
                 // Check if an acceptable solution has been found
-                if (Math.Abs(new_step) <= tol_act || fb == 0)
+                if (Math.Abs( new_step ) <= tol_act || fb == 0)
                     return upperBound;
 
                 // Decide if the interpolation can be tried
-                if (Math.Abs(prev_step) >= tol_act  // If prev_step was large enough
-                    && Math.Abs(fa) > Math.Abs(fb)) // and was in the true direction,
+                if (Math.Abs( prev_step ) >= tol_act  // If prev_step was large enough
+                    && Math.Abs( fa ) > Math.Abs( fb )) // and was in the true direction,
                 {
                     // Then interpolation may be tried   
 
@@ -300,8 +344,8 @@ namespace LearningFoundation.MathFunction
                     if (p > 0) q = -q; else p = -p;
 
                     // If b+p/q falls in [b,c] and isn't too large, then
-                    if (p < (0.75 * cb * q - Math.Abs(tol_act * q) / 2)
-                        && p < Math.Abs(prev_step * q / 2))
+                    if (p < (0.75 * cb * q - Math.Abs( tol_act * q ) / 2)
+                        && p < Math.Abs( prev_step * q / 2 ))
                     {
                         // It is accepted.
                         new_step = p / q;
@@ -313,7 +357,7 @@ namespace LearningFoundation.MathFunction
                 }
 
 
-                if (Math.Abs(new_step) < tol_act)
+                if (Math.Abs( new_step ) < tol_act)
                 {
                     // Adjust the step to be not less than tolerance
                     new_step = (new_step > 0) ? tol_act : -tol_act;
@@ -324,10 +368,10 @@ namespace LearningFoundation.MathFunction
 
                 // and do a step to a new approximation
                 upperBound += new_step;
-                fb = function(upperBound);
+                fb = function( upperBound );
 
-                if (Double.IsNaN(fb) || Double.IsInfinity(fb))
-                    throw new ConvergenceException("Function evaluation didn't return a finite number.");
+                if (Double.IsNaN( fb ) || Double.IsInfinity( fb ))
+                    throw new ConvergenceException( "Function evaluation didn't return a finite number." );
 
 
                 // Adjust c to have a sign opposite to that of b
@@ -338,11 +382,14 @@ namespace LearningFoundation.MathFunction
             }
         }
 
-
-        public static double Find(Func<double, double> function, double value,
-            double lowerBound, double upperBound, double tol = 1e-6)
+        /// <summary>
+        ///   Finds a value of a function in the interval [a;b]
+        /// </summary>
+        /// 
+        public static double Find( Func<double, double> function, double value,
+            double lowerBound, double upperBound, double tol = 1e-6 )
         {
-            return FindRoot((x) => function(x) - value, lowerBound, upperBound, tol);
+            return FindRoot( ( x ) => function( x ) - value, lowerBound, upperBound, tol );
         }
 
     }

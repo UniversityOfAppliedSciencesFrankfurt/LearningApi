@@ -16,6 +16,20 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="ICloneable.cs" />
+    <Compile Remove="IUnsupervisedLearning.cs" />
+    <Compile Remove="Math\Normal.cs" />
+    <Compile Remove="Math\Special.cs" />
+    <Compile Remove="Range\IntRange.cs" />
+    <Compile Remove="Range\IRange.cs" />
+    <Compile Remove="Range\Range.cs" />
+    <Compile Remove="Statistics\DistributionBase.cs" />
+    <Compile Remove="Statistics\IDistribution.cs" />
+    <Compile Remove="Statistics\IFittableDistribution.cs" />
+    <Compile Remove="Statistics\IUnivariateDistribution.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="9.0.1" />
     <PackageReference Include="System.ComponentModel.Annotations" Version="4.3.0" />
     <PackageReference Include="System.Net.Http" Version="4.3.2" />
