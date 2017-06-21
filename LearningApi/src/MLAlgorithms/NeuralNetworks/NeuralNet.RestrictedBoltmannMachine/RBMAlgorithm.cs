@@ -21,9 +21,9 @@ namespace NeuralNet.RestrictedBoltzmannMachine
         private int m_InputCount;
         private int m_HiddenNeurons;
         private int steps = 1;
-      //  private IStochasticFunction m_ActivationFunction = new BernoulliFunction( alpha: 0.5 );
-        //private Func<double, double> m_ActivationFunction = new BooleanActivationFunction( ).Function;
-        private Func<double, double> m_ActivationFunction = new BernoulliFunction(alpha: 0.5).Generate2;
+       private IStochasticFunction m_StochasticFunction = new BernoulliFunction( alpha: 0.5 );      
+        private Func<double, double> m_ActivationFunction = new BernoulliFunction(alpha: 0.5).Function;
+        
 
         private int m_Dimensions;
         private double[] m_Weights;
@@ -137,7 +137,7 @@ namespace NeuralNet.RestrictedBoltzmannMachine
         /// 
         public override IScore Run( double[][] featureValues, IContext ctx )
         {
-            var network = new RestrictedBoltzmannMachine( m_ActivationFunction, m_InputCount, m_HiddenNeurons );
+            var network = new RestrictedBoltzmannMachine(m_StochasticFunction, m_InputCount, m_HiddenNeurons );
             init( network.Hidden, network.Visible );
             for (int j = 0; j < m_Iterations; j++)
             {

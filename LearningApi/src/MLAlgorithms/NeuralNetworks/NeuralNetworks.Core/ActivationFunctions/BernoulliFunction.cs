@@ -4,6 +4,16 @@ using LearningFoundation;
 
 namespace NeuralNetworks.Core.ActivationFunctions
 {
+
+    //public class BernoulliFunctionGen : BernoulliFunction
+    //{
+    //    private double alpha = 0.5;
+    //    public override double Function(double x)
+    //    {
+    //        double y = base.Function(x);
+    //        return y > Generator.Random.NextDouble() ? 1 : 0;
+    //    }
+    //}
     /// <summary>
     ///   Bernoulli stochastic activation function.
     /// </summary>
@@ -13,7 +23,8 @@ namespace NeuralNetworks.Core.ActivationFunctions
     ///   The Bernoulli activation function can be used to create 
     ///   Stochastic Neurons, which can in turn be used to create 
     ///   Deep Belief Networks and Restricted Boltzmann
-    ///   Machines.The use of a Bernoulli function is indicated when the inputs of a problem
+    ///   Machines.
+    ///   The use of a Bernoulli function is indicated when the inputs of a problem
     ///   are discrete, it is, are either 0 or 1.
     ///   As a stochastic activation function, the Bernoulli
     ///   function is able to generate values following a statistic probability distribution.In
@@ -46,7 +57,7 @@ namespace NeuralNetworks.Core.ActivationFunctions
         ///   Initializes a new instance of the BernoulliFunction class.
         /// </summary>
         ///        
-
+        
         public BernoulliFunction(double alpha)
         {
             this.alpha = alpha;
@@ -62,7 +73,7 @@ namespace NeuralNetworks.Core.ActivationFunctions
         ///
         /// The method calculates function value at point x
         ///
-        public double Function(double x)
+        public virtual double Function(double x)
         {
             return (1 / (1 + Math.Exp(-alpha * x)));
 
@@ -144,4 +155,5 @@ namespace NeuralNetworks.Core.ActivationFunctions
 
 
     }
+   
 }

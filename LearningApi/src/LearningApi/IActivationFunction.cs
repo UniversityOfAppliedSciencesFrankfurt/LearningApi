@@ -10,8 +10,6 @@
   /// 
     public interface IActivationFunction
     {
-       
-
         /// <summary>
         /// Calculates function value.
         /// </summary>
@@ -22,8 +20,7 @@
         ///
         /// <remarks>The method calculates function value at point <paramref name="x"/>.</remarks>
         ///
-        double Function( double x );
-
+        double Function(double x);
         //double Derivative(double x);
         //double Derivative2(double y);
     }

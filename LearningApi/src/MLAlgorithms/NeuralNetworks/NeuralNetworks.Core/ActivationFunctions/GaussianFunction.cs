@@ -30,6 +30,7 @@ namespace NeuralNetworks.Core.ActivationFunctions
     /// </remarks>
     /// 
     [Serializable]
+   
     public class GaussianFunction : IStochasticFunction
     {
 
