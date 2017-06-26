@@ -315,54 +315,54 @@ namespace NeuralNet.RestrictedBoltzmannMachine
                 layers[i] = machines[i].Hidden;
         }
 
-        /// <summary>
-        ///   Stacks a new Boltzmann Machine at the end of this network.
-        /// </summary>
-        /// 
-        /// <param name="network">The machine to be added to the network.</param>
-        /// 
-        public void Push( RestrictedBoltzmannMachine network )
-        {
-            int lastLayerNeurons;
+        ///// <summary>
+        /////   Stacks a new Boltzmann Machine at the end of this network.
+        ///// </summary>
+        ///// 
+        ///// <param name="network">The machine to be added to the network.</param>
+        ///// 
+        //public void Push( RestrictedBoltzmannMachine network )
+        //{
+        //    int lastLayerNeurons;
 
-            if (machines.Count > 0)
-                lastLayerNeurons = machines[machines.Count - 1].Hidden.Neurons.Length;
-            else lastLayerNeurons = inputsCount;
+        //    if (machines.Count > 0)
+        //        lastLayerNeurons = machines[machines.Count - 1].Hidden.Neurons.Length;
+        //    else lastLayerNeurons = inputsCount;
 
-            machines.Add( network );
+        //    machines.Add( network );
 
-            // Override AForge layers
-            layers = new Layer[machines.Count];
-            for (int i = 0; i < layers.Length; i++)
-                layers[i] = machines[i].Hidden;
-        }
+        //    // Override AForge layers
+        //    layers = new Layer[machines.Count];
+        //    for (int i = 0; i < layers.Length; i++)
+        //        layers[i] = machines[i].Hidden;
+        //}
 
-        /// <summary>
-        ///   Removes the last layer from the network.
-        /// </summary>
-        /// 
-        public void Pop()
-        {
-            if (machines.Count == 0)
-                return;
+        ///// <summary>
+        /////   Removes the last layer from the network.
+        ///// </summary>
+        ///// 
+        //public void Pop()
+        //{
+        //    if (machines.Count == 0)
+        //        return;
 
-            machines.RemoveAt( machines.Count - 1 );
+        //    machines.RemoveAt( machines.Count - 1 );
 
-            // Override AForge layers
-            layers = new Layer[machines.Count];
-            for (int i = 0; i < layers.Length; i++)
-                layers[i] = machines[i].Hidden;
-        }
+        //    // Override AForge layers
+        //    layers = new Layer[machines.Count];
+        //    for (int i = 0; i < layers.Length; i++)
+        //        layers[i] = machines[i].Hidden;
+        //}
 
-        /// <summary>
-        ///   Updates the weights of the visible layers by copying
-        ///   the reverse of the weights in the hidden layers.
-        /// </summary>
-        /// 
-        public void UpdateVisibleWeights()
-        {
-            foreach (var machine in machines)
-                machine.UpdateVisibleWeights( );
-        }
+        ///// <summary>
+        /////   Updates the weights of the visible layers by copying
+        /////   the reverse of the weights in the hidden layers.
+        ///// </summary>
+        ///// 
+        //public void UpdateVisibleWeights()
+        //{
+        //    foreach (var machine in machines)
+        //        machine.UpdateVisibleWeights( );
+        //}
     }
 }

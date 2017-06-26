@@ -35,24 +35,14 @@ namespace NeuralNet.RestrictedBoltzmannMachine
         /// 
         /// <param name="network">The network to be trained.</param>
         /// 
-        public ContrastiveDivergenceLearning( RestrictedBoltzmannMachine network, int iteration, double[][] inputs, double learningrate )
+        public ContrastiveDivergenceLearning( RestrictedBoltzmannMachine network, int iteration, double[][] inputs )
         {
-            learningRate = learningrate;
+            
             init( network.Hidden, network.Visible );           
             for (int i = 0; i < iteration; i++)
                RunEpoch( inputs );
         }
-        /// <summary>
-        ///   Creates a new <see cref="ContrastiveDivergenceLearning"/> algorithm.
-        /// </summary>
-        /// 
-        /// <param name="hidden">The hidden layer of the hidden-visible layer pair to be trained.</param>
-        /// <param name="visible">The visible layer of the hidden-visible layer pair to be trained.</param>
-        /// 
-        public ContrastiveDivergenceLearning( StochasticLayer hidden, StochasticLayer visible )
-        {
-            init( hidden, visible );
-        }
+       
         private void init( StochasticLayer hidden, StochasticLayer visible )
         {
             this.hidden = hidden;
@@ -75,14 +65,14 @@ namespace NeuralNet.RestrictedBoltzmannMachine
         }
         /// <summary>
         ///   Gets or sets the learning rate of the
-        ///   learning algorithm. Default is 0.1.
+        ///   learning algorithm.Default is 0.1.
         /// </summary>
         /// 
-        //public double LearningRate
-        //{
-        //    get { return learningRate; }
-        //    set { learningRate = value; }
-        //}
+        public double LearningRate
+        {
+            get { return learningRate; }
+            set { learningRate = value; }
+        }
         /// <summary>
         ///   Gets or sets parallelization options.
         /// </summary>

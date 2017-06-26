@@ -5,15 +5,20 @@ using LearningFoundation;
 namespace NeuralNetworks.Core.ActivationFunctions
 {
 
-    //public class BernoulliFunctionGen : BernoulliFunction
-    //{
-    //    private double alpha = 0.5;
-    //    public override double Function(double x)
-    //    {
-    //        double y = base.Function(x);
-    //        return y > Generator.Random.NextDouble() ? 1 : 0;
-    //    }
-    //}
+    public class BernoulliFunctionGen : BernoulliFunction
+    {
+        private double alpha = 0.5;
+
+        //public BernoulliFunctionGen(double alpha) : base(alpha)
+        //{
+        //}
+
+        //public override double Function(double x)
+        //{
+        //    double y = base.Function(x);
+        //    return y > Generator.Random.NextDouble() ? 1 : 0;
+        //}
+    }
     /// <summary>
     ///   Bernoulli stochastic activation function.
     /// </summary>
@@ -46,7 +51,7 @@ namespace NeuralNetworks.Core.ActivationFunctions
         /// minimum value to its maximum value).</para>
         ///
         private double alpha;
-        
+
         public double Alpha
         {
             get { return alpha; }
@@ -57,14 +62,16 @@ namespace NeuralNetworks.Core.ActivationFunctions
         ///   Initializes a new instance of the BernoulliFunction class.
         /// </summary>
         ///        
-        
+
         public BernoulliFunction(double alpha)
         {
             this.alpha = alpha;
         }
+        public BernoulliFunction()
+        { }
 
         /// <summary>
-        /// Calculates function value.
+        /// Calculates function mean value.
         /// </summary>
         ///
         /// Input value: x
@@ -83,7 +90,7 @@ namespace NeuralNetworks.Core.ActivationFunctions
         ///   Samples a value from the function given a input value.
         /// </summary>
         /// 
-        /// <param name="x">Function input value.</param>
+        /// input X: Function input value
         /// 
         /// <returns>Draws a random value from the function.</returns>
         /// 
@@ -113,47 +120,7 @@ namespace NeuralNetworks.Core.ActivationFunctions
         {
             return y > Generator.Random.NextDouble() ? 1 : 0;
         }
-        /// <summary>
-        /// Calculates function derivative.
-        /// </summary>
-        /// 
-        /// <param name="x">Function input value.</param>
-        /// 
-        /// <returns>Function derivative, <i>f'(x)</i>.</returns>
-        /// 
-        /// <remarks>The method calculates function derivative at point <paramref name="x"/>.</remarks>
-        ///
-        public double Derivative( double x )
-        {
-            double y = Function( x );
-
-            return (alpha * y * (1 - y));
-        }
-
-        /// <summary>
-        /// Calculates function derivative.
-        /// </summary>
-        /// 
-        /// <param name="y">Function output value - the value, which was obtained
-        /// with the help of <see cref="Function"/> method.</param>
-        /// 
-        /// <returns>Function derivative, <i>f'(x)</i>.</returns>
-        /// 
-        /// <remarks><para>The method calculates the same derivative value as the
-        /// <see cref="Derivative"/> method, but it takes not the input <b>x</b> value
-        /// itself, but the function value, which was calculated previously with
-        /// the help of <see cref="Function"/> method.</para>
-        /// 
-        /// <para><note>Some applications require as function value, as derivative value,
-        /// so they can save the amount of calculations using this method to calculate derivative.</note></para>
-        /// </remarks>
-        /// 
-        public double Derivative2( double y )
-        {
-            return (alpha * y * (1 - y));
-        }
-
-
+        
     }
-   
+
 }
