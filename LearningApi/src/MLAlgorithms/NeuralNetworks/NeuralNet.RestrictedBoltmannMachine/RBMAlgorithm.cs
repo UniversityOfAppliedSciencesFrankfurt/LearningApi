@@ -253,6 +253,7 @@ namespace NeuralNet.RestrictedBoltzmannMachine
                 //}
 
             }
+
             score.Weights = this.m_Weights;
             score.Errors = this.m_Errors;
             score.TotolEpochError = totalError;
