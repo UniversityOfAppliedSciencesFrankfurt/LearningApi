@@ -55,20 +55,18 @@ namespace NeuralNetworks.Core.Neurons
         ///   Computes output value of neuron.
         /// </summary>
         /// 
-        /// <param name="input">An input vector.</param>
+        /// Input  : An input vector
         /// 
         /// <returns>Returns the neuron's output value for the given input.</returns>
         /// 
-        public override double Compute( double[] input )
+           //this.hidden = new StochasticLayer(function, hiddenNeurons, inputsCount);
+        public override double Compute( double[] input ) //1st: 111000
         {
-            double sum = threshold;
-            for (int i = 0; i < weights.Length; i++)
+            double sum = threshold; //1st :0
+            for (int i = 0; i < weights.Length; i++) // Length -6
                 sum += weights[i] * input[i];
-
-            double output = function.Function( sum );
-
+            double output = function.Function( sum );   
             this.output = output;
-
             return output;
         }
 
@@ -88,13 +86,10 @@ namespace NeuralNetworks.Core.Neurons
             double sum = threshold;
             for (int i = 0; i < weights.Length; i++)
                 sum += weights[i] * input[i];
-
             double output = function.Function( sum );
             double sample = function.Generate2( output );
-
             this.output = output;
             this.sample = sample;
-
             return sample;
         }
         /// <summary>
@@ -111,10 +106,8 @@ namespace NeuralNetworks.Core.Neurons
         public double Generate( double output )
         {
             double sample = function.Generate2( output );
-
             this.output = output;
             this.sample = sample;
-
             return sample;
         }
 

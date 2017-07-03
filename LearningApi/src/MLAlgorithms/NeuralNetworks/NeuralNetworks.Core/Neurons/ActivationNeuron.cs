@@ -99,11 +99,11 @@ namespace NeuralNetworks.Core.Neurons
         /// <remarks><para>The output value of activation neuron is equal to value
         /// of nueron's activation function, which parameter is weighted sum
         /// of its inputs plus threshold value. The output value is also stored
-        /// in <see cref="Neuron.Output">Output</see> property.</para>
+        /// in Output</see> property.</para>
         /// 
         /// <para><note>The method may be called safely from multiple threads to compute neuron's
         /// output value for the specified input values. However, the value of
-        /// <see cref="Neuron.Output"/> property in multi-threaded environment is not predictable,
+        /// output property in multi-threaded environment is not predictable,
         /// since it may hold neuron's output computed from any of the caller threads. Multi-threaded
         /// access to the method is useful in those cases when it is required to improve performance
         /// by utilizing several threads and the computation is based on the immediate return value

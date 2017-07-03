@@ -49,8 +49,8 @@ namespace NeuralNetworks.Core.Networks
         /// <remarks><para>The calculation way of network's output vector is determined by
         /// layers, which comprise the network.</para>
         /// 
-        /// <para><note>The property is not initialized (equals to <see langword="null"/>) until
-        /// <see cref="Compute"/> method is called.</note></para>
+        /// <para><note>The property is not initialized  until layer
+        /// method is called.</note></para>
         /// </remarks>
         /// 
         public double[] Output

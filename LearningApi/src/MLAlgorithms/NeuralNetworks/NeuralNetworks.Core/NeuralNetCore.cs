@@ -25,5 +25,6 @@ namespace NeuralNetworks.Core
         {
             throw new NotImplementedException(":( Used algorithm MUST implement method 'Predict()'");
         }
+       
     }
 }

@@ -20,9 +20,9 @@ namespace NeuralNetworks.Core.Layers
         /// Initializes a new instance of the ActivationLayer class.
         /// </summary>
         /// 
-        /// <param name="neuronsCount">Layer's neurons count.</param>
-        /// <param name="inputsCount">Layer's inputs count.</param>
-        /// <param name="function">Activation function of neurons of the layer.</param>
+        /// Layer's neurons count.</param>
+        /// Layer's inputs count.</param>
+        /// Activation function of neurons of the layer.</param>
         /// 
         /// <remarks>The new layer is randomized (ActivationNeuron.Randomize
         /// method) after it is created.</remarks>

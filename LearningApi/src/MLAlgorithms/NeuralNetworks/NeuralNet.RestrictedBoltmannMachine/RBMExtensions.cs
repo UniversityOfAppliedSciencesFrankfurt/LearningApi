@@ -9,7 +9,7 @@ namespace NeuralNet.RestrictedBoltzmannMachine
     public static class RBMExtensions
     {
         public static LearningApi UseRestrictedBoltzmannMachine( this LearningApi api, int inputscount, int hiddenneurons,
-            int iterations, double[][] samples, double learningrates, double momentums, double decays )
+            int iterations, double learningrates, double momentums, double decays )
         {
             #region testing
             //var function = new BernoulliFunction( alpha: 0.5 );
@@ -18,7 +18,7 @@ namespace NeuralNet.RestrictedBoltzmannMachine
             //double[][] inputs, IStochasticFunction activationfunction = null )
             #endregion
       
-        var alg = new RBMAlgorithm(inputscount, hiddenneurons, samples)
+        var alg = new RBMAlgorithm(inputscount, hiddenneurons)
             {
                 LearningRate = learningrates,
                 Momentum = momentums,

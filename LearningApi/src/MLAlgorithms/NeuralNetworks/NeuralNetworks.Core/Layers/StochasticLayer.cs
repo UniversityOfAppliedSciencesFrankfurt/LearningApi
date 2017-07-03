@@ -29,7 +29,7 @@ namespace NeuralNetworks.Core.Layers
 
 
         /// <summary>
-        ///   Initializes a new instance of the <see cref="StochasticLayer"/> class.
+        ///   Initializes a new instance of the StochasticLayer class.
         /// </summary>
         /// 
         /// <param name="function">The activation function for the neurons in the layer.</param>
@@ -55,12 +55,13 @@ namespace NeuralNetworks.Core.Layers
         ///   Returns layer's output vector.
         /// </returns>
         /// 
-        public override double[] Compute(double[] input)
+        public override double[] Compute(double[] input) //1st: 111000
         {
-            double[] output = new double[neuronsCount];
-
-            for (int i = 0; i < neurons.Length; i++)
-                output[i] = neurons[i].Compute(input);
+            //   this.hidden = new StochasticLayer(function, hiddenNeurons, inputsCount);
+            double[] output = new double[neuronsCount]; //neuroncount 2
+            //output 
+            for (int i = 0; i < neurons.Length; i++) // Neurons.Length 2
+                output[i] = neurons[i].Compute(input); //predict
 
             this.output = output;
 

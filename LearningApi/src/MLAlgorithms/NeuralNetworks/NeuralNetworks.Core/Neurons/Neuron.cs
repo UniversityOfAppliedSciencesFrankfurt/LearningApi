@@ -50,12 +50,12 @@ namespace NeuralNetworks.Core.Neurons
             get { return weights; }
         }
         /// <summary>
-        /// Initializes a new instance of the <see cref="Neuron"/> class.
+        /// Initializes a new instance of the Neuronclass.
         /// </summary>
         ///
         /// <param name="inputs">Neuron's inputs count.</param>
         /// 
-        /// <remarks>The new neuron will be randomized (see <see cref="Randomize"/> method)
+        /// <remarks>The new neuron will be randomized 
         /// after it is created.</remarks>
         ///
         protected Neuron( int inputs )
@@ -72,7 +72,7 @@ namespace NeuralNetworks.Core.Neurons
         /// 
         /// <remarks>
         ///   Initialize neuron's weights with random values specified
-        ///   by the <see cref="RandGenerator"/>.</remarks>
+        ///   by the RandGenerator
         /// 
         public virtual void Randomize()
         {
@@ -87,7 +87,7 @@ namespace NeuralNetworks.Core.Neurons
         /// <returns>Returns neuron's output value.</returns>
         /// 
         /// <remarks>The actual neuron's output value is determined by inherited class.
-        /// The output value is also stored in <see cref="Output"/> property.</remarks>
+        /// The output value is also stored in the output property.</remarks>
         /// 
         public abstract double Compute( double[] input );
     }

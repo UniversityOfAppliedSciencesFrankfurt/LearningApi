@@ -30,7 +30,7 @@ namespace NeuralNet.RestrictedBoltzmannMachine
         /// <param name="hiddenNeurons">The number of hidden neurons in the machine.</param>
         /// 
         public RestrictedBoltzmannMachine(int inputsCount, int hiddenNeurons)
-            : this(new BernoulliFunction(alpha: 1), inputsCount, hiddenNeurons) { }
+            : this(new BernoulliFunction(alpha: 0.5), inputsCount, hiddenNeurons) { }
 
         ///   Creates a new RBM class with the activation function, inputsCount and hidden Neurons
         ///   
@@ -39,12 +39,13 @@ namespace NeuralNet.RestrictedBoltzmannMachine
         /// <param name="hiddenNeurons">The number of hidden neurons in the machine.</param>
         /// 
         public RestrictedBoltzmannMachine(IStochasticFunction function, int inputsCount, int hiddenNeurons)
-            : base(function, inputsCount, 1)
+        : base(function, inputsCount, 1)
         {
             this.visible = new StochasticLayer(function, inputsCount, hiddenNeurons);
             this.hidden = new StochasticLayer(function, hiddenNeurons, inputsCount);
             base.layers[0] = hidden;
         }
+
 
         ///Compute the network output vector using the input vector
         public override double[] Compute(double[] input)

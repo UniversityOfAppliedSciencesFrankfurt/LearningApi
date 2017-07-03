@@ -68,14 +68,14 @@ namespace NeuralNetworks.Core.Layers
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="Layer"/> class.
+        /// Initializes a new instance of the layer class.
         /// </summary>
         /// 
-        /// <param name="neuronsCount">Layer's neurons count.</param>
-        /// <param name="inputsCount">Layer's inputs count.</param>
+        /// Layer's neurons count.</param>
+        /// Layer's inputs count.</param>
         /// 
-        /// <remarks>Protected contructor, which initializes <see cref="inputsCount"/>,
-        /// <see cref="neuronsCount"/> and <see cref="neurons"/> members.</remarks>
+        /// <remarks>Protected contructor, which initializes inputsCount,
+        /// >and <see cref="neurons"/> members.</remarks>
         /// 
 
         protected Layer(int neuronsCount, int inputsCount)
