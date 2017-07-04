@@ -50,10 +50,10 @@ namespace NeuralNetworks.Core.Neurons
             get { return weights; }
         }
         /// <summary>
-        /// Initializes a new instance of the Neuronclass.
+        /// Initializes a new instance of the Neuron class.
         /// </summary>
         ///
-        /// <param name="inputs">Neuron's inputs count.</param>
+        /// Neuron's inputs count
         /// 
         /// <remarks>The new neuron will be randomized 
         /// after it is created.</remarks>

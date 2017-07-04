@@ -112,7 +112,7 @@ namespace NeuralNet.RestrictedBoltzmannMachine
         #endregion
         // Activation function
         //private IStochasticFunction m_StochasticFunction = new BernoulliFunction(alpha: 0.5);
-        private Func<double, double> m_ActivationFunction = new BernoulliFunction(alpha: 0.5).Function;
+        private Func<double, double> m_ActivationFunction = new BernoulliFunction().Function;
 
 
         /// <summary>
@@ -427,31 +427,15 @@ namespace NeuralNet.RestrictedBoltzmannMachine
             #endregion
             //input : data[0] = 
             // output: 2 value of result : result[0], result [1]
-            double[] output = new double[data.Length];  //for test: data.length = 8
-            double[][] results = new double[data.Length][];        
-         
+           // double[] output = new double[data.Length];  //for test: data.length = 8
+            double[] results = new double[data.Length];
+
 
             for (int i = 0; i < data.Length; i++)
             {
-               
-                for (int j = 0; j < m_HiddenNeurons; j++)  //neuron weights lenth in test at 6
-                {
-                    results[i][j] = calculateResult(data[i], ctx.DataDescriptor.Features.Length);                  
-                }                       
-                for (int j = 0; j < m_HiddenNeurons-1; j++)
-                {
-                    if (results[i][j] < results[i][j+1])
-                    {
-                        output[i] = j+1;
-                    }
-                    else
-                    {
-                        output[i] = j ;
-                    }
-                }               
-                //output[0] = [0] ^ output[0] = [1]
+                    results[i] = calculateResult(data[i], ctx.DataDescriptor.Features.Length);             
             }
-            return output;
+            return results;
 
 
         }
@@ -466,7 +450,6 @@ namespace NeuralNet.RestrictedBoltzmannMachine
         //output[i] = neurons[i].Compute(double[] input);
         private double calculateResult(double[] input, int numOfFeatures) //input 111000 //numoffeature : 6
         {
-
             #region Origin
             //double result = 0.0;
             //for (int i = 0; i < numOfFeatures; i++)
@@ -487,16 +470,30 @@ namespace NeuralNet.RestrictedBoltzmannMachine
             //    return output;
             //}
             #endregion
-            double result = m_Threshold;
-
-            for (int i = 0; i < numOfFeatures; i++)
+            double result = 0.0;
+            double[] output = new double[m_Hidden.Neurons.Length];
+            for (int j = 0; j < m_Hidden.Neurons.Length; j++)
             {
-                result += m_Weights[i] * input[i];
+                StochasticNeuron neuron = m_Hidden.Neurons[j];               
+                for (int i = 0; i < numOfFeatures; i++)
+                {
+                    output[j] +=  neuron.Weights[i] * input[i];
+                }
+                output[j] += this.m_Threshold;
+                output[j] = m_ActivationFunction(output[j]);
             }
-
-
-            return m_ActivationFunction(result);
-
+            for (int j = 0; j < m_Hidden.Neurons.Length - 1; j++)
+            {
+                if (output[j+1] > output[j])
+                {
+                    result = (j+1)+ output[j + 1];
+                }
+                else
+                {
+                    result = j+ output[j];
+                }
+            }
+            return (result);
         }
 
         /// <summary>
