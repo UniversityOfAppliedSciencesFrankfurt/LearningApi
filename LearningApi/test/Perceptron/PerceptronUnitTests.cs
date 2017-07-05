@@ -45,7 +45,7 @@ namespace test.Perceptron
                 Type = LearningFoundation.DataMappers.ColumnType.NUMERIC,
                 Index = 0,
             };
-            desc.Features[0] = new LearningFoundation.DataMappers.Column()
+            desc.Features[1] = new LearningFoundation.DataMappers.Column()
             {
                 Id = 1,
                 Name = "Y",

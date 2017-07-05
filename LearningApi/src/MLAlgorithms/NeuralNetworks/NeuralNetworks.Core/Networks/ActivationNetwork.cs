@@ -6,12 +6,9 @@ namespace NeuralNetworks.Core.Networks
     /// <summary>
     /// Activation network.
     /// </summary>
-    /// 
-    /// <remarks><para>Activation network is a base for multi-layer neural network
+    /// <remarks>
+    /// <para>Activation network is a base for multi-layer neural network
     /// with activation functions. It consists of activation layers
-    /// 
-    
-
     [Serializable]
     public class ActivationNetwork : Network
     {

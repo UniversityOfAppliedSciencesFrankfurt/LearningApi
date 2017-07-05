@@ -22,14 +22,14 @@ namespace NeuralNet.RestrictedBoltzmannMachine
         private double m_Momentum = 0.9;
         private double m_LearningRate = 0.1;
         private double m_Decay = 0.01;
-        private int m_Iterations = 5000;        
+        private int m_Iterations = 5000;
         private int steps = 1;
         private int m_Dimensions;
         private double[] m_Weights;
         private double[] m_Errors;
         private double m_Threshold;
-        private RestrictedBoltzmannMachine m_RNetwork;   
-        
+        private RestrictedBoltzmannMachine m_RNetwork;
+
         /// <summary>
         /// Define RBM specific variables
         /// </summary>
@@ -46,7 +46,7 @@ namespace NeuralNet.RestrictedBoltzmannMachine
         private int hiddenCount;
         // Special RBM layer 
         private StochasticLayer m_Hidden;
-        private StochasticLayer m_Visible;     
+        private StochasticLayer m_Visible;
         //Special parallel type storage for multilayer calculating from RBM Gradient
         [NonSerialized]
         private ParallelOptions parallelOptions;
@@ -106,7 +106,7 @@ namespace NeuralNet.RestrictedBoltzmannMachine
         // Activation function
         private IStochasticFunction m_StochasticFunction = new BernoulliFunction(alpha: 0.5);
         private Func<double, double> m_ActivationFunction = new BernoulliFunction(alpha: 0.5).Function;
-      
+
         /// <summary>
         /// Gets the visible layer of the machine.
         /// </summary>
@@ -214,9 +214,10 @@ namespace NeuralNet.RestrictedBoltzmannMachine
         public RBMAlgorithm(int m_InputCount, int m_HiddenNeurons, Func<double, double> activationfunction = null)
         {
             if (activationfunction != null)
-                this.m_ActivationFunction = activationfunction;           
+                this.m_ActivationFunction = activationfunction;
             m_RNetwork = new RestrictedBoltzmannMachine(m_StochasticFunction, m_InputCount, m_HiddenNeurons);
         }
+
 
         /// <summary>
         ///   Runs learning algorithm.
@@ -228,86 +229,94 @@ namespace NeuralNet.RestrictedBoltzmannMachine
         ///   Returns sum of learning errors.
         /// </returns>
         /// 
+        /// 
         public override IScore Run(double[][] featureValues, IContext ctx)
         {
             ///            
             m_Dimensions = ctx.DataDescriptor.Features.Count(); //same as input count
             int numOfInputVectors = featureValues.Length; //6
             m_Errors = new double[numOfInputVectors]; //[6]
-            // initialize the neuron weight
-            m_Weights =  new double[m_Dimensions];  //[6]
-            
-           
+                                                      // initialize the neuron weight
+            m_Weights = new double[m_Dimensions];  //[6]
+
             initializeWeights();
-            ///Error calculation
+            // Error calculation
             double totalError = 0;
             var score = new RBMScore();
-           
+
             for (int i = 0; i < m_Iterations; i++)
             {
                 for (int j = 0; j < m_weightsGradient.Length; j++)
                     Array.Clear(m_weightsGradient[j], 0, m_weightsGradient[j].Length);
+               
                 Array.Clear(m_hiddenBiasGradient, 0, m_hiddenBiasGradient.Length);
                 Array.Clear(m_visibleBiasGradient, 0, m_visibleBiasGradient.Length);
 
-                /// calculate gradient and model error
-                double error = ComputeGradient(featureValues);
-                //m_Errors[numOfInputVectors] = error;
+                // Calculate gradient and model error
+                double error = computeGradient(featureValues);
+              
                 totalError += error;
                 if (totalError == 0)
                 {
                     score.Iterations = i;
                     break;
                 }
-                /// calculate weights updates
-                CalculateUpdates(featureValues);
-                /// update the network
-                UpdateNetwork();
-                /// Calculate visible neuron weight score
+
+                // Calculate weights updates
+                calculateUpdates(featureValues);
+
+                // Update the network
+                updateNetwork();
+
+                // Calculate visible neuron weight score
                 for (int x = 0; x < m_Visible.Neurons.Length; x++) //6
                 {
                     StochasticNeuron visibleneuron = m_Visible.Neurons[x];
                     for (int y = 0; y < m_Hidden.Neurons.Length; y++) //2
-                    { 
+                    {
                         {
                             m_Weights[x] += visibleneuron.Weights[y];
                         }
                     }
                 }
-
-             
-
             }
+
             score.Weights = this.m_Weights;
             score.Errors = this.m_Errors;
-            score.TotalEpochError = totalError; //Checked
+            score.TotalEpochError = totalError; 
             ctx.Score = score;
             return ctx.Score;
-
         }
+
+
         /// <summary>
         /// Initialize the layer
-        /// </summary>
-        /// 
-        /// 
+        /// </summary>     
         private void init(StochasticLayer hidden, StochasticLayer visible)
         {
             this.m_Hidden = hidden;
             this.m_Visible = visible;
             inputsCount = hidden.InputsCount;
             hiddenCount = hidden.Neurons.Length;
+
             m_weightsGradient = new double[inputsCount][];
+
             for (int i = 0; i < m_weightsGradient.Length; i++)
                 m_weightsGradient[i] = new double[hiddenCount];
+
             m_visibleBiasGradient = new double[inputsCount];
             m_hiddenBiasGradient = new double[hiddenCount];
             m_weightsUpdates = new double[inputsCount][];
+
             for (int i = 0; i < m_weightsUpdates.Length; i++)
                 m_weightsUpdates[i] = new double[hiddenCount];
+
             m_visibleBiasUpdates = new double[inputsCount];
             m_hiddenBiasUpdates = new double[hiddenCount];
+
             storage = new ThreadLocal<ParallelStorage>(() =>
                 new ParallelStorage(inputsCount, hiddenCount));
+
             this.ParallelOptions = new ParallelOptions();
         }
 
@@ -316,10 +325,11 @@ namespace NeuralNet.RestrictedBoltzmannMachine
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        private double ComputeGradient(double[][] input)
+        private double computeGradient(double[][] input)
         {
             double errors = 0;
             Object lockObj = new Object();
+
             // For each training instance
             Parallel.For(0, input.Length,
                 ParallelOptions,
@@ -364,14 +374,19 @@ namespace NeuralNet.RestrictedBoltzmannMachine
                     //    gather the output probabilities without sampling
                     for (int j = 0; j < m_Hidden.Neurons.Length; j++)
                         reprobability[j] = m_Hidden.Neurons[j].Compute(reconstruction);
+                    //
                     // 4.1. Compute positive associations
                     for (int k = 0; k < observation.Length; k++)
                         for (int j = 0; j < probability.Length; j++)
                             weightGradient[k][j] += observation[k] * probability[j];
+
                     for (int j = 0; j < hiddenGradient.Length; j++)
                         hiddenGradient[j] += probability[j];
+
                     for (int j = 0; j < visibleGradient.Length; j++)
                         visibleGradient[j] += observation[j];
+                   
+                    //
                     // 4.2. Compute negative associations
                     for (int k = 0; k < reconstruction.Length; k++)
                         for (int j = 0; j < reprobability.Length; j++)
@@ -385,7 +400,7 @@ namespace NeuralNet.RestrictedBoltzmannMachine
                     {
                         double e = observation[j] - reconstruction[j];
                         partial.ErrorSumOfSquares += e * e;
-                       this.m_Errors[j] = e;
+                        this.m_Errors[j] = e;
                     }
                     return partial; // Report partial solution
                 },
@@ -412,7 +427,7 @@ namespace NeuralNet.RestrictedBoltzmannMachine
         /// Calculate gradient descent updates
         /// </summary>
         /// <param name="input"></param>
-        private void CalculateUpdates(double[][] input)
+        private void calculateUpdates(double[][] input)
         {
             double rate = m_LearningRate;
             // Assume all neurons in the layer have the same act function
@@ -438,7 +453,7 @@ namespace NeuralNet.RestrictedBoltzmannMachine
         /// <summary>
         /// update visible layer and hidden layer weights
         /// </summary>
-        private void UpdateNetwork()
+        private void updateNetwork()
         {
             // 6.1 Update hidden layer weights
             for (int i = 0; i < m_Hidden.Neurons.Length; i++)
@@ -463,17 +478,15 @@ namespace NeuralNet.RestrictedBoltzmannMachine
         ///    
         public override double[] Predict(double[][] data, IContext ctx)
         {
-          
             double[] results = new double[data.Length];
             for (int i = 0; i < data.Length; i++)
             {
                 results[i] = calculateResult(data[i], ctx.DataDescriptor.Features.Length);
             }
+
             return results;
-
-
         }
-      
+
         /// <summary>
         /// Compute output value of neuron for the given input
         /// Returns the neuron's output value for the given input.
@@ -482,7 +495,7 @@ namespace NeuralNet.RestrictedBoltzmannMachine
         /// <param name="numOfFeatures"></param>       
         private double calculateResult(double[] input, int numOfFeatures) //input 111000 //numoffeature : 6
         {
-           
+
             double result = 0.0;
             double[] output = new double[m_Hidden.Neurons.Length];
             for (int j = 0; j < m_Hidden.Neurons.Length; j++)
@@ -509,6 +522,12 @@ namespace NeuralNet.RestrictedBoltzmannMachine
             return (result);
         }
 
+        #region Public Methods
 
+        #endregion
+
+        #region Private Methods
+
+        #endregion
     }
 }

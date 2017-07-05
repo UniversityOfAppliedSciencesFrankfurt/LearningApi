@@ -18,6 +18,7 @@ namespace NeuralNet.Perceptron
         private double[] m_Errors;
         private double m_Threshold;
         private bool m_PersistConvergenceData = false;
+
         public PerceptronAlgorithm(double threshold, double learningRate, int iterations, Func<double, double> activationFunction = null)
         {
             this.m_Threshold = threshold;
@@ -26,6 +27,7 @@ namespace NeuralNet.Perceptron
             if (activationFunction != null)
                 this.m_ActivationFunction = activationFunction;
         }
+
         public override IScore Run(double[][] featureValues, IContext ctx)
         {
             m_Dimensions = ctx.DataDescriptor.Features.Count();

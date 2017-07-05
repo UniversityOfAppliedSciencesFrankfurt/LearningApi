@@ -19,6 +19,7 @@ namespace NeuralNetworks.Core.ActivationFunctions
         //    return y > Generator.Random.NextDouble() ? 1 : 0;
         //}
     }
+
     /// <summary>
     ///   Bernoulli stochastic activation function.
     /// </summary>
@@ -57,18 +58,21 @@ namespace NeuralNetworks.Core.ActivationFunctions
             get { return alpha; }
             set { alpha = value; }
         }
-
+        
         /// <summary>
         ///   Initializes a new instance of the BernoulliFunction class.
         /// </summary>
         ///        
-
+        /// <param name="alpha"></param>
         public BernoulliFunction(double alpha)
         {
             this.alpha = alpha;
         }
-        public BernoulliFunction()
-        { }
+
+        public BernoulliFunction() : this(0.0)
+        {
+
+        }
 
         /// <summary>
         /// Calculates function mean value.
@@ -83,7 +87,6 @@ namespace NeuralNetworks.Core.ActivationFunctions
         public virtual double Function(double x)
         {
             return (1 / (1 + Math.Exp(-alpha * x)));
-
         }
 
         /// <summary>
@@ -120,7 +123,7 @@ namespace NeuralNetworks.Core.ActivationFunctions
         {
             return y > Generator.Random.NextDouble() ? 1 : 0;
         }
-        
+
     }
 
 }

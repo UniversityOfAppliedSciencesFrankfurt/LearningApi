@@ -5,7 +5,7 @@ using System.Text;
 
 namespace NeuralNet.RestrictedBoltmannMachine
 {
-    class RBMScore : IScore
+    public class RBMScore : IScore
     {
         public double[] Errors { get; set; }
 

@@ -3,6 +3,9 @@ using NeuralNetworks.Core.ActivationFunctions;
 using NeuralNetworks.Core.Layers;
 using NeuralNetworks.Core.Networks;
 using NeuralNetworks.Core.Neurons;
+using System.Runtime.CompilerServices;
+
+//[assembly: InternalsVisibleTo("test")]
 
 namespace NeuralNet.RestrictedBoltzmannMachine
 {
