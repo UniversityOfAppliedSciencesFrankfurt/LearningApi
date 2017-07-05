@@ -38,7 +38,9 @@ namespace NeuralNet.RestrictedBoltzmannMachine
         public ContrastiveDivergenceLearning( RestrictedBoltzmannMachine network, int iteration, double[][] inputs )
         {
             
-            init( network.Hidden, network.Visible );           
+            init( network.Hidden, network.Visible );
+          
+
             for (int i = 0; i < iteration; i++)
                RunEpoch( inputs );
         }

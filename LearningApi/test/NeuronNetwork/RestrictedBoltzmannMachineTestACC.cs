@@ -34,14 +34,14 @@ namespace test.NeuronNetwork
             };
             desc.Features[0] = new LearningFoundation.DataMappers.Column()
             {
-                Id = 1,
+                Id = 2,
                 Name = "C",
                 Type = LearningFoundation.DataMappers.ColumnType.NUMERIC,
                 Index = 0,
             };
             desc.Features[0] = new LearningFoundation.DataMappers.Column()
             {
-                Id = 1,
+                Id = 3,
                 Name = "X",
                 Type = LearningFoundation.DataMappers.ColumnType.NUMERIC,
                 Index = 0,
@@ -49,7 +49,7 @@ namespace test.NeuronNetwork
             };
             desc.Features[0] = new LearningFoundation.DataMappers.Column()
             {
-                Id = 1,
+                Id = 4,
                 Name = "Y",
                 Type = LearningFoundation.DataMappers.ColumnType.NUMERIC,
                 Index = 0,
@@ -57,7 +57,7 @@ namespace test.NeuronNetwork
             };
             desc.Features[0] = new LearningFoundation.DataMappers.Column()
             {
-                Id = 1,
+                Id = 5,
                 Name = "Z",
                 Type = LearningFoundation.DataMappers.ColumnType.NUMERIC,
                 Index = 0,
@@ -93,8 +93,8 @@ namespace test.NeuronNetwork
             var teacher = new ContrastiveDivergenceLearning(rbm, 5000, sample)
             {
                 LearningRate = 0.1,
-                Momentum = 0,
-                Decay = 0
+                Momentum = 0.9,
+                Decay = 0.9
             };
             double[] a = rbm.Compute(new double[] { 1, 1, 1, 0, 0, 0 }); // { 0.99, 0.00 }
             double[] b = rbm.Compute(new double[] { 0, 0, 0, 1, 1, 1 }); // { 0.00, 0.99 }
@@ -153,19 +153,20 @@ namespace test.NeuronNetwork
                 sample[0] = new double[] { 1, 1, 1, 0, 0, 0 }; // class a
                 sample[1] = new double[] { 1, 0, 1, 0, 0, 0 }; // class a
                 sample[2] = new double[] { 1, 1, 1, 0, 0, 0 }; // class a
-                sample[3] = new double[] { 0, 0, 0, 1, 1, 1 }; // class b
-                sample[4] = new double[] { 0, 0, 0, 1, 0, 1 }; // class b
-                sample[5] = new double[] { 0, 0, 0, 1, 1, 1 }; // class b
+                sample[3] = new double[] { 0, 0, 1, 1, 1, 0 }; // class b
+                sample[4] = new double[] { 0, 0, 1, 1, 0, 0 }; // class b
+                sample[5] = new double[] { 0, 0, 1, 1, 1, 0 }; // class b
+              
                 return sample;
             });
             ///////////////////////////////
 
             int inputscount = 6;
             int hiddenneurons = 2;
-            int iteration = 15000;
-            double learningrates = 0.5;
-            double momentums = 0.5;
-            double decays = 0.5;
+            int iteration = 5000;
+            double learningrates = 0.1;
+            double momentums = 0.9;
+            double decays = 0.01;
 
             /// Call the algorithm
             api.UseRestrictedBoltzmannMachine(inputscount, hiddenneurons, iteration, learningrates, momentums, decays);
