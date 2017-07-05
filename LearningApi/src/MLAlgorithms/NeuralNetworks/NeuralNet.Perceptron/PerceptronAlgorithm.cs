@@ -74,8 +74,8 @@ namespace NeuralNet.Perceptron
                 }
             }
             score.Weights = this.m_Weights;
-            score.Errors = this.m_Errors;
-            score.TotolEpochError = totalError;
+            score.Errors = this.m_Errors;//numberofsample
+            score.TotolEpochError = totalError;//all 0
             ctx.Score = score;
             return ctx.Score;
         }

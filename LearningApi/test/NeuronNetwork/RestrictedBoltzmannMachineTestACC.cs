@@ -137,26 +137,13 @@ namespace test.NeuronNetwork
             {
                 const int maxSamples = 6;
                 ctx.DataDescriptor = getDescriptor();
-                double[][] sample = new double[maxSamples][];
-                ////need to check the data type
-
-                //double[][] samples =
-                //{
-                //    new double[] { 1,1,1,0,0,0 }, // class a
-                //    new double[] { 1,0,1,0,0,0 }, // class a
-                //    new double[] { 1,1,1,0,0,0 }, // class a
-                //    new double[] { 0,0,1,1,1,0 }, // class b
-                //    new double[] { 0,0,1,1,0,0 }, // class b
-                //    new double[] { 0,0,1,1,1,0 }, // class b
-                //};
-
+                double[][] sample = new double[maxSamples][];                
                 sample[0] = new double[] { 1, 1, 1, 0, 0, 0 }; // class a
                 sample[1] = new double[] { 1, 0, 1, 0, 0, 0 }; // class a
                 sample[2] = new double[] { 1, 1, 1, 0, 0, 0 }; // class a
                 sample[3] = new double[] { 0, 0, 1, 1, 1, 0 }; // class b
                 sample[4] = new double[] { 0, 0, 1, 1, 0, 0 }; // class b
-                sample[5] = new double[] { 0, 0, 1, 1, 1, 0 }; // class b
-              
+                sample[5] = new double[] { 0, 0, 1, 1, 1, 0 }; // class b              
                 return sample;
             });
             ///////////////////////////////
@@ -185,23 +172,20 @@ namespace test.NeuronNetwork
             m_testdata[7] = new double[] { 0, 0, 0, 0, 1, 1 };
 
             /// Calculate the network output
-            // m_testresult[i] = m_rbm.Compute(m_testdata[i]); 
-            // m_testresultp[0][0]=99.9;  
-            // m_testresult[0][1]=0.1;
-            // m_testresult[0]=[99.9,0.1]
-            /// 
+           
             var m_testresult = api.Algorithm.Predict(m_testdata, api.Context);
 
             //// As we can see, if we feed an output pattern where the first neuron
             //// is firing and the second isn't, the network generates an example of
             //// a vector belonging to the first class. The same goes for the second
             ////// neuron and the second class.
-            for (int i = 0; i < m_testcount - 1; i++)
+            for (int i = 0; i < m_testcount - 2; i++)
             {
                // Assert.True(((m_testresult[i] == 0) && (m_testresult[i + 1] == 1)) ^ ((m_testresult[i] == 1) && (m_testresult[i + 1] == 0)));
                 Assert.IsTrue(((m_testresult[i] > m_testresult[i+1]) && (m_testresult[i+1] < m_testresult[i+2]))
                  ^ ((m_testresult[i] < m_testresult[i+1]) && (m_testresult[i+1] > m_testresult[i+2])));
             }
+
         }
 
     }
