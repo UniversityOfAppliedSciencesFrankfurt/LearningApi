@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using LearningFoundation;
+﻿using LearningFoundation;
 using LearningFoundation.Statistics;
+using System;
 
 namespace NeuralNetworks.Core.ActivationFunctions
 {
@@ -30,7 +28,7 @@ namespace NeuralNetworks.Core.ActivationFunctions
     /// </remarks>
     /// 
     [Serializable]
-   
+
     public class GaussianFunction : IStochasticFunction
     {
 
@@ -55,6 +53,20 @@ namespace NeuralNetworks.Core.ActivationFunctions
         }
 
         /// <summary>
+        ///   Function output range.
+        /// </summary>
+        ///
+        /// <remarks>
+        ///   <para>Default value is set to [-1;+1]</para>
+        /// </remarks>
+        ///
+        public DoubleRange Range
+        {
+            get { return range; }
+            set { range = value; }
+        }
+
+        /// <summary>
         ///   Creates a new Gaussian Function
         /// </summary>
         /// 
@@ -66,13 +78,23 @@ namespace NeuralNetworks.Core.ActivationFunctions
         }
 
         /// <summary>
-        ///   Creates a new Gaussian Function with the default value
+        ///   Creates a new GaussianFunction
         /// </summary>
         /// 
-
+        /// <param name="alpha">The linear slope value. Default is 1.</param>
+        /// 
         public GaussianFunction()
             : this(1.0) { }
 
+        /// <summary>
+        ///   Initializes a new instance of the GaussianFunction class.
+        /// </summary>
+        /// 
+        public GaussianFunction(double alpha, DoubleRange range)
+        {
+            this.Alpha = alpha;
+            this.Range = range;
+        }
 
         /// <summary>
         /// Calculates function value.
@@ -80,11 +102,10 @@ namespace NeuralNetworks.Core.ActivationFunctions
         ///
         /// <param name="x">Function input value.</param>
         /// 
-        /// <returns>Function output value, <i>f(x)</i>.</returns>
+        /// <returns>Function output value f(x)<returns>
         ///
-        /// <remarks>The method calculates function value at point <paramref name="x"/>.</remarks>
+        /// <remarks>The method calculates function value at point x.</remarks>
         ///
-
         public double Function(double x)
         {
             double y = alpha * x;
@@ -126,7 +147,7 @@ namespace NeuralNetworks.Core.ActivationFunctions
         /// </summary>
         /// 
         /// <param name="y">Function output value - the value, which was obtained
-        /// with the help of <see cref="Function"/> method.</param>
+        /// with the help of Function method.</param>
         /// 
         /// <returns>
         ///   Draws a random value from the function.

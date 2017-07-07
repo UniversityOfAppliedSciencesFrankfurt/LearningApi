@@ -17,14 +17,17 @@ namespace NeuralNetworks.Core.Neurons
         /// Neuron's inputs count.
         /// </summary>
         protected int inputsCount = 0;
+
         /// <summary>
         /// Neuron's weights.
         /// </summary>
         protected double[] weights = null;
+
         /// <summary>
         /// Neuron's output value.
         /// </summary>
         protected double output = 0;
+
         /// <summary>
         /// Random number generator.
         /// </summary>
@@ -32,6 +35,7 @@ namespace NeuralNetworks.Core.Neurons
         /// <remarks>The generator is used for neuron's weights randomization.</remarks>
         /// 
         protected IRandomNumberGenerator<double> rand = new UniformContinuousDistribution( );
+
         /// <summary>
         /// Neuron's output value.
         /// </summary>
@@ -42,6 +46,7 @@ namespace NeuralNetworks.Core.Neurons
         {
             get { return output; }
         }
+
         /// <summary>
         /// Neuron's weights.
         /// </summary>
@@ -49,12 +54,13 @@ namespace NeuralNetworks.Core.Neurons
         {
             get { return weights; }
         }
+
         /// <summary>
         /// Initializes a new instance of the Neuron class.
         /// </summary>
         ///
-        /// Neuron's inputs count
-        /// 
+        ///<param name="inputs">Neuron's inputs count.</param>
+        ///
         /// <remarks>The new neuron will be randomized 
         /// after it is created.</remarks>
         ///
@@ -66,6 +72,7 @@ namespace NeuralNetworks.Core.Neurons
             // randomize the neuron
             Randomize( );
         }
+
         /// <summary>
         /// Randomize neuron.
         /// </summary>
@@ -78,6 +85,7 @@ namespace NeuralNetworks.Core.Neurons
         {
             rand.Generate( weights.Length, weights );
         }
+
         /// <summary>
         /// Computes output value of neuron.
         /// </summary>

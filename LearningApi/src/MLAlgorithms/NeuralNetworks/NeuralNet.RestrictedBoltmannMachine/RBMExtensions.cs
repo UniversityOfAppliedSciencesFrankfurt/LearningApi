@@ -8,24 +8,29 @@ namespace NeuralNet.RestrictedBoltzmannMachine
 {
     public static class RBMExtensions
     {
-        public static LearningApi UseRestrictedBoltzmannMachine( this LearningApi api, int inputscount, int hiddenneurons,
-            int iterations, double learningrates, double momentums, double decays )
+        /// <summary>
+        /// Create a Restricted Boltzmann Machine algorithm with parameters
+        /// </summary>
+        /// <param name="api">Using the LearningAPI</param>
+        /// <param name="InputsCount"> </param>
+        /// <param name="HiddenNeurons"></param>
+        /// <param name="Iterations"></param>
+        /// <param name="LearningRates"></param>
+        /// <param name="Momentums"></param>
+        /// <param name="Decays"></param>
+        /// <returns></returns>
+        public static LearningApi UseRestrictedBoltzmannMachine( this LearningApi api, int InputsCount, 
+            int HiddenNeurons,int Iterations, double LearningRates, double Momentums, double Decays )
         {
-            #region testing
-            //var function = new BernoulliFunction( alpha: 0.5 );
-            //var rbm = new RestrictedBoltzmannMachine( function, inputscount, hiddenneurons ); //rbm(function,6,2)
-            //public RBMAlgorithm( int iterations, double learningrate, double momentum, double decay,
-            //double[][] inputs, IStochasticFunction activationfunction = null )
-            #endregion
-      
-        var alg = new RBMAlgorithm(inputscount, hiddenneurons)
+          
+        var alg = new RBMAlgorithm(InputsCount, HiddenNeurons)
             {
-                LearningRate = learningrates,
-                Momentum = momentums,
-                Decay = decays,
-                Iteration = iterations
-            }
-                ;
+                LearningRate = LearningRates,
+                Momentum = Momentums,
+                Decay = Decays,
+                Iteration = Iterations
+            };
+
             api.AddModule( alg, "RBMAlgorithm" );
             return api;
         }

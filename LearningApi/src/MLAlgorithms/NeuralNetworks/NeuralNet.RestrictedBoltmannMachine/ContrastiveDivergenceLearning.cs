@@ -1,19 +1,29 @@
 ﻿using System;
 using System.Threading;
 using NeuralNetworks.Core.Layers;
-using NeuralNet.RestrictedBoltzmannMachine;
 using NeuralNetworks.Core.Neurons;
 using System.Threading.Tasks;
 using NeuralNetworks.Core.ActivationFunctions;
 using LearningFoundation;
 using LearningFoundation.MathFunction;
+using System.Runtime.CompilerServices;
+
+[assembly: InternalsVisibleTo("test")]
+
 namespace NeuralNet.RestrictedBoltzmannMachine
 {
-    public class ContrastiveDivergenceLearning //: IUnsupervisedLearning//, IDisposable
+    /// <summary>
+    /// Contrastive divergence is a recipe for training undirected graphical models 
+    /// (a class of probabilistic models used in machine learning). 
+    /// It relies on an approximation of the gradient (a good direction of change for the parameters) 
+    /// of the log-likelihood (the basic criterion that most probabilistic learning algorithms try to optimize)
+    /// based on a short Markov chain (a way to sample from probabilistic models) started at the last example seen. 
+    /// </summary>
+    internal class ContrastiveDivergenceLearning
     {
-        private double momentum= 0.9;
-        private double learningRate= 0.1;
-        private double decay= 0.01;
+        private double momentum = 0.9;
+        private double learningRate = 0.1;
+        private double decay = 0.01;
         private int steps = 1;
         private int iteration;
         private double[][] weightsGradient;
@@ -29,23 +39,236 @@ namespace NeuralNet.RestrictedBoltzmannMachine
         private StochasticLayer visible;
         [NonSerialized]
         private ParallelOptions parallelOptions;
+        private class ParallelStorage
+        {
+            public double[][] WeightGradient { get; set; }
+            public double[] VisibleBiasGradient { get; set; }
+            public double[] HiddenBiasGradient { get; set; }
+            public double[] OriginalActivations { get; set; }
+            public double[] OriginalProbability { get; set; }
+            public double[] ReconstructedInput { get; set; }
+            public double[] ReconstructedProbs { get; set; }
+            public double ErrorSumOfSquares { get; set; }
+            public ParallelStorage(int inputsCount, int hiddenCount)
+            {
+                WeightGradient = new double[inputsCount][];
+                for (int i = 0; i < WeightGradient.Length; i++)
+                    WeightGradient[i] = new double[hiddenCount];
+                VisibleBiasGradient = new double[inputsCount];
+                HiddenBiasGradient = new double[hiddenCount];
+                OriginalActivations = new double[hiddenCount];
+                OriginalProbability = new double[hiddenCount];
+                ReconstructedInput = new double[inputsCount];
+                ReconstructedProbs = new double[hiddenCount];
+            }
+            public ParallelStorage Clear()
+            {
+                ErrorSumOfSquares = 0;
+                for (int i = 0; i < WeightGradient.Length; i++)
+                    Array.Clear(WeightGradient[i], 0, WeightGradient[i].Length);
+                Array.Clear(VisibleBiasGradient, 0, VisibleBiasGradient.Length);
+                Array.Clear(HiddenBiasGradient, 0, HiddenBiasGradient.Length);
+                return this;
+            }
+        }
+
         /// <summary>
-        ///   Creates a new <see cref="ContrastiveDivergenceLearning"/> algorithm.
+        ///   Releases unmanaged and - optionally - managed resources
+        /// </summary>
+        /// 
+        /// <param name="disposing"><c>true</c> to release both managed and unmanaged
+        /// resources; <c>false</c> to release only unmanaged resources.</param>
+        /// 
+        protected virtual void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                // free managed resources
+                if (storage != null)
+                {
+                    storage.Dispose();
+                    storage = null;
+                }
+            }
+        }
+
+        #region Public Function
+
+        /// <summary>
+        ///   Creates a new ContrastiveDivergenceLearning algorithm.
         /// </summary>
         /// 
         /// <param name="network">The network to be trained.</param>
         /// 
-        public ContrastiveDivergenceLearning( RestrictedBoltzmannMachine network, int iteration, double[][] inputs )
+       public ContrastiveDivergenceLearning(RestrictedBoltzmannMachine network)
         {
-            
-            init( network.Hidden, network.Visible );
-          
 
-            for (int i = 0; i < iteration; i++)
-               RunEpoch( inputs );
+            init(network.Hidden, network.Visible);
         }
-       
-        private void init( StochasticLayer hidden, StochasticLayer visible )
+
+        /// <summary>
+        ///   Gets or sets the learning rate of the
+        ///   learning algorithm.Default is 0.1.
+        /// </summary>
+        /// 
+        public double LearningRate
+        {
+            get { return learningRate; }
+            set { learningRate = value; }
+        }
+
+        /// <summary>
+        ///   Gets or sets parallelization options.
+        /// </summary>
+        /// 
+        /// <summary>
+        ///   Gets or sets parallelization options.
+        /// </summary>
+        /// 
+        public ParallelOptions ParallelOptions
+        {
+            get
+            {
+                if (parallelOptions == null)
+                    parallelOptions = new ParallelOptions();
+                return parallelOptions;
+            }
+            set { parallelOptions = value; }
+        }
+
+        /// <summary>
+        ///   Gets or sets the momentum term of the
+        ///   learning algorithm. Default is 0.9.
+        /// </summary>
+        /// 
+        public double Momentum
+        {
+            get { return momentum; }
+            set { momentum = value; }
+        }
+
+        /// <summary>
+        ///   Gets or sets the Weight Decay constant
+        ///   of the learning algorithm. Default is 0.01.
+        /// </summary>
+        /// 
+        public double Decay
+        {
+            get { return decay; }
+            set { decay = value; }
+        }
+
+        /// <summary>
+        ///   Performs application-defined tasks associated with 
+        ///   freeing, releasing, or resetting unmanaged resources.
+        /// </summary>
+        /// 
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        /// <summary>
+        ///   Runs learning epoch.
+        /// </summary>
+        /// 
+        /// <param name="input">Array of input vectors.</param>
+        /// 
+        /// <returns>
+        ///   Returns sum of learning errors.
+        /// </returns>
+        /// 
+        public double RunEpoch(double[][] input)
+        {
+            // Initialize iteration
+            for (int i = 0; i < weightsGradient.Length; i++)
+                Array.Clear(weightsGradient[i], 0, weightsGradient[i].Length);
+            Array.Clear(hiddenBiasGradient, 0, hiddenBiasGradient.Length);
+            Array.Clear(visibleBiasGradient, 0, visibleBiasGradient.Length);
+            // calculate gradient and model error
+            double error = ComputeGradient(input);
+            // calculate weights updates
+            CalculateUpdates(input);
+            // update the network
+            UpdateNetwork();
+            return error;
+        }
+
+        /// <summary>
+        ///   Computes the reconstruction error of the current layer.
+        /// </summary>
+        /// 
+        /// <param name="input">Array of input vectors.</param>
+        /// 
+        /// <returns>
+        ///   Returns sum of learning errors.
+        /// </returns>
+        /// 
+        public double ComputeError(double[][] input)
+        {
+            double errors = 0;
+            Object lockObj = new Object();
+            // For each training instance
+            Parallel.For(0, input.Length,
+#if DEBUG
+                        new ParallelOptions() { MaxDegreeOfParallelism = 1 },
+#endif
+                // Initialize
+                () => storage.Value.Clear(),
+                // Map
+                (observationIndex, loopState, partial) =>
+                {
+                    var observation = input[observationIndex];
+                    var probability = partial.OriginalProbability;
+                    var activations = partial.OriginalActivations;
+                    var reconstruction = partial.ReconstructedInput;
+                    // 1. Compute a forward pass. The network is being
+                    //    driven by data, so we will gather activations
+                    for (int j = 0; j < hidden.Neurons.Length; j++)
+                    {
+                        probability[j] = hidden.Neurons[j].Compute(observation);  // output probabilities
+                        activations[j] = hidden.Neurons[j].Generate(probability[j]); // state activations
+                    }
+                    // 2. Reconstruct inputs from previous outputs
+                    for (int j = 0; j < visible.Neurons.Length; j++)
+                        reconstruction[j] = visible.Neurons[j].Compute(activations);
+                    if (steps > 1)
+                    {
+                        // Perform Gibbs sampling
+                        double[] current = probability;
+                        for (int k = 0; k < steps - 1; k++)
+                        {
+                            for (int j = 0; j < probability.Length; j++)
+                                probability[j] = hidden.Neurons[j].Compute(current);
+                            for (int j = 0; j < reconstruction.Length; j++)
+                                reconstruction[j] = visible.Neurons[j].Compute(probability);
+                            current = reconstruction;
+                        }
+                    }
+                    // Compute current error
+                    for (int j = 0; j < observation.Length; j++)
+                    {
+                        double e = observation[j] - reconstruction[j];
+                        partial.ErrorSumOfSquares += e * e;
+                    }
+                    return partial; // Report partial solution
+                },
+                // Reduce
+                (partial) =>
+                {
+                    lock (lockObj)
+                    {
+                        errors += partial.ErrorSumOfSquares;
+                    }
+                });
+            return errors;
+        }
+
+        #endregion
+
+        #region Private Function
+        private void init(StochasticLayer hidden, StochasticLayer visible)
         {
             this.hidden = hidden;
             this.visible = visible;
@@ -61,94 +284,22 @@ namespace NeuralNet.RestrictedBoltzmannMachine
                 weightsUpdates[i] = new double[hiddenCount];
             visibleBiasUpdates = new double[inputsCount];
             hiddenBiasUpdates = new double[hiddenCount];
-            storage = new ThreadLocal<ParallelStorage>( () =>
-                 new ParallelStorage( inputsCount, hiddenCount ) );
-            this.ParallelOptions = new ParallelOptions( );
+            storage = new ThreadLocal<ParallelStorage>(() =>
+                new ParallelStorage(inputsCount, hiddenCount));
+            this.ParallelOptions = new ParallelOptions();
         }
-        /// <summary>
-        ///   Gets or sets the learning rate of the
-        ///   learning algorithm.Default is 0.1.
-        /// </summary>
-        /// 
-        public double LearningRate
-        {
-            get { return learningRate; }
-            set { learningRate = value; }
-        }
-        /// <summary>
-        ///   Gets or sets parallelization options.
-        /// </summary>
-        /// 
-        /// <summary>
-        ///   Gets or sets parallelization options.
-        /// </summary>
-        /// 
-        public ParallelOptions ParallelOptions
-        {
-            get
-            {
-                if (parallelOptions == null)
-                    parallelOptions = new ParallelOptions( );
-                return parallelOptions;
-            }
-            set { parallelOptions = value; }
-        }
-        /// <summary>
-        ///   Gets or sets the momentum term of the
-        ///   learning algorithm. Default is 0.9.
-        /// </summary>
-        /// 
-        public double Momentum
-        {
-            get { return momentum; }
-            set { momentum = value; }
-        }
-        /// <summary>
-        ///   Gets or sets the Weight Decay constant
-        ///   of the learning algorithm. Default is 0.01.
-        /// </summary>
-        /// 
-        public double Decay
-        {
-            get { return decay; }
-            set { decay = value; }
-        }
-        /// <summary>
-        ///   Runs learning epoch.
-        /// </summary>
-        /// 
-        /// <param name="input">Array of input vectors.</param>
-        /// 
-        /// <returns>
-        ///   Returns sum of learning errors.
-        /// </returns>
-        /// 
-        public double RunEpoch( double[][] input )
-        {
-            // Initialize iteration
-            for (int i = 0; i < weightsGradient.Length; i++)
-                Array.Clear( weightsGradient[i], 0, weightsGradient[i].Length );
-            Array.Clear( hiddenBiasGradient, 0, hiddenBiasGradient.Length );
-            Array.Clear( visibleBiasGradient, 0, visibleBiasGradient.Length );
-            // calculate gradient and model error
-            double error = ComputeGradient( input );
-            // calculate weights updates
-            CalculateUpdates( input );
-            // update the network
-            UpdateNetwork( );
-            return error;
-        }
-        private double ComputeGradient( double[][] input )
+
+        private double ComputeGradient(double[][] input)
         {
             double errors = 0;
-            Object lockObj = new Object( );
+            Object lockObj = new Object();
             // For each training instance
-            Parallel.For( 0, input.Length,
+            Parallel.For(0, input.Length,
                 ParallelOptions,
                 // Initialize
-                () => storage.Value.Clear( ),
+                () => storage.Value.Clear(),
                 // Map
-                ( observationIndex, loopState, partial ) =>
+                (observationIndex, loopState, partial) =>
                 {
                     var observation = input[observationIndex];
                     var probability = partial.OriginalProbability;
@@ -162,12 +313,12 @@ namespace NeuralNet.RestrictedBoltzmannMachine
                     //    driven by data, so we will gather activations
                     for (int j = 0; j < hidden.Neurons.Length; j++)
                     {
-                        probability[j] = hidden.Neurons[j].Compute( observation );  // output probabilities
-                        activations[j] = hidden.Neurons[j].Generate( probability[j] ); // state activations
+                        probability[j] = hidden.Neurons[j].Compute(observation);  // output probabilities
+                        activations[j] = hidden.Neurons[j].Generate(probability[j]); // state activations
                     }
                     // 2. Reconstruct inputs from previous outputs
                     for (int j = 0; j < visible.Neurons.Length; j++)
-                        reconstruction[j] = visible.Neurons[j].Compute( activations );
+                        reconstruction[j] = visible.Neurons[j].Compute(activations);
                     if (steps > 1)
                     {
                         // Perform Gibbs sampling
@@ -175,9 +326,9 @@ namespace NeuralNet.RestrictedBoltzmannMachine
                         for (int k = 0; k < steps - 1; k++)
                         {
                             for (int j = 0; j < probability.Length; j++)
-                                probability[j] = hidden.Neurons[j].Compute( current );
+                                probability[j] = hidden.Neurons[j].Compute(current);
                             for (int j = 0; j < reconstruction.Length; j++)
-                                reconstruction[j] = visible.Neurons[j].Compute( probability );
+                                reconstruction[j] = visible.Neurons[j].Compute(probability);
                             current = reconstruction;
                         }
                     }
@@ -185,7 +336,7 @@ namespace NeuralNet.RestrictedBoltzmannMachine
                     //    is now being driven by reconstructions, so we should
                     //    gather the output probabilities without sampling
                     for (int j = 0; j < hidden.Neurons.Length; j++)
-                        reprobability[j] = hidden.Neurons[j].Compute( reconstruction );
+                        reprobability[j] = hidden.Neurons[j].Compute(reconstruction);
                     // 4.1. Compute positive associations
                     for (int k = 0; k < observation.Length; k++)
                         for (int j = 0; j < probability.Length; j++)
@@ -211,7 +362,7 @@ namespace NeuralNet.RestrictedBoltzmannMachine
                     return partial; // Report partial solution
                 },
                 // Reduce
-                ( partial ) =>
+                (partial) =>
                 {
                     lock (lockObj)
                     {
@@ -225,79 +376,12 @@ namespace NeuralNet.RestrictedBoltzmannMachine
                             visibleBiasGradient[i] += partial.VisibleBiasGradient[i];
                         errors += partial.ErrorSumOfSquares;
                     }
-                } );
+                });
             return errors;
         }
-        /// <summary>
-        ///   Computes the reconstruction error of the current layer.
-        /// </summary>
-        /// 
-        /// <param name="input">Array of input vectors.</param>
-        /// 
-        /// <returns>
-        ///   Returns sum of learning errors.
-        /// </returns>
-        /// 
-//        public double ComputeError( double[][] input )
-//        {
-//            double errors = 0;
-//            Object lockObj = new Object( );
-//            // For each training instance
-//            Parallel.For( 0, input.Length,
-//#if DEBUG
-//                new ParallelOptions( ) { MaxDegreeOfParallelism = 1 },
-//#endif
-//                // Initialize
-//                () => storage.Value.Clear( ),
-//                // Map
-//                ( observationIndex, loopState, partial ) =>
-//                {
-//                    var observation = input[observationIndex];
-//                    var probability = partial.OriginalProbability;
-//                    var activations = partial.OriginalActivations;
-//                    var reconstruction = partial.ReconstructedInput;
-//                    // 1. Compute a forward pass. The network is being
-//                    //    driven by data, so we will gather activations
-//                    for (int j = 0; j < hidden.Neurons.Length; j++)
-//                    {
-//                        probability[j] = hidden.Neurons[j].Compute( observation );  // output probabilities
-//                        activations[j] = hidden.Neurons[j].Generate( probability[j] ); // state activations
-//                    }
-//                    // 2. Reconstruct inputs from previous outputs
-//                    for (int j = 0; j < visible.Neurons.Length; j++)
-//                        reconstruction[j] = visible.Neurons[j].Compute( activations );
-//                    if (steps > 1)
-//                    {
-//                        // Perform Gibbs sampling
-//                        double[] current = probability;
-//                        for (int k = 0; k < steps - 1; k++)
-//                        {
-//                            for (int j = 0; j < probability.Length; j++)
-//                                probability[j] = hidden.Neurons[j].Compute( current );
-//                            for (int j = 0; j < reconstruction.Length; j++)
-//                                reconstruction[j] = visible.Neurons[j].Compute( probability );
-//                            current = reconstruction;
-//                        }
-//                    }
-//                    // Compute current error
-//                    for (int j = 0; j < observation.Length; j++)
-//                    {
-//                        double e = observation[j] - reconstruction[j];
-//                        partial.ErrorSumOfSquares += e * e;
-//                    }
-//                    return partial; // Report partial solution
-//                },
-//                // Reduce
-//                ( partial ) =>
-//                {
-//                    lock (lockObj)
-//                    {
-//                        errors += partial.ErrorSumOfSquares;
-//                    }
-//                } );
-//            return errors;
-//        }
-        private void CalculateUpdates( double[][] input )
+
+
+        private void CalculateUpdates(double[][] input)
         {
             double rate = learningRate;
             // Assume all neurons in the layer have the same act function
@@ -315,10 +399,11 @@ namespace NeuralNet.RestrictedBoltzmannMachine
             for (int i = 0; i < visibleBiasUpdates.Length; i++)
                 visibleBiasUpdates[i] = momentum * visibleBiasUpdates[i]
                         + (rate * visibleBiasGradient[i]);
-            Debug.Assert( !weightsGradient.HasNaN( ) );
-            Debug.Assert( !visibleBiasUpdates.HasNaN( ) );
-            Debug.Assert( !hiddenBiasUpdates.HasNaN( ) );
+            Debug.Assert(!weightsGradient.HasNaN());
+            Debug.Assert(!visibleBiasUpdates.HasNaN());
+            Debug.Assert(!hiddenBiasUpdates.HasNaN());
         }
+
         private void UpdateNetwork()
         {
             // 6.1 Update hidden layer weights
@@ -332,68 +417,8 @@ namespace NeuralNet.RestrictedBoltzmannMachine
             // 6.2 Update visible layer with reverse weights
             for (int i = 0; i < visible.Neurons.Length; i++)
                 visible.Neurons[i].Threshold += visibleBiasUpdates[i];
-            visible.CopyReversedWeightsFrom( hidden );
+            visible.CopyReversedWeightsFrom(hidden);
         }
-        private class ParallelStorage
-        {
-            public double[][] WeightGradient { get; set; }
-            public double[] VisibleBiasGradient { get; set; }
-            public double[] HiddenBiasGradient { get; set; }
-            public double[] OriginalActivations { get; set; }
-            public double[] OriginalProbability { get; set; }
-            public double[] ReconstructedInput { get; set; }
-            public double[] ReconstructedProbs { get; set; }
-            public double ErrorSumOfSquares { get; set; }
-            public ParallelStorage( int inputsCount, int hiddenCount )
-            {
-                WeightGradient = new double[inputsCount][];
-                for (int i = 0; i < WeightGradient.Length; i++)
-                    WeightGradient[i] = new double[hiddenCount];
-                VisibleBiasGradient = new double[inputsCount];
-                HiddenBiasGradient = new double[hiddenCount];
-                OriginalActivations = new double[hiddenCount];
-                OriginalProbability = new double[hiddenCount];
-                ReconstructedInput = new double[inputsCount];
-                ReconstructedProbs = new double[hiddenCount];
-            }
-            public ParallelStorage Clear()
-            {
-                ErrorSumOfSquares = 0;
-                for (int i = 0; i < WeightGradient.Length; i++)
-                    Array.Clear( WeightGradient[i], 0, WeightGradient[i].Length );
-                Array.Clear( VisibleBiasGradient, 0, VisibleBiasGradient.Length );
-                Array.Clear( HiddenBiasGradient, 0, HiddenBiasGradient.Length );
-                return this;
-            }
-        }
-        ///// <summary>
-        /////   Performs application-defined tasks associated with 
-        /////   freeing, releasing, or resetting unmanaged resources.
-        ///// </summary>
-        ///// 
-        //public void Dispose()
-        //{
-        //    Dispose( true );
-        //    GC.SuppressFinalize( this );
-        //}
-        ///// <summary>
-        /////   Releases unmanaged and - optionally - managed resources
-        ///// </summary>
-        ///// 
-        ///// <param name="disposing"><c>true</c> to release both managed and unmanaged
-        ///// resources; <c>false</c> to release only unmanaged resources.</param>
-        ///// 
-        //protected virtual void Dispose( bool disposing )
-        //{
-        //    if (disposing)
-        //    {
-        //        // free managed resources
-        //        if (storage != null)
-        //        {
-        //            storage.Dispose( );
-        //            storage = null;
-        //        }
-        //    }
-        //}
+        #endregion
     }
 }

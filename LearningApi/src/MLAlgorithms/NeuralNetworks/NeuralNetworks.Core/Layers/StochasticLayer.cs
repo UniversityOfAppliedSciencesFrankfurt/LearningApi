@@ -9,15 +9,15 @@ namespace NeuralNetworks.Core.Layers
     /// </summary>
     /// 
     /// <remarks>
-    ///   This class represents a layer of <see cref="StochasticNeuron">stochastic neurons</see>.
+    ///   This class represents a layer of stochastic neurons.
     /// </remarks>
     /// 
     [Serializable]
     public class StochasticLayer : ActivationLayer
     {
-
         private new StochasticNeuron[] neurons;
         private double[] sample;
+
         /// <summary>
         ///   Gets the layer's neurons.
         /// </summary>
@@ -26,8 +26,7 @@ namespace NeuralNetworks.Core.Layers
         {
             get { return neurons; }
         }
-
-
+        
         /// <summary>
         ///   Initializes a new instance of the StochasticLayer class.
         /// </summary>
@@ -55,18 +54,17 @@ namespace NeuralNetworks.Core.Layers
         ///   Returns layer's output vector.
         /// </returns>
         /// 
-        public override double[] Compute(double[] input) //1st: 111000
-        {
-            //   this.hidden = new StochasticLayer(function, hiddenNeurons, inputsCount);
-            double[] output = new double[neuronsCount]; //neuroncount 2
-            //output 
-            for (int i = 0; i < neurons.Length; i++) // Neurons.Length 2
-                output[i] = neurons[i].Compute(input); //predict
+        public override double[] Compute(double[] input)
+        {          
+            double[] output = new double[neuronsCount];
+           
+            for (int i = 0; i < neurons.Length; i++) 
+                output[i] = neurons[i].Compute(input); 
 
             this.output = output;
-
             return output;
         }
+
         /// <summary>
         ///   Compute probability vector of the layer.
         /// </summary>
@@ -93,6 +91,7 @@ namespace NeuralNetworks.Core.Layers
 
             return sample;
         }
+
         /// <summary>
         ///   Copy the weights of another layer in reversed order. This
         ///   can be used to update visible layers from hidden layers and

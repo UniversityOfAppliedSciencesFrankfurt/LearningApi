@@ -4,22 +4,7 @@ using LearningFoundation;
 
 namespace NeuralNetworks.Core.ActivationFunctions
 {
-
-    public class BernoulliFunctionGen : BernoulliFunction
-    {
-        private double alpha = 0.5;
-
-        //public BernoulliFunctionGen(double alpha) : base(alpha)
-        //{
-        //}
-
-        //public override double Function(double x)
-        //{
-        //    double y = base.Function(x);
-        //    return y > Generator.Random.NextDouble() ? 1 : 0;
-        //}
-    }
-
+    
     /// <summary>
     ///   Bernoulli stochastic activation function.
     /// </summary>
@@ -42,6 +27,8 @@ namespace NeuralNetworks.Core.ActivationFunctions
     [Serializable]
     public class BernoulliFunction : IStochasticFunction
     {
+        private double alpha; // sigmoid's alpha value
+
         /// <summary>
         ///   Sigmoid's alpha value.
         /// </summary>
@@ -51,8 +38,6 @@ namespace NeuralNetworks.Core.ActivationFunctions
         /// value of this property makes sigmoid to be very smooth (slowly growing from its
         /// minimum value to its maximum value).</para>
         ///
-        private double alpha;
-
         public double Alpha
         {
             get { return alpha; }
@@ -69,20 +54,22 @@ namespace NeuralNetworks.Core.ActivationFunctions
             this.alpha = alpha;
         }
 
-        public BernoulliFunction() : this(0.0)
-        {
-
-        }
+        /// <summary>
+        ///   Initializes a new instance of the BernoulliFunction class.
+        /// </summary>
+        /// 
+        public BernoulliFunction()
+            : this(alpha: 1) { }
 
         /// <summary>
-        /// Calculates function mean value.
+        /// Calculates function value.
         /// </summary>
         ///
-        /// Input value: x
+        /// <param name="x">Function input value.</param>
         /// 
-        /// Output value: f(x)
+        /// <returns>Function output value, <i>f(x)</i>.</returns>
         ///
-        /// The method calculates function value at point x
+        /// <remarks>The method calculates function value at point <paramref name="x"/>.</remarks>
         ///
         public virtual double Function(double x)
         {
@@ -97,7 +84,6 @@ namespace NeuralNetworks.Core.ActivationFunctions
         /// 
         /// <returns>Draws a random value from the function.</returns>
         /// 
-
         public double Generate(double x)
         {
             double y = Function(x);
@@ -118,7 +104,6 @@ namespace NeuralNetworks.Core.ActivationFunctions
         /// 
         /// <returns>Draws a random value from the function.</returns>
         /// 
-
         public double Generate2(double y)
         {
             return y > Generator.Random.NextDouble() ? 1 : 0;

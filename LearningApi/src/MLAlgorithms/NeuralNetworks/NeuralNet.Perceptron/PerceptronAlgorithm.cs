@@ -68,11 +68,22 @@ namespace NeuralNet.Perceptron
                     // Updating of threshold
                     this.m_Threshold += this.m_LearningRate * error;
                 }
-               // Debug.WriteLine($"{m_Weights[0]}, {m_Threshold}");
+                // Debug.WriteLine($"{m_Weights[0]}, {m_Threshold}");
                 if (totalError == 0)
                 {
-                    score.Iterations = i;
-                    break;
+                    bool isAny = false;
+
+                    foreach (var err in m_Errors)
+                    {
+                        if (err != 0)
+                        {
+                            isAny = true;
+                            break;
+                        }
+                    }
+
+                    if (!isAny)
+                        break;
                 }
             }
             score.Weights = this.m_Weights;

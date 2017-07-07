@@ -6,29 +6,12 @@ namespace NeuralNetworks.Core.ActivationFunctions
     /// <summary>
     /// Sigmoid activation function.
     /// </summary>
-    ///
-    /// <remarks><para>The class represents sigmoid activation function with
-    /// the next expression:
-    /// <code lang="none">
-    ///                1
-    /// f(x) = ------------------
-    ///        1 + exp(-alpha * x)
-    ///
-    ///           alpha * exp(-alpha * x )
-    /// f'(x) = ---------------------------- = alpha * f(x) * (1 - f(x))
-    ///           (1 + exp(-alpha * x))^2
-    /// </code>
-    /// </para>
-    ///
-    /// <para>Output range of the function: <b>[0, 1]</b>.</para>
-    /// 
-    /// <para>Functions graph:</para>
-    /// <img src="img/neuro/sigmoid.bmp" width="242" height="172" />
-    /// </remarks>
+    ///   
     /// 
     [Serializable]
     public class SigmoidFunction : IActivationFunction
     {
+        // sigmoid's alpha value
         private double alpha = 2;
 
         /// <summary>
@@ -49,8 +32,14 @@ namespace NeuralNetworks.Core.ActivationFunctions
             set { alpha = value; }
         }
 
+
         /// <summary>
-        /// Initializes a new instance of the <see cref="SigmoidFunction"/> class.
+        /// Initializes a new instance of the SigmoidFunction class.
+        /// </summary>
+        public SigmoidFunction() { }
+
+        /// <summary>
+        /// Initializes a new instance of the Sigmoid Function class with specific alpha
         /// </summary>
         /// 
         /// <param name="alpha">Sigmoid's alpha value.</param>
@@ -59,6 +48,7 @@ namespace NeuralNetworks.Core.ActivationFunctions
         {
             this.alpha = alpha;
         }
+
 
         /// <summary>
         /// Calculates function value.
@@ -69,7 +59,7 @@ namespace NeuralNetworks.Core.ActivationFunctions
         /// <returns>Function output value, <i>f(x)</i>.</returns>
         ///
         /// <remarks>The method calculates function value at point <paramref name="x"/>.</remarks>
-        ///
+        ///           
         public double Function(double x)
         {
             return (1 / (1 + Math.Exp(-alpha * x)));

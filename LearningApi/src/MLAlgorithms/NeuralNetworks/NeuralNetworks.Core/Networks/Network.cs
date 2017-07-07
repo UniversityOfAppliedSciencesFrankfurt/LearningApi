@@ -3,10 +3,16 @@ using NeuralNetworks.Core.Layers;
 
 namespace NeuralNetworks.Core.Networks
 {
+    /// <summary>
+    /// Base neural network class.
+    /// </summary>
+    /// 
+    /// <remarks>This is a base neural netwok class, which represents
+    /// collection of neuron's layers.</remarks>
+    /// 
     [Serializable]
     public abstract class Network
     {
-
         /// <summary>
         /// Network's inputs count.
         /// </summary>
@@ -42,6 +48,7 @@ namespace NeuralNetworks.Core.Networks
         {
             get { return layers; }
         }
+
         /// <summary>
         /// Network's output vector.
         /// </summary>
@@ -49,7 +56,7 @@ namespace NeuralNetworks.Core.Networks
         /// <remarks><para>The calculation way of network's output vector is determined by
         /// layers, which comprise the network.</para>
         /// 
-        /// <para><note>The property is not initialized  until layer
+        /// <para><note>The property is not initialized until Compute
         /// method is called.</note></para>
         /// </remarks>
         /// 
@@ -59,7 +66,7 @@ namespace NeuralNetworks.Core.Networks
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="Network"/> class.
+        /// Initializes a new instance of the Network class.
         /// </summary>
         /// 
         /// <param name="inputsCount">Network's inputs count.</param>
@@ -84,19 +91,6 @@ namespace NeuralNetworks.Core.Networks
         /// 
         /// <returns>Returns network's output vector.</returns>
         /// 
-        /// <remarks><para>The actual network's output vecor is determined by layers,
-        /// which comprise the layer - represents an output vector of the last layer
-        /// of the network. The output vector is also stored in Output property.</para>
-        /// 
-        /// <para><note>The method may be called safely from multiple threads to compute network's
-        /// output value for the specified input values. However, the value of
-        /// Output property in multi-threaded environment is not predictable,
-        /// since it may hold network's output computed from any of the caller threads. Multi-threaded
-        /// access to the method is useful in those cases when it is required to improve performance
-        /// by utilizing several threads and the computation is based on the immediate return value
-        /// of the method, but not on network's output property.</note></para>
-        /// </remarks>
-        /// 
         public virtual double[] Compute( double[] input )
         {
             // local variable to avoid mutlithread conflicts
@@ -118,7 +112,7 @@ namespace NeuralNetworks.Core.Networks
         /// Randomize layers of the network.
         /// </summary>
         /// 
-        /// <remarks>Randomizes network's layers by calling Layer.Randomize method
+        /// <remarks>Randomizes network's layers by calling Randomize method
         /// of each layer.</remarks>
         /// 
         public virtual void Randomize()
@@ -128,7 +122,5 @@ namespace NeuralNetworks.Core.Networks
                 layer.Randomize( );
             }
         }
-
-
     }
 }

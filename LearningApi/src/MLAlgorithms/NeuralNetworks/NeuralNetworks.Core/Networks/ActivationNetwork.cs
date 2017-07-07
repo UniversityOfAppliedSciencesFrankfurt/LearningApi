@@ -21,8 +21,7 @@ namespace NeuralNetworks.Core.Networks
         /// <param name="neuronsCount">Array, which specifies the amount of neurons in
         /// each layer of the neural network.</param>
         /// 
-        /// <remarks>The new network is randomized (see <see cref="ActivationNeuron.Randomize"/>
-        /// method) after it is created.</remarks>
+        /// <remarks>The new network is randomized after it is created.</remarks>
         /// 
         public ActivationNetwork(IActivationFunction function, int inputsCount, params int[] neuronsCount)
             : base(inputsCount, neuronsCount.Length)
@@ -38,7 +37,6 @@ namespace NeuralNetworks.Core.Networks
                     // activation function of the layer
                     function);
             }
-        }
-        
+        }        
     }
 }

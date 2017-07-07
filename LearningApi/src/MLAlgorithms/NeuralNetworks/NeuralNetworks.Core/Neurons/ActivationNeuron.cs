@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using LearningFoundation;
+﻿using LearningFoundation;
+using System;
 
 namespace NeuralNetworks.Core.Neurons
 {
@@ -47,29 +45,31 @@ namespace NeuralNetworks.Core.Neurons
             get { return threshold; }
             set { threshold = value; }
         }
+
         /// <summary>
         /// Neuron's activation function.
         /// </summary>
         /// 
-
         public IActivationFunction ActivationFunction
         {
             get { return function; }
             set { function = value; }
 
         }
+
         /// <summary>
-        /// Initializes a new instance of the <see cref="ActivationNeuron"/> class.
+        /// Initializes a new instance of the Activation Neuron class.
         /// </summary>
         /// 
         /// <param name="inputs">Neuron's inputs count.</param>
         /// <param name="function">Neuron's activation function.</param>
         /// 
-        public ActivationNeuron( int inputs, IActivationFunction function )
-            : base( inputs )
+        public ActivationNeuron(int inputs, IActivationFunction function)
+            : base(inputs)
         {
             this.function = function;
         }
+
         /// <summary>
         /// Randomize neuron.
         /// </summary>
@@ -77,14 +77,13 @@ namespace NeuralNetworks.Core.Neurons
         /// <remarks>Calls base class Neuron.Randomizemethod
         /// to randomize neuron's weights and then randomizes threshold's value.</remarks>
         /// 
-
         public override void Randomize()
         {
             // randomize weights
-            base.Randomize( );
+            base.Randomize();
 
             // randomize threshold
-            threshold = rand.Generate( );
+            threshold = rand.Generate();
         }
 
 
@@ -95,29 +94,12 @@ namespace NeuralNetworks.Core.Neurons
         /// <param name="input">Input vector.</param>
         /// 
         /// <returns>Returns neuron's output value.</returns>
-        /// 
-        /// <remarks><para>The output value of activation neuron is equal to value
-        /// of nueron's activation function, which parameter is weighted sum
-        /// of its inputs plus threshold value. The output value is also stored
-        /// in Output</see> property.</para>
-        /// 
-        /// <para><note>The method may be called safely from multiple threads to compute neuron's
-        /// output value for the specified input values. However, the value of
-        /// output property in multi-threaded environment is not predictable,
-        /// since it may hold neuron's output computed from any of the caller threads. Multi-threaded
-        /// access to the method is useful in those cases when it is required to improve performance
-        /// by utilizing several threads and the computation is based on the immediate return value
-        /// of the method, but not on neuron's output property.</note></para>
-        /// </remarks>
-        /// 
-        /// <exception cref="ArgumentException">Wrong length of the input vector, which is not
-        /// equal to the <see cref="Neuron.InputsCount">expected value</see>.</exception>
-        /// 
-        public override double Compute( double[] input )
+        ///        
+        public override double Compute(double[] input)
         {
             // check for corrent input vector
             if (input.Length != inputsCount)
-                throw new ArgumentException( "Wrong length of the input vector." );
+                throw new ArgumentException("Wrong length of the input vector.");
 
             // initial sum value
             double sum = 0.0;
@@ -128,7 +110,7 @@ namespace NeuralNetworks.Core.Neurons
             sum += threshold;
 
             // local variable to avoid mutlithreaded conflicts
-            double output = function.Function( sum );
+            double output = function.Function(sum);
 
             // assign output property as well (works correctly for single threaded usage)
             this.output = output;

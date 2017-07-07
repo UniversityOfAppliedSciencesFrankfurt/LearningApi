@@ -10,21 +10,21 @@ namespace NeuralNetworks.Core.Layers
     /// Activation layer.
     /// </summary>
     /// 
-    /// <remarks>Activation layer is a layer of <see cref="ActivationNeuron">activation neurons</see>.
+    /// <remarks>Activation layer is a layer of activation neurons
     /// The layer is usually used in multi-layer neural networks.</remarks>
     /// 
     [Serializable]
     public class ActivationLayer : Layer
     {
         /// <summary>
-        /// Initializes a new instance of the ActivationLayer class.
+        /// Initializes a new instance of the <see cref="ActivationLayer"/> class.
         /// </summary>
         /// 
-        /// Layer's neurons count.</param>
-        /// Layer's inputs count.</param>
-        /// Activation function of neurons of the layer.</param>
+        /// <param name="neuronsCount">Layer's neurons count.</param>
+        /// <param name="inputsCount">Layer's inputs count.</param>
+        /// <param name="function">Activation function of neurons of the layer.</param>
         /// 
-        /// <remarks>The new layer is randomized (ActivationNeuron.Randomize
+        /// <remarks>The new layer is randomized (see <see cref="ActivationNeuron.Randomize"/>
         /// method) after it is created.</remarks>
         /// 
         public ActivationLayer(int neuronsCount, int inputsCount, IActivationFunction function)
@@ -34,6 +34,7 @@ namespace NeuralNetworks.Core.Layers
             for (int i = 0; i < neurons.Length; i++)
                 neurons[i] = new ActivationNeuron(inputsCount, function);
         }
+
         /// <summary>
         /// Set new activation function for all neurons of the layer.
         /// </summary>
@@ -41,7 +42,7 @@ namespace NeuralNetworks.Core.Layers
         /// <param name="function">Activation function to set.</param>
         /// 
         /// <remarks><para>The methods sets new activation function for each neuron by setting
-        /// their Activation Function property.</remarks>
+        /// their <see cref="ActivationNeuron.ActivationFunction"/> property.</para></remarks>
         /// 
         public void SetActivationFunction(IActivationFunction function)
         {

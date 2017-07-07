@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using LearningFoundation;
+﻿using LearningFoundation;
+using System;
 
 namespace NeuralNetworks.Core.Neurons
 {
@@ -21,7 +19,6 @@ namespace NeuralNetworks.Core.Neurons
     [Serializable]
     public class StochasticNeuron : ActivationNeuron
     {
-
         private double sample;
         private new IStochasticFunction function;
 
@@ -30,7 +27,6 @@ namespace NeuralNetworks.Core.Neurons
         ///   function for this stochastic neuron.
         /// </summary>
         /// 
-
         public new IStochasticFunction ActivationFunction
         {
             get { return function; }
@@ -38,7 +34,7 @@ namespace NeuralNetworks.Core.Neurons
         }
 
         /// <summary>
-        ///   Initializes a new instance of the <see cref="StochasticNeuron"/> class.
+        ///   Initializes a new instance of the Stochastic Neuron class.
         /// </summary>
         /// 
         /// <param name="inputs">Number of inputs for the neuron.</param>
@@ -55,15 +51,14 @@ namespace NeuralNetworks.Core.Neurons
         ///   Computes output value of neuron.
         /// </summary>
         /// 
-        /// Input  : An input vector
+        /// <param name="input">An input vector.</param>
         /// 
         /// <returns>Returns the neuron's output value for the given input.</returns>
         /// 
-           //this.hidden = new StochasticLayer(function, hiddenNeurons, inputsCount);
-        public override double Compute( double[] input ) //1st: 111000
+        public override double Compute( double[] input ) 
         {
-            double sum = threshold; //1st :0
-            for (int i = 0; i < weights.Length; i++) // Length -6
+            double sum = threshold;
+            for (int i = 0; i < weights.Length; i++) 
                 sum += weights[i] * input[i];
             double output = function.Function( sum );   
             this.output = output;
@@ -80,7 +75,6 @@ namespace NeuralNetworks.Core.Neurons
         /// <returns>A possible output for the neuron drawn
         /// from the neuron's stochastic function.</returns>
         /// 
-
         public double Generate( double[] input )
         {
             double sum = threshold;
@@ -92,6 +86,7 @@ namespace NeuralNetworks.Core.Neurons
             this.sample = sample;
             return sample;
         }
+
         /// <summary>
         ///   Samples the neuron output considering
         ///   the stochastic activation function.
@@ -102,7 +97,6 @@ namespace NeuralNetworks.Core.Neurons
         /// <returns>A possible output for the neuron drawn
         /// from the neuron's stochastic function.</returns>
         /// 
-
         public double Generate( double output )
         {
             double sample = function.Generate2( output );
@@ -110,6 +104,5 @@ namespace NeuralNetworks.Core.Neurons
             this.sample = sample;
             return sample;
         }
-
     }
 }
