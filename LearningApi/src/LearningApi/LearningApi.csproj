@@ -17,6 +17,7 @@
 
   <ItemGroup>
     <Compile Remove="ICloneable.cs" />
+    <Compile Remove="IRandomElement.cs" />
     <Compile Remove="IUnsupervisedLearning.cs" />
     <Compile Remove="Math\Normal.cs" />
     <Compile Remove="Math\Special.cs" />

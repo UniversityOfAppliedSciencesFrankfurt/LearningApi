@@ -26,7 +26,6 @@ namespace LearningFoundation
         /// <returns></returns>
         double[] Predict(double[][] data, IContext ctx);
 
-
         // TODO: Validate();
     }
 }

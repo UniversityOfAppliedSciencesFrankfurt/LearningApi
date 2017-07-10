@@ -14,6 +14,10 @@ namespace NeuralNet.RestrictedBoltzmannMachine
 {
     public class RBMAlgorithm : NeuralNetCore
     {
+        /// <summary>
+        /// Define RBM specific variables
+        /// </summary>
+
         //Define algorithm main variables
         private double m_Momentum = 0.9;
         private double m_LearningRate = 0.1;
@@ -26,28 +30,34 @@ namespace NeuralNet.RestrictedBoltzmannMachine
         private double m_Threshold;
         private RestrictedBoltzmannMachine m_RNetwork;
 
-        /// <summary>
-        /// Define RBM specific variables
-        /// </summary>
         //Gradient Variable 
         private double[][] m_weightsGradient;
         private double[] m_visibleBiasGradient;
         private double[] m_hiddenBiasGradient;
+
         //Neuron and layer update variables
         private double[][] m_weightsUpdates;
         private double[] m_visibleBiasUpdates;
         private double[] m_hiddenBiasUpdates;
+
         // Inputs Count and hidden Count 
         private int inputsCount;
         private int hiddenCount;
+
         // Special RBM layer 
         private StochasticLayer m_Hidden;
         private StochasticLayer m_Visible;
+
         //Special parallel type storage for multilayer calculating from RBM Gradient
         [NonSerialized]
         private ParallelOptions parallelOptions;
         private ThreadLocal<ParallelStorage> storage;
-        #region Parallel Method implement
+
+        // Activation function
+        private IStochasticFunction m_StochasticFunction = new BernoulliFunction(alpha: 0.5);
+        private Func<double, double> m_ActivationFunction = new BernoulliFunction(alpha: 0.5).Function;
+
+        #region Public Method
         /// <summary>
         ///   Gets or sets parallelization options.
         /// </summary>
@@ -62,51 +72,11 @@ namespace NeuralNet.RestrictedBoltzmannMachine
             }
             set { parallelOptions = value; }
         }
-        /// <summary>
-        /// Get or set parallelization value storage
-        /// 
-        /// </summary>
-        private class ParallelStorage
-        {
-            public double[][] WeightGradient { get; set; }
-            public double[] VisibleBiasGradient { get; set; }
-            public double[] HiddenBiasGradient { get; set; }
-            public double[] OriginalActivations { get; set; }
-            public double[] OriginalProbability { get; set; }
-            public double[] ReconstructedInput { get; set; }
-            public double[] ReconstructedProbs { get; set; }
-            public double ErrorSumOfSquares { get; set; }
-            public ParallelStorage(int inputsCount, int hiddenCount)
-            {
-                WeightGradient = new double[inputsCount][];
-                for (int i = 0; i < WeightGradient.Length; i++)
-                    WeightGradient[i] = new double[hiddenCount];
-                VisibleBiasGradient = new double[inputsCount];
-                HiddenBiasGradient = new double[hiddenCount];
-                OriginalActivations = new double[hiddenCount];
-                OriginalProbability = new double[hiddenCount];
-                ReconstructedInput = new double[inputsCount];
-                ReconstructedProbs = new double[hiddenCount];
-            }
-            public ParallelStorage Clear()
-            {
-                ErrorSumOfSquares = 0;
-                for (int i = 0; i < WeightGradient.Length; i++)
-                    Array.Clear(WeightGradient[i], 0, WeightGradient[i].Length);
-                Array.Clear(VisibleBiasGradient, 0, VisibleBiasGradient.Length);
-                Array.Clear(HiddenBiasGradient, 0, HiddenBiasGradient.Length);
-                return this;
-            }
-        }
-        #endregion
-        // Activation function
-        private IStochasticFunction m_StochasticFunction = new BernoulliFunction(alpha: 0.5);
-        private Func<double, double> m_ActivationFunction = new BernoulliFunction(alpha: 0.5).Function;
 
-        #region Public Method
         /// <summary>
         /// Gets the visible layer of the machine.
         /// </summary>
+        /// 
         public StochasticLayer Visible
         {
             get { return m_Visible; }
@@ -115,6 +85,7 @@ namespace NeuralNet.RestrictedBoltzmannMachine
         /// <summary>
         /// Gets the hidden layer of the machine.
         /// </summary>
+        /// 
         public StochasticLayer Hidden
         {
             get { return m_Hidden; }
@@ -164,6 +135,8 @@ namespace NeuralNet.RestrictedBoltzmannMachine
             set { m_Iterations = value; }
         }
 
+
+
         /// <summary>
         ///   Creates a new instance of RBM Algorithm Class.
         /// </summary>
@@ -185,7 +158,6 @@ namespace NeuralNet.RestrictedBoltzmannMachine
         ///   Returns sum of learning errors.
         /// </returns>
         /// 
-        /// 
         public override IScore Run(double[][] featureValues, IContext ctx)
         {
 
@@ -195,6 +167,7 @@ namespace NeuralNet.RestrictedBoltzmannMachine
             m_Weights = new double[m_Dimensions];
             initializeWeights();
 
+            //
             // Error calculation
             double totalError = 0;
             var score = new RBMScore();
@@ -217,17 +190,20 @@ namespace NeuralNet.RestrictedBoltzmannMachine
                     break;
                 }
 
+                //
                 // Calculate weights updates
                 calculateUpdates(featureValues);
 
+                //
                 // Update the network
                 updateNetwork();
 
+                //
                 // Calculate visible neuron weight score
-                for (int x = 0; x < m_Visible.Neurons.Length; x++) //6
+                for (int x = 0; x < m_Visible.Neurons.Length; x++) 
                 {
                     StochasticNeuron visibleneuron = m_Visible.Neurons[x];
-                    for (int y = 0; y < m_Hidden.Neurons.Length; y++) //2
+                    for (int y = 0; y < m_Hidden.Neurons.Length; y++) 
                     {
                         {
                             m_Weights[x] += visibleneuron.Weights[y];
@@ -254,9 +230,10 @@ namespace NeuralNet.RestrictedBoltzmannMachine
             {
                 results[i] = calculateResult(data[i], ctx.DataDescriptor.Features.Length);
             }
-
             return results;
         }
+
+
         #endregion
         #region Private Method
 
@@ -472,37 +449,73 @@ namespace NeuralNet.RestrictedBoltzmannMachine
 
         /// <summary>
         /// Compute output value of neuron for the given input
-        /// Returns the neuron's output value for the given input.
         /// </summary>
         /// <param name="input"></param>
-        /// <param name="numOfFeatures"></param>       
+        /// <param name="numOfFeatures"></param>
+        /// <returns>Hidden neuron's output value</returns>
+        /// 
         private double calculateResult(double[] input, int numOfFeatures)
         {
+            double output = 0.0;         
+            double[] sum = new double[m_Hidden.Neurons.Length];
 
-            double result = 0.0;
-            double[] output = new double[m_Hidden.Neurons.Length];
+            //
+            // Calculate the classification Probability
             for (int j = 0; j < m_Hidden.Neurons.Length; j++)
             {
                 StochasticNeuron neuron = m_Hidden.Neurons[j];
                 for (int i = 0; i < numOfFeatures; i++)
                 {
-                    output[j] += neuron.Weights[i] * input[i];
+                    sum[j] += neuron.Weights[i] * input[i];
                 }
-                output[j] += neuron.Threshold;
-                output[j] = m_ActivationFunction(output[j]);
+                sum[j] += neuron.Threshold;
+                sum[j] = m_ActivationFunction(sum[j]);
             }
-            for (int j = 0; j < m_Hidden.Neurons.Length - 1; j++)
+
+            //
+            //Display the class with the highest probability
+            double maxvalue = sum.Max();
+            int maxindex = sum.ToList().IndexOf(maxvalue);
+            output = maxvalue + maxindex;
+
+            return (output);
+        }
+
+        /// <summary>
+        /// Get or set parallelization value storage
+        /// </summary>
+        /// 
+        private class ParallelStorage
+        {
+            public double[][] WeightGradient { get; set; }
+            public double[] VisibleBiasGradient { get; set; }
+            public double[] HiddenBiasGradient { get; set; }
+            public double[] OriginalActivations { get; set; }
+            public double[] OriginalProbability { get; set; }
+            public double[] ReconstructedInput { get; set; }
+            public double[] ReconstructedProbs { get; set; }
+            public double ErrorSumOfSquares { get; set; }
+            public ParallelStorage(int inputsCount, int hiddenCount)
             {
-                if (output[j + 1] > output[j])
-                {
-                    result = (j + 1) + output[j + 1];
-                }
-                else
-                {
-                    result = j + output[j];
-                }
+                WeightGradient = new double[inputsCount][];
+                for (int i = 0; i < WeightGradient.Length; i++)
+                    WeightGradient[i] = new double[hiddenCount];
+                VisibleBiasGradient = new double[inputsCount];
+                HiddenBiasGradient = new double[hiddenCount];
+                OriginalActivations = new double[hiddenCount];
+                OriginalProbability = new double[hiddenCount];
+                ReconstructedInput = new double[inputsCount];
+                ReconstructedProbs = new double[hiddenCount];
             }
-            return (result);
+            public ParallelStorage Clear()
+            {
+                ErrorSumOfSquares = 0;
+                for (int i = 0; i < WeightGradient.Length; i++)
+                    Array.Clear(WeightGradient[i], 0, WeightGradient[i].Length);
+                Array.Clear(VisibleBiasGradient, 0, VisibleBiasGradient.Length);
+                Array.Clear(HiddenBiasGradient, 0, HiddenBiasGradient.Length);
+                return this;
+            }
         }
 
         #endregion

@@ -1,6 +1,9 @@
 ﻿using LearningFoundation;
 using NeuralNet.RestrictedBoltzmannMachine;
 using NeuralNetworks.Core.ActivationFunctions;
+using System;
+using LearningFoundation.MathFunction;
+using System.Linq;
 using Xunit;
 
 namespace test.NeuronNetwork
@@ -15,7 +18,7 @@ namespace test.NeuronNetwork
 
         /// <summary>
         /// Describe the sample data for training,
-        /// including the ordinal numbers and labels of features 
+        /// including the ID numbers and labels of features 
         /// </summary>
         /// <returns> Sample data description </returns>
         private DataDescriptor getDescriptor()
@@ -74,6 +77,25 @@ namespace test.NeuronNetwork
             desc.LabelIndex = 6;
             return desc;
         }
+        private DataDescriptor getDescriptor2()
+        {
+            DataDescriptor desc = new DataDescriptor();
+            int NumOfFeature = 10;
+            desc.Features = new LearningFoundation.DataMappers.Column[NumOfFeature];
+            char[] alpha = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".ToCharArray();
+            for (int i = 0; i < NumOfFeature; i++)
+            {
+                desc.Features[i] = new LearningFoundation.DataMappers.Column()
+                {
+                    Id = i,
+                    Name = alpha[i].ToString(),
+                    Type = LearningFoundation.DataMappers.ColumnType.NUMERIC,
+                    Index = i,
+                };
+            }
+            desc.LabelIndex = NumOfFeature;
+            return desc;
+        }
 
         /// <summary>
         /// Accord .Net standard test for Restricted Boltzmann Machine
@@ -120,7 +142,7 @@ namespace test.NeuronNetwork
             double[] g = rbm.Compute(new double[] { 0, 1, 0, 1, 0, 1 });
 
             // Generate input vectors given the classes:
-            double[] xa = rbm.GenerateInput(new double[] { 1, 0 });
+            double[] xa = rbm.GenerateInput(new double[] { 1, 0 });/// 1.1.1.0.0.0
             double[] xb = rbm.GenerateInput(new double[] { 0, 1 });
 
             //Testing the test data
@@ -137,7 +159,7 @@ namespace test.NeuronNetwork
         {
             // Create some sample inputs. Note that the
             // first three vectors belong to one class, and the other
-            // threebelong to another           
+            // three belong to another           
             LearningApi api = new LearningApi();
             api.UseActionModule<object, double[][]>((notUsed, ctx) =>
             {
@@ -162,6 +184,7 @@ namespace test.NeuronNetwork
             double LearningRates = 0.1;
             double Momentums = 0.9;
             double Decays = 0.01;
+            Random rand = new Random();
 
             // Call the algorithm
             api.UseRestrictedBoltzmannMachine(InputsCount, HiddenNeurons, Iteration, LearningRates, Momentums, Decays);
@@ -169,7 +192,7 @@ namespace test.NeuronNetwork
             //Run the algorithm
             IScore score = api.Run() as IScore;
 
-            //Create some test data
+            //Create some test data manually
             int m_testcount = 8;
             double[][] m_testdata = new double[m_testcount][];
             m_testdata[0] = new double[] { 1, 1, 1, 0, 0, 0 };
@@ -181,9 +204,11 @@ namespace test.NeuronNetwork
             m_testdata[6] = new double[] { 0, 1, 1, 0, 0, 0 };
             m_testdata[7] = new double[] { 0, 0, 0, 0, 1, 1 };
 
+            //
             // Calculate the network output based on the test data
             var m_testresult = api.Algorithm.Predict(m_testdata, api.Context);
 
+            //
             // Testing the test data in the specific order
             for (int i = 0; i < m_testcount - 2; i++)
             {
@@ -191,6 +216,83 @@ namespace test.NeuronNetwork
                     && (m_testresult[i + 1] < m_testresult[i + 2]))
    ^ ((m_testresult[i] < m_testresult[i + 1])
    && (m_testresult[i + 1] > m_testresult[i + 2])));
+            }
+        }
+
+
+        [Fact]
+        public void RBM_SimpleTest2()
+        {
+            // Create some sample inputs. Note that the
+            // first three vectors belong to one class, and the other
+            // three belong to another           
+            LearningApi api = new LearningApi();
+
+            api.UseActionModule<object, double[][]>((notUsed, ctx) =>
+            {
+                ctx.DataDescriptor = getDescriptor2();
+                int NumOfFeature = api.Context.DataDescriptor.Features.Length;
+                var max = Math.Pow(2, NumOfFeature);
+                int maxSamples = Convert.ToInt32(max);
+
+                Random random = new Random();
+
+                double[][] sample = new double[maxSamples][];
+
+                for (int i = 0; i < maxSamples; i++)
+                {
+                    sample[i] = Enumerable.Repeat(0.0, api.Context.DataDescriptor.Features.Length).ToArray();
+                }
+
+                for (int i = 0; i < maxSamples; i++)
+                {
+                    for (int j = 0; j < NumOfFeature; j++)
+                    {
+                        sample[i][j] = random.Next(0, 2);
+                    }
+                }
+
+                return sample;
+            });
+
+            //Define the value of Restricted Boltzmann Machine training variables
+            int InputsCount = 10;
+            int HiddenNeurons = 5;
+            int Iteration = 15000;
+            double LearningRates = 0.07;
+            double Momentums = 0.9;
+            double Decays = 0.01;
+            Random rand = new Random();
+
+            // Call the algorithm
+            api.UseRestrictedBoltzmannMachine(InputsCount, HiddenNeurons, Iteration, LearningRates, Momentums, Decays);
+
+            //Run the algorithm
+            IScore score = api.Run() as IScore;
+
+            //
+            //Auto Generate some test data
+            int m_testcountAuto = 10000;
+            double[][] m_testdataAuto = new double[m_testcountAuto][];
+
+            for (int i = 0; i < m_testcountAuto; i++)
+            {
+                m_testdataAuto[i] = Enumerable.Repeat(0.0, api.Context.DataDescriptor.Features.Length).ToArray();
+            }
+
+            for (int i = 0; i < m_testcountAuto; i++)
+            {
+                for (int j = 0; j < api.Context.DataDescriptor.Features.Length; j++)
+                {
+                    m_testdataAuto[i][j] = rand.Next(0, 2);
+                }
+            }
+
+            // Calculate the network output based on the auto generated test data
+            var m_testresultAuto = api.Algorithm.Predict(m_testdataAuto, api.Context);
+            for (int i = 0; i < m_testcountAuto; i++)
+            {
+                Assert.True(m_testresultAuto[i] > 0);
             }
         }
     }
