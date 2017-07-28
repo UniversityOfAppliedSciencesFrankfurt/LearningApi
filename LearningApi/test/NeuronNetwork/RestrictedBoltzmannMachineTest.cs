@@ -111,8 +111,8 @@ namespace test.NeuronNetwork
             new double[] { 1,1,1,0,0,0 }, // class a
             new double[] { 0,0,1,1,1,0 }, // class b
             new double[] { 0,0,1,1,0,0 }, // class b
-            new double[] { 0,0,1,1,1,0 }, // class b
-            };
+            new double[] { 0,0,1,1,1,0 }, // class b           
+        };
 
             // Create a Bernoulli activation function
             var function = new BernoulliFunction(alpha: 0.5);
@@ -124,7 +124,7 @@ namespace test.NeuronNetwork
             var teacher = new ContrastiveDivergenceLearning(rbm)
             {
                 LearningRate = 0.1,
-                Momentum = 0.1,
+                Momentum = 0.9,
                 Decay = 0.01
             };
 
@@ -135,11 +135,13 @@ namespace test.NeuronNetwork
             // Compute the machine answers for the given test data inputs:
             double[] a = rbm.Compute(new double[] { 1, 1, 1, 0, 0, 0 });
             double[] b = rbm.Compute(new double[] { 0, 0, 0, 1, 1, 1 });
-            double[] c = rbm.Compute(new double[] { 1, 0, 1, 0, 0, 0 });
-            double[] d = rbm.Compute(new double[] { 1, 0, 1, 1, 0, 0 });
-            double[] e = rbm.Compute(new double[] { 1, 0, 1, 0, 1, 0 });
-            double[] f = rbm.Compute(new double[] { 1, 0, 1, 0, 0, 1 });
-            double[] g = rbm.Compute(new double[] { 0, 1, 0, 1, 0, 1 });
+            double[] c = rbm.Compute(new double[] { 1, 1, 0, 0, 0, 0 });
+            double[] d = rbm.Compute(new double[] { 0, 0, 0, 1, 1, 0 });
+            double[] e = rbm.Compute(new double[] { 1, 0, 1, 0, 0, 0 });
+            double[] f = rbm.Compute(new double[] { 0, 0, 0, 1, 0, 1 });
+            double[] g = rbm.Compute(new double[] { 0, 1, 1, 0, 0, 0 });
+            double[] h = rbm.Compute(new double[] { 0, 0, 0, 0, 1, 1 });
+            
 
             // Generate input vectors given the classes:
             double[] xa = rbm.GenerateInput(new double[] { 1, 0 });/// 1.1.1.0.0.0

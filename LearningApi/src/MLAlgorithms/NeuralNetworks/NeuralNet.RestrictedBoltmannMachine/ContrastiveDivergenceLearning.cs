@@ -384,10 +384,7 @@ namespace NeuralNet.RestrictedBoltzmannMachine
         private void CalculateUpdates(double[][] input)
         {
             double rate = learningRate;
-            // Assume all neurons in the layer have the same act function
-            if (visible.Neurons[0].ActivationFunction is GaussianFunction)
-                rate = learningRate / (100 * input.Length);
-            else rate = learningRate / (input.Length);
+           rate = learningRate / (input.Length);
             // 5. Compute gradient descent updates
             for (int i = 0; i < weightsGradient.Length; i++)
                 for (int j = 0; j < weightsGradient[i].Length; j++)

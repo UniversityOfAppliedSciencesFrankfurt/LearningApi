@@ -14,6 +14,7 @@ namespace NeuralNet.RestrictedBoltzmannMachine
 {
     public class RBMAlgorithm : NeuralNetCore
     {
+        #region Define variable
         /// <summary>
         /// Define RBM specific variables
         /// </summary>
@@ -56,6 +57,8 @@ namespace NeuralNet.RestrictedBoltzmannMachine
         // Activation function
         private IStochasticFunction m_StochasticFunction = new BernoulliFunction(alpha: 0.5);
         private Func<double, double> m_ActivationFunction = new BernoulliFunction(alpha: 0.5).Function;
+
+        #endregion
 
         #region Public Method
         /// <summary>
@@ -135,8 +138,7 @@ namespace NeuralNet.RestrictedBoltzmannMachine
             set { m_Iterations = value; }
         }
 
-
-
+        
         /// <summary>
         ///   Creates a new instance of RBM Algorithm Class.
         /// </summary>
@@ -160,7 +162,6 @@ namespace NeuralNet.RestrictedBoltzmannMachine
         /// 
         public override IScore Run(double[][] featureValues, IContext ctx)
         {
-
             m_Dimensions = ctx.DataDescriptor.Features.Count();
             int numOfInputVectors = featureValues.Length;
             m_Errors = new double[numOfInputVectors];
@@ -176,10 +177,10 @@ namespace NeuralNet.RestrictedBoltzmannMachine
             {
                 for (int j = 0; j < m_weightsGradient.Length; j++)
                     Array.Clear(m_weightsGradient[j], 0, m_weightsGradient[j].Length);
-
                 Array.Clear(m_hiddenBiasGradient, 0, m_hiddenBiasGradient.Length);
                 Array.Clear(m_visibleBiasGradient, 0, m_visibleBiasGradient.Length);
 
+                //
                 // Calculate gradient and model error
                 double error = computeGradient(featureValues);
 
@@ -238,7 +239,7 @@ namespace NeuralNet.RestrictedBoltzmannMachine
         #region Private Method
 
         /// <summary>
-        /// Initialize the Neuron weithgt of RBM
+        /// Initialize the RBM weight of hidden and visible layer neuron
         /// </summary>
         private void initializeWeights()
         {
@@ -277,7 +278,7 @@ namespace NeuralNet.RestrictedBoltzmannMachine
         }
 
         /// <summary>
-        /// 
+        /// Calculate the gradient using Gibb sampling
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>

@@ -64,7 +64,7 @@ namespace test.Perceptron
             LearningApi api = new LearningApi();
             api.UseActionModule<object, double[][]>((notUsed, ctx) =>
             {
-                const int maxSamples = 100000;
+                const int maxSamples = 10000;
                 ctx.DataDescriptor = getDescriptor();
                 double[][] data = new double[maxSamples][];
 
@@ -88,32 +88,20 @@ namespace test.Perceptron
                 return data;
             });
 
-            api.UsePerceptron(0.01, 100000);
+            api.UsePerceptron(0.01, 10000);
           
             IScore score = api.Run() as IScore;
 
             double[][] testData = new double[10][];
-            testData[0] = new double[] { 20.0, 0.0 };
-            testData[1] = new double[] { 1020.0, 0.0 };
-            testData[2] = new double[] { 20.0, 0.0 };
-            testData[3] = new double[] { 20.0, 0.0 };
-            testData[4] = new double[] { 20000.0, 0.0 };
-            testData[5] = new double[] { 20.0, 0.0 };
-            testData[6] = new double[] { 20.0, 0.0 };
-            testData[7] = new double[] { 60000.0, 0.0 };
-            testData[8] = new double[] { 20.0, 0.0 };
-            testData[9] = new double[] { 20.0, 0.0 };
-
-            //testData[1] = new double[] { 2000.0, 0.0 };
-            //testData[2] = new double[] { 6000.0, 0.0 };
-            //testData[3] = new double[] { 5001, 0.0 };
-            //testData[4] = new double[] { 20.0, 0.0 };
-            //testData[5] = new double[] { 100.0, 0.0 };
-            //testData[6] = new double[] { 200.0, 0.0 };
-            //testData[7] = new double[] { 500.0, 0.0 };
-            //testData[8] = new double[] { 1000.0, 0.0 };
-            //testData[9] = new double[] { 2500.0, 0.0 };
-
+            testData[1] = new double[] { 2000.0, 0.0 };
+            testData[2] = new double[] { 6000.0, 0.0 };
+            testData[3] = new double[] { 5001, 0.0 };
+            testData[4] = new double[] { 20.0, 0.0 };
+            testData[5] = new double[] { 100.0, 0.0 };
+            testData[6] = new double[] { 200.0, 0.0 };
+            testData[7] = new double[] { 500.0, 0.0 };
+            testData[8] = new double[] { 1000.0, 0.0 };
+            testData[9] = new double[] { 2500.0, 0.0 };
 
             var result = api.Algorithm.Predict(testData, api.Context);
 

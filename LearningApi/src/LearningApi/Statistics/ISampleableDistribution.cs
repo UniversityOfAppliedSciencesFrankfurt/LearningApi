@@ -11,7 +11,7 @@ namespace LearningFoundation.Statistics
     /// 
     /// <typeparam name="TObservations">The type of the observations, such as System.Double
     /// 
-    public interface ISampleableDistribution<TObservations> : //IDistribution<TObservations>,
+    public interface ISampleableDistribution<TObservations> :
        IRandomNumberGenerator<TObservations>
     {
         /// <summary>
