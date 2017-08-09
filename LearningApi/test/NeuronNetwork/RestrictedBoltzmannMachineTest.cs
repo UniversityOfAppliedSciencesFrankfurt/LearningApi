@@ -5,12 +5,19 @@ using System;
 using LearningFoundation.MathFunction;
 using System.Linq;
 using Xunit;
+using System.IO;
+using LearningFoundation.DataProviders;
+using LearningFoundation.DataMappers;
 
 namespace test.NeuronNetwork
 {
 
     public class RestrictedBoltzmannTest
     {
+        //Define the data location
+        string m_binary_data_path = @"SampleData\binary\binary.csv";
+        int FeatureAmount = 10;
+
         static RestrictedBoltzmannTest()
         {
 
@@ -77,10 +84,15 @@ namespace test.NeuronNetwork
             desc.LabelIndex = 6;
             return desc;
         }
-        private DataDescriptor getDescriptor2()
+
+        /// <summary>
+        /// Describe the auto generate training sample using the capitalize characters as the feature name
+        /// </summary>
+        /// <returns></returns>
+        private DataDescriptor getDescriptor_Auto()
         {
             DataDescriptor desc = new DataDescriptor();
-            int NumOfFeature = 10;
+            int NumOfFeature = FeatureAmount;
             desc.Features = new LearningFoundation.DataMappers.Column[NumOfFeature];
             char[] alpha = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".ToCharArray();
             for (int i = 0; i < NumOfFeature; i++)
@@ -96,6 +108,7 @@ namespace test.NeuronNetwork
             desc.LabelIndex = NumOfFeature;
             return desc;
         }
+        
 
         /// <summary>
         /// Accord .Net standard test for Restricted Boltzmann Machine
@@ -154,7 +167,7 @@ namespace test.NeuronNetwork
 
 
         /// <summary>
-        /// Restricted Boltzmann Machine algorithm simple test
+        /// Test using pre-define data
         /// </summary>
         [Fact]
         public void RBM_SimpleTest()
@@ -212,7 +225,7 @@ namespace test.NeuronNetwork
 
             //
             // Testing the test data in the specific order
-            for (int i = 0; i < m_testcount - 2; i++)
+            for (   int i = 0; i < m_testcount - 2; i++)
             {
                 Assert.True(((m_testresult[i] > m_testresult[i + 1])
                     && (m_testresult[i + 1] < m_testresult[i + 2]))
@@ -221,18 +234,18 @@ namespace test.NeuronNetwork
             }
         }
 
-
+        /// <summary>
+        /// Test using auto generate randomly data
+        /// </summary>
         [Fact]
         public void RBM_SimpleTest2()
         {
-            // Create some sample inputs. Note that the
-            // first three vectors belong to one class, and the other
-            // three belong to another           
+            // Create some randomly generated sample inputs. 
             LearningApi api = new LearningApi();
 
             api.UseActionModule<object, double[][]>((notUsed, ctx) =>
             {
-                ctx.DataDescriptor = getDescriptor2();
+                ctx.DataDescriptor = getDescriptor_Auto();
                 int NumOfFeature = api.Context.DataDescriptor.Features.Length;
                 var max = Math.Pow(2, NumOfFeature);
                 int maxSamples = Convert.ToInt32(max);
@@ -257,14 +270,79 @@ namespace test.NeuronNetwork
                 return sample;
             });
 
+            //
             //Define the value of Restricted Boltzmann Machine training variables
-            int InputsCount = 10;
+            int InputsCount = FeatureAmount;
             int HiddenNeurons = 5;
             int Iteration = 15000;
             double LearningRates = 0.07;
             double Momentums = 0.9;
             double Decays = 0.01;
+            
+            //
+            // Call the algorithm
+            api.UseRestrictedBoltzmannMachine(InputsCount, HiddenNeurons, Iteration, LearningRates, Momentums, Decays);
+
+            //
+            //Run the algorithm
+            IScore score = api.Run() as IScore;
+
+            //
+            //Auto Generate some test data
+            int m_testcountAuto = 10000;
             Random rand = new Random();
+            double[][] m_testdataAuto = new double[m_testcountAuto][];
+
+            for (int i = 0; i < m_testcountAuto; i++)
+            {
+                m_testdataAuto[i] = Enumerable.Repeat(0.0, api.Context.DataDescriptor.Features.Length).ToArray();
+            }
+
+            for (int i = 0; i < m_testcountAuto; i++)
+            {
+                for (int j = 0; j < api.Context.DataDescriptor.Features.Length; j++)
+                {
+                    m_testdataAuto[i][j] = rand.Next(0, 2);
+                }
+            }
+
+            // Calculate the network output based on the auto generated test data
+            var m_testresultAuto = api.Algorithm.Predict(m_testdataAuto, api.Context);
+            for (int i = 0; i < m_testcountAuto; i++)
+            {
+                Assert.True(m_testresultAuto[i] > 0);
+            }
+        }
+
+        [Fact]
+        /// <summary>
+        ///Test using pre-created data file
+        /// </summary>
+        public void RBM_GetDataTest()
+        {
+            var binary_path = System.IO.Path.Combine(Directory.GetCurrentDirectory(), m_binary_data_path);
+
+            //
+            LearningApi api = new LearningApi(TestHelpers.GetDescriptorBinary());
+
+            //
+            api.UseCsvDataProvider(binary_path, ',', 1);
+
+            //
+            api.UseDefaultDataMapper();
+            
+            //
+            int NumOfFeature = api.Context.DataDescriptor.Features.Length;
+
+
+            //
+            //Define the value of Restricted Boltzmann Machine training variables
+            int InputsCount = NumOfFeature;
+            int HiddenNeurons = 5;
+            int Iteration = 15000;
+            double LearningRates = 0.07;
+            double Momentums = 0.9;
+            double Decays = 0.01;
 
             // Call the algorithm
             api.UseRestrictedBoltzmannMachine(InputsCount, HiddenNeurons, Iteration, LearningRates, Momentums, Decays);
@@ -272,9 +350,11 @@ namespace test.NeuronNetwork
             //Run the algorithm
             IScore score = api.Run() as IScore;
 
+
             //
             //Auto Generate some test data
-            int m_testcountAuto = 10000;
+            int m_testcountAuto = 1000;
+            Random rand = new Random();
             double[][] m_testdataAuto = new double[m_testcountAuto][];
 
             for (int i = 0; i < m_testcountAuto; i++)

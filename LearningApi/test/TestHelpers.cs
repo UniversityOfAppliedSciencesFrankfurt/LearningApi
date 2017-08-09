@@ -11,11 +11,14 @@ namespace test
     public class TestHelpers
     {
         private static string m_iris_mapper_path;
+        private static string m_binary_mapper_path;
+
 
         static TestHelpers()
         {
             //mapper initialization
             m_iris_mapper_path = System.IO.Path.Combine(Directory.GetCurrentDirectory(), @"SampleData\iris\iris_mapper.json");
+            m_binary_mapper_path = System.IO.Path.Combine(Directory.GetCurrentDirectory(), @"SampleData\binary\binary_mapper.json");
 
         }
 
@@ -23,6 +26,21 @@ namespace test
         {
             if (string.IsNullOrEmpty(path))
                 path = m_iris_mapper_path;
+
+            string strContent = System.IO.File.ReadAllText(path);
+
+            var dm = JsonConvert.DeserializeObject(strContent, typeof(DataDescriptor));
+
+            if (dm is DataDescriptor)
+                return (DataDescriptor)dm;
+            else
+                return null;
+        }
+
+        public static DataDescriptor GetDescriptorBinary(string path = null)
+        {
+            if (string.IsNullOrEmpty(path))
+                path = m_binary_mapper_path;
 
             string strContent = System.IO.File.ReadAllText(path);
 

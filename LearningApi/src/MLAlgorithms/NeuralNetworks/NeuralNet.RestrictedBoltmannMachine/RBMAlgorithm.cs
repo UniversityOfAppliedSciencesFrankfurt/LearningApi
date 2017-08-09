@@ -138,7 +138,7 @@ namespace NeuralNet.RestrictedBoltzmannMachine
             set { m_Iterations = value; }
         }
 
-        
+
         /// <summary>
         ///   Creates a new instance of RBM Algorithm Class.
         /// </summary>
@@ -201,10 +201,10 @@ namespace NeuralNet.RestrictedBoltzmannMachine
 
                 //
                 // Calculate visible neuron weight score
-                for (int x = 0; x < m_Visible.Neurons.Length; x++) 
+                for (int x = 0; x < m_Visible.Neurons.Length; x++)
                 {
                     StochasticNeuron visibleneuron = m_Visible.Neurons[x];
-                    for (int y = 0; y < m_Hidden.Neurons.Length; y++) 
+                    for (int y = 0; y < m_Hidden.Neurons.Length; y++)
                     {
                         {
                             m_Weights[x] += visibleneuron.Weights[y];
@@ -457,7 +457,7 @@ namespace NeuralNet.RestrictedBoltzmannMachine
         /// 
         private double calculateResult(double[] input, int numOfFeatures)
         {
-            double output = 0.0;         
+            double output = 0.0;
             double[] sum = new double[m_Hidden.Neurons.Length];
 
             //
@@ -479,6 +479,8 @@ namespace NeuralNet.RestrictedBoltzmannMachine
             int maxindex = sum.ToList().IndexOf(maxvalue);
             output = maxvalue + maxindex;
 
+            double[] xa = m_RNetwork.GenerateInput(new double[] { 1, 0 });/// 1.1.1.0.0.0
+            double[] xb = m_RNetwork.GenerateInput(new double[] { 0, 1 });
             return (output);
         }
 

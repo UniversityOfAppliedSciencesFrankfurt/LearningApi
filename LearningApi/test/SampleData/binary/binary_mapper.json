@@ -1,0 +1,47 @@
+﻿{
+  "Features": [
+    {
+      "Id": 1,
+      "Name": "A",
+      "Index": 0,
+      "Type": 1
+
+    },
+    {
+      "Id": 2,
+      "Name": "B",
+      "Index": 1,
+      "Type": 1
+
+    },
+    {
+      "Id": 3,
+      "Name": "C",
+      "Index": 2,
+      "Type": 1
+
+    },
+    {
+      "Id": 4,
+      "Name": "D",
+      "Index": 3,
+      "Type": 1
+
+    },
+    {
+      "Id": 5,
+      "Name": "E",
+      "Index": 4,
+      "Type": 1
+
+    },
+    {
+      "Id": 6,
+      "Name": "F",
+      "Index": 5,
+      "Type": 1
+    }
+  ],
+  "NumOfFeatures": 6,
+  "LabelIndex": 6 
+}
