@@ -227,10 +227,26 @@ namespace NeuralNet.RestrictedBoltzmannMachine
         public override double[] Predict(double[][] data, IContext ctx)
         {
             double[] results = new double[data.Length];
+            double[][] inputvector = new double[hiddenCount][];
+            double[] vector = new double[m_Hidden.Neurons.Length];
+            vector = Enumerable.Repeat(0.0, m_Hidden.Neurons.Length).ToArray();
+
+            //
+            // Calculate the predicted results for the test sample 
             for (int i = 0; i < data.Length; i++)
             {
                 results[i] = calculateResult(data[i], ctx.DataDescriptor.Features.Length);
             }
+
+            //
+            // Regenerate the input vector that has the highest appearance probability
+            //and being the common labels for the training sample
+            for (int i= 0; i<hiddenCount; i++)
+            {
+                vector[i] = 1.0; 
+                inputvector[i] = m_RNetwork.GenerateInput(vector);
+            }
+          
             return results;
         }
 
@@ -479,8 +495,7 @@ namespace NeuralNet.RestrictedBoltzmannMachine
             int maxindex = sum.ToList().IndexOf(maxvalue);
             output = maxvalue + maxindex;
 
-            double[] xa = m_RNetwork.GenerateInput(new double[] { 1, 0 });/// 1.1.1.0.0.0
-            double[] xb = m_RNetwork.GenerateInput(new double[] { 0, 1 });
+          
             return (output);
         }
 

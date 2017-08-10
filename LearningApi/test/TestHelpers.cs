@@ -19,6 +19,8 @@ namespace test
             //mapper initialization
             m_iris_mapper_path = System.IO.Path.Combine(Directory.GetCurrentDirectory(), @"SampleData\iris\iris_mapper.json");
             m_binary_mapper_path = System.IO.Path.Combine(Directory.GetCurrentDirectory(), @"SampleData\binary\binary_mapper.json");
+         
+
 
         }
 

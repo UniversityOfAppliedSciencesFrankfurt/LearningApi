@@ -1,13 +1,12 @@
 ﻿using LearningFoundation;
+using LearningFoundation.DataMappers;
+using LearningFoundation.DataProviders;
 using NeuralNet.RestrictedBoltzmannMachine;
 using NeuralNetworks.Core.ActivationFunctions;
 using System;
-using LearningFoundation.MathFunction;
+using System.IO;
 using System.Linq;
 using Xunit;
-using System.IO;
-using LearningFoundation.DataProviders;
-using LearningFoundation.DataMappers;
 
 namespace test.NeuronNetwork
 {
@@ -338,7 +337,7 @@ namespace test.NeuronNetwork
             //
             //Define the value of Restricted Boltzmann Machine training variables
             int InputsCount = NumOfFeature;
-            int HiddenNeurons = 5;
+            int HiddenNeurons = 4;
             int Iteration = 15000;
             double LearningRates = 0.07;
             double Momentums = 0.9;
