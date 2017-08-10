@@ -1,0 +1,2 @@
+# RestrictedBoltzmannMachineApi
+A restricted Boltzmann machine (RBM) is a fascinating software component that has some similarities to a basic neural network. An RBM has two sets of nodes—visible and hidden. Each set of nodes can act as either inputs or outputs relative to the other set. Each node has a value of zero or one and these values are calculated using probability rather than deterministically.

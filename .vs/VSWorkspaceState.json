@@ -5,9 +5,9 @@
     "\\LearningApi\\src",
     "\\LearningApi\\src\\MLAlgorithms",
     "\\LearningApi\\src\\MLAlgorithms\\NeuralNetworks",
-    "\\LearningApi\\src\\MLAlgorithms\\NeuralNetworks\\NeuralNetworks.Core",
+    "\\LearningApi\\src\\MLAlgorithms\\NeuralNetworks\\NeuralNet.RestrictedBoltmannMachine",
     "\\LearningApi\\test"
   ],
-  "SelectedNode": "\\LearningApi\\src\\MLAlgorithms\\NeuralNetworks",
+  "SelectedNode": "\\LearningApi\\src\\MLAlgorithms\\NeuralNetworks\\NeuralNet.RestrictedBoltmannMachine\\README.md",
   "PreviewInSolutionExplorer": false
 }
