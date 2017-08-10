@@ -108,63 +108,7 @@ namespace test.NeuronNetwork
             return desc;
         }
         
-
-        /// <summary>
-        /// Accord .Net standard test for Restricted Boltzmann Machine
-        /// </summary>
-        [Fact]
-        public void RBM_AccordTest()
-        {
-            //Create some sample data for the 
-            double[][] sample =
-            {
-            new double[] { 1,1,1,0,0,0 }, // class a
-            new double[] { 1,0,1,0,0,0 }, // class a
-            new double[] { 1,1,1,0,0,0 }, // class a
-            new double[] { 0,0,1,1,1,0 }, // class b
-            new double[] { 0,0,1,1,0,0 }, // class b
-            new double[] { 0,0,1,1,1,0 }, // class b           
-        };
-
-            // Create a Bernoulli activation function
-            var function = new BernoulliFunction(alpha: 0.5);
-
-            // Create a Restricted Boltzmann Machine algorithm with 6 inputs and 2 hidden neuron
-            var rbm = new RestrictedBoltzmannMachine(function, inputsCount: 6, hiddenNeurons: 2);
-
-            // Create the training algorithm for RBM
-            var teacher = new ContrastiveDivergenceLearning(rbm)
-            {
-                LearningRate = 0.1,
-                Momentum = 0.9,
-                Decay = 0.01
-            };
-
-            // Run the learning algorithm
-            for (int i = 0; i < 5000; i++)
-                teacher.RunEpoch(sample);
-
-            // Compute the machine answers for the given test data inputs:
-            double[] a = rbm.Compute(new double[] { 1, 1, 1, 0, 0, 0 });
-            double[] b = rbm.Compute(new double[] { 0, 0, 0, 1, 1, 1 });
-            double[] c = rbm.Compute(new double[] { 1, 1, 0, 0, 0, 0 });
-            double[] d = rbm.Compute(new double[] { 0, 0, 0, 1, 1, 0 });
-            double[] e = rbm.Compute(new double[] { 1, 0, 1, 0, 0, 0 });
-            double[] f = rbm.Compute(new double[] { 0, 0, 0, 1, 0, 1 });
-            double[] g = rbm.Compute(new double[] { 0, 1, 1, 0, 0, 0 });
-            double[] h = rbm.Compute(new double[] { 0, 0, 0, 0, 1, 1 });
-            
-
-            // Generate input vectors given the classes:
-            double[] xa = rbm.GenerateInput(new double[] { 1, 0 });/// 1.1.1.0.0.0
-            double[] xb = rbm.GenerateInput(new double[] { 0, 1 });
-
-            //Testing the test data
-            Assert.True(((a[0] > a[1]) && (b[0] < b[1]))
-                  ^ ((a[0] < a[1]) && (b[0] > b[1])));
-        }
-
-
+        
         /// <summary>
         /// Test using pre-define data
         /// </summary>
