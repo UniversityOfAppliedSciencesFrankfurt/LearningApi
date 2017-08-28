@@ -229,7 +229,7 @@ namespace NeuralNet.RestrictedBoltzmannMachine
             double[] results = new double[data.Length];
             double[][] inputvector = new double[hiddenCount][];
             double[] vector = new double[m_Hidden.Neurons.Length];
-            vector = Enumerable.Repeat(0.0, m_Hidden.Neurons.Length).ToArray();
+           
 
             //
             // Calculate the predicted results for the test sample 
@@ -243,15 +243,18 @@ namespace NeuralNet.RestrictedBoltzmannMachine
             //and being the common labels for the training sample
             for (int i= 0; i<hiddenCount; i++)
             {
+                vector = Enumerable.Repeat(0.0, m_Hidden.Neurons.Length).ToArray();
                 vector[i] = 1.0; 
-                inputvector[i] = m_RNetwork.GenerateInput(vector);
-            }
+                inputvector[i] = m_RNetwork.GenerateInput(vector);             
+            }           
+          
           
             return results;
         }
 
 
         #endregion
+
         #region Private Method
 
         /// <summary>

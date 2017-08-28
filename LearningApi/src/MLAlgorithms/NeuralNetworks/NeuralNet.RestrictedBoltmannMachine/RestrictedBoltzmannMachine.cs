@@ -5,11 +5,10 @@ using NeuralNetworks.Core.Networks;
 using System.Runtime.CompilerServices;
 
 [assembly: InternalsVisibleTo("test")]
-[assembly: InternalsVisibleTo("ContrastiveDivergenceLearning")]
 
 namespace NeuralNet.RestrictedBoltzmannMachine
 {
-   internal class RestrictedBoltzmannMachine : ActivationNetwork
+    internal class RestrictedBoltzmannMachine : ActivationNetwork
     {
 
         private StochasticLayer visible;
@@ -54,34 +53,48 @@ namespace NeuralNet.RestrictedBoltzmannMachine
             this.hidden = new StochasticLayer(function, hiddenNeurons, inputsCount);
             base.layers[0] = hidden;
         }
+
         
-        ///Compute the network output vector using the input vector
+        /// <summary>
+        /// Compute the network output vector using the input vector
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
         public override double[] Compute(double[] input)
         {
             return hidden.Compute(input);
         }
 
-        /// Resconstruc an input vector using a given output
+        
+        /// <summary>
+        ///  Resconstruc an input vector using a given output
+        /// </summary>
+        /// <param name="output"></param>
+        /// <returns></returns>
         public double[] Reconstruct(double[] output)
         {
             return visible.Compute(output);
         }
 
-        /////   Samples an output vector from the network with an input vector.
-        /////   Output is A possible output considering the stochastic activations of the network.
 
-            /// <summary>
-            /// 
-            /// </summary>
-            /// <param name="input"></param>
-            /// <returns></returns>
+        /// <summary>
+        /// Samples an output vector from the network with an input vector.
+        /// Output is a possible output considering the stochastic activations of the network. 
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
         public double[] GenerateOutput(double[] input)
         {
             return hidden.Generate(input);
         }
 
-        ///   Samples an input vector from the network  given an output vector.
-        ///   Output is a possible reconstruction considering the stochastic activations of the network.
+
+        /// <summary>
+        ///Samples an input vector from the network  given an output vector.
+        /// Output is a possible reconstruction considering the stochastic activations of the network.
+        /// </summary>
+        /// <param name="output"></param>
+        /// <returns></returns>
         public double[] GenerateInput(double[] output)
         {
             return visible.Generate(output);

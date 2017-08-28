@@ -165,6 +165,7 @@ namespace test.NeuronNetwork
             //
             // Calculate the network output based on the test data
             var m_testresult = api.Algorithm.Predict(m_testdata, api.Context);
+           
 
             //
             // Testing the test data in the specific order
@@ -276,8 +277,7 @@ namespace test.NeuronNetwork
             
             //
             int NumOfFeature = api.Context.DataDescriptor.Features.Length;
-
-
+            
             //
             //Define the value of Restricted Boltzmann Machine training variables
             int InputsCount = NumOfFeature;
@@ -292,7 +292,6 @@ namespace test.NeuronNetwork
 
             //Run the algorithm
             IScore score = api.Run() as IScore;
-
 
             //
             //Auto Generate some test data
@@ -313,12 +312,14 @@ namespace test.NeuronNetwork
                 }
             }
 
+
             // Calculate the network output based on the auto generated test data
             var m_testresultAuto = api.Algorithm.Predict(m_testdataAuto, api.Context);
             for (int i = 0; i < m_testcountAuto; i++)
             {
                 Assert.True(m_testresultAuto[i] > 0);
             }
+            
         }
     }
 }
