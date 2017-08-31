@@ -40,7 +40,7 @@ namespace LogisticRegression
 
             var trainData = data;
 
-            //construct weights acording to features count
+            //construct weights according to features count
             var weights = new double[trainData[0].Length];
 
             // alpha is the learning rate
@@ -49,7 +49,7 @@ namespace LogisticRegression
             for (int i = 0; i < sequence.Length; ++i)
                 sequence[i] = i;
             double[] errors = new double[Iterations];
-            while (epoch < Iterations)//Todo: termination criteria is not implemented yet.
+            while (epoch < Iterations)//Todd: termination criteria is not implemented yet.
             {
                 Shuffle(sequence); // process data in random order
 
@@ -70,10 +70,10 @@ namespace LogisticRegression
 
 
         /// <summary>
-        /// TODO: We should think about separate all Learner from the ML Algortim
-        /// because same learner can be use more than one MLAlgoritm
+        /// TODO: We should think about separate all Learners from the ML Algorithm
+        /// because same learner can be used more than one MLAlgoritm
         /// ..
-        /// Gradient Descadent learner.
+        /// Gradient Decadents learner.
         /// </summary>
         /// <param name="trainData"></param>
         /// <param name="weights"></param>
@@ -122,7 +122,7 @@ namespace LogisticRegression
         }
 
         /// <summary>
-        /// Shufles the data
+        /// Shuffles the data
         /// </summary>
         /// <param name="sequence"></param>
         private void Shuffle(int[] sequence)

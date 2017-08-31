@@ -51,7 +51,7 @@ namespace test.logisticregression
 
             IScore score = api.GetScore();
 
-            //Errors during each iteration. IF the learningRate is suitable erros is descrising for every next iteration 
+            //Errors during each iteration. IF the learningRate is suitable errors is describing for every next iteration 
             Assert.Equal(Math.Round(score.Errors[0], 5), 0.24278);
             Assert.Equal(Math.Round(score.Errors[1], 5), 0.23749);
             Assert.Equal(Math.Round(score.Errors[2], 5), 0.23359);
