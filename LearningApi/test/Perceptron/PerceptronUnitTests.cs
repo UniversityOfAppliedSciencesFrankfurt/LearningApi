@@ -88,11 +88,11 @@ namespace test.Perceptron
                 return data;
             });
 
-            api.UsePerceptron(0.01, 10000);
+            api.UsePerceptron(0.02, 10000);
           
             IScore score = api.Run() as IScore;
 
-            double[][] testData = new double[10][];
+            double[][] testData = new double[20][];
             testData[0] = new double[] { 1000.0, 0.0 };
             testData[1] = new double[] { 2000.0, 0.0 };
             testData[2] = new double[] { 5000.0, 0.0 };
@@ -103,6 +103,16 @@ namespace test.Perceptron
             testData[7] = new double[] { 500.0, 0.0 };
             testData[8] = new double[] { 4999.0, 0.0 };
             testData[9] = new double[] { 7500.0, 0.0 };
+            testData[10] = new double[] { 9999.0, 0.0 };
+            testData[11] = new double[] { 7893.0, 0.0 };
+            testData[12] = new double[] { 50.0, 0.0 };
+            testData[13] = new double[] { 501, 0.0 };
+            testData[14] = new double[] { 2.0, 0.0 };
+            testData[15] = new double[] { 1900.0, 0.0 };
+            testData[16] = new double[] { 9200.0, 0.0 };
+            testData[17] = new double[] { 50.0, 0.0 };
+            testData[18] = new double[] { 499.0, 0.0 };
+            testData[19] = new double[] { 750.0, 0.0 };
 
             var result = api.Algorithm.Predict(testData, api.Context);
 
@@ -110,6 +120,23 @@ namespace test.Perceptron
             Assert.True(result[1] == 0);
             Assert.True(result[2] == 1);
             Assert.True(result[3] == 1);
+            Assert.True(result[4] == 0);
+            Assert.True(result[5] == 0);
+            Assert.True(result[6] == 0);
+            Assert.True(result[7] == 0);
+            //Assert.True(result[8] == 0);
+            Assert.True(result[9] == 1);
+            Assert.True(result[10] == 1);
+            Assert.True(result[11] == 1);
+            Assert.True(result[12] == 0);
+            Assert.True(result[13] == 0);
+            Assert.True(result[14] == 0);
+            Assert.True(result[15] == 0);
+            Assert.True(result[16] == 1);
+            Assert.True(result[17] == 0);
+            Assert.True(result[18] == 0);
+            Assert.True(result[19] == 0);
+
         }
 
         [Fact]

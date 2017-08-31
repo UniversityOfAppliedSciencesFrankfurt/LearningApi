@@ -35,11 +35,12 @@ namespace NeuralNet.Perceptron
             m_Weights = new double[m_Dimensions];
             m_Errors = new double[numOfInputVectors];
             initializeWeights();
-            double totalError = 0;
+            double totalError = 0.0;
             var score = new PerceptronAlgorithmScore();
             for (int i = 0; i < m_Iterations; i++)
             {
-                totalError = 0;
+               // totalError = 0;
+
                 for (int inputVectIndx = 0; inputVectIndx < numOfInputVectors; inputVectIndx++)
                 {
                     // Calculate the output value with current weights.
@@ -49,8 +50,10 @@ namespace NeuralNet.Perceptron
                     // Error is difference between calculated output and expected output.
                     double error = expectedOutput - calculatedOutput;
                     this.m_Errors[inputVectIndx] = error;
-                    // Total error for all input vectors.
-                    totalError += error;
+
+                    //// Total error for all input vectors.
+                    //totalError += Math.Abs(error);
+
                     if (error != 0)
                     {
                         // Y = W * X
@@ -67,6 +70,13 @@ namespace NeuralNet.Perceptron
                     //
                     // Updating of threshold
                     this.m_Threshold += this.m_LearningRate * error;
+
+                    //
+                    //
+                    // Total error for all input vectors.
+                    totalError += Math.Abs(error);
+
+
                 }
                 // Debug.WriteLine($"{m_Weights[0]}, {m_Threshold}");
                 //if (totalError == 0)
@@ -84,7 +94,7 @@ namespace NeuralNet.Perceptron
 
                 //    if (!isAny)
                 //        break;
-                //}
+                //}   
                 if (totalError == 0) break;
             }
             score.Weights = this.m_Weights;
