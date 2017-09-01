@@ -67,8 +67,8 @@ namespace NeuralNet.Perceptron
                     this.m_Errors[inputVectIndx] = error;
 
                     // Total error for all input vectors.
-                  //  totalError += error;
-                     totalError += Math.Abs(error);
+                    // totalError += error;
+                       totalError += Math.Abs(error);
 
                     if (error != 0)
                     {
@@ -92,6 +92,22 @@ namespace NeuralNet.Perceptron
 
                 if (totalError == 0)
                     break;
+        
+                //if (totalError == 0)
+                //{
+                //    bool isAny = false;
+                //    foreach (var err in m_Errors)
+                //    {
+                //        if (err != 0)
+                //        {
+                //            isAny = true;
+                //            break;
+                //        }
+                //    }
+                //    if (!isAny)
+                //        break;
+                //}
+                    
             }
 
             ctx.Score = new PerceptronAlgorithmScore()
