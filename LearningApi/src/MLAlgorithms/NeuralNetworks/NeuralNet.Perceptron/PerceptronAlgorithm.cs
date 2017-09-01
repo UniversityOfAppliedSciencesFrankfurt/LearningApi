@@ -67,7 +67,8 @@ namespace NeuralNet.Perceptron
                     this.m_Errors[inputVectIndx] = error;
 
                     // Total error for all input vectors.
-                    totalError += error;
+                  //  totalError += error;
+                     totalError += Math.Abs(error);
 
                     if (error != 0)
                     {
