@@ -17,7 +17,7 @@ namespace NeuralNet.Perceptron
         private double[] m_Weights;
         private double[] m_Errors;
         private double m_Threshold;
-        private bool m_PersistConvergenceData = false;
+      //  private bool m_PersistConvergenceData = false;
 
         public PerceptronAlgorithm(double threshold, double learningRate, int iterations, Func<double, double> activationFunction = null)
         {
@@ -45,14 +45,16 @@ namespace NeuralNet.Perceptron
                 {
                     // Calculate the output value with current weights.
                     double calculatedOutput = calculateResult(featureValues[inputVectIndx], m_Dimensions);
+
                     // Get expected output.
                     double expectedOutput = featureValues[inputVectIndx][ctx.DataDescriptor.LabelIndex];
+
                     // Error is difference between calculated output and expected output.
                     double error = expectedOutput - calculatedOutput;
                     this.m_Errors[inputVectIndx] = error;
 
-                    //// Total error for all input vectors.
-                    //totalError += Math.Abs(error);
+                    // Total error for all input vectors.
+                    totalError += Math.Abs(error);
 
                     if (error != 0)
                     {
@@ -67,36 +69,16 @@ namespace NeuralNet.Perceptron
                             m_Weights[dimensionIndx] += delta;
                         }
                     }
+
                     //
                     // Updating of threshold
                     this.m_Threshold += this.m_LearningRate * error;
 
-                    //
-                    //
-                    // Total error for all input vectors.
-                    totalError += Math.Abs(error);
-
-
                 }
-                // Debug.WriteLine($"{m_Weights[0]}, {m_Threshold}");
-                //if (totalError == 0)
-                //{
-                //    bool isAny = false;
-
-                //    foreach (var err in m_Errors)
-                //    {
-                //        if (err != 0)
-                //        {
-                //            isAny = true;
-                //            break;
-                //        }
-                //    }
-
-                //    if (!isAny)
-                //        break;
-                //}   
+              
                 if (totalError == 0) break;
             }
+
             score.Weights = this.m_Weights;
             score.Errors = this.m_Errors;//numberofsample
             score.TotolEpochError = totalError;//all 0
