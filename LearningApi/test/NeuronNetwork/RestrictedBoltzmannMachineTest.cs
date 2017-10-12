@@ -165,7 +165,8 @@ namespace test.NeuronNetwork
             //
             // Calculate the network output based on the test data
             var m_testresult = api.Algorithm.Predict(m_testdata, api.Context);
-           
+            var classes = api.Algorithm.Predict(m_testdata, api.Context).
+
 
             //
             // Testing the test data in the specific order

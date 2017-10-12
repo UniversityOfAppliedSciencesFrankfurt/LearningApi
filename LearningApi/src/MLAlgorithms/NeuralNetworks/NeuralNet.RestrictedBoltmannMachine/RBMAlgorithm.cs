@@ -226,10 +226,10 @@ namespace NeuralNet.RestrictedBoltzmannMachine
         ///    
         public override double[] Predict(double[][] data, IContext ctx)
         {
+
             double[] results = new double[data.Length];
-            double[][] inputvector = new double[hiddenCount][];
-            double[] vector = new double[m_Hidden.Neurons.Length];
-           
+        
+
 
             //
             // Calculate the predicted results for the test sample 
@@ -241,15 +241,12 @@ namespace NeuralNet.RestrictedBoltzmannMachine
             //
             // Regenerate the input vector that has the highest appearance probability
             //and being the common labels for the training sample
-            for (int i= 0; i<hiddenCount; i++)
-            {
-                vector = Enumerable.Repeat(0.0, m_Hidden.Neurons.Length).ToArray();
-                vector[i] = 1.0; 
-                inputvector[i] = m_RNetwork.GenerateInput(vector);             
-            }           
-          
-          
+            getClasses(hiddenCount);
+
+            //
+            //Return the result
             return results;
+
         }
 
 
@@ -263,6 +260,21 @@ namespace NeuralNet.RestrictedBoltzmannMachine
         private void initializeWeights()
         {
             init(m_RNetwork.Hidden, m_RNetwork.Visible);
+        }
+
+        private double[][] getClasses(int hiddenCount)
+        {
+            double[][] classes = new double[hiddenCount][];
+            double[] vector = new double[m_Hidden.Neurons.Length];
+
+            for (int i = 0; i < hiddenCount; i++)
+            {
+                vector = Enumerable.Repeat(0.0, m_Hidden.Neurons.Length).ToArray();
+                vector[i] = 1.0;
+                classes[i] = m_RNetwork.GenerateInput(vector);
+
+            }
+            return classes;
         }
 
         /// <summary>
