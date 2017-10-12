@@ -183,7 +183,18 @@ namespace LogisticRegression
 
         public double[] Predict(double[][] data, IContext ctx)
         {
-            throw new NotImplementedException();
+            double[] result = new double[data.Length];
+
+            for (int i = 0; i < data.Length; ++i) // each data
+            {
+                var dataRow = data[i];
+                var weights = ctx.Score.Weights;
+                double computed = ComputeOutput(dataRow, weights);
+                result[i] = computed;
+            }
+
+            return result;
+           
         }
     }
 }
