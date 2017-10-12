@@ -138,10 +138,10 @@ namespace test.NeuronNetwork
             //Define the value of Restricted Boltzmann Machine training variables
             int InputsCount = 6;
             int HiddenNeurons = 2;
-            int Iteration = 5000;
-            double LearningRates = 0.1;
+            int Iteration = 15000;
+            double LearningRates = 0.15;
             double Momentums = 0.9;
-            double Decays = 0.01;
+            double Decays = 0.02;
             Random rand = new Random();
 
             // Call the algorithm

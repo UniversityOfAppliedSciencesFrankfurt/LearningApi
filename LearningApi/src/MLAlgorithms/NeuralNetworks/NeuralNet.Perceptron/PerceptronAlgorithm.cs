@@ -17,7 +17,7 @@ namespace NeuralNet.Perceptron
         private double[] m_Weights;
         private double[] m_Errors;
         private double m_Threshold;
-      //  private bool m_PersistConvergenceData = false;
+        //  private bool m_PersistConvergenceData = false;
 
         public PerceptronAlgorithm(double threshold, double learningRate, int iterations, Func<double, double> activationFunction = null)
         {
@@ -39,7 +39,7 @@ namespace NeuralNet.Perceptron
             var score = new PerceptronAlgorithmScore();
             for (int i = 0; i < m_Iterations; i++)
             {
-               // totalError = 0;
+                // totalError = 0;
 
                 for (int inputVectIndx = 0; inputVectIndx < numOfInputVectors; inputVectIndx++)
                 {
@@ -75,8 +75,25 @@ namespace NeuralNet.Perceptron
                     this.m_Threshold += this.m_LearningRate * error;
 
                 }
-              
+
                 if (totalError == 0) break;
+
+                //if (totalError == 0)
+                //{
+                //    bool isAny = false;
+
+                //    foreach (var err in m_Errors)
+                //    {
+                //        if (err != 0)
+                //        {
+                //            isAny = true;
+                //            break;
+                //        }
+                //    }
+
+                //    if (!isAny)
+                //        break;
+                //}
             }
 
             score.Weights = this.m_Weights;
@@ -92,7 +109,7 @@ namespace NeuralNet.Perceptron
             {
                 results[i] = calculateResult(data[i], ctx.DataDescriptor.Features.Length);
             }
-            return results;        
+            return results;
         }
         private double calculateResult(double[] input, int numOfFeatures)
         {

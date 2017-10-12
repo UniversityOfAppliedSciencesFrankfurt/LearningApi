@@ -97,7 +97,7 @@ namespace UnitTests
             //api.UseGaussNormalizer(m_stats.Select(x => x.Mean).ToArray(), m_stats.Select(x => x.StDev).ToArray());
 
             // Prepares the ML Algoritm and setup parameters
-            api.UseBackPropagation(1, 0.2, 1.0, null);
+            api.UseBackPropagation(1, 0.2, 1.0, 5000,null);
 
             api.Run();
 
@@ -126,7 +126,7 @@ namespace UnitTests
             //api.UseGaussNormalizer(m_stats.Select(x => x.Mean).ToArray(), m_stats.Select(x => x.StDev).ToArray());
 
             // Prepares the ML Algoritm and setup parameters
-            api.UseBackPropagation(1, 0.2, 1.0, null);
+            api.UseBackPropagation(1, 0.2, 1.0, 5000 ,null);
 
             //start process of learning
             api.Run();

@@ -15,9 +15,14 @@ In this RBM API, visible nodes act as input, while the hiddne nodes provide outp
 The input is provide in the following format, which is an array of binary number define the boolean values of the specific features.
 
 ```<language>
-  sample[0] = new double[] { 1, 1, 1, 0, 0, 0 };
+sample[0] = new double[] { 1, 1, 1, 0, 0, 0 };
+sample[1] = new double[] { 1, 0, 1, 0, 0, 0 };
+sample[2] = new double[] { 1, 1, 1, 0, 0, 0 };
+sample[3] = new double[] { 0, 0, 1, 1, 1, 0 };
+sample[4] = new double[] { 0, 0, 1, 1, 0, 0 };
+sample[5] = new double[] { 0, 0, 1, 1, 1, 0 };
 ```
-> The above sample provides the values of 6 features.
+> In the example above, there are six training samples provides the values of 6 features.
 
 To use the API, user must first provide the training sample, then decide the values of the meta-parameters of the API.
 
@@ -27,12 +32,19 @@ After that, user can call the algorithm and run the training process
 api.UseRestrictedBoltzmannMachine(InputsCount, HiddenNeurons, Iteration, LearningRates, Momentums, Decays);
 IScore score = api.Run() as IScore;
 ```
-To evaluate the data, after providing the test data set, user can use the predict function as follow
+To evaluate the data, first we need to provide test data:
+```<language>
+double[][] m_testdata = new double[m_testcount][2];
+m_testdata[0] = new double[] { 1, 1, 1, 0, 0, 0 };
+m_testdata[1] = new double[] { 0, 0, 0, 1, 1, 1 };
+```
+
+After that , we can use the "Predict" function as following:
 ```<language>
  var m_testresult = api.Algorithm.Predict(m_testdata, api.Context);
 ```
 
-The "Predict" function output provides two meanings.
+The "Predict" function output value will provide two values.
 The output will provide the "class", which contains the highest appearance probability features in the sample data,
 and the probability that the test sample belongs to that specific "class".
 

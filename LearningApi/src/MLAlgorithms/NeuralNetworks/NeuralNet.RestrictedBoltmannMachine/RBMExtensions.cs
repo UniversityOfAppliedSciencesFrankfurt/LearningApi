@@ -19,16 +19,16 @@ namespace NeuralNet.RestrictedBoltzmannMachine
         /// <param name="Momentums"> The training Momentums</param>
         /// <param name="Decays">The training decay </param>
         /// <returns></returns>
-        public static LearningApi UseRestrictedBoltzmannMachine( this LearningApi api, int InputsCount, 
-            int HiddenNeurons,int Iterations, double LearningRates, double Momentums, double Decays )
+        public static LearningApi UseRestrictedBoltzmannMachine( this LearningApi api, int inputsCount, 
+            int hiddenNeurons,int iterations, double learningRates, double momentums, double decays )
         {
           
-        var alg = new RBMAlgorithm(InputsCount, HiddenNeurons)
+        var alg = new RBMAlgorithm(inputsCount, hiddenNeurons)
             {
-                LearningRate = LearningRates,
-                Momentum = Momentums,
-                Decay = Decays,
-                Iteration = Iterations
+                LearningRate = learningRates,
+                Momentum = momentums,
+                Decay = decays,
+                Iteration = iterations
             };
 
             api.AddModule( alg, "RBMAlgorithm" );
