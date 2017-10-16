@@ -24,5 +24,10 @@ namespace NeuralNet.RestrictedBoltmannMachine
         /// </summary>
         public double[] Weights { get; set; }
 
+        /// <summary>
+        /// The class vector of the machine
+        /// </summary>
+        public double[][] Class { get; set; }
+
     }
 }

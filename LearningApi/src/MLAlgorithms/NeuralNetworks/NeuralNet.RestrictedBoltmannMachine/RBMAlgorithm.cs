@@ -28,6 +28,7 @@ namespace NeuralNet.RestrictedBoltzmannMachine
         private int m_Dimensions;
         private double[] m_Weights;
         private double[] m_Errors;
+        
         private double m_Threshold;
         private RestrictedBoltzmannMachine m_RNetwork;
 
@@ -166,6 +167,7 @@ namespace NeuralNet.RestrictedBoltzmannMachine
             int numOfInputVectors = featureValues.Length;
             m_Errors = new double[numOfInputVectors];
             m_Weights = new double[m_Dimensions];
+          
             initializeWeights();
 
             //
@@ -212,11 +214,20 @@ namespace NeuralNet.RestrictedBoltzmannMachine
                     }
                 }
             }
+            
+            //
+            // Regenerate the input vector that has the highest appearance probability
+            //and being the common labels for the training sample
+           
+            var m_Class = getClasses(hiddenCount);
 
+            // Get the score for the machine
+            score.Class = m_Class;
             score.Weights = this.m_Weights;
             score.Errors = this.m_Errors;
             score.TotalEpochError = totalError;
             ctx.Score = score;
+
             return ctx.Score;
         }
 
@@ -228,28 +239,20 @@ namespace NeuralNet.RestrictedBoltzmannMachine
         {
 
             double[] results = new double[data.Length];
-        
-
-
+                    
             //
             // Calculate the predicted results for the test sample 
             for (int i = 0; i < data.Length; i++)
             {
                 results[i] = calculateResult(data[i], ctx.DataDescriptor.Features.Length);
             }
-
-            //
-            // Regenerate the input vector that has the highest appearance probability
-            //and being the common labels for the training sample
-            getClasses(hiddenCount);
-
+            
             //
             //Return the result
             return results;
 
         }
-
-
+        
         #endregion
 
         #region Private Method
@@ -261,22 +264,7 @@ namespace NeuralNet.RestrictedBoltzmannMachine
         {
             init(m_RNetwork.Hidden, m_RNetwork.Visible);
         }
-
-        private double[][] getClasses(int hiddenCount)
-        {
-            double[][] classes = new double[hiddenCount][];
-            double[] vector = new double[m_Hidden.Neurons.Length];
-
-            for (int i = 0; i < hiddenCount; i++)
-            {
-                vector = Enumerable.Repeat(0.0, m_Hidden.Neurons.Length).ToArray();
-                vector[i] = 1.0;
-                classes[i] = m_RNetwork.GenerateInput(vector);
-
-            }
-            return classes;
-        }
-
+       
         /// <summary>
         /// Initialize the layer
         /// </summary>     
@@ -492,7 +480,7 @@ namespace NeuralNet.RestrictedBoltzmannMachine
             double[] sum = new double[m_Hidden.Neurons.Length];
 
             //
-            // Calculate the classification Probability
+            // Calculate the classification probability
             for (int j = 0; j < m_Hidden.Neurons.Length; j++)
             {
                 StochasticNeuron neuron = m_Hidden.Neurons[j];
@@ -515,6 +503,26 @@ namespace NeuralNet.RestrictedBoltzmannMachine
         }
 
         /// <summary>
+        /// Get the auto-generate classes vector elements  
+        /// </summary>
+        /// <param name="hiddenCount"></param>
+        /// <returns></returns>
+        private double[][] getClasses(int hiddenCount)
+        {
+            double[][] classes = new double[hiddenCount][];
+            double[] vector = new double[m_Hidden.Neurons.Length];
+
+            for (int i = 0; i < hiddenCount; i++)
+            {
+                vector = Enumerable.Repeat(0.0, m_Hidden.Neurons.Length).ToArray();
+                vector[i] = 1.0;
+                classes[i] = m_RNetwork.GenerateInput(vector);
+
+            }
+            return classes;
+        }
+
+        /// <summary>
         /// Get or set parallelization value storage
         /// </summary>
         /// 
@@ -528,6 +536,7 @@ namespace NeuralNet.RestrictedBoltzmannMachine
             public double[] ReconstructedInput { get; set; }
             public double[] ReconstructedProbs { get; set; }
             public double ErrorSumOfSquares { get; set; }
+
             public ParallelStorage(int inputsCount, int hiddenCount)
             {
                 WeightGradient = new double[inputsCount][];
@@ -540,6 +549,7 @@ namespace NeuralNet.RestrictedBoltzmannMachine
                 ReconstructedInput = new double[inputsCount];
                 ReconstructedProbs = new double[hiddenCount];
             }
+
             public ParallelStorage Clear()
             {
                 ErrorSumOfSquares = 0;
