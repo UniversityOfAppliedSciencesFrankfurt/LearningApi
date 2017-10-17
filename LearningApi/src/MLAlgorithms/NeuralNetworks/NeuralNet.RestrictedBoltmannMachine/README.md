@@ -11,19 +11,24 @@ The RBM API is, in one way, can be described as a classification and categorized
 The training process of RBM will auto generate a number of categories.
 Each category is a group of features that can describe approximately a large number of training sample.
 
-> For example, the training dataset is a group of people, which need to be categorized in "man" and "woman". 
+> A practical example for the training and testing process is "gender" recognition based on observing a large group of people.
+> The training dataset will be a large group of people with a close ratio between man and woman.
+> The machine is required to divide - or categorize the training dataset in two classes. 
+> A number of features- or traits - that is critical to determine the different between the two genders must be predefined. For example: voice pitch (high/low), hair (long/short), neck(long/short), height (tall/short), et cetera...
 >
-> The training phase will allow RBM automatically detetermine which and how many features are needed for each "category", which is "gender" in this case.
-> The category "man" usually contains features "short hair", "big muscle", "tall", "no breast", "low voice", et cetera...
+> In the training phase, by checking each training person using the above features, the machine will recognize that two certain group of features has very high appearance probability.
+> Due to using unsupervise training, the machine will not know which group is "man" and which group is "woman".
+> After the training phase, the machine know that each class will have a set of significant features that can be used to determine the upcoming test person.
 >
-> When testing with a person, by checking if the person has a satisfied number of features, this algorithm will predict the gender of the person in question.
-> The larger the number of features details in the training phase, the more exact this algorithm's prediction.
+> When testing with a person, by checking if the person satisfied a number of features that belong to a class, the machine can predict the class of the person, which is either "man" or "woman" in this case.
+> It can also provide the probability of the person in question belongs to each class.
+>
 
 
-As an exmple how to use the algorithm, I will demonstrate step by step the Simple test.
+The following is an example of how to use the API:
 
 Imagining you have 6 training objects. You wish to divide them into 2 unspecific and autogenerate classes, no matter what kind.
-And you know they can be categoried by using 6 predefined features.
+And you know they can be categorized by using 6 predefined features.
 
 RBM will put each object through 6 feature tests and get the answer either "Yes" or "No" if the specific feature exists.
 We will label each feature "A","B","C","D","E","F". We will also set 1 as "Yes" for a feature that the object contains, and 0 as "No".
