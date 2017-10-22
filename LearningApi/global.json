@@ -1,6 +1,0 @@
-{
-  "projects": [ "src", "test", ".", "src/MLAlgorithms", "src/MLAlgorithms/NeuralNetworks", "src/DataProviders", "src/Normalizers" ],
-  "sdk": {
-    "version": "1.0.0-preview2-003131"
-  }
-}
