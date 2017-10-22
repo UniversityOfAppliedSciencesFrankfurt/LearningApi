@@ -35,27 +35,20 @@ namespace NeuralNet.Perceptron
             if (activationFunction != null)
                 this.m_ActivationFunction = activationFunction;
         }
-        
-      
+
+
         public override IScore Run(double[][] featureValues, IContext ctx)
         {
             m_Dimensions = ctx.DataDescriptor.Features.Count();
-
             int numOfInputVectors = featureValues.Length;
-
             m_Weights = new double[m_Dimensions];
-
             m_Errors = new double[numOfInputVectors];
-
             initializeWeights();
-
-            double totalError = 0;
-
+            double totalError = 0.0;
             var score = new PerceptronAlgorithmScore();
-
             for (int i = 0; i < m_Iterations; i++)
             {
-                totalError = 0;
+                // totalError = 0;
 
                 for (int inputVectIndx = 0; inputVectIndx < numOfInputVectors; inputVectIndx++)
                 {
@@ -67,18 +60,16 @@ namespace NeuralNet.Perceptron
 
                     // Error is difference between calculated output and expected output.
                     double error = expectedOutput - calculatedOutput;
-
                     this.m_Errors[inputVectIndx] = error;
 
                     // Total error for all input vectors.
-                    totalError += error;
+                    totalError += Math.Abs(error);
 
                     if (error != 0)
                     {
                         // Y = W * X
                         // error = expectedOutput - calculatedOutput
                         // W = Y/X
-
                         //
                         // Updating of weights
                         for (int dimensionIndx = 0; dimensionIndx < m_Dimensions; dimensionIndx++)
@@ -91,27 +82,36 @@ namespace NeuralNet.Perceptron
                     //
                     // Updating of threshold
                     this.m_Threshold += this.m_LearningRate * error;
+
                 }
 
-               // Debug.WriteLine($"{m_Weights[0]}, {m_Threshold}");
+                if (totalError == 0) break;
 
-                if (totalError == 0)
-                {
-                    score.Iterations = i;
-                    break;
-                }
+                //if (totalError == 0)
+                //{
+                //    bool isAny = false;
+
+                //    foreach (var err in m_Errors)
+                //    {
+                //        if (err != 0)
+                //        {
+                //            isAny = true;
+                //            break;
+                //        }
+                //    }
+
+                //    if (!isAny)
+                //        break;
+                //}
             }
 
             score.Weights = this.m_Weights;
-            
-            score.Errors = this.m_Errors;
-            
-            score.TotolEpochError = totalError;
-
+            score.Errors = this.m_Errors;//numberofsample
+            score.TotolEpochError = totalError;//all 0
             ctx.Score = score;
-
             return ctx.Score;
         }
+
 
         public override double[] Predict(double[][] data, IContext ctx)
         {
