@@ -51,7 +51,7 @@ namespace test.logisticregression
 
             IScore score = api.GetScore();
 
-            //Errors during each iteration. IF the learningRate is suitable erros is descrising for every next iteration 
+            //Errors during each iteration. IF the learningRate is suitable errors is describing for every next iteration 
             Assert.Equal(Math.Round(score.Errors[0], 5), 0.24278);
             Assert.Equal(Math.Round(score.Errors[1], 5), 0.23749);
             Assert.Equal(Math.Round(score.Errors[2], 5), 0.23359);
@@ -71,6 +71,34 @@ namespace test.logisticregression
             Assert.Equal(Math.Round(score.Weights[4], 5), -0.30213);
             Assert.Equal(Math.Round(score.Weights[5], 5), -0.30213);
             Assert.Equal(Math.Round(score.Weights[6], 5), -0.85624);
+
+
+            //define data for testing (prediction)
+            LearningApi apiPrediction = new LearningApi(desc);
+            //Real dataset must be defined as object type, because data can be numeric, binary and classification
+            apiPrediction.UseActionModule<object[][], object[][]>((input, ctx) =>
+            {
+                var data = new object[4][] 
+                {
+                    new object[]{0.202,"blue", "male",13,"yes" },
+                    new object[]{0.447,"green","female",37,"no" },
+                    new object[]{0.120,"red","male", "21", "yes" },
+                    new object[]{0.313,"green","male",22,"yes" },
+                    };
+                return data;
+            });
+
+            // Use mapper for data, which will extract (map) required columns 
+            apiPrediction.UseDefaultDataMapper();
+            var testData = apiPrediction.Run();
+
+            //use previous trained model
+           var result=  api.Algorithm.Predict(testData as double[][], api.Context);
+
+            Assert.Equal(Math.Round(result[0], 5), 1E-05);
+            Assert.Equal(Math.Round(result[1], 5), 0);
+            Assert.Equal(Math.Round(result[2], 5), 0);
+            Assert.Equal(Math.Round(result[3], 5), 0);
         }
 
         /// <summary>
@@ -121,6 +149,35 @@ namespace test.logisticregression
             Assert.Equal(Math.Round(score.Weights[4], 5), -0.26733);
             Assert.Equal(Math.Round(score.Weights[5], 5), -0.26733);
             Assert.Equal(Math.Round(score.Weights[6], 5), -0.91266);
+
+
+
+            //define data for testing (prediction)
+            LearningApi apiPrediction = new LearningApi(desc);
+            //Real dataset must be defined as object type, because data can be numeric, binary and classification
+            apiPrediction.UseActionModule<object[][], object[][]>((input, ctx) =>
+            {
+                var data = new object[4][]
+                {
+                    new object[]{0.202,"blue", "male",13,"yes" },
+                    new object[]{0.447,"green","female",37,"no" },
+                    new object[]{0.120,"red","male", "21", "yes" },
+                    new object[]{0.313,"green","male",22,"yes" },
+                    };
+                return data;
+            });
+
+            // Use mapper for data, which will extract (map) required columns 
+            apiPrediction.UseDefaultDataMapper();
+            var testData = apiPrediction.Run();
+
+            //use previous trained model
+            var result = api.Algorithm.Predict(testData as double[][], api.Context);
+
+            Assert.Equal(Math.Round(result[0], 5), 1E-05);
+            Assert.Equal(Math.Round(result[1], 5), 0);
+            Assert.Equal(Math.Round(result[2], 5), 0);
+            Assert.Equal(Math.Round(result[3], 5), 0);
         }
 
         /// <summary>
@@ -181,6 +238,35 @@ namespace test.logisticregression
             Assert.Equal(Math.Round(score.Weights[4], 5), -0.33841);
             Assert.Equal(Math.Round(score.Weights[5], 5), -0.33841);
             Assert.Equal(Math.Round(score.Weights[6], 5), -1.62489);
+
+
+            //define data for testing (prediction)
+            LearningApi apiPrediction = new LearningApi(desc);
+            //Real dataset must be defined as object type, because data can be numeric, binary and classification
+            apiPrediction.UseActionModule<object[][], object[][]>((input, ctx) =>
+            {
+                var data = new object[4][]
+                {
+                    new object[]{0.202,"blue", "male",13,"yes" },
+                    new object[]{0.447,"green","female",37,"no" },
+                    new object[]{0.120,"red","male", "21", "yes" },
+                    new object[]{0.313,"green","male",22,"yes" },
+                    };
+                return data;
+            });
+
+            // Use mapper for data, which will extract (map) required columns 
+            apiPrediction.UseDefaultDataMapper();
+            var testData = apiPrediction.Run();
+
+            //use previous trained model
+            var result = api.Algorithm.Predict(testData as double[][], api.Context);
+
+            Assert.Equal(Math.Round(result[0], 5), 0);
+            Assert.Equal(Math.Round(result[1], 5), 0);
+            Assert.Equal(Math.Round(result[2], 5), 0);
+            Assert.Equal(Math.Round(result[3], 5), 0);
+
         }
 
         #region Data Sample
