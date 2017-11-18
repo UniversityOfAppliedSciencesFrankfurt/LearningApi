@@ -5,6 +5,11 @@ using System.Threading.Tasks;
 
 namespace LearningFoundation
 {
+    /// <summary>
+    /// Provides extension for injectable function module.
+    /// By using of this module, you don't have to implement module as a separeted project.
+    /// You can rather inject the function, which will be executed in the pipeline.
+    /// </summary>
     public static class FuctionModuleExtensions
     {
         /// <summary>

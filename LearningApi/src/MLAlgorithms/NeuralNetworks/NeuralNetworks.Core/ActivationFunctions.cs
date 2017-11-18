@@ -17,5 +17,7 @@ namespace NeuralNetworks.Core
         {
             return 1 / (1 + Math.Exp(-val));
         }
+
+      
     }
 }

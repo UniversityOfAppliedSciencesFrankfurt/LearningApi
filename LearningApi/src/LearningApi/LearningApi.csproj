@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>netstandard1.2</TargetFrameworks>
+    <TargetFrameworks>netstandard1.3;net451</TargetFrameworks>
     <AssemblyName>LearningApi</AssemblyName>
     <PackageId>LearningApi</PackageId>
     <NetStandardImplicitPackageVersion>1.6.0</NetStandardImplicitPackageVersion>
@@ -9,6 +9,7 @@
     <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
     <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
     <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
+    <RootNamespace>LearningFoundation</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
