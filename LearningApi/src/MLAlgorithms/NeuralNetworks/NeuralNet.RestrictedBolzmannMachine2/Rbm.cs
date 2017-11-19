@@ -5,6 +5,10 @@ using LearningFoundation;
 
 namespace NeuralNet.RestrictedBolzmannMachine2
 {
+    /// <summary>
+    /// Nice article about RBM.
+    /// https://deeplearning4j.org/restrictedboltzmannmachine
+    /// </summary>
     public class Rbm : NeuralNetCore
     {
         private double learnRate;
@@ -23,12 +27,11 @@ namespace NeuralNet.RestrictedBolzmannMachine2
 
         private Func<double, double> m_ActivationFunction = logSig;
 
-        private double[] m_VisibleVals;
-
+      
         /// <summary>
         /// Visible node values (0, 1)
         /// </summary>
-        public double[] visValues;
+        public double[] m_VisibleValues;
         public double[] visProbs;
         public double[] visBiases;
 
@@ -40,15 +43,23 @@ namespace NeuralNet.RestrictedBolzmannMachine2
 
         private Random m_Rnd = new Random();
 
-        public Rbm(int numVisible, int numHidden)
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="numVisible">Number of visible nodes.</param>
+        /// <param name="numHidden">Number of hidden nodes.</param>
+        public Rbm(int numVisible, int numHidden, int maxEpochs = 1000, double learnRate = 0.01)
         {
+            this.learnRate = learnRate;
+            this.maxEpochs = maxEpochs;
             this.numVisible = numVisible;
             this.numHidden = numHidden;
 
             //
             // Allocate matrixes
 
-            visValues = new double[numVisible];
+            m_VisibleValues = new double[numVisible];
             visProbs = new double[numVisible];
             visBiases = new double[numVisible];
 
@@ -96,7 +107,7 @@ namespace NeuralNet.RestrictedBolzmannMachine2
 
                     // Copy train data to visible values
                     for (int j = 0; j < numVisible; ++j)
-                        m_VisibleVals[j] = data[i][j];
+                        m_VisibleValues[j] = data[i][j];
 
                     //
                     // Compute hidden node values 
@@ -104,7 +115,7 @@ namespace NeuralNet.RestrictedBolzmannMachine2
                     {
                         double sum = 0.0;
                         for (int visibleIndx = 0; visibleIndx < numVisible; ++visibleIndx)
-                            sum += m_VisibleVals[visibleIndx] * vhWeights[visibleIndx][hiddenIndx];
+                            sum += m_VisibleValues[visibleIndx] * vhWeights[visibleIndx][hiddenIndx];
 
                         sum += hidBiases[hiddenIndx]; // add the hidden bias
                         hidProbs[hiddenIndx] = m_ActivationFunction(sum); // compute prob of h activation
@@ -116,7 +127,7 @@ namespace NeuralNet.RestrictedBolzmannMachine2
                     }
 
                     // compute positive gradient =  outer product of v & h
-                    double[][] positiveGradient = MathFunctions.OuterProd(m_VisibleVals, hidValues);
+                    double[][] positiveGradient = MathFunctions.OuterProd(m_VisibleValues, hidValues);
 
                     // reconstruct visual Nodes as v'
                     double[] vPrime = new double[numVisible];  // v' in Wikipedia
@@ -162,7 +173,7 @@ namespace NeuralNet.RestrictedBolzmannMachine2
 
                     // Update visBiases
                     for (int v = 0; v < numVisible; ++v)
-                        visBiases[v] += learnRate * (m_VisibleVals[v] - vPrime[v]);
+                        visBiases[v] += learnRate * (m_VisibleValues[v] - vPrime[v]);
                     // update hidBiases
                     for (int h = 0; h < numHidden; ++h)
                         hidBiases[h] += learnRate * (hidValues[h] - hPrime[h]);
@@ -180,6 +191,34 @@ namespace NeuralNet.RestrictedBolzmannMachine2
             if (x < -20.0) return 0.0000000001;
             else if (x > 20.0) return 0.9999999999;
             else return 1.0 / (1.0 + Math.Exp(-x));
+        }
+
+        public override double[] Predict(double[][] data, IContext ctx)
+        {
+            double[][] result = new double[data.Length][];
+
+            for (int i = 0; i < data.Length; i++)
+            {
+                result[i] = new double[numHidden];
+
+                for (int h = 0; h < numHidden; ++h)
+                {
+                    double sum = 0.0;
+                    for (int v = 0; v < numVisible; ++v)
+                        sum += data[i][v] * vhWeights[v][h];
+
+                    sum += hidBiases[h]; // add the hidden bias
+                    double probActiv = m_ActivationFunction(sum); // compute prob of h activation
+                                                                  // Console.WriteLine("Hidden [" + h + "] activation probability = " + probActiv.ToString("F4"));
+                    double pr = m_Rnd.NextDouble();  // determine 0/1 h node value
+                    if (probActiv > pr)
+                        result[i][h] = 1;
+                    else
+                        result[i][h] = 0;
+                }             
+            }
+
+            return null;
         }
     }
 }
