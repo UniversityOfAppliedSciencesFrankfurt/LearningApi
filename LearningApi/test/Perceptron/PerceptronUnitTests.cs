@@ -106,6 +106,11 @@ namespace test.Perceptron
             Assert.True(result[3] == 1);
         }
 
+
+        /// <summary>
+        /// Please note that data generated in this test cannot be learned by perceptron perfect way.
+        /// This test will sometime sfail.
+        /// </summary>
         [Fact]
         public void SimpleSequenceWithGapsTest()
         {
@@ -125,7 +130,10 @@ namespace test.Perceptron
                 {
                     data[i] = new double[2];
                     data[i][0] = i * 3;
-                    data[i][1] = ((i * 3) > (maxSamples / 2)) ? 1 : 0;
+                    if ((i * 3) > (maxSamples / 2))
+                        data[i][1] = 1;
+                    else
+                        data[i][1] = 0;
                 }
 
                 return data;
