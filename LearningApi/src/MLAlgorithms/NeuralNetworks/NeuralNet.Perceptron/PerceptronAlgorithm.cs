@@ -63,7 +63,8 @@ namespace NeuralNet.Perceptron
                     this.m_Errors[inputVectIndx] = error;
 
                     // Total error for all input vectors.
-                    totalError += Math.Abs(error);
+                 
+                       totalError += Math.Abs(error);
 
                     if (error != 0)
                     {
@@ -83,7 +84,25 @@ namespace NeuralNet.Perceptron
                     // Updating of threshold
                     this.m_Threshold += this.m_LearningRate * error;
 
-                }
+                if (totalError == 0)
+                    break;
+        
+                //if (totalError == 0)
+                //{
+                //    bool isAny = false;
+                //    foreach (var err in m_Errors)
+                //    {
+                //        if (err != 0)
+                //        {
+                //            isAny = true;
+                //            break;
+                //        }
+                //    }
+                //    if (!isAny)
+                //        break;
+                //}
+                    
+            }
 
                 if (totalError == 0) break;
 
