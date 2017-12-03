@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using LearningFoundation;
+using System.Diagnostics;
 
 namespace NeuralNet.Perceptron
 {
@@ -13,7 +14,7 @@ namespace NeuralNet.Perceptron
 
         private int m_Iterations;
 
-        private Func<double, double> m_ActivationFunction = ActivationFunctions.Sigmoid;
+        private Func<double, double> m_ActivationFunction = ActivationFunctions.Boolean;
 
         private int m_Dimensions;
 
@@ -22,6 +23,8 @@ namespace NeuralNet.Perceptron
         private double[] m_Errors;
 
         private double m_Threshold;
+
+        private bool m_PersistConvergenceData = false;
 
         public PerceptronAlgorithm(double threshold, double learningRate, int iterations, Func<double, double> activationFunction = null)
         {
@@ -34,24 +37,18 @@ namespace NeuralNet.Perceptron
         }
 
 
-      
         public override IScore Run(double[][] featureValues, IContext ctx)
         {
             m_Dimensions = ctx.DataDescriptor.Features.Count();
-
             int numOfInputVectors = featureValues.Length;
-
             m_Weights = new double[m_Dimensions];
-
             m_Errors = new double[numOfInputVectors];
-
             initializeWeights();
-
-            double totalError = 0;
-
+            double totalError = 0.0;
+            var score = new PerceptronAlgorithmScore();
             for (int i = 0; i < m_Iterations; i++)
             {
-                totalError = 0;
+                // totalError = 0;
 
                 for (int inputVectIndx = 0; inputVectIndx < numOfInputVectors; inputVectIndx++)
                 {
@@ -63,11 +60,10 @@ namespace NeuralNet.Perceptron
 
                     // Error is difference between calculated output and expected output.
                     double error = expectedOutput - calculatedOutput;
-
                     this.m_Errors[inputVectIndx] = error;
 
                     // Total error for all input vectors.
-                    // totalError += error;
+                 
                        totalError += Math.Abs(error);
 
                     if (error != 0)
@@ -75,7 +71,6 @@ namespace NeuralNet.Perceptron
                         // Y = W * X
                         // error = expectedOutput - calculatedOutput
                         // W = Y/X
-
                         //
                         // Updating of weights
                         for (int dimensionIndx = 0; dimensionIndx < m_Dimensions; dimensionIndx++)
@@ -88,7 +83,6 @@ namespace NeuralNet.Perceptron
                     //
                     // Updating of threshold
                     this.m_Threshold += this.m_LearningRate * error;
-                }
 
                 if (totalError == 0)
                     break;
@@ -110,17 +104,33 @@ namespace NeuralNet.Perceptron
                     
             }
 
-            ctx.Score = new PerceptronAlgorithmScore()
-            {
-                Weights = this.m_Weights,
+                if (totalError == 0) break;
 
-                Errors = this.m_Errors,
+                //if (totalError == 0)
+                //{
+                //    bool isAny = false;
 
-                TotolEpochError = totalError
-            };
+                //    foreach (var err in m_Errors)
+                //    {
+                //        if (err != 0)
+                //        {
+                //            isAny = true;
+                //            break;
+                //        }
+                //    }
 
+                //    if (!isAny)
+                //        break;
+                //}
+            }
+
+            score.Weights = this.m_Weights;
+            score.Errors = this.m_Errors;//numberofsample
+            score.TotolEpochError = totalError;//all 0
+            ctx.Score = score;
             return ctx.Score;
         }
+
 
         public override double[] Predict(double[][] data, IContext ctx)
         {

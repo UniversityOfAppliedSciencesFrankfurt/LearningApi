@@ -1,0 +1,63 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.0</TargetFramework>
+    <DebugType>portable</DebugType>
+    <AssemblyName>test</AssemblyName>
+    <PackageId>test</PackageId>
+    <GenerateRuntimeConfigurationFiles>true</GenerateRuntimeConfigurationFiles>
+    <NetStandardImplicitPackageVersion>1.6.0</NetStandardImplicitPackageVersion>
+    <PackageTargetFallback>$(PackageTargetFallback)</PackageTargetFallback>
+    <!--<RuntimeFrameworkVersion>netcoreapp2.0</RuntimeFrameworkVersion>-->
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\src\MLAlgorithms\AnomDetect.KMeans\AnomDetect.KMeans.csproj" />
+    <ProjectReference Include="..\src\DataProviders\CsvDataProvider\CsvDataProvider.csproj" />
+    <ProjectReference Include="..\src\LearningApi\LearningApi.csproj" />
+    <ProjectReference Include="..\src\MLAlgorithms\NeuralNetworks\NeuralNet.BackPropagation\NeuralNet.BackPropagation.csproj" />
+    <ProjectReference Include="..\src\MLAlgorithms\NeuralNetworks\NeuralNet.RestrictedBolzmannMachine2\NeuralNet.RestrictedBolzmannMachine2.csproj" />
+    <ProjectReference Include="..\src\MLAlgorithms\NeuralNetworks\NeuralNetworks.Core\NeuralNetworks.Core.csproj" />
+    <ProjectReference Include="..\src\Normalizers\GaussNormalizer\GaussNormalizer.csproj" />
+    <ProjectReference Include="..\src\Normalizers\MinMaxNormalizer\MinMaxNormalizer.csproj" />
+    <ProjectReference Include="..\src\MLAlgorithms\LogisticRegression\LogisticRegression.csproj" />
+    <ProjectReference Include="..\src\MLAlgorithms\NeuralNetworks\NeuralNet.Perceptron\NeuralNet.Perceptron.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.3.0" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.3.0" />
+    <PackageReference Include="System.Runtime.Serialization.Primitives" Version="4.3.0" />
+    <PackageReference Include="xunit" Version="2.3.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Service Include="{82a7f48d-3b50-4b1e-b82e-3ada8210c358}" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="RestrictedBolzmannMachine2\rbm_sample1.csv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="SampleData\iris\iris.csv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="SampleData\iris\iris.xlsx">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="SampleData\iris\iris_gauss_normalized.csv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="SampleData\iris\iris_mapper.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="SampleData\iris\iris_minmax_normalized.csv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="SampleData\iris\iris_numeric.csv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+</Project>

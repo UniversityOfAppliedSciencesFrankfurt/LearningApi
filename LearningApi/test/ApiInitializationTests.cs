@@ -18,13 +18,13 @@ namespace UnitTests
     
     public class ApiInitializationTests
     {
-        string m_iris_data_path;
+        string m_IrisDataPath;
 
       
         public ApiInitializationTests()
         {
             //iris data file
-            m_iris_data_path = System.IO.Path.Combine(Directory.GetCurrentDirectory(), @"SampleData\iris\iris.csv");
+            m_IrisDataPath = System.IO.Path.Combine(Directory.GetCurrentDirectory(), @"SampleData\iris\iris.csv");
         }
 
         /// <summary>
@@ -85,7 +85,7 @@ namespace UnitTests
             LearningApi api = new LearningApi(TestHelpers.GetDescriptor());
 
             // Initialize data provider
-            api.UseCsvDataProvider(m_iris_data_path, ',', 1);
+            api.UseCsvDataProvider(m_IrisDataPath, ',', 1);
 
             // Use mapper for data, which will extract (map) required columns 
             api.UseDefaultDataMapper();
@@ -114,7 +114,7 @@ namespace UnitTests
             LearningApi api = new LearningApi(TestHelpers.GetDescriptor());
 
             // Initialize data provider
-            api.UseCsvDataProvider(m_iris_data_path, ',', 1);
+            api.UseCsvDataProvider(m_IrisDataPath, ',', 1);
 
             // Use mapper for data, which will extract (map) required columns 
             api.UseDefaultDataMapper();
