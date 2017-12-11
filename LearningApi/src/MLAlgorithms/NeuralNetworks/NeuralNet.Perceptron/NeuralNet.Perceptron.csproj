@@ -4,8 +4,7 @@
     <TargetFramework>netstandard1.3</TargetFramework>
     <AssemblyName>NeuralNet.Perceptron</AssemblyName>
     <PackageId>NeuralNet.Perceptron</PackageId>
-    <NetStandardImplicitPackageVersion>1.6.0</NetStandardImplicitPackageVersion>
-    <PackageTargetFallback>$(PackageTargetFallback)</PackageTargetFallback>
+  
     <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
     <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
     <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
