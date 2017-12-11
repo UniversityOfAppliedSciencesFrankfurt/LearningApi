@@ -12,6 +12,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\..\Self_Organizing_Map\src\Self_Organizing_Map\SelfOrganizingMap.csproj" />
     <ProjectReference Include="..\src\MLAlgorithms\AnomDetect.KMeans\AnomDetect.KMeans.csproj" />
     <ProjectReference Include="..\src\DataProviders\CsvDataProvider\CsvDataProvider.csproj" />
     <ProjectReference Include="..\src\LearningApi\LearningApi.csproj" />

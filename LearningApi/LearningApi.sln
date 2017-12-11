@@ -44,6 +44,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NeuralNet.Perceptron", "src
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NeuralNet.RestrictedBolzmannMachine2", "src\MLAlgorithms\NeuralNetworks\NeuralNet.RestrictedBolzmannMachine2\NeuralNet.RestrictedBolzmannMachine2.csproj", "{D80402D7-ED09-4706-8A9E-6D08965EF6EF}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SelfOrganizingMap", "..\..\Self_Organizing_Map\src\Self_Organizing_Map\SelfOrganizingMap.csproj", "{754AE2F3-792C-4941-9C68-C1B32EA2EA4C}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SelfOrganizingMap", "SelfOrganizingMap", "{E30CC2F2-8B69-408E-9F72-6813EFF54D04}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -98,6 +102,10 @@ Global
 		{D80402D7-ED09-4706-8A9E-6D08965EF6EF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D80402D7-ED09-4706-8A9E-6D08965EF6EF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D80402D7-ED09-4706-8A9E-6D08965EF6EF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{754AE2F3-792C-4941-9C68-C1B32EA2EA4C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{754AE2F3-792C-4941-9C68-C1B32EA2EA4C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{754AE2F3-792C-4941-9C68-C1B32EA2EA4C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{754AE2F3-792C-4941-9C68-C1B32EA2EA4C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -119,6 +127,8 @@ Global
 		{B9C93B81-9125-4F8D-B5B2-0356F0DFB67A} = {99343BF5-0AC3-451A-A249-343C47AEDEE9}
 		{AB1551F8-42C1-4DE2-AAF0-A07EBFEA8EA8} = {461E3D43-4B87-4CC0-9762-88ACFDBAFBCA}
 		{D80402D7-ED09-4706-8A9E-6D08965EF6EF} = {461E3D43-4B87-4CC0-9762-88ACFDBAFBCA}
+		{754AE2F3-792C-4941-9C68-C1B32EA2EA4C} = {E30CC2F2-8B69-408E-9F72-6813EFF54D04}
+		{E30CC2F2-8B69-408E-9F72-6813EFF54D04} = {99343BF5-0AC3-451A-A249-343C47AEDEE9}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {DD0FDFB7-25B1-4E83-9B3D-B71D6DB943F9}
