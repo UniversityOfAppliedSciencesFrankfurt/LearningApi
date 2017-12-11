@@ -4,18 +4,20 @@ using System.Linq;
 using System.Threading.Tasks;
 using Xunit;
 using LearningFoundation;
-using Self_Organizing_Map;
+using SelfOrganizingMap;
 using System.IO;
 
 
 namespace Test
 {
-    
-    public class Test_Self_Organizing_Map
+
+    public class SelfOrganizingMapTest
     {
+        string path = Path.GetDirectoryName(Path.GetDirectoryName(Path.GetDirectoryName(System.IO.Directory.GetCurrentDirectory())));
+
         [Fact]
-        public void TestMethod()
-         {
+        public void TestMapWithLearningAPI()
+        {
             List<string> labels = new List<string>();
 
             var api = new LearningApi();
@@ -23,17 +25,17 @@ namespace Test
             {
                 List<double[]> patterns = new List<double[]>();
                 var dimensions = 3;
-                StreamReader reader = File.OpenText(@"../../../../Self_Organizing_Map/Food.csv");
+                StreamReader reader = File.OpenText(path + "\\SelfOrganizingMap\\Food.csv");
                 ///<Summary>Ignore first line.
-                reader.ReadLine(); 
-                 while (!reader.EndOfStream)
-                  {
+                reader.ReadLine();
+                while (!reader.EndOfStream)
+                {
                     string[] line = reader.ReadLine().Split(',');
                     labels.Add(line[0]);
                     double[] inputs = new double[dimensions];
 
                     for (int i = 0; i < dimensions; i++)
-                     {
+                    {
                         inputs[i] = double.Parse(line[i + 1]);
                     }
                     patterns.Add(inputs);
@@ -43,7 +45,7 @@ namespace Test
                 return patterns;
             });
             api.AddModule(new Map(3, 10, 0.000001));
-            var r = api.Run() as Neuron[]; 
+            var r = api.Run() as Neuron[];
 
             for (int i = 0; i < r.Length; i++)
             {
