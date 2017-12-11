@@ -8,6 +8,18 @@
     <GenerateRuntimeConfigurationFiles>true</GenerateRuntimeConfigurationFiles>
     <NetStandardImplicitPackageVersion>1.6.0</NetStandardImplicitPackageVersion>
     <PackageTargetFallback>$(PackageTargetFallback)</PackageTargetFallback>
+    <Version>1.0.1-beta</Version>
+    <Authors>University of Applied Sciences in cooperation with daenet GmbH</Authors>
+    <Company>University of Applied Sciences</Company>
+    <Product>Learning Foundation</Product>
+    <PackageProjectUrl>https://github.com/UniversityOfAppliedSciencesFrankfurt/LearningApi</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/UniversityOfAppliedSciencesFrankfurt/LearningApi</RepositoryUrl>
+    <RepositoryType>github</RepositoryType>
+    <PackageTags>machine learning, ai</PackageTags>
+    <PackageReleaseNotes>beta</PackageReleaseNotes>
+    <AssemblyVersion>1.0.0.1</AssemblyVersion>
+    <FileVersion>1.0.0.1</FileVersion>
+    <PackageIconUrl>https://upload.wikimedia.org/wikipedia/commons/d/d8/Logo-fu%402x.png</PackageIconUrl>
     <!--<RuntimeFrameworkVersion>netcoreapp2.0</RuntimeFrameworkVersion>-->
   </PropertyGroup>
 
