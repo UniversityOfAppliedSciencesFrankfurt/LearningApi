@@ -1,24 +1,26 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>netstandard1.3;net451</TargetFrameworks>
-    <AssemblyName>LearningApi</AssemblyName>
-    <PackageId>LearningApi</PackageId>
-    <NetStandardImplicitPackageVersion>1.6.0</NetStandardImplicitPackageVersion>
-    <PackageTargetFallback Condition=" '$(TargetFramework)' == 'netstandard1.2' ">$(PackageTargetFallback);dnxcore50</PackageTargetFallback>
-    <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
-    <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
-    <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
-    <RootNamespace>LearningFoundation</RootNamespace>
+    <TargetFramework>netstandard1.3</TargetFramework>
+    <Version>1.0.1-beta</Version>
+    <Authors>daenet GmbH, University of Applied Sciences Frankfurt am Main</Authors>
+    <PackageProjectUrl>https://github.com/UniversityOfAppliedSciencesFrankfurt/LearningApi</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/UniversityOfAppliedSciencesFrankfurt/LearningApi</RepositoryUrl>
+    <RepositoryType>github</RepositoryType>
+    <PackageTags>ai, ml</PackageTags>
+    <AssemblyVersion>1.0.0.1</AssemblyVersion>
+    <FileVersion>1.0.0.1</FileVersion>
   </PropertyGroup>
+
 
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="9.0.1" />
   </ItemGroup>
 
-  <ItemGroup Condition=" '$(TargetFramework)' == 'net451' ">
-    <Reference Include="System" />
-    <Reference Include="Microsoft.CSharp" />
+
+  <ItemGroup>
+    <Folder Include="Properties\" />
   </ItemGroup>
+
 
 </Project>

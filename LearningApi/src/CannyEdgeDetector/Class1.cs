@@ -9,7 +9,7 @@ namespace CannyEdgeDetector
     {
         public Class1()
         { 
-            //...
+            //... Work in progress
         }
     }
 }
