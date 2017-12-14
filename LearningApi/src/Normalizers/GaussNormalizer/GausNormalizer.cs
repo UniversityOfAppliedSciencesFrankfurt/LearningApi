@@ -36,7 +36,7 @@ namespace LearningFoundation.Normalizers
             var normData = new List<List<double>>();
 
             // calculate min and max value for each column vector
-            var tuple = data.calculateMeanStDev();
+            var tuple = data.CalculateMeanStDev();
             var desc = ctx.DataDescriptor as DataDescriptor;
 
             //store values for denormalizer

@@ -14,12 +14,12 @@
 
 
   <ItemGroup>
-    <PackageReference Include="Newtonsoft.Json" Version="9.0.1" />
+    <Folder Include="Properties\" />
   </ItemGroup>
 
 
   <ItemGroup>
-    <Folder Include="Properties\" />
+    <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
   </ItemGroup>
 
 

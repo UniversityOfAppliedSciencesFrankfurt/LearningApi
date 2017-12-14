@@ -18,13 +18,14 @@ namespace LearningFoundation.DataProviders
         /// <param name="api">instance of the LearningAPI</param>
         /// <param name="fileName">csv file path</param>
         /// <param name="delimiter">csv delimiter</param>
+        /// <param name="isHeader"> is header included in the data after skiped rows. </param>
         /// <param name="skipRows">firs several rows which should be skiped in parsing.</param>
         /// <returns></returns>
-        public static LearningApi UseCsvDataProvider(this LearningApi api, string fileName, char delimiter, int skipRows = 0)       
+        public static LearningApi UseCsvDataProvider(this LearningApi api, string fileName, char delimiter, bool isHeader, int skipRows = 0)       
         {
-            var dp = new CsvDataProvider(fileName, delimiter, skipRows);
+            var dp = new CsvDataProvider(fileName, delimiter, isHeader, skipRows);
           
-            api.AddModule(dp, "DataProvider");
+            api.AddModule(dp, "CsvDataProvider");
             
             return api;
         }

@@ -22,9 +22,13 @@ namespace test.statistics
             var dataSample1 = new double[] { 180, 176, 144, 195, 159, 185, 166, 173, 149, 168 };
             var dataSample2 = new double[] { 87, 65, 52, 94, 87, 79, 59, 64, 45, 77 };
 
-
+            //Pearson correlation
             var result = dataSample1.CorrCoeffOf(dataSample2);
             Assert.Equal(Math.Round(result, 4), 0.7294);
+
+            //Sperman correlation
+            var result1 = dataSample1.CorrCoeffRankOf(dataSample2);
+            Assert.Equal(Math.Round(result1, 4), 0.7182);
         }
 
 
@@ -38,7 +42,11 @@ namespace test.statistics
             var dataSample2 = new double[] { 178, 171, 149, 195, 162, 181, 160, 175, 159, 168 };
 
             var result = dataSample1.CorrCoeffOf(dataSample2);
-            Assert.Equal(Math.Round(result, 4), 0.9584);           
+            Assert.Equal(Math.Round(result, 4), 0.9584);
+
+            //Sperman correlation
+            var result1 = dataSample1.CorrCoeffRankOf(dataSample2);
+            Assert.Equal(Math.Round(result1, 4), 0.9758);
         }
         [Fact]
         public void CalculateMeanStDev_Tests2()
@@ -48,7 +56,7 @@ namespace test.statistics
             //test 1
             var dataset = getSampleDataSet();
 
-            var result = dataset.calculateMeanStDev();
+            var result = dataset.CalculateMeanStDev();
             //mean
             Assert.Equal(Math.Round(result.Item1[0], 4), -0.2916);
             Assert.Equal(Math.Round(result.Item1[1], 4), 0.55);

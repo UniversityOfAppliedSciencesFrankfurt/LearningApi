@@ -85,7 +85,7 @@ namespace UnitTests
             LearningApi api = new LearningApi(TestHelpers.GetDescriptor());
 
             // Initialize data provider
-            api.UseCsvDataProvider(m_IrisDataPath, ',', 1);
+            api.UseCsvDataProvider(m_IrisDataPath, ',', false, 1);
 
             // Use mapper for data, which will extract (map) required columns 
             api.UseDefaultDataMapper();
@@ -114,7 +114,7 @@ namespace UnitTests
             LearningApi api = new LearningApi(TestHelpers.GetDescriptor());
 
             // Initialize data provider
-            api.UseCsvDataProvider(m_IrisDataPath, ',', 1);
+            api.UseCsvDataProvider(m_IrisDataPath, ',', false, 1);
 
             // Use mapper for data, which will extract (map) required columns 
             api.UseDefaultDataMapper();
@@ -125,7 +125,7 @@ namespace UnitTests
             // We could also use some other normalizer like Gaus data normalizer
             //api.UseGaussNormalizer(m_stats.Select(x => x.Mean).ToArray(), m_stats.Select(x => x.StDev).ToArray());
 
-            // Prepares the ML Algoritm and setup parameters
+            // Prepares the ML Algorithm and setup parameters
             api.UseBackPropagation(1, 0.2, 1.0, null);
 
             //start process of learning
