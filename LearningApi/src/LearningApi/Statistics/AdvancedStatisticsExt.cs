@@ -143,6 +143,115 @@ namespace LearningFoundation.Statistics
             return rankCorrelation;
         }
 
+        /// <summary>
+        /// Point Biserial Correlation coefficient
+        /// https://en.wikipedia.org/wiki/Point-biserial_correlation_coefficient
+        ///When you choose to analyse your data using a point-biserial correlation, part of the process involves checking to make sure that the data you want to analyse can actually be analysed using a point-biserial correlation. 
+        ///You need to do this because it is only appropriate to use a point-biserial correlation if your data "passes" five assumptions 
+        ///that are required for a point-biserial correlation to give you a valid result. 
+        ///In practice, checking for these five assumptions just adds a little bit more time to your analysis, requiring you to click 
+        ///a few more buttons in SPSS Statistics when performing your analysis, as well as think a little bit more about 
+        ///your data, but it is not a difficult task.When you choose to analyse your data using a point-biserial correlation,
+        ///part of the process involves checking to make sure that the data you want to analyse can actually be analysed 
+        ///using a point-biserial correlation. You need to do this because it is only appropriate to use a point-biserial 
+        ///correlation if your data "passes" five assumptions that are required for a point-biserial correlation to give you a 
+        ///valid result. In practice, checking for these five assumptions just adds a little bit more time to your analysis, 
+        ///requiring you to click a few more buttons in SPSS Statistics when performing your analysis, as well as think a 
+        ///little bit more about your data, but it is not a difficult task.
+        /// Assumption #1: One of your two variables should be measured on a continuous scale. Examples of continuous variables include
+        ///             revision time (measured in hours), intelligence (measured using IQ score), exam performance (measured from 0 to 100), 
+        ///             weight (measured in kg), and so forth. You can learn more about continuous variables in our article: Types of Variable.
+        /// Assumption #2: Your other variable should be dichotomous. Examples of dichotomous variables include gender 
+        ///             (two groups: male or female), employment status (two groups: employed or unemployed), smoker (two groups: yes or no), and so forth.
+        /// Assumption #3: There should be no outliers for the continuous variable for each category of the dichotomous variable. 
+        ///             You can test for outliers using boxplots.
+        /// Assumption #4: Your continuous variable should be approximately normally distributed for each category of the dichotomous 
+        ///             variable. You can test this using the Shapiro-Wilk test of normality.
+        /// Assumption #5: Your continuous variable should have equal variances for each category of the dichotomous variable.
+        ///             You can test this using Levene's test of equality of variances.
+        ///
+        /// </summary>
+        /// <param name="data1">numeric array</param>
+        /// <param name="data2">array of 0 and 1s</param>
+        /// <returns></returns>
+        public static double CorrCoeffPBOf(this double[] data1, int[] data2)
+        {
+            if (data1 == null || data1.Length < 2)
+                throw new MLException("'xData' cannot be null or empty!");
+
+            if (data2 == null || data2.Length < 2)
+                throw new MLException("'yData' cannot be null or empty!");
+
+            if (data1.Length != data2.Length)
+                throw new MLException("Both datasets must be of the same size!");
+
+            if(data2.Distinct().Count()!=2)
+                throw new MLException("Data2 must be dichotomous!");
+
+            //implementation in excel
+            //http://www.real-statistics.com/correlation/biserial-correlation/
+            //rb=(m1-m0)p0p1/sy
+
+            int n = data1.Length;
+            int n1 = 0;
+            int n0 = 0;
+            double s1 = 0;
+            double s0 = 0;
+            for(int i=0; i< data1.Length; i++)
+            {
+                if (data2[i] == 1)
+                {
+                    n1++;
+                    s1 = s1 + data1[i];
+                }
+                else
+                {
+                    n0++;
+                    s0 = s0 + data1[i];
+                }
+            }
+            if(n!=n0+n1)
+                throw new MLException("Data2 must be dichotomous!");
+            //
+            var m1 = s1 / (double)n1;
+            var m0 = s0 / (double)n0;
+            var p0 = n0 / (double)n;
+            var p1 = n1 / (double)n;
+            var s = data1.Stdev();
+            var z = Distributions.NormSInverse(p1);
+            var y = Distributions.NormDist(z, 0,1,false);
+            return (m1-m0)*p0*p1/(s*y);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="x"></param>
+        /// <returns></returns>
+        public static double Phi(double x)
+        {
+            // constants
+            double a1 = 0.254829592;
+            double a2 = -0.284496736;
+            double a3 = 1.421413741;
+            double a4 = -1.453152027;
+            double a5 = 1.061405429;
+            double p = 0.3275911;
+
+            // Save the sign of x
+            int sign = 1;
+            if (x < 0)
+                sign = -1;
+            x = Math.Abs(x) / Math.Sqrt(2.0);
+
+            // A&S formula 7.1.26
+            double t = 1.0 / (1.0 + p * x);
+            double y = 1.0 - (((((a5 * t + a4) * t) + a3) * t + a2) * t + a1) * t * Math.Exp(-x * x);
+
+            return 0.5 * (1.0 + sign * y);
+        }
+
+
         class DataPoint
         {
             public double xValue,yValue;

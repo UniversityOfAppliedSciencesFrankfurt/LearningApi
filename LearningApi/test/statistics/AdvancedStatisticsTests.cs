@@ -68,6 +68,21 @@ namespace test.statistics
             Assert.Equal(Math.Round(result.Item2[2], 4), 0.7947);
         }
 
+        [Fact]
+        public void PointBiserialCorrelationCoefficientTests()
+        {
+            //define stats modul 
+
+            //test 1
+            var dataSample1 = new double[24] { 23, 15, 16,25,20,17,18,14,12,19,21,22,16,21,16,11,24,21,18,15,19,22,13,24 };
+            var dataSample2 = new int[24] { 1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0 };
+
+            //Point Biserial correlation
+            var result = dataSample1.CorrCoeffPBOf(dataSample2);
+            Assert.Equal(Math.Round(result, 4), -0.0682);
+
+        }
+
 
         private double[][] getSampleDataSet()
         {
