@@ -39,7 +39,7 @@ namespace test.csvdataprovider
             var isris_path = System.IO.Path.Combine(Directory.GetCurrentDirectory(), m_iris_data_path);
 
             LearningApi api = new LearningApi(TestHelpers.GetDescriptor());
-            api.UseCsvDataProvider(isris_path, ',', 1);
+            api.UseCsvDataProvider(isris_path, ',', false,1);
 
             var result = api.Run() as object[][];
 
@@ -89,7 +89,7 @@ namespace test.csvdataprovider
             var isris_path = System.IO.Path.Combine(Directory.GetCurrentDirectory(), m_secom_data_path);
 
             LearningApi api = new LearningApi(TestHelpers.GetDescriptor(m_secom_data_mapper_path));
-            api.UseCsvDataProvider(isris_path, ',', 1);
+            api.UseCsvDataProvider(isris_path, ',', false, 1);
 
             var result = api.Run() as object[][];
 

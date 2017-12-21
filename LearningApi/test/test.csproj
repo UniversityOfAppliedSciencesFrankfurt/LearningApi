@@ -1,14 +1,26 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp1.2</TargetFramework>
+    <TargetFramework>netcoreapp2.0</TargetFramework>
     <DebugType>portable</DebugType>
     <AssemblyName>test</AssemblyName>
     <PackageId>test</PackageId>
     <GenerateRuntimeConfigurationFiles>true</GenerateRuntimeConfigurationFiles>
     <NetStandardImplicitPackageVersion>1.6.0</NetStandardImplicitPackageVersion>
-    <PackageTargetFallback>$(PackageTargetFallback);dotnet5.4;portable-net451+win8</PackageTargetFallback>
-    <RuntimeFrameworkVersion>1.0.4</RuntimeFrameworkVersion>
+    <PackageTargetFallback>$(PackageTargetFallback)</PackageTargetFallback>
+    <Version>1.0.1-beta</Version>
+    <Authors>University of Applied Sciences in cooperation with daenet GmbH</Authors>
+    <Company>University of Applied Sciences</Company>
+    <Product>Learning Foundation</Product>
+    <PackageProjectUrl>https://github.com/UniversityOfAppliedSciencesFrankfurt/LearningApi</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/UniversityOfAppliedSciencesFrankfurt/LearningApi</RepositoryUrl>
+    <RepositoryType>github</RepositoryType>
+    <PackageTags>machine learning, ai</PackageTags>
+    <PackageReleaseNotes>beta</PackageReleaseNotes>
+    <AssemblyVersion>1.0.0.1</AssemblyVersion>
+    <FileVersion>1.0.0.1</FileVersion>
+    <PackageIconUrl>https://upload.wikimedia.org/wikipedia/commons/d/d8/Logo-fu%402x.png</PackageIconUrl>
+    <!--<RuntimeFrameworkVersion>netcoreapp2.0</RuntimeFrameworkVersion>-->
   </PropertyGroup>
 
   <ItemGroup>
@@ -16,6 +28,7 @@
     <ProjectReference Include="..\src\DataProviders\CsvDataProvider\CsvDataProvider.csproj" />
     <ProjectReference Include="..\src\LearningApi\LearningApi.csproj" />
     <ProjectReference Include="..\src\MLAlgorithms\NeuralNetworks\NeuralNet.BackPropagation\NeuralNet.BackPropagation.csproj" />
+    <ProjectReference Include="..\src\MLAlgorithms\NeuralNetworks\NeuralNet.RestrictedBolzmannMachine2\NeuralNet.RestrictedBolzmannMachine2.csproj" />
     <ProjectReference Include="..\src\MLAlgorithms\NeuralNetworks\NeuralNetworks.Core\NeuralNetworks.Core.csproj" />
     <ProjectReference Include="..\src\Normalizers\GaussNormalizer\GaussNormalizer.csproj" />
     <ProjectReference Include="..\src\Normalizers\MinMaxNormalizer\MinMaxNormalizer.csproj" />
@@ -24,15 +37,38 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.3.0" />
-    <PackageReference Include="xunit.runner.visualstudio" Version="2.3.0" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.5.0" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.3.1" />
     <PackageReference Include="System.Runtime.Serialization.Primitives" Version="4.3.0" />
-    <PackageReference Include="xunit" Version="2.3.0" />
-    <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
+    <PackageReference Include="xunit" Version="2.3.1" />
   </ItemGroup>
 
   <ItemGroup>
     <Service Include="{82a7f48d-3b50-4b1e-b82e-3ada8210c358}" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="RestrictedBolzmannMachine2\rbm_sample1.csv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="SampleData\iris\iris.csv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="SampleData\iris\iris.xlsx">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="SampleData\iris\iris_gauss_normalized.csv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="SampleData\iris\iris_mapper.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="SampleData\iris\iris_minmax_normalized.csv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="SampleData\iris\iris_numeric.csv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
   <ItemGroup>

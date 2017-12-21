@@ -22,7 +22,7 @@ namespace test.datamapper
     {
         
         /// <summary>
-        /// COnstructor which initializes all neccessery data for test
+        /// COnstructor which initializes all necessary data for test
         /// </summary>
         public DataMapperTests()
         {

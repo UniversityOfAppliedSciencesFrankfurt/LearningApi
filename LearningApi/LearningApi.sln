@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26430.16
+VisualStudioVersion = 15.0.27004.2009
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{4366E8AF-8F45-46BB-9FF7-6D67AA4171FA}"
 EndProject
@@ -42,7 +42,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LogisticRegression", "src\M
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NeuralNet.Perceptron", "src\MLAlgorithms\NeuralNetworks\NeuralNet.Perceptron\NeuralNet.Perceptron.csproj", "{AB1551F8-42C1-4DE2-AAF0-A07EBFEA8EA8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SurvivalAnalysis", "src\MLAlgorithms\SurvivalAnalysis\SurvivalAnalysis.csproj", "{8091F2CE-D96D-489D-93CB-C44310923991}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NeuralNet.RestrictedBolzmannMachine2", "src\MLAlgorithms\NeuralNetworks\NeuralNet.RestrictedBolzmannMachine2\NeuralNet.RestrictedBolzmannMachine2.csproj", "{D80402D7-ED09-4706-8A9E-6D08965EF6EF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -94,10 +94,10 @@ Global
 		{AB1551F8-42C1-4DE2-AAF0-A07EBFEA8EA8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AB1551F8-42C1-4DE2-AAF0-A07EBFEA8EA8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AB1551F8-42C1-4DE2-AAF0-A07EBFEA8EA8}.Release|Any CPU.Build.0 = Release|Any CPU
-		{8091F2CE-D96D-489D-93CB-C44310923991}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{8091F2CE-D96D-489D-93CB-C44310923991}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{8091F2CE-D96D-489D-93CB-C44310923991}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{8091F2CE-D96D-489D-93CB-C44310923991}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D80402D7-ED09-4706-8A9E-6D08965EF6EF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D80402D7-ED09-4706-8A9E-6D08965EF6EF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D80402D7-ED09-4706-8A9E-6D08965EF6EF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D80402D7-ED09-4706-8A9E-6D08965EF6EF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -118,6 +118,9 @@ Global
 		{0C98AAB8-042D-4219-96FD-D3EF0CF84F5D} = {4366E8AF-8F45-46BB-9FF7-6D67AA4171FA}
 		{B9C93B81-9125-4F8D-B5B2-0356F0DFB67A} = {99343BF5-0AC3-451A-A249-343C47AEDEE9}
 		{AB1551F8-42C1-4DE2-AAF0-A07EBFEA8EA8} = {461E3D43-4B87-4CC0-9762-88ACFDBAFBCA}
-		{8091F2CE-D96D-489D-93CB-C44310923991} = {99343BF5-0AC3-451A-A249-343C47AEDEE9}
+		{D80402D7-ED09-4706-8A9E-6D08965EF6EF} = {461E3D43-4B87-4CC0-9762-88ACFDBAFBCA}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {DD0FDFB7-25B1-4E83-9B3D-B71D6DB943F9}
 	EndGlobalSection
 EndGlobal

@@ -6,13 +6,15 @@ using LearningFoundation;
 using System.IO;
 using System.Collections;
 
+
 namespace LearningFoundation.DataProviders
 {
     /// <summary>
-    /// DataProvider implementation in case data is comming from CSV file
+    /// DataProvider implementation in case data is coming from CSV file
     /// </summary>
     public class CsvDataProvider : IDataProvider<object[]>
     {
+        string[] m_Header;
         IEnumerable<object[]> list = new List<object[]>();
 
         private StreamReader m_Reader;
@@ -25,10 +27,20 @@ namespace LearningFoundation.DataProviders
 
         private int m_SkipRows;
 
-        public CsvDataProvider(string fileName, char delimiter, int skipRows = 0)
+        private bool isHeaderIncluded;
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="fileName"></param>
+        /// <param name="delimiter"></param>
+        /// <param name="isHeader"></param>
+        /// <param name="skipRows"></param>
+        public CsvDataProvider(string fileName, char delimiter, bool isHeader, int skipRows = 0)
         {
             m_FileName = fileName;
             m_Delimiter = delimiter;
+            isHeaderIncluded = isHeader;
             m_SkipRows = skipRows;
             // TODO.. check if file exists.
             m_Reader = File.OpenText(m_FileName);
@@ -36,11 +48,21 @@ namespace LearningFoundation.DataProviders
             {
                 m_CurrentLine = m_Reader.ReadLine();
             }
+            //define header
+            if (isHeaderIncluded)
+            {
+                m_CurrentLine = m_Reader.ReadLine();
+                if (!string.IsNullOrEmpty(m_CurrentLine))
+                {
+                    m_Header = m_CurrentLine.Split(new char[] { m_Delimiter });
+                }
+            }
+
         }
 
 
         /// <summary>
-        /// Respesent the loaded data
+        /// Represent the loaded data
         /// </summary>
         public IEnumerable<object[]> DataSet
         {
@@ -64,6 +86,11 @@ namespace LearningFoundation.DataProviders
         {
         }
 
+        /// <summary>
+        /// Header of the data set
+        /// </summary>
+        public string[] Header => m_Header;
+        
         /// <summary>
         /// Current object of the enumerator
         /// </summary>
@@ -144,7 +171,8 @@ namespace LearningFoundation.DataProviders
                     var strCols = line.Split(m_Delimiter);
 
                     //skip first ... rows
-                    if(linenum < m_SkipRows)
+                    var headerLine = isHeaderIncluded ? 1 : 0;
+                    if(linenum < m_SkipRows+ headerLine)
                     {
                         linenum++;
                         continue;
