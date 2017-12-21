@@ -65,6 +65,7 @@ namespace LearningFoundation.Statistics
 
         /// <summary>
         /// calculates normal distribution
+        /// NORMSDIST(z) returns the probability that the observed value of a standard normal random variable will be less than or equal to z. A standard normal random variable has mean 0 and standard deviation 1 (and also variance 1 because variance = standard deviation squared).
         /// </summary>
         /// <param name="x"> value</param>
         /// <param name="mean"> mean</param>
@@ -93,6 +94,39 @@ namespace LearningFoundation.Statistics
                                 * (-1.821255978 + t * 1.330274429))));
                 return x >= 0 ? 1.0 - cdf : cdf;
             }
+        }
+
+
+        /// <summary>
+        /// Erf(x) is a function that calculates the value of error function of x. It is constructed 
+        /// based on formula 7.1.26 (A&S). This method is chosen among formula 7.1.25 - 7.1.28 as it gives 
+        /// the smallest "error" which is less than 1.5x10-7. However the direct calculation of erf(x) 
+        /// has been modified with a technique called Horner's method for better efficiency 
+        /// (See Stand-alone error function erf(x) https://www.johndcook.com/blog/2009/01/19/stand-alone-error-function-erf/. 
+        /// </summary>
+        /// <param name="x"></param>
+        /// <returns></returns>
+        public static double Erf(double x)
+        {
+            // constants
+            double a1 = 0.254829592;
+            double a2 = -0.284496736;
+            double a3 = 1.421413741;
+            double a4 = -1.453152027;
+            double a5 = 1.061405429;
+            double p = 0.3275911;
+
+            // Save the sign of x
+            int sign = 1;
+            if (x < 0)
+                sign = -1;
+            x = Math.Abs(x) / Math.Sqrt(2.0);
+
+            // A&S formula 7.1.26
+            double t = 1.0 / (1.0 + p * x);
+            double y = 1.0 - (((((a5 * t + a4) * t) + a3) * t + a2) * t + a1) * t * Math.Exp(-x * x);
+
+            return 0.5 * (1.0 + sign * y);
         }
 
     }
