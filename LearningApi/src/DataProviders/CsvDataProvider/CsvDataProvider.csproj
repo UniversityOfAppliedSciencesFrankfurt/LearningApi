@@ -9,6 +9,8 @@
     <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
     <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
     <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
+    <Version>1.0.5-beta</Version>
+    <Authors>daenet GmbH, University of Applied Sciences Frankfurt am Main</Authors>
   </PropertyGroup>
 
   <ItemGroup>

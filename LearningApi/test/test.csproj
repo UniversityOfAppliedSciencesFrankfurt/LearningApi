@@ -24,6 +24,38 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="SampleData\secom\ReadMe.txt" />
+    <None Remove="SampleData\secom\SECOM_column_statistics.json" />
+    <None Remove="SampleData\secom\SECOM_Dataset_AllFeatures.csv" />
+    <None Remove="SampleData\secom\SECOM_Dataset_AllFeatures_gauss_normalized.csv" />
+    <None Remove="SampleData\secom\SECOM_Dataset_AllFeatures_minmax_normalized.csv" />
+    <None Remove="SampleData\secom\SECOM_Dataset_AllFeatures_numeric.csv" />
+    <None Remove="SampleData\secom\SECOM_data_mapper.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="SampleData\secom\ReadMe.txt" />
+    <Content Include="SampleData\secom\SECOM_column_statistics.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="SampleData\secom\SECOM_Dataset_AllFeatures.csv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="SampleData\secom\SECOM_Dataset_AllFeatures_gauss_normalized.csv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="SampleData\secom\SECOM_Dataset_AllFeatures_minmax_normalized.csv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="SampleData\secom\SECOM_Dataset_AllFeatures_numeric.csv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="SampleData\secom\SECOM_data_mapper.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\src\MLAlgorithms\AnomDetect.KMeans\AnomDetect.KMeans.csproj" />
     <ProjectReference Include="..\src\DataProviders\CsvDataProvider\CsvDataProvider.csproj" />
     <ProjectReference Include="..\src\LearningApi\LearningApi.csproj" />

@@ -16,7 +16,7 @@ namespace LearningFoundation
         /// </summary>
         int LabelIndex { get; set; }
 
-        //feature description: feature type, missingvalue, 
+        //feature description: feature type, missing-value, 
         DataMappers.Column[] Features { get; set; }
     }
 }
