@@ -105,16 +105,14 @@ namespace test.logisticregression
         /// Performs the LogisticRegression algortim on dataset with 10 iteration and 0.15 learning rate.
         /// </summary>
         [Fact]
-        public void LogisticRegression_Test_iterations_10_learningrate_015()
+        public void LogisticRegression_Test_Real_Example()
         {
-            var desc = loadMetaData();
-            LearningApi api = new LearningApi(desc);
+            string m_binary_data_path = @"SampleData\binary\admit_binary.csv";
 
-            //Real dataset must be defined as object type, because data can be numeric, binary and classification
-            api.UseActionModule<object[][], object[][]>((input, ctx) =>
-            {
-                return loadRealDataSample();
-            });
+            var binary_path = System.IO.Path.Combine(Directory.GetCurrentDirectory(), m_binary_data_path);
+
+            LearningApi api = new LearningApi(loadMetaData1());
+            api.UseCsvDataProvider(binary_path, ',', false,1);
 
             // Use mapper for data, which will extract (map) required columns 
             api.UseDefaultDataMapper();
@@ -122,152 +120,48 @@ namespace test.logisticregression
             api.UseMinMaxNormalizer();
 
             //run logistic regression for 10 iteration with learningRate=0.15
-            api.UseLogisticRegression(0.15, 10);
+            api.UseLogisticRegression(0.00012, 200);
 
 
-            var task = api.Run();
+            var score = api.Run();
 
-            IScore score = api.GetScore();
-
-            //Errors during each iteration
-            Assert.Equal(Math.Round(score.Errors[0], 5), 0.24236);
-            Assert.Equal(Math.Round(score.Errors[1], 5), 0.23707);
-            Assert.Equal(Math.Round(score.Errors[2], 5), 0.23358);
-            Assert.Equal(Math.Round(score.Errors[3], 5), 0.23001);
-            Assert.Equal(Math.Round(score.Errors[4], 5), 0.22806);
-            Assert.Equal(Math.Round(score.Errors[5], 5), 0.22506);
-            Assert.Equal(Math.Round(score.Errors[6], 5), 0.22409);
-            Assert.Equal(Math.Round(score.Errors[7], 5), 0.22134);
-            Assert.Equal(Math.Round(score.Errors[8], 5), 0.22105);
-            Assert.Equal(Math.Round(score.Errors[9], 5), 0.21840);
-
-            //LG Model Best Found model in 10 iteration
-            Assert.Equal(Math.Round(score.Weights[0], 5), 0.17820);
-            Assert.Equal(Math.Round(score.Weights[1], 5), 0.28781);
-            Assert.Equal(Math.Round(score.Weights[2], 5), 1.01732);
-            Assert.Equal(Math.Round(score.Weights[3], 5), 0.63396);
-            Assert.Equal(Math.Round(score.Weights[4], 5), -0.26733);
-            Assert.Equal(Math.Round(score.Weights[5], 5), -0.26733);
-            Assert.Equal(Math.Round(score.Weights[6], 5), -0.91266);
-
-
-
-            //define data for testing (prediction)
-            LearningApi apiPrediction = new LearningApi(desc);
+            ///**************PREDICTION AFTER MODEL IS CREATED*********////
+            /////define data for testing (prediction)
+            LearningApi apiPrediction = new LearningApi(loadMetaData1());
             //Real dataset must be defined as object type, because data can be numeric, binary and classification
             apiPrediction.UseActionModule<object[][], object[][]>((input, ctx) =>
             {
-                var data = new object[4][]
+                var data = new object[5][]
                 {
-                    new object[]{0.202,"blue", "male",13,"yes" },
-                    new object[]{0.447,"green","female",37,"no" },
-                    new object[]{0.120,"red","male", "21", "yes" },
-                    new object[]{0.313,"green","male",22,"yes" },
+                    new object[]{660,3.88,2,1},
+                    new object[]{580,3.36,2,0},
+                    new object[]{640,3.17,2,0},
+                    new object[]{640,3.51,2,0},
+                    new object[]{800,3.05,2,1},
+
                     };
                 return data;
             });
 
             // Use mapper for data, which will extract (map) required columns 
             apiPrediction.UseDefaultDataMapper();
+            apiPrediction.UseMinMaxNormalizer();
             var testData = apiPrediction.Run();
 
             //use previous trained model
             var result = api.Algorithm.Predict(testData as double[][], api.Context);
 
-            Assert.Equal(Math.Round(result[0], 5), 1E-05);
-            Assert.Equal(Math.Round(result[1], 5), 0);
-            Assert.Equal(Math.Round(result[2], 5), 0);
-            Assert.Equal(Math.Round(result[3], 5), 0);
+            //
+            Assert.Equal(Math.Round(result[0], 0), 0);
+            Assert.Equal(Math.Round(result[1], 0), 0);
+            Assert.Equal(Math.Round(result[2], 0), 0);
+            Assert.Equal(Math.Round(result[3], 0), 0);
+            Assert.Equal(Math.Round(result[3], 0), 0);
+
+
         }
 
-        /// <summary>
-        /// Performs the LogisticRegression algortim on dataset with 20 iteration and 0.15 learning rate.
-        /// </summary>
-        [Fact]
-        public void LogisticRegression_Test_iterations_20_learningrate_015()
-        {
-            var desc = loadMetaData();
-            LearningApi api = new LearningApi(desc);
-
-            //Real dataset must be defined as object type, because data can be numeric, binary and classification
-            api.UseActionModule<object[][], object[][]>((input, ctx) =>
-            {
-                return loadRealDataSample();
-            });
-
-            // Use mapper for data, which will extract (map) required columns 
-            api.UseDefaultDataMapper();
-
-            api.UseMinMaxNormalizer();
-
-            //run logistic regression for 10 iteration with learningRate=0.15
-            api.UseLogisticRegression(0.15, 20);
-
-            api.Run();
-
-            IScore score = api.GetScore();
-
-            //Errors during each iteration
-            Assert.Equal(Math.Round(score.Errors[0], 5), 0.24236);
-            Assert.Equal(Math.Round(score.Errors[1], 5), 0.23707);
-            Assert.Equal(Math.Round(score.Errors[2], 5), 0.23358);
-            Assert.Equal(Math.Round(score.Errors[3], 5), 0.23001);
-            Assert.Equal(Math.Round(score.Errors[4], 5), 0.22806);
-            Assert.Equal(Math.Round(score.Errors[5], 5), 0.22506);
-            Assert.Equal(Math.Round(score.Errors[6], 5), 0.22409);
-            Assert.Equal(Math.Round(score.Errors[7], 5), 0.22134);
-            Assert.Equal(Math.Round(score.Errors[8], 5), 0.22105);
-            Assert.Equal(Math.Round(score.Errors[9], 5), 0.21840);
-            Assert.Equal(Math.Round(score.Errors[10], 5), 0.21857);
-            Assert.Equal(Math.Round(score.Errors[11], 5), 0.21595);
-            Assert.Equal(Math.Round(score.Errors[12], 5), 0.21640);
-            Assert.Equal(Math.Round(score.Errors[13], 5), 0.21381);
-            Assert.Equal(Math.Round(score.Errors[14], 5), 0.21439);
-            Assert.Equal(Math.Round(score.Errors[15], 5), 0.21189);
-            Assert.Equal(Math.Round(score.Errors[16], 5), 0.21251);
-            Assert.Equal(Math.Round(score.Errors[17], 5), 0.21015);
-            Assert.Equal(Math.Round(score.Errors[18], 5), 0.21076);
-            Assert.Equal(Math.Round(score.Errors[19], 5), 0.20860);
-
-
-            //LG Model Best Found model in 20 iteration
-            Assert.Equal(Math.Round(score.Weights[0], 5), 0.28363);
-            Assert.Equal(Math.Round(score.Weights[1], 5), 0.37424);
-            Assert.Equal(Math.Round(score.Weights[2], 5), 1.41890);
-            Assert.Equal(Math.Round(score.Weights[3], 5), 1.01207);
-            Assert.Equal(Math.Round(score.Weights[4], 5), -0.33841);
-            Assert.Equal(Math.Round(score.Weights[5], 5), -0.33841);
-            Assert.Equal(Math.Round(score.Weights[6], 5), -1.62489);
-
-
-            //define data for testing (prediction)
-            LearningApi apiPrediction = new LearningApi(desc);
-            //Real dataset must be defined as object type, because data can be numeric, binary and classification
-            apiPrediction.UseActionModule<object[][], object[][]>((input, ctx) =>
-            {
-                var data = new object[4][]
-                {
-                    new object[]{0.202,"blue", "male",13,"yes" },
-                    new object[]{0.447,"green","female",37,"no" },
-                    new object[]{0.120,"red","male", "21", "yes" },
-                    new object[]{0.313,"green","male",22,"yes" },
-                    };
-                return data;
-            });
-
-            // Use mapper for data, which will extract (map) required columns 
-            apiPrediction.UseDefaultDataMapper();
-            var testData = apiPrediction.Run();
-
-            //use previous trained model
-            var result = api.Algorithm.Predict(testData as double[][], api.Context);
-
-            Assert.Equal(Math.Round(result[0], 5), 0);
-            Assert.Equal(Math.Round(result[1], 5), 0);
-            Assert.Equal(Math.Round(result[2], 5), 0);
-            Assert.Equal(Math.Round(result[3], 5), 0);
-
-        }
+       
 
         #region Data Sample
         private DataDescriptor loadMetaData()
@@ -319,5 +213,23 @@ namespace test.logisticregression
         }
 
         #endregion
+
+        /// <summary>
+        /// Meta data for binary__admin data sample
+        /// </summary>
+        /// <returns></returns>
+        private DataDescriptor loadMetaData1()
+        {
+            var des = new DataDescriptor();
+
+            des.Features = new Column[4];
+            des.Features[0] = new Column { Id = 1, Name = "gre", Index = 0, Type = ColumnType.NUMERIC, DefaultMissingValue = 0, Values = null };
+            des.Features[1] = new Column { Id = 2, Name = "gpa", Index = 1, Type = ColumnType.NUMERIC, DefaultMissingValue = 0, Values = null };
+            des.Features[2] = new Column { Id = 3, Name = "rank", Index = 2, Type = ColumnType.NUMERIC, DefaultMissingValue = 0, Values = null };
+            des.Features[3] = new Column { Id = 4, Name = "admit", Index = 3, Type = ColumnType.BINARY, DefaultMissingValue = 0, Values = new string[2] { "0", "1" } };
+            
+            des.LabelIndex = 3;
+            return des;
+        }
     }
 }

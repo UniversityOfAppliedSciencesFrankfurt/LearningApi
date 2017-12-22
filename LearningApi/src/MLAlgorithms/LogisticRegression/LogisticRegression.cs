@@ -56,7 +56,7 @@ namespace LogisticRegression
                 // batch/offline standard approach
                 weights = GDLearner(trainData, sequence, weights);
 
-                errors[epoch] = Error(trainData, weights);
+                errors[epoch] = Error(trainData, weights, 0.05,0.01);
 
                 ++epoch;
 
@@ -135,14 +135,16 @@ namespace LogisticRegression
                 sequence[i] = tmp;
             }
         }
-         
+
         /// <summary>
         /// Calculate Sum of Square Error from calculate and expected result
         /// </summary>
         /// <param name="trainData"></param>
         /// <param name="weights"></param>
+        /// <param name="l1"> l1 regularization parameter</param>
+        /// <param name="l2"> l2 regularization parameter</param>
         /// <returns></returns>
-        private double Error(double[][] trainData, double[] weights)
+        private double Error(double[][] trainData, double[] weights, double l1, double l2)
         {
             // mean squared error using supplied weights
 
@@ -161,18 +163,18 @@ namespace LogisticRegression
             // L2 regularization adds the sqrt of sum of squared values
 
             //*********L1 L2 regularization**************
-            //double sumAbsVals = 0.0; // L1 penalty
-            //for (int i = 0; i < weights.Length; ++i)
-            //    sumAbsVals += Math.Abs(weights[i]);
+            double sumAbsVals = 0.0; // L1 penalty
+            for (int i = 0; i < weights.Length; ++i)
+                sumAbsVals += Math.Abs(weights[i]);
 
-            //double sumSquaredVals = 0.0; // L2 penalty
-            //for (int i = 0; i < weights.Length; ++i)
-            //    sumSquaredVals += (weights[i] * weights[i]);
-            ////double rootSum = Math.Sqrt(sumSquaredVals);
+            double sumSquaredVals = 0.0; // L2 penalty
+            for (int i = 0; i < weights.Length; ++i)
+                sumSquaredVals += (weights[i] * weights[i]);
+            //double rootSum = Math.Sqrt(sumSquaredVals);
 
-            //return (sumSquaredError / trainData.Length) +
-            //  (l1 * sumAbsVals) +
-            //  (l2 * sumSquaredVals);
+            return (sumSquaredError / trainData.Length) +
+              (l1 * sumAbsVals) +
+              (l2 * sumSquaredVals);
 
         }
 

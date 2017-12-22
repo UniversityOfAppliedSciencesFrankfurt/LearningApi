@@ -103,4 +103,10 @@
     </None>
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="SampleData\binary\admit_binary.csv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>
