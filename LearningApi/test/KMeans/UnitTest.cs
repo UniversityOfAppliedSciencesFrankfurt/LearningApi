@@ -43,7 +43,6 @@ namespace Test
             api.UseActionModule<object, double[][]>((data, ctx) =>
             {
                 var rawData = Helpers.CreateSampleData(clusterCentars, 2, 10000, 0.5);
-
                 return rawData ;
             });
 
@@ -60,7 +59,7 @@ namespace Test
             Assert.True(result[2] == 2);
         }
 
-    
+      
         private static DataDescriptor loadDescriptor()
         {
             var des = new DataDescriptor();

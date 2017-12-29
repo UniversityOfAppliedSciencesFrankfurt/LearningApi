@@ -23,7 +23,7 @@ namespace AnomalyDetection.Interfaces
         /// <li> - Code: 0, "Clustering Complete. K-means converged at iteration: " + Iteration_Reached </li>
         /// </ul>
         /// </returns>
-        AnomalyDetectionResponse Training(double[][] rawData, double[][] centroids = null);
+        AnomalyDetectionResponse Training(double[][] rawData);
 
         /// <summary>
         /// CheckSample is a function that detects to which cluster the given sample belongs to.

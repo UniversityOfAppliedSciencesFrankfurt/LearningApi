@@ -3,11 +3,12 @@
   <PropertyGroup>
     <TargetFramework>netstandard1.3</TargetFramework>
     <AssemblyName>AnomDetect.KMeans</AssemblyName>
-    <PackageId>AnomDetect.KMeans</PackageId>
+    <PackageId>Clustering.KMeans</PackageId>
    
     <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
     <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
     <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
+    <Version>1.0.2-beta</Version>
   </PropertyGroup>
 
   <ItemGroup>

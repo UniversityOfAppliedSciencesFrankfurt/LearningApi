@@ -63,7 +63,7 @@ namespace AnomalyDetectionApi
         /// <li> - Code: 0, "Clustering Complete. K-means converged at iteration: " + Iteration_Reached </li>
         /// </ul>
         /// </returns>
-        public AnomalyDetectionResponse Training(double[][] rawData, double[][] centroids = null)
+        public AnomalyDetectionResponse Training(double[][] rawData)
         {
             try
             {
@@ -85,7 +85,7 @@ namespace AnomalyDetectionApi
                 Tuple<int[], AnomalyDetectionResponse> kMeansResponse;
 
                 //initiate the clustering process
-                kMeansResponse = runKMeansClusteringAlg(instance.RawData, instance.NumberOfClusters, clusterSettings.NumberOfAttributes, clusterSettings.KmeansMaxIterations, clusterSettings.KmeansAlgorithm, clusterSettings.InitialGuess, centroids, out calculatedCentroids, out IterationReached);
+                kMeansResponse = runKMeansClusteringAlg(instance.RawData, instance.NumberOfClusters, clusterSettings.NumberOfAttributes, clusterSettings.KmeansMaxIterations, clusterSettings.KmeansAlgorithm, clusterSettings.InitialGuess, this.clusterSettings.InitialCentroids, out calculatedCentroids, out IterationReached);
 
                 if (kMeansResponse.Item2.Code != 0)
                 {

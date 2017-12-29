@@ -41,6 +41,11 @@ namespace AnomalyDetection.Interfaces
         /// </summary>
         public int NumberOfAttributes { get; internal set; }
 
+        /// <summary>
+        /// If set, it will be used as initial centroids.
+        /// </summary>
+        public double[][] InitialCentroids { get; set; }
+
         ///// <summary>
         ///// settings to save the clustering instance
         ///// </summary>
@@ -50,7 +55,7 @@ namespace AnomalyDetection.Interfaces
         ///// settings to load a clustering instance (can be "" or null in case of not loading)
         ///// </summary>
         //public SaveLoadSettings LoadObject { get; internal set; }
-        
+
         /// <summary>
         /// Constructor to create the desired settings by the user for clustering.
         /// </summary>
@@ -73,7 +78,8 @@ namespace AnomalyDetection.Interfaces
             int NumberOfAttributes, 
             int KmeansAlgorithm = 1, 
             bool InitialGuess = false,  
-            bool Replace = false)
+            bool Replace = false,
+            double[][] initialCentroids = null)
         {
             if (KmeansAlgorithm != 2)
             {
@@ -87,6 +93,7 @@ namespace AnomalyDetection.Interfaces
             this.NumberOfClusters = NumberOfClusters;
             this.InitialGuess = InitialGuess;
             this.NumberOfAttributes = NumberOfAttributes;
+            this.InitialCentroids = initialCentroids;
         }
 
     }
