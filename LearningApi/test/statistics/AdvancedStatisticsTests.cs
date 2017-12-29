@@ -22,9 +22,13 @@ namespace test.statistics
             var dataSample1 = new double[] { 180, 176, 144, 195, 159, 185, 166, 173, 149, 168 };
             var dataSample2 = new double[] { 87, 65, 52, 94, 87, 79, 59, 64, 45, 77 };
 
-
+            //Pearson correlation
             var result = dataSample1.CorrCoeffOf(dataSample2);
             Assert.Equal(Math.Round(result, 4), 0.7294);
+
+            //Sperman correlation
+            var result1 = dataSample1.CorrCoeffRankOf(dataSample2);
+            Assert.Equal(Math.Round(result1, 4), 0.7182);
         }
 
 
@@ -38,7 +42,11 @@ namespace test.statistics
             var dataSample2 = new double[] { 178, 171, 149, 195, 162, 181, 160, 175, 159, 168 };
 
             var result = dataSample1.CorrCoeffOf(dataSample2);
-            Assert.Equal(Math.Round(result, 4), 0.9584);           
+            Assert.Equal(Math.Round(result, 4), 0.9584);
+
+            //Sperman correlation
+            var result1 = dataSample1.CorrCoeffRankOf(dataSample2);
+            Assert.Equal(Math.Round(result1, 4), 0.9758);
         }
         [Fact]
         public void CalculateMeanStDev_Tests2()
@@ -48,7 +56,7 @@ namespace test.statistics
             //test 1
             var dataset = getSampleDataSet();
 
-            var result = dataset.calculateMeanStDev();
+            var result = dataset.CalculateMeanStDev();
             //mean
             Assert.Equal(Math.Round(result.Item1[0], 4), -0.2916);
             Assert.Equal(Math.Round(result.Item1[1], 4), 0.55);
@@ -58,6 +66,21 @@ namespace test.statistics
             Assert.Equal(Math.Round(result.Item2[0], 4), 2.6234);
             Assert.Equal(Math.Round(result.Item2[1], 4), 0.5104);
             Assert.Equal(Math.Round(result.Item2[2], 4), 0.7947);
+        }
+
+        [Fact]
+        public void PointBiserialCorrelationCoefficientTests()
+        {
+            //define stats modul 
+
+            //test 1
+            var dataSample1 = new double[24] { 23, 15, 16,25,20,17,18,14,12,19,21,22,16,21,16,11,24,21,18,15,19,22,13,24 };
+            var dataSample2 = new int[24] { 1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0 };
+
+            //Point Biserial correlation
+            var result = dataSample1.CorrCoeffPBOf(dataSample2);
+            Assert.Equal(Math.Round(result, 4), -0.0682);
+
         }
 
 

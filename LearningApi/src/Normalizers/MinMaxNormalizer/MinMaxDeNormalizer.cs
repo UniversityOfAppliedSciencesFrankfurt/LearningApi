@@ -57,7 +57,7 @@ namespace LearningFoundation.Normalizers
                      //numeric column
                     if (column.Type == ColumnType.NUMERIC)
                     {
-                        //in case the colum is constant
+                        //in case the column is constant
                         if (desc.Max[dataIndex] == desc.Min[dataIndex])
                         {
                             if (desc.Max[dataIndex] == 0) //zero column 

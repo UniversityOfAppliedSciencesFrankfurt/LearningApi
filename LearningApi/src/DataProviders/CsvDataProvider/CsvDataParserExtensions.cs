@@ -8,24 +8,24 @@ using System.Threading.Tasks;
 namespace LearningFoundation.DataProviders
 {
     /// <summary>
-    /// Extension method for loading and parsing data from SCV file 
+    /// Extension method for parsing data from CSV like string  
     /// </summary>
-    public static class CsvDataProviderExtensions
+    public static class CsvDataParserExtensions
     {
         /// <summary>
         /// perform the loading data from SCV file
         /// </summary>
         /// <param name="api">instance of the LearningAPI</param>
-        /// <param name="fileName">csv file path</param>
+        /// <param name="strContent">csv string</param>
         /// <param name="delimiter">csv delimiter</param>
         /// <param name="isHeader"> is header included in the data after skiped rows. </param>
         /// <param name="skipRows">firs several rows which should be skiped in parsing.</param>
         /// <returns></returns>
-        public static LearningApi UseCsvDataProvider(this LearningApi api, string fileName, char delimiter, bool isHeader, int skipRows = 0)       
+        public static LearningApi UseCsvDataParser(this LearningApi api, string strContent, char delimiter, bool isHeader, int skipRows = 0)       
         {
-            var dp = new CsvDataProvider(fileName, delimiter, isHeader, skipRows);
+            var dp = new CsvDataParser(strContent, delimiter, isHeader, skipRows);
           
-            api.AddModule(dp, "CsvDataProvider");
+            api.AddModule(dp, "CsvDataParser");
             
             return api;
         }
@@ -34,12 +34,12 @@ namespace LearningFoundation.DataProviders
         /// <summary>
         /// Creating dataset row by row
         /// </summary>
-        /// <param name="fileName">csv file reade</param>
-        /// <param name="delimeter">csvdelimiter</param>
+        /// <param name="strContent">csv string reade</param>
+        /// <param name="delimeter">csv delimiter</param>
         /// <returns></returns>
-        public static IEnumerable<object[]> LoadDataFromFile(string fileName, char delimeter)
+        public static IEnumerable<object[]> LoadDataFromFile(string strContent, char delimeter)
         {
-            using (StreamReader reader = File.OpenText(fileName))
+            using (StringReader reader = new StringReader(strContent))
             {
                 //
                 foreach (string line in readLineFromFile(reader))
@@ -63,11 +63,11 @@ namespace LearningFoundation.DataProviders
         }
 
         /// <summary>
-        /// Reading stream reader line by line with IEnumerable collection.
+        /// Reading string reader line by line with IEnumerable collection.
         /// </summary>
         /// <param name="reader"></param>
         /// <returns></returns>
-        private static IEnumerable<string> readLineFromFile(StreamReader reader)
+        private static IEnumerable<string> readLineFromFile(StringReader reader)
         {
             string currentLine;
             while ((currentLine = reader.ReadLine()) != null)

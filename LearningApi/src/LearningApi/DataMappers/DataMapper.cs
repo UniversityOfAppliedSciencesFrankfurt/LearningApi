@@ -43,7 +43,7 @@ namespace LearningFoundation.DataMappers
                 object[] vector = ((object[])data[i]);
 
                 //
-                // Transform rawData in to raw of Fetures with proper type, normalization value, and corect binary and catogery type 
+                // Transform rawData in to raw of Features with proper type, normalization value, and corect binary and catogery type 
                 // during enumeration Features are sorted by Id property
                 //for (int featureIndx = 0; featureIndx < data[0].Length; featureIndx++)
                 foreach(var featureIndx in ctx.DataDescriptor.Features.OrderBy(x=>x.Id).Select(x=>x.Index))

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 namespace LearningFoundation.Statistics
 {
     /// <summary>
-    /// Implement extension methods for statistics clculation on one data set eg. mean, median, variance,... 
+    /// Implement extension methods for statistics calculation on one data set eg. mean, median, variance,... 
     /// Modul calculate mean value of array of numbers. 
     /// The mean is the average of the numbers.
     /// </summary>
@@ -156,8 +156,8 @@ namespace LearningFoundation.Statistics
         /// Calculates the minimum and maximum value for each column in dataset
         /// </summary>
         /// <param name="dataset"></param>
-        /// <returns>tuple wher the first value is MIN, and second value is MAX</returns>
-        public static Tuple<double[], double[]> calculateMinMax(this double[][] dataset)
+        /// <returns>tuple where the first value is MIN, and second value is MAX</returns>
+        public static Tuple<double[], double[]> CalculateMinMax(this double[][] dataset)
         {
             //
             if (dataset == null || dataset.Length == 0)
@@ -186,7 +186,7 @@ namespace LearningFoundation.Statistics
         /// </summary>
         /// <param name="dataset"></param>
         /// <returns>return tuple of mean and StDev</returns>
-        public static Tuple<double[], double[]> calculateMeanStDev(this double[][] dataset)
+        public static Tuple<double[], double[]> CalculateMeanStDev(this double[][] dataset)
         {
             //
             if (dataset == null || dataset.Length <= 1)

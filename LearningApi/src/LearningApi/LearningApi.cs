@@ -48,14 +48,15 @@ namespace LearningFoundation
         /// Gets the module of specified type and name.
         /// </summary>
         /// <typeparam name="T">Type of the module.</typeparam>
-        /// <param name="name">[Optional]: Name opf the module.</param>
+        /// <param name="name">[Optional]: Name of the module.</param>
         /// <returns>The module instance.</returns>
         public T GetModule<T>(string name = null) where T : IPipelineModule
         {
+
             if (name == null)
                 return (T)this.Modules.FirstOrDefault(m => m.GetType().Name == typeof(T).Name).Value;
             else
-                return (T)this.Modules.FirstOrDefault(m => m.GetType().Name == name).Value;
+                return (T)this.Modules.FirstOrDefault(m => m.Key == name).Value;
         }
 
         public LearningApi AddModule(IPipelineModule module, string name = null)

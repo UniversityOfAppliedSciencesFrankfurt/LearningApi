@@ -20,7 +20,7 @@ namespace LearningFoundation.Normalizers
         public static LearningApi UseMinMaxNormalizer(this LearningApi api)
         {           
             var minMaxNorm = new MinMaxNormalizer();
-            api.AddModule(minMaxNorm, "Normilizer");
+            api.AddModule(minMaxNorm, "Normalizer");
             
             return api;
         }
@@ -33,7 +33,7 @@ namespace LearningFoundation.Normalizers
         public static LearningApi UseMinMaxDeNormalizer(this LearningApi api)
         {
             var minMaxDeNorm = new MinMaxDeNormalizer();
-            api.AddModule(minMaxDeNorm, "Denormilizer");
+            api.AddModule(minMaxDeNorm, "Denormalizer");
             return api;
         }
     }

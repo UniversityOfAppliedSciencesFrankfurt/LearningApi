@@ -105,7 +105,7 @@ namespace test.RestrictedBolzmannMachine
             LearningApi api = new LearningApi(this.getDescriptorForRbm_sample1());
            
             // Initialize data provider
-            api.UseCsvDataProvider(dataPath, ',', 1);
+            api.UseCsvDataProvider(dataPath, ',', false, 1);
             api.UseDefaultDataMapper();
             api.UseRbm(0.2, 1000);
 

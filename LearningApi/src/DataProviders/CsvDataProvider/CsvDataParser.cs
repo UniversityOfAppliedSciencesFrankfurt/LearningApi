@@ -12,16 +12,16 @@ namespace LearningFoundation.DataProviders
     /// <summary>
     /// DataProvider implementation in case data is coming from CSV file
     /// </summary>
-    public class CsvDataProvider : IDataProvider<object[]>
+    public class CsvDataParser : IDataProvider<object[]>
     {
         string[] m_Header;
         IEnumerable<object[]> list = new List<object[]>();
 
-        private StreamReader m_Reader;
+        private StringReader m_Reader;
 
         private string m_CurrentLine;
 
-        private string m_FileName;
+        private string m_StrContent;
 
         private char m_Delimiter;
 
@@ -32,18 +32,18 @@ namespace LearningFoundation.DataProviders
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="fileName"></param>
+        /// <param name="strContent"></param>
         /// <param name="delimiter"></param>
         /// <param name="isHeader"></param>
         /// <param name="skipRows"></param>
-        public CsvDataProvider(string fileName, char delimiter, bool isHeader, int skipRows = 0)
+        public CsvDataParser(string strContent, char delimiter, bool isHeader, int skipRows = 0)
         {
-            m_FileName = fileName;
+            m_StrContent = strContent;
             m_Delimiter = delimiter;
             isHeaderIncluded = isHeader;
             m_SkipRows = skipRows;
             // TODO.. check if file exists.
-            m_Reader = File.OpenText(m_FileName);
+            m_Reader = new StringReader(m_StrContent);
             for (int i = 0; i < m_SkipRows; i++)
             {
                 m_CurrentLine = m_Reader.ReadLine();
@@ -82,7 +82,7 @@ namespace LearningFoundation.DataProviders
         /// <summary>
         /// main constructor
         /// </summary>
-        public CsvDataProvider()
+        public CsvDataParser()
         {
         }
 
@@ -154,7 +154,7 @@ namespace LearningFoundation.DataProviders
         public void Reset()
         {
             m_CurrentLine = null;
-            m_Reader.BaseStream.Position = 0;
+            //m_Reader.BaseStream.Position = 0;
         }
 
 
@@ -162,7 +162,7 @@ namespace LearningFoundation.DataProviders
         {
             List<object[]> rawData = new List<object[]>();
 
-            using (StreamReader reader = File.OpenText(m_FileName))
+            using (StringReader reader =  new StringReader(m_StrContent))
             {
                 int linenum = 0;
                 foreach (string line in readLineFromFile(reader))
@@ -199,7 +199,7 @@ namespace LearningFoundation.DataProviders
         /// </summary>
         /// <param name="reader"></param>
         /// <returns></returns>
-        private static IEnumerable<string> readLineFromFile(StreamReader reader)
+        private static IEnumerable<string> readLineFromFile(StringReader reader)
         {
             string currentLine;
             while ((currentLine = reader.ReadLine()) != null)
