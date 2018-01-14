@@ -24,9 +24,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\src\CannyEdgeDetector\CannyEdgeDetector.csproj" />
     <ProjectReference Include="..\src\MLAlgorithms\AnomDetect.KMeans\AnomDetect.KMeans.csproj" />
     <ProjectReference Include="..\src\DataProviders\CsvDataProvider\CsvDataProvider.csproj" />
     <ProjectReference Include="..\src\LearningApi\LearningApi.csproj" />
+    <ProjectReference Include="..\src\MLAlgorithms\GaussianAndMeanFilter\GaussianAndMeanFilter.csproj" />
     <ProjectReference Include="..\src\MLAlgorithms\NeuralNetworks\NeuralNet.BackPropagation\NeuralNet.BackPropagation.csproj" />
     <ProjectReference Include="..\src\MLAlgorithms\NeuralNetworks\NeuralNet.RestrictedBolzmannMachine2\NeuralNet.RestrictedBolzmannMachine2.csproj" />
     <ProjectReference Include="..\src\MLAlgorithms\NeuralNetworks\NeuralNetworks.Core\NeuralNetworks.Core.csproj" />
@@ -43,6 +45,7 @@
     <PackageReference Include="System.Runtime.Serialization.Primitives" Version="4.3.0" />
     <PackageReference Include="xunit" Version="2.3.0" />
     <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
+    <PackageReference Include="ZKWeb.System.Drawing" Version="4.0.1" />
   </ItemGroup>
 
   <ItemGroup>
