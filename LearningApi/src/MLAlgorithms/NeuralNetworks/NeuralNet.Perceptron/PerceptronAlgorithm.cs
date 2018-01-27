@@ -63,8 +63,8 @@ namespace NeuralNet.Perceptron
                     this.m_Errors[inputVectIndx] = error;
 
                     // Total error for all input vectors.
-                 
-                       totalError += Math.Abs(error);
+
+                    totalError += Math.Abs(error);
 
                     if (error != 0)
                     {
@@ -84,44 +84,25 @@ namespace NeuralNet.Perceptron
                     // Updating of threshold
                     this.m_Threshold += this.m_LearningRate * error;
 
-                if (totalError == 0)
-                    break;
-        
-                //if (totalError == 0)
-                //{
-                //    bool isAny = false;
-                //    foreach (var err in m_Errors)
-                //    {
-                //        if (err != 0)
-                //        {
-                //            isAny = true;
-                //            break;
-                //        }
-                //    }
-                //    if (!isAny)
-                //        break;
-                //}
-                    
-            }
+                    if (totalError == 0 && i >= (m_Iterations * 0.1)) // We let it calculate at least 10% of max iterations
+                        break;
 
-                if (totalError == 0) break;
+                    //if (totalError == 0)
+                    //{
+                    //    bool isAny = false;
+                    //    foreach (var err in m_Errors)
+                    //    {
+                    //        if (err != 0)
+                    //        {
+                    //            isAny = true;
+                    //            break;
+                    //        }
+                    //    }
+                    //    if (!isAny)
+                    //        break;
+                    //}
 
-                //if (totalError == 0)
-                //{
-                //    bool isAny = false;
-
-                //    foreach (var err in m_Errors)
-                //    {
-                //        if (err != 0)
-                //        {
-                //            isAny = true;
-                //            break;
-                //        }
-                //    }
-
-                //    if (!isAny)
-                //        break;
-                //}
+                }
             }
 
             score.Weights = this.m_Weights;
@@ -141,7 +122,7 @@ namespace NeuralNet.Perceptron
                 results[i] = calculateResult(data[i], ctx.DataDescriptor.Features.Length);
             }
 
-            return results;        
+            return results;
         }
 
 

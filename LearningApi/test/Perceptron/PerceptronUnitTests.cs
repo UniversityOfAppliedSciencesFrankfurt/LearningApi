@@ -117,7 +117,7 @@ namespace test.Perceptron
             LearningApi api = new LearningApi();
             api.UseActionModule<object, double[][]>((notUsed, ctx) =>
             {
-                const int maxSamples = 10000;
+                const int maxSamples = 100000;
                 ctx.DataDescriptor = getDescriptor();
                 double[][] data = new double[maxSamples / 3][];
 
