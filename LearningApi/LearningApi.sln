@@ -48,6 +48,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SelfOrganizingMap", "src\ML
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SelfOrganizingMapProj", "SelfOrganizingMapProj", "{42E886CC-A5C2-4A88-916D-FE7F4B10C24A}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GaussianAndMeanFilter", "src\MLAlgorithms\GaussianAndMeanFilter\GaussianAndMeanFilter.csproj", "{9B908482-01AB-4579-A196-2DA93E396CE5}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DeltaRuleLearning", "src\MLAlgorithms\DeltaRuleLearning\DeltaRuleLearning.csproj", "{30A99494-1A83-41E3-9422-A185AE38E042}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -106,6 +110,14 @@ Global
 		{E2C5E205-9A72-4494-BFB7-230641E1C570}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E2C5E205-9A72-4494-BFB7-230641E1C570}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E2C5E205-9A72-4494-BFB7-230641E1C570}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9B908482-01AB-4579-A196-2DA93E396CE5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9B908482-01AB-4579-A196-2DA93E396CE5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9B908482-01AB-4579-A196-2DA93E396CE5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9B908482-01AB-4579-A196-2DA93E396CE5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{30A99494-1A83-41E3-9422-A185AE38E042}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{30A99494-1A83-41E3-9422-A185AE38E042}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{30A99494-1A83-41E3-9422-A185AE38E042}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{30A99494-1A83-41E3-9422-A185AE38E042}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -129,6 +141,8 @@ Global
 		{D80402D7-ED09-4706-8A9E-6D08965EF6EF} = {461E3D43-4B87-4CC0-9762-88ACFDBAFBCA}
 		{E2C5E205-9A72-4494-BFB7-230641E1C570} = {42E886CC-A5C2-4A88-916D-FE7F4B10C24A}
 		{42E886CC-A5C2-4A88-916D-FE7F4B10C24A} = {4366E8AF-8F45-46BB-9FF7-6D67AA4171FA}
+		{9B908482-01AB-4579-A196-2DA93E396CE5} = {99343BF5-0AC3-451A-A249-343C47AEDEE9}
+		{30A99494-1A83-41E3-9422-A185AE38E042} = {99343BF5-0AC3-451A-A249-343C47AEDEE9}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {DD0FDFB7-25B1-4E83-9B3D-B71D6DB943F9}
