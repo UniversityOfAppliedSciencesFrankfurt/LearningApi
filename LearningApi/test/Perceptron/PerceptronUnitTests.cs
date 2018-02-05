@@ -114,10 +114,12 @@ namespace test.Perceptron
         [Fact]
         public void SimpleSequenceWithGapsTest()
         {
+           // byte[] b = new byte[300000000];
+
             LearningApi api = new LearningApi();
             api.UseActionModule<object, double[][]>((notUsed, ctx) =>
             {
-                const int maxSamples = 100000;
+                const int maxSamples = 1000000;
                 ctx.DataDescriptor = getDescriptor();
                 double[][] data = new double[maxSamples / 3][];
 
@@ -139,7 +141,7 @@ namespace test.Perceptron
                 return data;
             });
 
-            api.UsePerceptron(0.2, 1000);
+            api.UsePerceptron(0.2, 10000);
 
             IScore score = api.Run() as IScore;
 
