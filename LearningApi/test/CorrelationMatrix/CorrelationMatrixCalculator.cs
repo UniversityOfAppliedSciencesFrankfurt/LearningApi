@@ -38,7 +38,7 @@ namespace test.datamapper
             LearningApi api = new LearningApi(null);
 
             // Initialize data provider
-            api.UseCsvDataProvider(@"C:\\Users\\Bahrudin Hrnjica\\DAENET GmbH\\HMCDigital - SputterSampleFiles\\M2-Ir-3974_S01.csv", ',',true,0);
+            api.UseCsvDataProvider(@"CorrelationMatrix/corellation_data.csv", ',',true,0);
 
 
             //Custom action of dataset 
@@ -69,6 +69,8 @@ namespace test.datamapper
                 for (int j = i; j < data.Length; j++)
                 {
                     var corValue = data[i].CorrCoeffOf(data[j]);
+                    if (double.IsNaN(corValue))
+                        continue;
                     lst.Add(corValue.ToString("n5", CultureInfo.InvariantCulture));
                 }
 
@@ -76,7 +78,9 @@ namespace test.datamapper
                 strData.Add(string.Join(",", lst));
             }
 
-            System.IO.File.WriteAllLines(@"C:\\Users\\Bahrudin Hrnjica\\Desktop\\strCorrlation.txt", strData);
+            Assert.True("Col1,1.00000,0.16892,0.99111,0.75077,-0.82354,-0.85164"==strData[1]);
+
+            System.IO.File.WriteAllLines(@"CorrelationMatrix/strCorrlation.txt", strData);
             //
             return;
         }
