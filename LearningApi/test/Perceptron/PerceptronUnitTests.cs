@@ -98,12 +98,12 @@ namespace test.Perceptron
             testData[2] = new double[] { 6000.0, 0.0 };
             testData[3] = new double[] { 5001, 0.0 };
 
-            var result = api.Algorithm.Predict(testData, api.Context);
+            var result = api.Algorithm.Predict(testData, api.Context) as PerceptronResult;
 
-            Assert.True(result[0] == 0);
-            Assert.True(result[1] == 1);
-            Assert.True(result[2] == 1);
-            Assert.True(result[3] == 1);
+            Assert.True(result.PredictedValues[0] == 0);
+            Assert.True(result.PredictedValues[1] == 1);
+            Assert.True(result.PredictedValues[2] == 1);
+            Assert.True(result.PredictedValues[3] == 1);
         }
 
 
@@ -153,14 +153,14 @@ namespace test.Perceptron
             testData[4] = new double[] { 6002.0, 0.0 };
             testData[5] = new double[] { 9005, 0.0 };
 
-            var result = api.Algorithm.Predict(testData, api.Context);
+            var result = api.Algorithm.Predict(testData, api.Context) as PerceptronResult;
 
-            Assert.True(result[0] == 0);
-            Assert.True(result[1] == 0);
-            Assert.True(result[2] == 0);
-            Assert.True(result[3] == 1);
-            Assert.True(result[4] == 1);
-            Assert.True(result[5] == 1);
+            Assert.True(result.PredictedValues[0] == 0);
+            Assert.True(result.PredictedValues[1] == 0);
+            Assert.True(result.PredictedValues[2] == 0);
+            Assert.True(result.PredictedValues[3] == 1);
+            Assert.True(result.PredictedValues[4] == 1);
+            Assert.True(result.PredictedValues[5] == 1);
         }
 
 
@@ -202,14 +202,14 @@ namespace test.Perceptron
             testData[4] = new double[] { 490, 5.0, 0.0 };
             testData[5] = new double[] { 490, -5.0, 0.0 };
 
-            var result = api.Algorithm.Predict(testData, api.Context);
+            var result = api.Algorithm.Predict(testData, api.Context) as PerceptronResult;
 
-            Assert.True(result[0] == 1);
-            Assert.True(result[1] == 0);
-            Assert.True(result[2] == 0);
-            Assert.True(result[3] == 0);
-            Assert.True(result[4] == 1);
-            Assert.True(result[5] == 0);
+            Assert.True(result.PredictedValues[0] == 1);
+            Assert.True(result.PredictedValues[1] == 0);
+            Assert.True(result.PredictedValues[2] == 0);
+            Assert.True(result.PredictedValues[3] == 0);
+            Assert.True(result.PredictedValues[4] == 1);
+            Assert.True(result.PredictedValues[5] == 0);
         }
     }
 

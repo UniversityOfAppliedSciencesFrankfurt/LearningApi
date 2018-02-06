@@ -93,12 +93,12 @@ namespace test.logisticregression
             var testData = apiPrediction.Run();
 
             //use previous trained model
-           var result=  api.Algorithm.Predict(testData as double[][], api.Context);
+           var result=  api.Algorithm.Predict(testData as double[][], api.Context) as LogisticRegressionResult;
 
-            Assert.Equal(Math.Round(result[0], 5), 1E-05);
-            Assert.Equal(Math.Round(result[1], 5), 0);
-            Assert.Equal(Math.Round(result[2], 5), 0);
-            Assert.Equal(Math.Round(result[3], 5), 0);
+            Assert.Equal(Math.Round(result.PredictedValues[0], 5), 1E-05);
+            Assert.Equal(Math.Round(result.PredictedValues[1], 5), 0);
+            Assert.Equal(Math.Round(result.PredictedValues[2], 5), 0);
+            Assert.Equal(Math.Round(result.PredictedValues[3], 5), 0);
         }
 
         /// <summary>
@@ -149,14 +149,14 @@ namespace test.logisticregression
             var testData = apiPrediction.Run();
 
             //use previous trained model
-            var result = api.Algorithm.Predict(testData as double[][], api.Context);
+            var result = api.Algorithm.Predict(testData as double[][], api.Context) as LogisticRegressionResult;
 
             //
-            Assert.Equal(Math.Round(result[0], 0), 0);
-            Assert.Equal(Math.Round(result[1], 0), 0);
-            Assert.Equal(Math.Round(result[2], 0), 0);
-            Assert.Equal(Math.Round(result[3], 0), 0);
-            Assert.Equal(Math.Round(result[3], 0), 0);
+            Assert.Equal(Math.Round(result.PredictedValues[0], 0), 0);
+            Assert.Equal(Math.Round(result.PredictedValues[1], 0), 0);
+            Assert.Equal(Math.Round(result.PredictedValues[2], 0), 0);
+            Assert.Equal(Math.Round(result.PredictedValues[3], 0), 0);
+            Assert.Equal(Math.Round(result.PredictedValues[3], 0), 0);
 
 
         }

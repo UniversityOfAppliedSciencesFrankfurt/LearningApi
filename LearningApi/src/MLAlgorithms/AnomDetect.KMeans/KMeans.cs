@@ -22,18 +22,24 @@ namespace AnomDetect.KMeans
             kmeanApi = new AnomalyDetectionAPI(settings); 
         }
 
-        public double[] Predict(double[][] data, IContext ctx)
+        public IResult Predict(double[][] data, IContext ctx)
         {
+            KMeansResult res = new KMeansResult()
+            {
+                PredictedClusters = new int[data.Length],
+            };
+
             int clusterIndex = -1;
             List<double> list = new List<double>();
 
+            int n = 0;
             foreach (var item in data)
             {
-                var res = kmeanApi.CheckSample(new CheckingSampleSettings(null, item, 0), out clusterIndex);
-                list.Add(clusterIndex);
+                var r = kmeanApi.CheckSample(new CheckingSampleSettings(null, item, 0), out clusterIndex);
+                res.PredictedClusters[n++] = clusterIndex;
             }
-            
-            return list.ToArray();
+
+            return res;
         }
 
         public IScore Run(double[][] data, IContext ctx)
@@ -44,7 +50,7 @@ namespace AnomDetect.KMeans
         public IScore Train(double[][] data, IContext ctx)
         {
             var r = this.kmeanApi.Training(data);
-            KMeansResult res = new KMeansResult();
+            KMeansScore res = new KMeansScore();
             res.Clusters = this.kmeanApi.Clusters;
 
             return res;

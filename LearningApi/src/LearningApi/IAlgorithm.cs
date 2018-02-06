@@ -24,7 +24,7 @@ namespace LearningFoundation
         /// <param name="data"></param>
         /// <param name="ctx"></param>
         /// <returns></returns>
-        double[] Predict(double[][] data, IContext ctx);
+        IResult Predict(double[][] data, IContext ctx);
 
 
         // TODO: Validate();

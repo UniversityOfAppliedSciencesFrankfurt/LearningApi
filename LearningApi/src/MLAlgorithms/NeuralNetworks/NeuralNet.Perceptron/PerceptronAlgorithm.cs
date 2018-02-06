@@ -113,16 +113,19 @@ namespace NeuralNet.Perceptron
         }
 
 
-        public override double[] Predict(double[][] data, IContext ctx)
+        public override IResult Predict(double[][] data, IContext ctx)
         {
-            double[] results = new double[data.Length];
+            PerceptronResult res = new PerceptronResult()
+            {
+                PredictedValues = new double[data.Length],
+            };           
 
             for (int i = 0; i < data.Length; i++)
             {
-                results[i] = calculateResult(data[i], ctx.DataDescriptor.Features.Length);
+                res.PredictedValues[i] = calculateResult(data[i], ctx.DataDescriptor.Features.Length);
             }
 
-            return results;
+            return res;
         }
 
 

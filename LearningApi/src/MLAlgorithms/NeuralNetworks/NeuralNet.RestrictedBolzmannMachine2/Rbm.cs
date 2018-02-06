@@ -197,13 +197,17 @@ namespace NeuralNet.RestrictedBolzmannMachine2
             else return 1.0 / (1.0 + Math.Exp(-x));
         }
 
-        public override double[] Predict(double[][] data, IContext ctx)
+        public override IResult Predict(double[][] data, IContext ctx)
         {
-            double[][] result = new double[data.Length][];
-
+            RbmResult res = new RbmResult()
+            {
+                HiddenNodesPredictions = new double[data.Length][],
+                VisibleNodesPredictions = new double[data.Length][],
+            };
+           
             for (int i = 0; i < data.Length; i++)
             {
-                result[i] = new double[numHidden];
+                res.HiddenNodesPredictions[i] = new double[numHidden];
 
                 for (int h = 0; h < numHidden; ++h)
                 {
@@ -216,18 +220,20 @@ namespace NeuralNet.RestrictedBolzmannMachine2
                                                                   // Console.WriteLine("Hidden [" + h + "] activation probability = " + probActiv.ToString("F4"));
                     double pr = m_Rnd.NextDouble();  // determine 0/1 h node value
                     if (probActiv > pr)
-                        result[i][h] = 1;
+                        res.HiddenNodesPredictions[i][h] = 1;
                     else
-                        result[i][h] = 0;
-                }             
+                        res.HiddenNodesPredictions[i][h] = 0;
+                }
+
+                res.VisibleNodesPredictions[i] = calcVisibleFromHidden(res.HiddenNodesPredictions[i]);
             }
 
-            return null;
+            return res;
         }
 
-        public int[] VisibleFromHid(double[] hiddens)
+        public double[] calcVisibleFromHidden(double[] hiddens)
         {
-            int[] result = new int[numVisible];
+            double[] result = new double[numVisible];
 
             for (int v = 0; v < numVisible; ++v)
             {

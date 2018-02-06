@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 namespace LearningFoundation
 {
     /// <summary>
-    /// Defines the status of the trained model.
+    /// Defines the result of evaluation (predicting) function.
     /// </summary>
-    public interface IScore
+    public interface IResult
     {
 
 

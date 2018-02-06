@@ -5,7 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Xunit;
 using DeltaLearning;
-
+using DeltaRuleLearning;
 
 namespace test
 {
@@ -125,17 +125,17 @@ namespace test
             double[][] testData = new double[4][];
             testData[0] = new double[] { 2.0, 0.0 };
             testData[1] = new double[] { 4.0, 0.0 };
-            testData[2] = new double[] {6.0, 0.0 };
+            testData[2] = new double[] { 6.0, 0.0 };
             testData[3] = new double[] { 8.0, 0.0 };
-            
-
-            var result = api.Algorithm.Predict(testData, api.Context);
 
 
-            Assert.True(result[0] == 0);
-            Assert.True(result[1] == 0);
-            Assert.True(result[2] == 1);
-            Assert.True(result[3] == 1);
+            var result = api.Algorithm.Predict(testData, api.Context) as DeltaLearningResult;
+
+
+            Assert.True(result.PredictedResults[0] == 0);
+            Assert.True(result.PredictedResults[1] == 0);
+            Assert.True(result.PredictedResults[2] == 1);
+            Assert.True(result.PredictedResults[3] == 1);
 
         }
 
@@ -144,52 +144,53 @@ namespace test
         /// for odd number of samples we should get -5.0 0.0
         /// </summary>
 
-           [Fact]
-            public void SimpleSequence2DTest()
+        [Fact]
+        public void SimpleSequence2DTest()
+        {
+            LearningApi api = new LearningApi();
+            api.UseActionModule<object, double[][]>((notUsed, ctx) =>
             {
-                LearningApi api = new LearningApi();
-                api.UseActionModule<object, double[][]>((notUsed, ctx) =>
+                const int maxSamples = 10000;
+                ctx.DataDescriptor = get2DDescriptor();
+                double[][] data = new double[maxSamples][];
+
+                for (int i = 0; i < maxSamples / 2; i++)
                 {
-                    const int maxSamples = 10000;
-                    ctx.DataDescriptor = get2DDescriptor();
-                    double[][] data = new double[maxSamples][];
+                    data[2 * i] = new double[3];
+                    data[2 * i][0] = i;
+                    data[2 * i][1] = 5.0;
+                    data[2 * i][2] = 1.0;
 
-                    for (int i = 0; i < maxSamples / 2; i++)
-                    {
-                        data[2 * i] = new double[3];
-                        data[2 * i][0] = i;
-                        data[2 * i][1] = 5.0;
-                        data[2 * i][2] = 1.0;
+                    data[2 * i + 1] = new double[3];
+                    data[2 * i + 1][0] = i;
+                    data[2 * i + 1][1] = -5.0;
+                    data[2 * i + 1][2] = 0.0;
+                }
+                return data;
+            });
 
-                        data[2 * i + 1] = new double[3];
-                        data[2 * i + 1][0] = i;
-                        data[2 * i + 1][1] = -5.0;
-                        data[2 * i + 1][2] = 0.0;
-                    }
-                    return data;
-                });
+            api.UseDeltaLearning(0.2, 1000);
 
-                api.UseDeltaLearning(0.2, 1000);
+            IScore score = api.Run() as IScore;
 
-                IScore score = api.Run() as IScore;
+            double[][] testData = new double[6][];
+            testData[0] = new double[] { 2.0, 5.0, 0.0 };
+            testData[1] = new double[] { 2, -5.0, 0.0 };
+            testData[2] = new double[] { 100, -5.0, 0.0 };
+            testData[3] = new double[] { 100, -5.0, 0.0 };
+            testData[4] = new double[] { 490, 5.0, 0.0 };
+            testData[5] = new double[] { 490, -5.0, 0.0 };
 
-                double[][] testData = new double[6][];
-                testData[0] = new double[] { 2.0, 5.0, 0.0 };
-                testData[1] = new double[] { 2, -5.0, 0.0 };
-                testData[2] = new double[] { 100, -5.0, 0.0 };
-                testData[3] = new double[] { 100, -5.0, 0.0 };
-                testData[4] = new double[] { 490, 5.0, 0.0 };
-                testData[5] = new double[] { 490, -5.0, 0.0 };
-                var result = api.Algorithm.Predict(testData, api.Context);
-            
-            Assert.True(result[0] == 1);
-                Assert.True(result[1] == 0);
-                Assert.True(result[2] == 0);
-                Assert.True(result[3] == 0);
-                Assert.True(result[4] == 1);
-                Assert.True(result[5] == 0);
+            var result = api.Algorithm.Predict(testData, api.Context) as DeltaLearningResult;
 
-            }
+            Assert.True(result.PredictedResults[0] == 1);
+            Assert.True(result.PredictedResults[1] == 0);
+            Assert.True(result.PredictedResults[2] == 0);
+            Assert.True(result.PredictedResults[3] == 0);
+            Assert.True(result.PredictedResults[4] == 1);
+            Assert.True(result.PredictedResults[5] == 0);
+
+        }
 
         /// <summary>
         /// OR gate implementation
@@ -209,7 +210,7 @@ namespace test
                 data[1] = new double[] { 0, 1, 1, 0.0 };
                 data[2] = new double[] { 1, 0, 1, 0.0 };
                 data[3] = new double[] { 1, 1, 1, 0.0 };
-               
+
                 return data;
             });
 
@@ -221,14 +222,13 @@ namespace test
             testData[0] = new double[] { 0, 0, 0.0 };
             testData[1] = new double[] { 1, 1, 0.0 };
             testData[2] = new double[] { 0, 1, 0.0 };
-            
-            var result = api.Algorithm.Predict(testData, api.Context);
-            
-            Assert.True(result[0] == 0);
-            Assert.True(result[1] == 1);
-            Assert.True(result[2] == 1);
 
+            var result = api.Algorithm.Predict(testData, api.Context) as DeltaLearningResult;
+
+            Assert.True(result.PredictedResults[0] == 0);
+            Assert.True(result.PredictedResults[1] == 1);
+            Assert.True(result.PredictedResults[2] == 1);
         }
     }
-    }
+}
 

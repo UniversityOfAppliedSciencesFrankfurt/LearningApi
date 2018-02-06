@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using LearningFoundation;
 using DeltaLearning;
 using System.IO;
+using DeltaRuleLearning;
 
 namespace DeltaLearning
 {
@@ -168,17 +169,17 @@ namespace DeltaLearning
         /// <param name="ctx"></param>
         /// <returns></returns>
 
-        double[] IAlgorithm.Predict(double[][] data, IContext ctx)
+        public IResult Predict(double[][] data, IContext ctx)
         {
-
-            double[] results = new double[data.Length];
-
-            for (int i = 0; i < data.Length; i++)
+            DeltaLearningResult res = new DeltaLearningResult()
             {
-                
+                 PredictedResults = new double[data.Length],
+            };
+        
+            for (int i = 0; i < data.Length; i++)
+            {                
                 double result = 0.0;
-
-
+                
                 for (int j = 0; j < ctx.DataDescriptor.Features.Length; j++)
                 {
                     result += m_Weights[j] * data[i][j];
@@ -189,13 +190,11 @@ namespace DeltaLearning
                     {
                         result = 0;
                     }
-                    results[i] = result ;
+                    res.PredictedResults[i] = result ;
                 }
             }
-
-
-            return results;
-
+            
+            return res;
         }
     }
 }

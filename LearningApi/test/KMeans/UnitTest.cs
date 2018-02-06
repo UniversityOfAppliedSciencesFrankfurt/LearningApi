@@ -48,15 +48,15 @@ namespace Test
 
             api.UseKMeans(settings);
 
-            var resp = api.Run() as KMeansResult;
+            var resp = api.Run() as KMeansScore;
             
             Assert.True(resp.Clusters != null);
             Assert.True(resp.Clusters.Length == clusterCentars.Length);
 
-            var result = api.Algorithm.Predict(clusterCentars, api.Context);
-            Assert.True(result[0] == 0);
-            Assert.True(result[1] == 1);
-            Assert.True(result[2] == 2);
+            var result = api.Algorithm.Predict(clusterCentars, api.Context) as KMeansResult;
+            Assert.True(result.PredictedClusters[0] == 0);
+            Assert.True(result.PredictedClusters[1] == 1);
+            Assert.True(result.PredictedClusters[2] == 2);
         }
 
       

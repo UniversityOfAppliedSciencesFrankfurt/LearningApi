@@ -184,19 +184,23 @@ namespace LogisticRegression
             return Run(featureValues, ctx);
         }
 
-        public double[] Predict(double[][] data, IContext ctx)
+        public IResult Predict(double[][] data, IContext ctx)
         {
-            double[] result = new double[data.Length];
+            LogisticRegressionResult res = new LogisticRegressionResult()
+            {
+                PredictedValues = new double[data.Length],
+            };
 
+       
             for (int i = 0; i < data.Length; ++i) // each data
             {
                 var dataRow = data[i];
                 var weights = ((LogisticRegressionScore)ctx.Score).Weights;
                 double computed = ComputeOutput(dataRow, weights);
-                result[i] = computed;
+                res.PredictedValues[i] = computed;
             }
 
-            return result;
+            return res;
            
         }
     }

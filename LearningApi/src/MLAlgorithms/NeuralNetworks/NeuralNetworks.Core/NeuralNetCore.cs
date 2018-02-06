@@ -21,7 +21,7 @@ namespace NeuralNetworks.Core
         }
 
 
-        public virtual double[] Predict(double[][] data, IContext ctx)
+        public virtual IResult Predict(double[][] data, IContext ctx)
         {
             throw new NotImplementedException(":( Used algorithm MUST implement method 'Predict()'");
         }
