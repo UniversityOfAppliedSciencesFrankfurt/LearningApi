@@ -2,6 +2,7 @@
 using System;
 using LearningFoundation;
 
+//https://github.com/echen/restricted-boltzmann-machines
 
 namespace NeuralNet.RestrictedBolzmannMachine2
 {
@@ -105,15 +106,18 @@ namespace NeuralNet.RestrictedBolzmannMachine2
                 {
                     int i = indices[idx];  // i points to curr train data
 
-                    // Copy train data to visible values
+                    //
+                    // Copy train data to visible values.
+                    // It copies input vector to member m_VisibleValues
                     for (int j = 0; j < numVisible; ++j)
                         m_VisibleValues[j] = data[i][j];
 
                     //
-                    // Compute hidden node values 
+                    // Compute hidden node values for current input vector.
                     for (int hiddenIndx = 0; hiddenIndx < numHidden; ++hiddenIndx)
                     {
                         double sum = 0.0;
+
                         for (int visibleIndx = 0; visibleIndx < numVisible; ++visibleIndx)
                             sum += m_VisibleValues[visibleIndx] * vhWeights[visibleIndx][hiddenIndx];
 
@@ -219,6 +223,27 @@ namespace NeuralNet.RestrictedBolzmannMachine2
             }
 
             return null;
+        }
+
+        public int[] VisibleFromHid(double[] hiddens)
+        {
+            int[] result = new int[numVisible];
+
+            for (int v = 0; v < numVisible; ++v)
+            {
+                double sum = 0.0;
+                for (int h = 0; h < numHidden; ++h)
+                    sum += hiddens[h] * vhWeights[v][h];
+                // sum up visible bias
+                sum += visBiases[v]; 
+                double probActiv = m_ActivationFunction(sum);
+                double pr = m_Rnd.NextDouble();
+                if (probActiv > pr)
+                    result[v] = 1;
+                else
+                    result[v] = 0;
+            }
+            return result;
         }
     }
 }

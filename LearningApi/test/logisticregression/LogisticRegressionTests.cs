@@ -49,7 +49,7 @@ namespace test.logisticregression
 
             api.Run();
 
-            IScore score = api.GetScore();
+            LogisticRegressionScore score = api.GetScore() as LogisticRegressionScore;
 
             //Errors during each iteration. IF the learningRate is suitable errors is describing for every next iteration 
             Assert.Equal(Math.Round(score.Errors[0], 5), 0.24278);

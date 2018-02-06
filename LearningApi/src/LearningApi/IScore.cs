@@ -11,10 +11,10 @@ namespace LearningFoundation
     public interface IScore
     {
 
-        //
-        double [] Errors { get;set;}
+        ////
+        //double [] Errors { get;set;}
 
-        double [] Weights { get; set;}
+        //double [] Weights { get; set;}
 
     }
 

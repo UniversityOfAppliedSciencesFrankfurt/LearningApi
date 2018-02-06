@@ -62,8 +62,9 @@ namespace LogisticRegression
 
             } // while
 
-            ctx.Score.Weights = weights;
-            ctx.Score.Errors = errors;
+            LogisticRegressionScore res = ctx.Score as LogisticRegressionScore;
+            res.Weights = weights;
+            res.Errors = errors;
             
             return ctx.Score;
         }
@@ -190,7 +191,7 @@ namespace LogisticRegression
             for (int i = 0; i < data.Length; ++i) // each data
             {
                 var dataRow = data[i];
-                var weights = ctx.Score.Weights;
+                var weights = ((LogisticRegressionScore)ctx.Score).Weights;
                 double computed = ComputeOutput(dataRow, weights);
                 result[i] = computed;
             }
