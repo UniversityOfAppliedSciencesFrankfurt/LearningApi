@@ -37,7 +37,7 @@ namespace NeuralNet.RestrictedBolzmannMachine2
         public double[] visBiases;
 
         public double[] hidValues;
-        public double[] hidProbs;
+        //public double[] hidProbs;
         public double[] hidBiases;
 
         public double[][] vhWeights;
@@ -65,7 +65,7 @@ namespace NeuralNet.RestrictedBolzmannMachine2
             visBiases = new double[numVisible];
 
             hidValues = new double[numHidden];
-            hidProbs = new double[numHidden];
+            //hidProbs = new double[numHidden];
             hidBiases = new double[numHidden];
 
             vhWeights = new double[numVisible][];  // visible-to-hidden
@@ -122,9 +122,16 @@ namespace NeuralNet.RestrictedBolzmannMachine2
                             sum += m_VisibleValues[visibleIndx] * vhWeights[visibleIndx][hiddenIndx];
 
                         sum += hidBiases[hiddenIndx]; // add the hidden bias
-                        hidProbs[hiddenIndx] = m_ActivationFunction(sum); // compute prob of h activation
+                        //hidProbs[hiddenIndx] = m_ActivationFunction(sum); // compute prob of h activation
+                        //double pr = m_Rnd.NextDouble();  // determine 0/1 h node value
+                        //if (hidProbs[hiddenIndx] > pr)
+                        //    hidValues[hiddenIndx] = 1;
+                        //else
+                        //    hidValues[hiddenIndx] = 0;
+
+                        var sumPrime = m_ActivationFunction(sum);
                         double pr = m_Rnd.NextDouble();  // determine 0/1 h node value
-                        if (hidProbs[hiddenIndx] > pr)
+                        if (sumPrime > pr)
                             hidValues[hiddenIndx] = 1;
                         else
                             hidValues[hiddenIndx] = 0;
@@ -231,7 +238,7 @@ namespace NeuralNet.RestrictedBolzmannMachine2
             return res;
         }
 
-        public double[] calcVisibleFromHidden(double[] hiddens)
+        private double[] calcVisibleFromHidden(double[] hiddens)
         {
             double[] result = new double[numVisible];
 
