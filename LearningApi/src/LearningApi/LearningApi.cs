@@ -89,16 +89,36 @@ namespace LearningFoundation
         public object Run()
         {
             dynamic data = null;
-
+            
             foreach (var item in this.Modules)
             {
                 dynamic module = item.Value;
 
-                data = module.Run(data, this.Context);
+                var tmpData = module.Run(data, this.Context);
+                if (tmpData == null)
+                {
+                    data = this.Context.Score;
+                    break;
+                }
+                else
+                    data = tmpData;
             }
 
             return data;
         }
+
+        public object RunBatch()
+        {
+            dynamic data = null;
+
+            do
+            {
+                data = Run();
+            } while (this.Context.IsMoreDataAvailable);
+
+            return data;
+        }
+
 
         public async Task TrainAsync()
         {

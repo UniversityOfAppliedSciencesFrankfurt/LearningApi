@@ -18,6 +18,14 @@ namespace LearningFoundation
         /// </summary>
         public IDataDescriptor DataDescriptor { get; set; }
 
+        /// <summary>
+        /// Gets the score of training operation.
+        /// </summary>
         public IScore Score { get; set; }
+
+        /// <summary>
+        /// Indicates if the operation is running in the batch.
+        /// </summary>
+        public bool IsMoreDataAvailable { get; set; }
     }
 }

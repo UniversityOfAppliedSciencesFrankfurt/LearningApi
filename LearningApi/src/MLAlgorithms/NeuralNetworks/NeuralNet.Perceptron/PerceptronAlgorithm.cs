@@ -20,7 +20,7 @@ namespace NeuralNet.Perceptron
 
         private double[] m_Weights;
 
-        private double[] m_Errors;
+        //private double[] m_Errors;
 
         private double m_Threshold;
 
@@ -41,14 +41,20 @@ namespace NeuralNet.Perceptron
         {
             m_Dimensions = ctx.DataDescriptor.Features.Count();
             int numOfInputVectors = featureValues.Length;
-            m_Weights = new double[m_Dimensions];
-            m_Errors = new double[numOfInputVectors];
-            initializeWeights();
+
+            if (m_Weights == null)
+            {
+                m_Weights = new double[m_Dimensions];
+                initializeWeights();
+            }
+
+            //m_Errors = new double[numOfInputVectors];
+            
             double totalError = 0.0;
             var score = new PerceptronAlgorithmScore();
             for (int i = 0; i < m_Iterations; i++)
             {
-                // totalError = 0;
+                totalError = 0;
 
                 for (int inputVectIndx = 0; inputVectIndx < numOfInputVectors; inputVectIndx++)
                 {
@@ -60,7 +66,7 @@ namespace NeuralNet.Perceptron
 
                     // Error is difference between calculated output and expected output.
                     double error = expectedOutput - calculatedOutput;
-                    this.m_Errors[inputVectIndx] = error;
+                    //this.m_Errors[inputVectIndx] = error;
 
                     // Total error for all input vectors.
 
@@ -84,29 +90,21 @@ namespace NeuralNet.Perceptron
                     // Updating of threshold
                     this.m_Threshold += this.m_LearningRate * error;
 
-                    if (totalError == 0 && i >= (m_Iterations * 0.1)) // We let it calculate at least 10% of max iterations
-                        break;
-
-                    //if (totalError == 0)
-                    //{
-                    //    bool isAny = false;
-                    //    foreach (var err in m_Errors)
-                    //    {
-                    //        if (err != 0)
-                    //        {
-                    //            isAny = true;
-                    //            break;
-                    //        }
-                    //    }
-                    //    if (!isAny)
-                    //        break;
-                    //}
-
+                    //if (totalError == 0 && i >= (m_Iterations * 0.1)
+                    //    && inputVectIndx >= (numOfInputVectors * 0.1)) // We let it calculate at least 10% of max iterations
+                    //    break;
                 }
+
+
+                if (totalError == 0 && i >= (m_Iterations * 0.1)) // We let it calculate at least 10% of max iterations
+                    break;
+
+                //if (totalError == 0)
+                //    break;
             }
 
             score.Weights = this.m_Weights;
-            score.Errors = this.m_Errors;//numberofsample
+            //score.Errors = this.m_Errors;//numberofsample
             score.TotolEpochError = totalError;//all 0
             ctx.Score = score;
             return ctx.Score;
@@ -118,7 +116,7 @@ namespace NeuralNet.Perceptron
             PerceptronResult res = new PerceptronResult()
             {
                 PredictedValues = new double[data.Length],
-            };           
+            };
 
             for (int i = 0; i < data.Length; i++)
             {

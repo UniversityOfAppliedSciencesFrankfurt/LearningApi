@@ -21,5 +21,7 @@ namespace LearningFoundation
         /// Current score of algorithm.
         /// </summary>
         IScore Score { get; set; }
+
+        bool IsMoreDataAvailable { get; set; }
     }
 }

@@ -130,6 +130,56 @@ namespace test.RestrictedBolzmannMachine
         }
 
 
+        [Fact]
+        public void LinearEquationSolver()
+        {
+            LearningApi api = new LearningApi();
+            api.UseActionModule<object, double[][]>((notUsed, ctx) =>
+            {
+                const int maxSamples = 12;
+                ctx.DataDescriptor = getDescriptorForRbm_sample1();
+                double[][] data = new double[maxSamples][];
+
+                data[0] = new double[] { 1, 1, 0, 0, 0, 0 };  // A
+                data[1] = new double[] { 0, 0, 1, 1, 0, 0 };  // B
+                data[2] = new double[] { 0, 0, 0, 0, 1, 1 };  // C
+
+                data[3] = new double[] { 1, 1, 0, 0, 0, 1 };  // noisy A
+                data[4] = new double[] { 0, 0, 1, 1, 0, 0 };  // B
+                data[5] = new double[] { 0, 0, 0, 0, 1, 1 };  // C
+
+                data[6] = new double[] { 1, 0, 0, 0, 0, 0 };  // weak A
+                data[7] = new double[] { 0, 0, 1, 0, 0, 0 };  // weak B
+                data[8] = new double[] { 0, 0, 0, 0, 1, 0 };  // weak C
+
+                data[9] = new double[] { 1, 1, 0, 1, 0, 0 };  // noisy A
+                data[10] = new double[] { 1, 0, 1, 1, 0, 0 };  // noisy B
+                data[11] = new double[] { 0, 0, 1, 0, 1, 1 };  // noisy C
+                return data;
+            });
+
+
+            api.UseRbm(0.2, 1000);
+
+            IScore score = api.Run() as IScore;
+
+            double[][] testData = new double[4][];
+
+            testData[0] = new double[] { 1, 1, 0, 0, 0, 0 };
+            testData[1] = new double[] { 0, 0, 0, 0, 1, 1 };
+            testData[2] = new double[] { 0, 1, 0, 0, 0, 0 };
+            testData[3] = new double[] { 0, 0, 0, 0, 1, 0 };
+
+            var result = api.Algorithm.Predict(testData, api.Context);
+
+            // NOT FINISHED.
+            //Assert.True(result[0] == 1);
+            //Assert.True(result[1] == 0);
+            //Assert.True(result[2] == 0);
+            //Assert.True(result[3] == 0);
+            //Assert.True(result[4] == 1);
+            //Assert.True(result[5] == 0);
+        }
     }
 
 
