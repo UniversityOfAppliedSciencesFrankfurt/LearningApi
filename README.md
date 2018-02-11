@@ -122,4 +122,4 @@ Following code in previous example shows how to evaluation (predict) the model:
 ~~~
 
 #### Working with batches of data
-For more information about training with huge amount of data please read [this](/blob/master/LearningApi/WorkingWithBatches.md)
+For more information about training with huge amount of data please read [this](blob/master/LearningApi/WorkingWithBatches.md)
