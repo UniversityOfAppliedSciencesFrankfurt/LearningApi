@@ -103,10 +103,10 @@ IScore score = api.Run() as IScore;
 ~~~
 
 When the pipeline starts,  modules are executed in the sequenceordered as they are added to the pipeline. In this case, first action module will be executed and then perceptron algorithm.
-After running of the pipeline model is trained. Next common step in MAchine LEarning applications is called evaluation of the model. 
+After running of the pipeline model is trained. Next common step in Machine Learning applications is called evaluation of the model. 
 Following code in previous example shows how to evaluation (predict) the model:
 
-~~~ csharp
+~~~ csharp            
             double[][] testData = new double[4][];
             testData[0] = new double[] { 2.0, 0.0 };
             testData[1] = new double[] { 2000.0, 0.0 };
