@@ -121,4 +121,5 @@ Following code in previous example shows how to evaluation (predict) the model:
             Assert.True(result.PredictedValues[3] == 1);
 ~~~
 
-
+#### Working with batches of data
+For more information about training with huge amount of data please read [this](/blob/master/LearningApi/WorkingWithBatches.md)
