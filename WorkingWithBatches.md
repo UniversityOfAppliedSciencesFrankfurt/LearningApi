@@ -6,7 +6,8 @@ To implement batch operations, you should be aware of following:
 - The training is started by *RunBatch()* method instead of *Run()* method.
 
 The data provider module returns the data as usual. As long there is more data to return, module should return batch of data.
-The method *RunBatch()* will invoke data provider module after training of the batch over and over again, as long the data provider returns an empty data set. Additionally the module must set IsMoreDataAvailable on true of the context instnce.
+The method *RunBatch()* will invoke data provider module after training of the batch over and over again, as long the data provider returns a none empty data set. Additionally the module must set IsMoreDataAvailable on true of the context instance, when there is no more data to retrieve.
+Following example demonstrates how to do this:
 
 ~~~ csharp
                 // ... code omitted for simplicity...
