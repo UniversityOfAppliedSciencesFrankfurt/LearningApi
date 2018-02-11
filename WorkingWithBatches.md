@@ -1,5 +1,5 @@
 When training the LearningApi pipeline with huge amount of data, the batching operation can be used.
-Example of batching can be find in [this file](/test/Perceptron/PerceptronUnitTests.cs)
+Example of batching can be find in [this file](test/Perceptron/PerceptronUnitTests.cs)
 
 To implement batch operations, you should be aware of following:
 - The first module in the pipeline must implement batching correctlly
