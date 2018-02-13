@@ -82,6 +82,73 @@ namespace test.csvdataprovider
         /// Demonstrates how to inject a data provider as an action.
         /// </summary>
         [Fact]
+        public void CSVDataProviderTest_MiniBatch()
+        {
+            //
+            //iris data file
+            var iris_path = System.IO.Path.Combine(Directory.GetCurrentDirectory(), m_iris_data_path);
+
+            LearningApi api = new LearningApi(TestHelpers.GetDescriptor());
+            api.UseCsvDataProvider(iris_path, ',', false, 1);
+
+            //define action module to test miniBatching with expected result
+            api.UseActionModule<object, double[][]>((data, ctx) =>
+            {
+                var miniBatchData =  data as object[][];
+
+                compareData(miniBatchData, ctx);
+
+
+                return null;
+            });
+            //define miniBatchSize
+            api.Context.MiniBatchSize = 10; 
+
+
+            var result = api.RunBatch() as object[][];
+
+            
+
+            return;
+
+        }
+
+        private void compareData(object[][] miniBatchData, IContext ctx)
+        {
+            //get expected result
+            var expected = GetReal_Iris_DataSet();
+
+            for (int i = 0; i < miniBatchData.Length; i++)
+            {
+                for (int j = 0; j < miniBatchData[0].Length; j++)
+                {
+                    var col = ctx.DataDescriptor.Features[j];
+                    if (col.Type == ColumnType.STRING)
+                        continue;
+                    else if (col.Type == ColumnType.NUMERIC)//numeric column
+                    {
+                        var val1 = double.Parse(miniBatchData[i][j].ToString());
+                        var val2 = double.Parse(expected[i+ ctx.MiniBatchIteration*ctx.MiniBatchSize][j].ToString());
+
+                        Assert.Equal(val1, val2);
+                    }
+                    else if (col.Type == ColumnType.BINARY)//binary column
+                    {
+                        Assert.Equal(miniBatchData[i][j].ToString(), expected[i + ctx.MiniBatchIteration * ctx.MiniBatchSize][j ].ToString());
+                    }
+                    else if (col.Type == ColumnType.CLASS)//class column
+                    {
+                        Assert.Equal(miniBatchData[i][j].ToString(), expected[i + ctx.MiniBatchIteration * ctx.MiniBatchSize][j ].ToString());
+                    }
+                }
+            }
+        }
+
+
+        /// <summary>
+        /// Demonstrates how to inject a data provider as an action.
+        /// </summary>
+        [Fact]
         public void CSVDataProviderTest_SecomData()
         {
             //

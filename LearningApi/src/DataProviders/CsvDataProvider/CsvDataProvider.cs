@@ -160,6 +160,12 @@ namespace LearningFoundation.DataProviders
 
         public object[][] Run(object data, IContext ctx)
         {
+            //check if mini-batch is defined
+            if (ctx.MiniBatchSize > 0)
+            {
+                return RunBatch(data, ctx);
+            }
+
             List<object[]> rawData = new List<object[]>();
 
             using (StreamReader reader = File.OpenText(m_FileName))
@@ -189,6 +195,55 @@ namespace LearningFoundation.DataProviders
 
                     rawData.Add(singleRow);
                 }
+
+                return rawData.ToArray();
+            }
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="data"></param>
+        /// <param name="ctx"></param>
+        /// <returns></returns>
+        private object[][] RunBatch(object data, IContext ctx)
+        {
+            
+            //
+            int currentMBI = ctx.MiniBatchIteration;
+            int mbSize = ctx.MiniBatchSize;
+
+            List<object[]> rawData = new List<object[]>();
+
+            using (StreamReader reader = File.OpenText(m_FileName))
+            {
+                int linenum = 0;
+                foreach (string line in readLineFromFile(reader).Skip(currentMBI * mbSize).Take(mbSize))
+                {
+                    //split line in to column
+                    var strCols = line.Split(m_Delimiter);
+
+                    //skip first ... rows
+                    var headerLine = isHeaderIncluded ? 1 : 0;
+                    if (linenum < m_SkipRows + headerLine)
+                    {
+                        linenum++;
+                        continue;
+                    }
+
+                    //Transform data from row->col in to col->row
+                    var singleRow = new object[strCols.Length];
+
+                    //define columns
+                    for (int i = 0; i < strCols.Length; i++)
+                    {
+                        singleRow[i] = strCols[i];
+                    }
+
+                    rawData.Add(singleRow);
+                }
+
+                //check if the miniBatch iteration reach to the end of file.
+                ctx.IsMoreDataAvailable = !reader.EndOfStream;
 
                 return rawData.ToArray();
             }
