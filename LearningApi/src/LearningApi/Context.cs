@@ -28,16 +28,11 @@ namespace LearningFoundation
         /// </summary>
         public bool IsMoreDataAvailable { get; set; }
 
-        /// <summary>
-        /// Mini-batch size.
-        /// It must be define at the beginning of the iteration process
-        /// In case it is not defined (LTE 0) mini-batching will not be happen.In fact will be performed full batching
-        /// </summary>
-        public int MiniBatchSize { get; set; }
+
         /// <summary>
         /// Indication of the current mini-batch iteration. It is incremented over each batch iteration,
         /// since we need how much data should be skipped in the current batch iteration. 
         /// </summary> 
-        public int MiniBatchIteration { get; set; }
+        public int BatchIteration { get; set; }
     }
 }

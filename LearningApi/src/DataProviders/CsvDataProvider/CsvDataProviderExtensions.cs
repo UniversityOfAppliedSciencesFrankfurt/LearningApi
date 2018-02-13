@@ -21,9 +21,9 @@ namespace LearningFoundation.DataProviders
         /// <param name="isHeader"> is header included in the data after skiped rows. </param>
         /// <param name="skipRows">firs several rows which should be skiped in parsing.</param>
         /// <returns></returns>
-        public static LearningApi UseCsvDataProvider(this LearningApi api, string fileName, char delimiter, bool isHeader, int skipRows = 0)       
+        public static LearningApi UseCsvDataProvider(this LearningApi api, string fileName, char delimiter, bool isHeader, int batchSize=0/*0 - witout batching*/,int skipRows = 0)       
         {
-            var dp = new CsvDataProvider(fileName, delimiter, isHeader, skipRows);
+            var dp = new CsvDataProvider(fileName, delimiter, isHeader, batchSize ,skipRows);
           
             api.AddModule(dp, "CsvDataProvider");
             

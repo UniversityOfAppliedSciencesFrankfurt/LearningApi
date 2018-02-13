@@ -86,25 +86,23 @@ namespace test.csvdataprovider
         {
             //
             //iris data file
+            int batchSize = 10;
             var iris_path = System.IO.Path.Combine(Directory.GetCurrentDirectory(), m_iris_data_path);
 
             LearningApi api = new LearningApi(TestHelpers.GetDescriptor());
-            api.UseCsvDataProvider(iris_path, ',', false, 1);
+            api.UseCsvDataProvider(iris_path, ',', false, batchSize, 1);
 
             //define action module to test miniBatching with expected result
             api.UseActionModule<object, double[][]>((data, ctx) =>
             {
                 var miniBatchData =  data as object[][];
 
-                compareData(miniBatchData, ctx);
+                compareData(miniBatchData, ctx, batchSize);
 
 
                 return null;
             });
-            //define miniBatchSize
-            api.Context.MiniBatchSize = 10; 
-
-
+           
             var result = api.RunBatch() as object[][];
 
             
@@ -113,7 +111,7 @@ namespace test.csvdataprovider
 
         }
 
-        private void compareData(object[][] miniBatchData, IContext ctx)
+        private void compareData(object[][] miniBatchData, IContext ctx, int batchSize)
         {
             //get expected result
             var expected = GetReal_Iris_DataSet();
@@ -128,17 +126,17 @@ namespace test.csvdataprovider
                     else if (col.Type == ColumnType.NUMERIC)//numeric column
                     {
                         var val1 = double.Parse(miniBatchData[i][j].ToString());
-                        var val2 = double.Parse(expected[i+ ctx.MiniBatchIteration*ctx.MiniBatchSize][j].ToString());
+                        var val2 = double.Parse(expected[i+ ctx.BatchIteration* batchSize][j].ToString());
 
                         Assert.Equal(val1, val2);
                     }
                     else if (col.Type == ColumnType.BINARY)//binary column
                     {
-                        Assert.Equal(miniBatchData[i][j].ToString(), expected[i + ctx.MiniBatchIteration * ctx.MiniBatchSize][j ].ToString());
+                        Assert.Equal(miniBatchData[i][j].ToString(), expected[i + ctx.BatchIteration * batchSize][j ].ToString());
                     }
                     else if (col.Type == ColumnType.CLASS)//class column
                     {
-                        Assert.Equal(miniBatchData[i][j].ToString(), expected[i + ctx.MiniBatchIteration * ctx.MiniBatchSize][j ].ToString());
+                        Assert.Equal(miniBatchData[i][j].ToString(), expected[i + ctx.BatchIteration * batchSize][j ].ToString());
                     }
                 }
             }

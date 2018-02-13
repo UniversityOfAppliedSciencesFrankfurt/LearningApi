@@ -30,14 +30,22 @@ namespace LearningFoundation.DataProviders
         private bool isHeaderIncluded;
 
         /// <summary>
+        /// Mini-batch size.
+        /// It must be define at the beginning of the iteration process
+        /// In case it is not defined (LTE 0) mini-batching will not be happen.In fact will be performed full batching
+        /// </summary>
+        private int m_BatchSize;
+
+        /// <summary>
         /// 
         /// </summary>
         /// <param name="fileName"></param>
         /// <param name="delimiter"></param>
         /// <param name="isHeader"></param>
         /// <param name="skipRows"></param>
-        public CsvDataProvider(string fileName, char delimiter, bool isHeader, int skipRows = 0)
+        public CsvDataProvider(string fileName, char delimiter, bool isHeader, int batchSize ,int skipRows = 0)
         {
+            m_BatchSize = batchSize;
             m_FileName = fileName;
             m_Delimiter = delimiter;
             isHeaderIncluded = isHeader;
@@ -131,7 +139,8 @@ namespace LearningFoundation.DataProviders
         /// </summary>
         public void Dispose()
         {
-            m_Reader.Dispose();
+            if(m_Reader!=null)
+                m_Reader.Dispose();
         }
 
         /// <summary>
@@ -161,43 +170,40 @@ namespace LearningFoundation.DataProviders
         public object[][] Run(object data, IContext ctx)
         {
             //check if mini-batch is defined
-            if (ctx.MiniBatchSize > 0)
+            if (m_BatchSize > 0)
             {
                 return RunBatch(data, ctx);
             }
 
             List<object[]> rawData = new List<object[]>();
 
-            using (StreamReader reader = File.OpenText(m_FileName))
+            int linenum = 0;
+            foreach (string line in readLineFromFile(m_Reader))
             {
-                int linenum = 0;
-                foreach (string line in readLineFromFile(reader))
+                //split line in to column
+                var strCols = line.Split(m_Delimiter);
+
+                //skip first ... rows
+                var headerLine = isHeaderIncluded ? 1 : 0;
+                if (linenum < m_SkipRows + headerLine)
                 {
-                    //split line in to column
-                    var strCols = line.Split(m_Delimiter);
-
-                    //skip first ... rows
-                    var headerLine = isHeaderIncluded ? 1 : 0;
-                    if(linenum < m_SkipRows+ headerLine)
-                    {
-                        linenum++;
-                        continue;
-                    }
-
-                    //Transform data from row->col in to col->row
-                    var singleRow = new object[strCols.Length];
-
-                    //define columns
-                    for (int i = 0; i < strCols.Length; i++)
-                    {
-                        singleRow[i] = strCols[i];
-                    }
-
-                    rawData.Add(singleRow);
+                    linenum++;
+                    continue;
                 }
 
-                return rawData.ToArray();
+                //Transform data from row->col in to col->row
+                var singleRow = new object[strCols.Length];
+
+                //define columns
+                for (int i = 0; i < strCols.Length; i++)
+                {
+                    singleRow[i] = strCols[i];
+                }
+
+                rawData.Add(singleRow);
             }
+
+            return rawData.ToArray();
         }
         /// <summary>
         /// 
@@ -209,15 +215,14 @@ namespace LearningFoundation.DataProviders
         {
             
             //
-            int currentMBI = ctx.MiniBatchIteration;
-            int mbSize = ctx.MiniBatchSize;
+            int currentMBI = ctx.BatchIteration;
 
             List<object[]> rawData = new List<object[]>();
 
             using (StreamReader reader = File.OpenText(m_FileName))
             {
                 int linenum = 0;
-                foreach (string line in readLineFromFile(reader).Skip(currentMBI * mbSize).Take(mbSize))
+                foreach (string line in readLineFromFile(reader).Skip(currentMBI * m_BatchSize).Take(m_BatchSize))
                 {
                     //split line in to column
                     var strCols = line.Split(m_Delimiter);

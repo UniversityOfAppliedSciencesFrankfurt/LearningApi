@@ -116,12 +116,12 @@ namespace LearningFoundation
                 data = Run();
 
                 //increment mini-batch iteration
-                this.Context.MiniBatchIteration++;
+                this.Context.BatchIteration++;
 
             } while (this.Context.IsMoreDataAvailable);
 
             //reset mini-batch iteration 
-            this.Context.MiniBatchIteration=0;
+            this.Context.BatchIteration=0;
             return data;
         }
 
