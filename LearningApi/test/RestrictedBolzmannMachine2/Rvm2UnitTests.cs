@@ -44,7 +44,17 @@ namespace test.RestrictedBolzmannMachine
 
             return des;
         }
-        
+
+        /// <summary>
+        /// Movies:
+        /// 
+        /// </summary>
+        [Fact]
+        public void RBMRecoomendationTest()
+        {
+
+        }
+
 
         [Fact]
         public void SimpleRBMTest()
@@ -109,8 +119,8 @@ namespace test.RestrictedBolzmannMachine
             api.UseDefaultDataMapper();
             api.UseRbm(0.2, 1000);
 
-            IScore score = api.Run() as IScore;
-
+            RbmResult score = api.Run() as RbmResult;
+           
             double[][] testData = new double[4][];
 
             testData[0] = new double[] { 1, 1, 0, 0, 0, 0 };

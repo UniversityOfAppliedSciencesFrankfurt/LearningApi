@@ -1,8 +1,10 @@
 ﻿using NeuralNetworks.Core;
 using System;
 using LearningFoundation;
+using System.Diagnostics;
 
-//https://github.com/echen/restricted-boltzmann-machines
+//Recommendation: https://github.com/echen/restricted-boltzmann-machines
+//DATASET: https://grouplens.org/datasets/movielens/
 
 namespace NeuralNet.RestrictedBolzmannMachine2
 {
@@ -189,6 +191,8 @@ namespace NeuralNet.RestrictedBolzmannMachine2
                     for (int h = 0; h < numHidden; ++h)
                         hidBiases[h] += learnRate * (hidValues[h] - hPrime[h]);
 
+                    printOut();
+
                 } 
 
                 ++epoch;
@@ -258,5 +262,24 @@ namespace NeuralNet.RestrictedBolzmannMachine2
             }
             return result;
         }
+
+
+        private int m_Epoch;
+
+        private void printOut()
+        {
+            Debug.WriteLine(m_Epoch);
+
+            for (int row = 0; row < numVisible; ++row)
+            {
+                Debug.WriteLine("");
+                Debug.WriteLine("");
+
+                for (int col = 0; col < numHidden; ++col)
+                    Debug.Write($"{vhWeights[row][col]}\t");
+            }
+        }
+
+
     }
 }

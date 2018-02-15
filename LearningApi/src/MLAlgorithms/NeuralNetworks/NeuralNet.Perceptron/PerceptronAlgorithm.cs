@@ -22,15 +22,18 @@ namespace NeuralNet.Perceptron
 
         //private double[] m_Errors;
 
+        private bool m_TraceTotalError;
+
         private double m_Threshold;
 
         private bool m_PersistConvergenceData = false;
 
-        public PerceptronAlgorithm(double threshold, double learningRate, int iterations, Func<double, double> activationFunction = null)
+        public PerceptronAlgorithm(double threshold, double learningRate, int iterations, Func<double, double> activationFunction = null, bool traceTotalError = false)
         {
             this.m_Threshold = threshold;
             this.m_LearningRate = learningRate;
             this.m_Iterations = iterations;
+            this.m_TraceTotalError = traceTotalError;
 
             if (activationFunction != null)
                 this.m_ActivationFunction = activationFunction;
@@ -49,7 +52,9 @@ namespace NeuralNet.Perceptron
             }
 
             //m_Errors = new double[numOfInputVectors];
-            
+
+            double maxError = 0;
+            double lastError = 0;
             double totalError = 0.0;
             var score = new PerceptronAlgorithmScore();
             for (int i = 0; i < m_Iterations; i++)
@@ -71,6 +76,14 @@ namespace NeuralNet.Perceptron
                     // Total error for all input vectors.
 
                     totalError += Math.Abs(error);
+         
+                    if (this.m_TraceTotalError)
+                    {
+                        if (maxError < totalError)
+                            maxError = totalError;
+                        else if (inputVectIndx == numOfInputVectors -1)
+                            lastError = totalError;
+                    }
 
                     if (error != 0)
                     {
@@ -95,6 +108,10 @@ namespace NeuralNet.Perceptron
                     //    break;
                 }
 
+                if (this.m_TraceTotalError)
+                {
+                    Debug.WriteLine($"Interation: {i}\tfirstErr:{maxError}\tlastErr:{lastError}");
+                }
 
                 if (totalError == 0 && i >= (m_Iterations * 0.1)) // We let it calculate at least 10% of max iterations
                     break;

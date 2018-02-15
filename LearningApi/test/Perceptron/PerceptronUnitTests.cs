@@ -88,7 +88,7 @@ namespace test.Perceptron
                 return data;
             });
 
-            api.UsePerceptron(0.02, 10000);
+            api.UsePerceptron(0.02, 10000, traceTotalError:true);
 
             IScore score = api.Run() as IScore;
 
@@ -107,64 +107,7 @@ namespace test.Perceptron
         }
 
 
-        /// <summary>
-        /// TEST NOT FINISHED!
-        /// Peceptron does not learn with parameters specified in this test.
-        /// Please note that data generated in this test cannot be learned by perceptron perfect way.
-        /// This test might sometimes fail.
-        /// </summary>
-        [Fact]
-        public void SimpleSequenceWithGapsTest()
-        {
-            LearningApi api = new LearningApi();
-            api.UseActionModule<object, double[][]>((notUsed, ctx) =>
-            {
-                const int maxSamples = 1000000;
-                ctx.DataDescriptor = getDescriptor();
-                double[][] data = new double[maxSamples / 3][];
-
-                //
-                // We generate following input vectors: 
-                // IN Val - Expected OUT Val 
-                // Every 3th number is given
-
-                for (int i = 0; i < maxSamples / 3; i++)
-                {
-                    data[i] = new double[2];
-                    data[i][0] = i * 3;
-                    if ((i * 3) > (maxSamples / 2))
-                        data[i][1] = 1;
-                    else
-                        data[i][1] = 0;
-                }
-
-                return data;
-            });
-
-            api.UsePerceptron(0.05, 1000);
-
-            IScore score = api.Run() as IScore;
-
-            double[][] testData = new double[6][];
-            testData[0] = new double[] { 2.0, 0.0 };
-            testData[1] = new double[] { 1, 0.0 };
-            testData[2] = new double[] { 3, 0.0 };
-            testData[3] = new double[] { 3002, 0.0 };
-            testData[4] = new double[] { 6002.0, 0.0 };
-            testData[5] = new double[] { 9005, 0.0 };
-
-            var result = api.Algorithm.Predict(testData, api.Context) as PerceptronResult;
-
-            // TODO... THUS TEST iS NOT COMPLETED
-
-            //Assert.True(result.PredictedValues[0] == 0);
-            //Assert.True(result.PredictedValues[1] == 0);
-            //Assert.True(result.PredictedValues[2] == 0);
-            //Assert.True(result.PredictedValues[3] == 1);
-            //Assert.True(result.PredictedValues[4] == 1);
-            //Assert.True(result.PredictedValues[5] == 1);
-        }
-
+    
 
 
         [Fact]
@@ -269,7 +212,7 @@ namespace test.Perceptron
                 }
             });
 
-            api.UsePerceptron(0.02, 10000);
+            api.UsePerceptron(0.02, 10000, traceTotalError: true);
 
             IScore score = api.RunBatch() as IScore;
 
@@ -285,6 +228,65 @@ namespace test.Perceptron
             Assert.True(result.PredictedValues[1] == 0);
             Assert.True(result.PredictedValues[2] == 1);
             Assert.True(result.PredictedValues[3] == 1);
+        }
+
+
+        /// <summary>
+        /// TEST NOT FINISHED!
+        /// Peceptron does not learn with parameters specified in this test.
+        /// Please note that data generated in this test cannot be learned by perceptron perfect way.
+        /// This test might sometimes fail.
+        /// </summary>
+        [Fact]
+        public void SimpleSequenceWithGapsTest()
+        {
+            LearningApi api = new LearningApi();
+            api.UseActionModule<object, double[][]>((notUsed, ctx) =>
+            {
+                const int maxSamples = 1000000;
+                ctx.DataDescriptor = getDescriptor();
+                double[][] data = new double[maxSamples / 3][];
+
+                //
+                // We generate following input vectors: 
+                // IN Val - Expected OUT Val 
+                // Every 3th number is given
+
+                for (int i = 0; i < maxSamples / 3; i++)
+                {
+                    data[i] = new double[2];
+                    data[i][0] = i * 3;
+                    if ((i * 3) > (maxSamples / 2))
+                        data[i][1] = 1;
+                    else
+                        data[i][1] = 0;
+                }
+
+                return data;
+            });
+
+            api.UsePerceptron(0.05, 1000);
+
+            IScore score = api.Run() as IScore;
+
+            double[][] testData = new double[6][];
+            testData[0] = new double[] { 2.0, 0.0 };
+            testData[1] = new double[] { 1, 0.0 };
+            testData[2] = new double[] { 3, 0.0 };
+            testData[3] = new double[] { 3002, 0.0 };
+            testData[4] = new double[] { 6002.0, 0.0 };
+            testData[5] = new double[] { 9005, 0.0 };
+
+            var result = api.Algorithm.Predict(testData, api.Context) as PerceptronResult;
+
+            // TODO... THUS TEST iS NOT COMPLETED
+
+            //Assert.True(result.PredictedValues[0] == 0);
+            //Assert.True(result.PredictedValues[1] == 0);
+            //Assert.True(result.PredictedValues[2] == 0);
+            //Assert.True(result.PredictedValues[3] == 1);
+            //Assert.True(result.PredictedValues[4] == 1);
+            //Assert.True(result.PredictedValues[5] == 1);
         }
 
     }

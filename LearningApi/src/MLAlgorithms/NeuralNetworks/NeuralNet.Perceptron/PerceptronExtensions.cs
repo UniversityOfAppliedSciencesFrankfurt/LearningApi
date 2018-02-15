@@ -10,10 +10,11 @@ namespace NeuralNet.Perceptron
     {
         public static LearningApi UsePerceptron(this LearningApi api,
            double learningRate, int iterations,
-                IActivationFunction activationFnc = null)
+                Func<double, double> activationFunction = null,
+                bool traceTotalError = false)
 
         {
-            var alg = new PerceptronAlgorithm(0, learningRate, iterations);
+            var alg = new PerceptronAlgorithm(0, learningRate, iterations, activationFunction, traceTotalError);
             api.AddModule(alg, "PerceptronAlgorithm");
             return api;
         }
