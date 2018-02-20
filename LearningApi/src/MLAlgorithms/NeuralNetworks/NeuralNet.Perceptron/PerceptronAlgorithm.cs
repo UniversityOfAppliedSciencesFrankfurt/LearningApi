@@ -53,12 +53,13 @@ namespace NeuralNet.Perceptron
 
             //m_Errors = new double[numOfInputVectors];
 
-            double maxError = 0;
             double lastError = 0;
             double totalError = 0.0;
             var score = new PerceptronAlgorithmScore();
             for (int i = 0; i < m_Iterations; i++)
             {
+                double maxError = 0;
+
                 totalError = 0;
 
                 for (int inputVectIndx = 0; inputVectIndx < numOfInputVectors; inputVectIndx++)
@@ -71,10 +72,8 @@ namespace NeuralNet.Perceptron
 
                     // Error is difference between calculated output and expected output.
                     double error = expectedOutput - calculatedOutput;
-                    //this.m_Errors[inputVectIndx] = error;
-
-                    // Total error for all input vectors.
-
+                
+                    // Total error for all input vectors inside of a single iteration.
                     totalError += Math.Abs(error);
          
                     if (this.m_TraceTotalError)
@@ -110,7 +109,7 @@ namespace NeuralNet.Perceptron
 
                 if (this.m_TraceTotalError)
                 {
-                    Debug.WriteLine($"Interation: {i}\tfirstErr:{maxError}\tlastErr:{lastError}");
+                    Debug.WriteLine($"Interation: {i}\tmaxError:{maxError}\tlastErr:{lastError}");
                 }
 
                 if (totalError == 0 && i >= (m_Iterations * 0.1)) // We let it calculate at least 10% of max iterations
