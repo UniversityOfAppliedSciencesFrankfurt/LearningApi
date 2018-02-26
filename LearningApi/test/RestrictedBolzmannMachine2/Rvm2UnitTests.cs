@@ -85,7 +85,7 @@ namespace test.RestrictedBolzmannMachine
             });
 
             
-            api.UseRbm(0.2, 1000);
+            api.UseRbm(0.01, 1000, 6,3);
 
             IScore score = api.Run() as IScore;
 
@@ -117,7 +117,7 @@ namespace test.RestrictedBolzmannMachine
             // Initialize data provider
             api.UseCsvDataProvider(dataPath, ',', false, 1);
             api.UseDefaultDataMapper();
-            api.UseRbm(0.2, 1000);
+            api.UseRbm(0.2, 1000, 6, 3);
 
             RbmResult score = api.Run() as RbmResult;
            
@@ -169,7 +169,7 @@ namespace test.RestrictedBolzmannMachine
             });
 
 
-            api.UseRbm(0.2, 1000);
+            api.UseRbm(0.2, 1000, 6, 3);
 
             IScore score = api.Run() as IScore;
 
@@ -179,6 +179,63 @@ namespace test.RestrictedBolzmannMachine
             testData[1] = new double[] { 0, 0, 0, 0, 1, 1 };
             testData[2] = new double[] { 0, 1, 0, 0, 0, 0 };
             testData[3] = new double[] { 0, 0, 0, 0, 1, 0 };
+
+            var result = api.Algorithm.Predict(testData, api.Context);
+
+            // NOT FINISHED.
+            //Assert.True(result[0] == 1);
+            //Assert.True(result[1] == 0);
+            //Assert.True(result[2] == 0);
+            //Assert.True(result[3] == 0);
+            //Assert.True(result[4] == 1);
+            //Assert.True(result[5] == 0);
+        }
+
+        [Fact]
+        public void FullDataSetRBMTest()
+        {
+            const int bits = 10; 
+
+            LearningApi api = new LearningApi();
+
+            api.UseActionModule<object, double[][]>((notUsed, ctx) =>
+            {
+               
+
+                var maxSamples = (int)Math.Pow(2, bits);
+                double[][] data = new double[maxSamples][];
+
+                for (int i = 0; i < maxSamples; i++)
+                {
+                    data[i] = new double[bits];
+                    
+                    var val = 1;
+                    for (int j = 0; j < bits; j++)
+                    {
+                        if ((val & i) >= 1)
+                        {
+                            data[i][j] = 1;
+                        }
+                        val = val << 1;                       
+                    }
+                }
+                                
+                ctx.DataDescriptor = getDescriptorForRbm_sample1();
+              
+                return data;
+            });
+
+
+            api.UseRbm(0.01, 1000, bits, 3);
+
+            IScore score = api.Run() as IScore;
+
+            double[][] testData = new double[4][];
+
+            testData[0] = new double[] { 1, 1, 0, 0, 0, 0,0,0,0,0 };
+            testData[1] = new double[] { 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0 };
+            testData[2] = new double[] { 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+            testData[3] = new double[] { 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0 };
 
             var result = api.Algorithm.Predict(testData, api.Context);
 
