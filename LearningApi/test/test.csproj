@@ -90,6 +90,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Update="RestrictedBolzmannMachine2\rbm_twoclass_sample.csv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Update="RestrictedBolzmannMachine2\rbm_sample1.csv">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

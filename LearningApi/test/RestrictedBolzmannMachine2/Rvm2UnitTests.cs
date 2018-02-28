@@ -46,6 +46,33 @@ namespace test.RestrictedBolzmannMachine
         }
 
         /// <summary>
+        /// RBM is not supervised algorithm. This is why we do not have a label.
+        /// </summary>
+        /// <returns></returns>
+        private DataDescriptor getDescriptorForRbmTwoClassesClassifier()
+        {
+            DataDescriptor des = new DataDescriptor();
+            des.Features = new LearningFoundation.DataMappers.Column[10];
+
+            // Label not used.
+            des.LabelIndex = -1;
+
+            des.Features = new Column[10];
+            des.Features[0] = new Column { Id = 1, Name = "col1", Index = 0, Type = ColumnType.NUMERIC, Values = null, DefaultMissingValue = 0 };
+            des.Features[1] = new Column { Id = 2, Name = "col2", Index = 1, Type = ColumnType.NUMERIC, Values = null, DefaultMissingValue = 0 };
+            des.Features[2] = new Column { Id = 3, Name = "col3", Index = 2, Type = ColumnType.NUMERIC, Values = null, DefaultMissingValue = 0 };
+            des.Features[3] = new Column { Id = 4, Name = "col4", Index = 3, Type = ColumnType.NUMERIC, Values = null, DefaultMissingValue = 0 };
+            des.Features[4] = new Column { Id = 5, Name = "col5", Index = 4, Type = ColumnType.NUMERIC, Values = null, DefaultMissingValue = 0 };
+            des.Features[5] = new Column { Id = 6, Name = "col6", Index = 5, Type = ColumnType.NUMERIC, Values = null, DefaultMissingValue = 0 };
+            des.Features[6] = new Column { Id = 7, Name = "col7", Index = 6, Type = ColumnType.NUMERIC, Values = null, DefaultMissingValue = 0 };
+            des.Features[7] = new Column { Id = 8, Name = "col8", Index = 7, Type = ColumnType.NUMERIC, Values = null, DefaultMissingValue = 0 };
+            des.Features[8] = new Column { Id = 9, Name = "col9", Index = 8, Type = ColumnType.NUMERIC, Values = null, DefaultMissingValue = 0 };
+            des.Features[9] = new Column { Id = 10, Name = "col10", Index = 9, Type = ColumnType.NUMERIC, Values = null, DefaultMissingValue = 0 };
+           
+            return des;
+        }
+
+        /// <summary>
         /// Movies:
         /// 
         /// </summary>
@@ -191,6 +218,10 @@ namespace test.RestrictedBolzmannMachine
             //Assert.True(result[5] == 0);
         }
 
+
+        /// <summary>
+        /// Gives full dataset.
+        /// </summary>
         [Fact]
         public void FullDataSetRBMTest()
         {
@@ -200,8 +231,6 @@ namespace test.RestrictedBolzmannMachine
 
             api.UseActionModule<object, double[][]>((notUsed, ctx) =>
             {
-               
-
                 var maxSamples = (int)Math.Pow(2, bits);
                 double[][] data = new double[maxSamples][];
 
@@ -224,18 +253,17 @@ namespace test.RestrictedBolzmannMachine
               
                 return data;
             });
-
-
-            api.UseRbm(0.01, 1000, bits, 3);
+             
+            api.UseRbm(0.01, 1000, bits, 7);
 
             IScore score = api.Run() as IScore;
 
             double[][] testData = new double[4][];
 
-            testData[0] = new double[] { 1, 1, 0, 0, 0, 0,0,0,0,0 };
-            testData[1] = new double[] { 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0 };
-            testData[2] = new double[] { 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
-            testData[3] = new double[] { 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0 };
+            testData[0] = new double[] { 1, 1, 0, 0, 0, 0, 0, 0, 0, 0 };
+            testData[1] = new double[] { 0, 0, 0, 0, 1, 1, 0, 0, 0, 0 };
+            testData[2] = new double[] { 0, 1, 0, 0, 0, 0, 0, 0, 0, 0 };
+            testData[3] = new double[] { 0, 0, 0, 0, 1, 0, 0, 0, 0, 1 };
 
             var result = api.Algorithm.Predict(testData, api.Context);
 
@@ -247,7 +275,62 @@ namespace test.RestrictedBolzmannMachine
             //Assert.True(result[4] == 1);
             //Assert.True(result[5] == 0);
         }
+
+
+        /// <summary>
+        /// This test provides data, which contains two patterns.
+        /// First pattern is concentrated on left and second pattern is concentrated on right.
+        /// Sample data is stored in 'rbm_twoclass_sample.csv'.
+        /// Data looks like:
+        /// 011111000000
+        /// 000000001110
+        /// It is concentrated on left or on right.
+        /// </summary>
+        [Fact]
+        public void Rbm_ClassifierTest()
+        {
+            var dataPath = System.IO.Path.Combine(Directory.GetCurrentDirectory(), @"RestrictedBolzmannMachine2\rbm_twoclass_sample.csv");
+
+            LearningApi api = new LearningApi(this.getDescriptorForRbmTwoClassesClassifier());
+
+            // Initialize data provider
+            api.UseCsvDataProvider(dataPath, ';', false, 1);
+            api.UseDefaultDataMapper();
+            api.UseRbm(0.2, 1000, 10, 2);
+             
+            RbmResult score = api.Run() as RbmResult;
+
+            double[][] testData = new double[5][];
+
+            testData[0] = new double[] { 1, 1, 1, 0, 0, 0, 0, 0, 0, 0 };
+            testData[1] = new double[] { 1, 0, 1, 0, 0, 0, 0, 0, 0, 0 };
+            testData[2] = new double[] { 0, 0, 0, 0, 0, 1, 1, 1, 0, 0 };
+            testData[3] = new double[] { 0, 0, 0, 0, 0, 1, 0, 1, 0, 0 };
+
+            // This wil be classified as third class.
+            testData[4] = new double[] { 1, 1, 1, 0, 0, 1, 1, 1, 0, 0 };
+
+            var result = api.Algorithm.Predict(testData, api.Context) as RbmResult;
+
+            //
+            // 2 * BIT1 + BIT2 of [0] and [1] should be same.
+            // We don't know how RBM will classiffy data. We only expect that
+            // same or similar pattern of data will be assigned to the same class.
+            // Note, we have here two classes (two hiddne nodes).
+            // First and second data sample are of same class. Third and fourth are also of same class.
+
+            // Here we check first classs.
+            Assert.True(2 * result.HiddenNodesPredictions[0][0] + result.HiddenNodesPredictions[0][1] ==
+                2 * result.HiddenNodesPredictions[1][0] + result.HiddenNodesPredictions[1][1]);
+
+            // Here is test for second class.
+            Assert.True(2 * result.HiddenNodesPredictions[2][0] + result.HiddenNodesPredictions[2][1] ==
+                2 * result.HiddenNodesPredictions[3][0] + result.HiddenNodesPredictions[3][1]);
+
+        }
     }
+
+
 
 
 }
