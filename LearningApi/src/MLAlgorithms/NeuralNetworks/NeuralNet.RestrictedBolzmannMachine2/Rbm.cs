@@ -206,10 +206,10 @@ namespace NeuralNet.RestrictedBolzmannMachine2
                         for (int h = 0; h < numHidden; ++h)
                             hidBiases[h] += learnRate * (hidValues[h] - hPrime[h]);
 
-                       
+                        // Include these lines to print out internal result.
                         //printVector("Visible", m_VisibleValues);
                         //printVector("Hidden", hidValues);
-                        // printVector("Weights", vhWeights);
+                        //printVector("Weights", vhWeights);
                     }
 
                     sw.WriteLine($"{delta/indices.Length};{epoch}");
@@ -265,6 +265,7 @@ namespace NeuralNet.RestrictedBolzmannMachine2
             {
                 HiddenNodesPredictions = new double[data.Length][],
                 VisibleNodesPredictions = new double[data.Length][],
+                Weights = vhWeights,
             };
            
             for (int i = 0; i < data.Length; i++)
@@ -313,8 +314,7 @@ namespace NeuralNet.RestrictedBolzmannMachine2
             }
             return result;
         }
-
-
+        
 
         private void printVector(string name, double[][] vector)
         {
@@ -329,6 +329,7 @@ namespace NeuralNet.RestrictedBolzmannMachine2
 
             Debug.WriteLine("");
         }
+
 
         //private void printOut()
         //{

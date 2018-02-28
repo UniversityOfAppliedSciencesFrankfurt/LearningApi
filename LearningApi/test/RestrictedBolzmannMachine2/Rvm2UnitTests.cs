@@ -9,7 +9,7 @@ using NeuralNet.RestrictedBolzmannMachine2;
 using System.IO;
 using LearningFoundation.DataProviders;
 using LearningFoundation.DataMappers;
-
+using System.Diagnostics;
 
 namespace test.RestrictedBolzmannMachine
 {
@@ -312,6 +312,7 @@ namespace test.RestrictedBolzmannMachine
 
             var result = api.Algorithm.Predict(testData, api.Context) as RbmResult;
 
+
             //
             // 2 * BIT1 + BIT2 of [0] and [1] should be same.
             // We don't know how RBM will classiffy data. We only expect that
@@ -327,6 +328,22 @@ namespace test.RestrictedBolzmannMachine
             Assert.True(2 * result.HiddenNodesPredictions[2][0] + result.HiddenNodesPredictions[2][1] ==
                 2 * result.HiddenNodesPredictions[3][0] + result.HiddenNodesPredictions[3][1]);
 
+            printVector("Weights", result.Weights);
+        }
+
+
+        private void printVector(string name, double[][] vector)
+        {
+            Debug.WriteLine("");
+            Debug.WriteLine(name);
+            for (int row = 0; row < vector.Length; ++row)
+            {
+                Debug.WriteLine("");
+                for (int col = 0; col < vector[row].Length; ++col)
+                    Debug.Write($"{vector[row][col]:F3}\t");
+            }
+
+            Debug.WriteLine("");
         }
     }
 
