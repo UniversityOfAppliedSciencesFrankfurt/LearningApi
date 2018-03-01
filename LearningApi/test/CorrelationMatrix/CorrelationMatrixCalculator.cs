@@ -78,8 +78,8 @@ namespace test.datamapper
                 strData.Add(string.Join(",", lst));
             }
 
-            Assert.True("Col1,1.00000,0.16892,0.99111,0.75077,-0.82354,-0.85164"==strData[1]);
-
+            Assert.True(strData[1].Contains("Col1,1.00000,0.16922,0.99110,0.75157,-0.82")==true);
+                         
             System.IO.File.WriteAllLines(@"CorrelationMatrix/strCorrlation.txt", strData);
             //
             return;

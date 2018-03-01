@@ -112,7 +112,7 @@ namespace test.logisticregression
             var binary_path = System.IO.Path.Combine(Directory.GetCurrentDirectory(), m_binary_data_path);
 
             LearningApi api = new LearningApi(loadMetaData1());
-            api.UseCsvDataProvider(binary_path, ',', false,1);
+            api.UseCsvDataProvider(binary_path, ',', true,0,1);
 
             // Use mapper for data, which will extract (map) required columns 
             api.UseDefaultDataMapper();

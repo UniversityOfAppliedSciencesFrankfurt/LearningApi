@@ -16,13 +16,13 @@ using NeuralNet.BackPropagation;
 namespace test.csvdataprovider
 {
 
-    public class CSVDataProviderTast
+    public class CSVDataProviderTest
     {
         string m_iris_data_path = @"SampleData\iris\iris.csv";
         string m_secom_data_path = @"SampleData\secom\SECOM_Dataset_AllFeatures.csv";
         string m_secom_data_mapper_path = @"SampleData\secom\SECOM_data_mapper.json";
 
-        public CSVDataProviderTast()
+        public CSVDataProviderTest()
         {
 
 
@@ -39,7 +39,7 @@ namespace test.csvdataprovider
             var isris_path = System.IO.Path.Combine(Directory.GetCurrentDirectory(), m_iris_data_path);
 
             LearningApi api = new LearningApi(TestHelpers.GetDescriptor());
-            api.UseCsvDataProvider(isris_path, ',', false,1);
+            api.UseCsvDataProvider(isris_path, ',', false,0,1);
 
             var result = api.Run() as object[][];
 
@@ -154,7 +154,7 @@ namespace test.csvdataprovider
             var isris_path = System.IO.Path.Combine(Directory.GetCurrentDirectory(), m_secom_data_path);
 
             LearningApi api = new LearningApi(TestHelpers.GetDescriptor(m_secom_data_mapper_path));
-            api.UseCsvDataProvider(isris_path, ',', false, 1);
+            api.UseCsvDataProvider(isris_path, ',', false, 0,1);
 
             var result = api.Run() as object[][];
 
