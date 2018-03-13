@@ -302,16 +302,17 @@ namespace test.RestrictedBolzmannMachine
 
             double[][] testData = new double[5][];
 
+            //
+            // This test data contains two patterns. One is grouped at left and one at almost right.
             testData[0] = new double[] { 1, 1, 1, 0, 0, 0, 0, 0, 0, 0 };
             testData[1] = new double[] { 1, 0, 1, 0, 0, 0, 0, 0, 0, 0 };
             testData[2] = new double[] { 0, 0, 0, 0, 0, 1, 1, 1, 0, 0 };
             testData[3] = new double[] { 0, 0, 0, 0, 0, 1, 0, 1, 0, 0 };
 
-            // This wil be classified as third class.
+            // This will be classified as third class.
             testData[4] = new double[] { 1, 1, 1, 0, 0, 1, 1, 1, 0, 0 };
 
             var result = api.Algorithm.Predict(testData, api.Context) as RbmResult;
-
 
             //
             // 2 * BIT1 + BIT2 of [0] and [1] should be same.

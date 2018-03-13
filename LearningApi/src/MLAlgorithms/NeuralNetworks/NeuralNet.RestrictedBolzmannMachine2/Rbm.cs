@@ -103,7 +103,7 @@ namespace NeuralNet.RestrictedBolzmannMachine2
                 int epoch = 0;
                 while (epoch < maxEpochs)
                 {
-                    double delta = 0;
+                    double loss = 0;
                     MathFunctions.Shuffle(indices);
 
                     // 
@@ -189,7 +189,7 @@ namespace NeuralNet.RestrictedBolzmannMachine2
 
 #if DEBUG
                         var val= calcDelta(posGrad, negGrad);
-                        delta += val / (numHidden * numVisible);
+                        loss += val / (numHidden * numVisible);
 #endif
                         // printVector("PosGrad", posGrad);
                         // printVector("NegGrad", negGrad);
@@ -212,8 +212,10 @@ namespace NeuralNet.RestrictedBolzmannMachine2
                         //printVector("Weights", vhWeights);
                     }
 
-                    sw.WriteLine($"{delta/indices.Length};{epoch}");
-                    Debug.WriteLine($"dGrad: {delta / indices.Length}");
+                    sw.WriteLine($"{loss/indices.Length};{epoch}");
+                    // Loss of iteration is calculated as 
+                    // SUM(posGrad-negGrad) / number of training vectors
+                    Debug.WriteLine($"loss: {loss / indices.Length}");
                     ++epoch;
                 }
             }
