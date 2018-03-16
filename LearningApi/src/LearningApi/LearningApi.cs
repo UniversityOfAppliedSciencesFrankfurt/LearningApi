@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Reflection;
 using LearningFoundation.DataMappers;
-
+using LearningFoundation.PersistenceProviders;
 
 namespace LearningFoundation
 {
@@ -13,34 +13,34 @@ namespace LearningFoundation
     /// </summary>
     public class LearningApi
     {
+        /// <summary>
+        /// Provider used for loading and saving of models.
+        /// </summary>
+        private IModelPersistenceProvider m_PersistenceProvider;
+
         public IContext Context { get; set; }
 
         protected Dictionary<string, IPipelineModule> Modules { get; set; }
-
-        /// <summary>
-        /// Gets/Sets DataProvider for loading of the data.
-        /// </summary>
-        //public IDataProvider DataProvider { get; set; }
+        
 
         /// <summary>
         /// Gets/Sets specifics ML algortim for training
         /// </summary>
         public IAlgorithm Algorithm { get; set; }
         
+      
         /// <summary>
-        /// Used to map input columns to features.
-        /// </summary>
-        //public IDataMapper DataMapper { get;set;}
-
-        /// <summary>
-        /// main constructor
+        /// Main constructor
         /// </summary>
         /// <param name="desc">Describes the data and features.</param>
-        public LearningApi(DataDescriptor desc = null, IScore score = null)
+        public LearningApi(DataDescriptor desc = null, IModelPersistenceProvider persistenceProvider = null)
         {
-            this.Context = new Context() { DataDescriptor = desc, Score = score };
+            this.Context = new Context() { DataDescriptor = desc};
 
             this.Modules = new Dictionary<string, LearningFoundation.IPipelineModule>();
+
+            if (persistenceProvider == null)
+                this.m_PersistenceProvider = new JsonPersistenceProvider();
         }
 
 
@@ -83,8 +83,6 @@ namespace LearningFoundation
             return Context.Score;
         }
 
-        
-        
 
         public object Run()
         {
@@ -153,6 +151,24 @@ namespace LearningFoundation
 
                     vector = module.Run(vector, this.Context);
                 }
+            }
+        }
+
+
+        public static LearningApi Load(string fileName)
+        {
+            return null;
+        }
+
+        /// <summary>
+        /// Saves the current state of algorithm.
+        /// </summary>
+        public void Save(string fineName)
+        {
+            var algorithm = this.Modules.Values.OfType<IAlgorithm>().FirstOrDefault();
+            if (algorithm != null)
+            {
+
             }
         }
     }

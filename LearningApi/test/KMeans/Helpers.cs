@@ -8,6 +8,14 @@ namespace Test
 {
     public static class Helpers
     {
+        /// <summary>
+        /// Crates sample data distributed arround specified clusters.
+        /// </summary>
+        /// <param name="clusterCentars"></param>
+        /// <param name="numSkalars"></param>
+        /// <param name="numDataSamples"></param>
+        /// <param name="maxDistanceFromClusterCentar"></param>
+        /// <returns></returns>
         public static double[][] CreateSampleData(double[][] clusterCentars, int numSkalars, int numDataSamples, double maxDistanceFromClusterCentar)
         {
             List<double[]> samples = new List<double[]>();

@@ -1223,7 +1223,8 @@ namespace AnomalyDetectionApi
             {
                 return Tuple.Create(false, new AnomalyDetectionResponse(400, "Function<Assign>: Unhandled exception:\t" + Ex.ToString()));
             }
-        } // Assign
+        } 
+
 
         /// <summary>
         /// MinIndex is a function that returns the index of the smallest distance between a set of distances.
@@ -1280,22 +1281,27 @@ namespace AnomalyDetectionApi
 
                 initialMeans = new double[numberOfClusters][];
 
-                int NumberOfAttributes = rawData[0].Length;
+                // We peek here same sample vector.
+                int numOfAttrs = rawData[0].Length;
 
+                //
+                // Allocate space for initial means.
                 for (int i = 0; i < numberOfClusters; i++)
                 {
-                    initialMeans[i] = new double[NumberOfAttributes];
+                    initialMeans[i] = new double[numOfAttrs];
                 }
 
-                for (int j = 0; j < NumberOfAttributes; j++)
+                for (int j = 0; j < numOfAttrs; j++)
                 {
                     MinValues[j] = rawData[0][j];
                     MaxValues[j] = rawData[0][j];
                 }
 
+                // 
+                // Calculate min and max of all samples.
                 for (int i = 1; i < rawData.Length; i++)
                 {
-                    for (int j = 0; j < NumberOfAttributes; j++)
+                    for (int j = 0; j < numOfAttrs; j++)
                     {
                         if (rawData[i][j] > MaxValues[j])
                         {
@@ -1308,9 +1314,11 @@ namespace AnomalyDetectionApi
                     }
                 }
 
+                //
+                // Take some reasonable values as start values from min+(min-max)/numofclusters to min+(min-max)*[2*numdclusters+1/numofclusters*2)
                 for (int i = 0; i < numberOfClusters; i++)
                 {
-                    for (int j = 0; j < NumberOfAttributes; j++)
+                    for (int j = 0; j < numOfAttrs; j++)
                     {
                         initialMeans[i][j] = MinValues[j] + ((MaxValues[j] - MinValues[j]) * (i * 2 + 1)) / (numberOfClusters * 2);
                     }
