@@ -136,7 +136,7 @@ namespace Test
             }
 
             // Mean of 1,2,3,4,5 is 2
-            AnomalyDetectionAPI.updateMeans(data, clustering, means, 0, 0.0);
+            AnomalyDetectionAPI.updateMeans(data, clustering, means, 0, new double[] { 0 });
             Assert.True(means[0][0] == 2);
 
             data = new double[5][];
@@ -150,7 +150,7 @@ namespace Test
                 clustering[i] = 0; // We have a single cluster. Every sample belongs to that cluster.
             }
 
-            AnomalyDetectionAPI.updateMeans(data, clustering, means, 5, 2);
+            AnomalyDetectionAPI.updateMeans(data, clustering, means, 5, new double[] { 2 });
             // M1 = mean of 1,2,3,4,5
             // M2 = mean of 6,7,8,9,10
             // Mean of M1 and M2 together is 4.5
@@ -200,7 +200,7 @@ namespace Test
                 }
 
                 // Calculate mean of numOfSamples/2
-                AnomalyDetectionAPI.updateMeans(data, clustering, means, 0, 0.0);
+                AnomalyDetectionAPI.updateMeans(data, clustering, means, 0, new double[] { 0 });
                 // Mean of numOfSamples/2
                 var mean1 = means[0][0];
 
@@ -215,7 +215,7 @@ namespace Test
                     clustering[i] = 0; // We have a single cluster. Every sample belongs to that cluster.
                 }
 
-                AnomalyDetectionAPI.updateMeans(data, clustering, means, numOfSamples/2, mean1);
+                AnomalyDetectionAPI.updateMeans(data, clustering, means, numOfSamples/2, new double[] { mean1 });
               
                 // Mean for numbers from numOfSamples/2 to numOfSamples
                 var mean2 = means[0][0];

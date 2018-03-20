@@ -996,7 +996,7 @@ namespace AnomalyDetectionApi
         /// <li> - Code: 0, "OK" </li>
         /// </ul>
         /// </returns>
-        internal static AnomalyDetectionResponse updateMeans(double[][] rawData, int[] clustering, double[][] means, long previousSampleCount = 0, double previousMeanValue = 0)
+        internal static AnomalyDetectionResponse updateMeans(double[][] rawData, int[] clustering, double[][] means, long previousSampleCount = 0, double[] previousMeanValues = null)
         {
             try
             {
@@ -1050,10 +1050,10 @@ namespace AnomalyDetectionApi
                             means[k][j] /= clusterCounts[k];
                             //
                             // This code recalculate sum by adding a mean from previous minibatch.
-                            if (previousSampleCount != 0 && previousMeanValue != 0)
+                            if (previousSampleCount != 0 && previousMeanValues != null)
                             {
                                 double f = (double)1 / (rawData.Length + previousSampleCount);
-                                means[k][j] = f * (previousSampleCount * previousMeanValue + rawData.Length * means[k][j]);
+                                means[k][j] = f * (previousSampleCount * previousMeanValues[k] + rawData.Length * means[k][j]);
                             }
                         }
                     }

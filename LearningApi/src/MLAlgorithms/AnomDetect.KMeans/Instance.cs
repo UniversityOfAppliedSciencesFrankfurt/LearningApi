@@ -40,6 +40,10 @@ namespace AnomalyDetectionApi
         [DataMember]
         public int[] DataToClusterMapping { get; internal set; }
 
+        [DataMember]
+        public double NumOfSamples { get; set; }
+
+        public double MyProperty { get; set; }
 
         /// <summary>
         /// Constructor for creating AnomalyDetectionAPI object
