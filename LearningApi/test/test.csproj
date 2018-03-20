@@ -90,6 +90,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Update="KMeans\TestFiles\TestFile01.csv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Update="RestrictedBolzmannMachine2\rbm_twoclass_sample.csv">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
@@ -120,10 +123,6 @@
     <None Update="SampleData\binary\admit_binary.csv">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="KMeans\" />
   </ItemGroup>
 
 </Project>

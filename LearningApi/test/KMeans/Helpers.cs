@@ -1,5 +1,4 @@
-﻿using AnomalyDetection.Interfaces;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -9,6 +8,8 @@ namespace Test
 {
     public static class Helpers
     {
+        private const string cCR = "\r\n";
+
         /// <summary>
         /// CreateSampleData creates sample data distributed arround specified clusters.
         /// </summary>
@@ -84,28 +85,54 @@ namespace Test
             return distances;
         }
 
-        /// <summary>
-        /// cSVtoDoubleJaggedArray loads a csv file into double array
-        /// </summary>
-        /// <param name="FilePath">path of file</param>
-        /// <returns>the data from file</returns>
-        public static double[][] cSVtoDoubleJaggedArray(string FilePath)
+        public static bool CheckOrCreateDefaultFunction(string rootPath, string file, int points, int numOfDims)
         {
-            if (FilePath.EndsWith(".csv"))
+            if (File.Exists(file))
+                return true;
+
+            var delta = 2 * Math.PI / points;
+
+            List<double[]> rows = new List<double[]>();
+
+            for (int y = 0; y < numOfDims; y++)
             {
-                if (System.IO.File.Exists(FilePath))
+                double[] rowData = new double[points];
+
+                for (int i = 0; i < points; i++)
+                {
+                    rowData[i] = Math.Sin(i * delta);
+                }
+
+                rows.Add(rowData);
+            }
+
+            Write2CSVFile(rows.ToArray(), Path.Combine(rootPath, file), false);
+
+            return false;
+        }
+
+        /// <summary>
+        /// Loads a csv file into double array
+        /// </summary>
+        /// <param name="filePath">path of file</param>
+        /// <returns>the data from file</returns>
+        public static double[][] LoadFunctionData(string filePath)
+        {
+            if (filePath.EndsWith(".csv"))
+            {
+                if (System.IO.File.Exists(filePath))
                 {
                     string CsvFile = "";
                     double[][] CsvData;
-                    CsvFile = System.IO.File.ReadAllText(FilePath);
+                    CsvFile = System.IO.File.ReadAllText(filePath);
 
-                    string RD = "\r\n";
-                    if (CsvFile.EndsWith(",\r\n"))
+                    string RD = cCR;
+                    if (CsvFile.EndsWith($",{cCR}"))
                     {
                         CsvFile = CsvFile.Remove(CsvFile.Length - 3, 3);
-                        RD = ",\r\n" ;
+                        RD = $",{cCR}";
                     }
-                    else if (CsvFile.EndsWith("\r\n"))
+                    else if (CsvFile.EndsWith(cCR))
                     {
                         CsvFile = CsvFile.Remove(CsvFile.Length - 2, 2);
                     }

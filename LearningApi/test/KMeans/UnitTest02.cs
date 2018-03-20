@@ -41,7 +41,7 @@ namespace Test
             int Runs = 3;
 
             // prepare the functions for clustering
-            double[][] mFun = Helpers.cSVtoDoubleJaggedArray(directory + "\\NRP" + NRP + "\\" + FunctionName + " SimilarFunctions Normalized NRP" + NRP + ".csv");
+            double[][] mFun = Helpers.LoadFunctionData(directory + "\\NRP" + NRP + "\\" + FunctionName + " SimilarFunctions Normalized NRP" + NRP + ".csv");
 
             int NumFun = mFun.Length/numAttributes;
 
@@ -119,6 +119,9 @@ namespace Test
             string myDirectory = @"C:\Users\skiwa\Desktop\Thesis\Functions\";
             // directory to save
             string saveDirectory = @"C:\Users\skiwa\Desktop\Thesis\Pattern Recognition\";
+
+            Assert.True(File.Exists("KMeans\\TestFiles\\TestFile01.csv"), "Expected file was not deployed to unit test foilder.");
+
             // functions' paths
             string[] FunctionPaths = new string[]
             {
@@ -146,7 +149,7 @@ namespace Test
             int testingCentroidsOffset = numTrainFun * numCluster;
             for (int i = 0; i < FunctionPaths.Length; i++)
             {
-                loadedCentroids = Helpers.cSVtoDoubleJaggedArray(FunctionPaths[i]);
+                loadedCentroids = Helpers.LoadFunctionData(FunctionPaths[i]);
                 for(int j = 0; j < numTestFun * numCluster; j++)
                 {
                     testingCentroids[i * numTestFun * numCluster + j] = loadedCentroids[j + testingCentroidsOffset];
@@ -398,7 +401,7 @@ namespace Test
         private static Tuple<double[][], double[]> formClusters(string path, int numClusters, int numTrainFun)
         {
             // get centroids of training functions
-            double[][] trainedCentroids = Helpers.cSVtoDoubleJaggedArray(path);
+            double[][] trainedCentroids = Helpers.LoadFunctionData(path);
             // number of attributes
             int dimenions = trainedCentroids[0].Length;
             // initialize cluster centroids

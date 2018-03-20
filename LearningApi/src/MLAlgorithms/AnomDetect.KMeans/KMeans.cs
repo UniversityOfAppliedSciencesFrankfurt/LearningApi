@@ -107,13 +107,13 @@ namespace LearningFoundation.Clustering.KMeans
                 int IterationReached = -1;
 
                 //initiate the clustering process
-                instance.DataToClusterMapping = kMeansClusteringAlg(instance.RawData, instance.NumberOfClusters, clusterSettings.NumberOfAttributes, clusterSettings.KmeansMaxIterations, clusterSettings.KmeansAlgorithm, clusterSettings.InitialGuess, this.clusterSettings.InitialCentroids, out calculatedCentroids, out IterationReached);
+                instance.DataToClusterMapping = kMeansClusteringAlg(rawData, instance.NumberOfClusters, clusterSettings.NumberOfAttributes, clusterSettings.KmeansMaxIterations, clusterSettings.KmeansAlgorithm, clusterSettings.InitialGuess, this.clusterSettings.InitialCentroids, out calculatedCentroids, out IterationReached);
 
                 instance.Centroids = calculatedCentroids;
 
 
                 //create the clusters' result & statistics
-                m_cluster = ClusteringResults.CreateClusteringResult(instance.RawData, instance.DataToClusterMapping, calculatedCentroids, instance.NumberOfClusters);
+                m_cluster = ClusteringResults.CreateClusteringResult(rawData, instance.DataToClusterMapping, calculatedCentroids, instance.NumberOfClusters);
 
                 instance.InClusterMaxDistance = new double[instance.NumberOfClusters];
 
@@ -798,12 +798,15 @@ namespace LearningFoundation.Clustering.KMeans
         }
 
         /// <summary>
-        /// updateMeans is a function that calculates the new mean of each cluster.
+        /// UpdateMeans is a function that calculates the new mean of each cluster.
         /// </summary>
+        /// <param name="previousMeanValue">The mean value of the previous minibatch.</param>
+        /// <param name="previousSampleCount">The number of samples in previous minibatch.</param>
         /// <param name="rawData">the samples to be clustered</param>
         /// <param name="clustering">contains the assigned cluster number for each sample of the RawData</param>
         /// <param name="means">mean of each cluster (Updated in the function)</param>
-        private static void updateMeans(double[][] rawData, int[] clustering, double[][] means)
+      
+        internal static void updateMeans(double[][] rawData, int[] clustering, double[][] means, long previousSampleCount = 0, double[] previousMeanValues = null)
         {
             int Code;
             string Message = "Function <updateMeans>: ";
@@ -859,6 +862,14 @@ namespace LearningFoundation.Clustering.KMeans
                     for (int j = 0; j < means[k].Length; ++j)
                     {
                         means[k][j] /= clusterCounts[k];
+
+                        //
+                        // This code recalculate sum by adding a mean from previous minibatch.
+                        if (previousSampleCount != 0 && previousMeanValues != null)
+                        {
+                            double f = (double)1 / (rawData.Length + previousSampleCount);
+                            means[k][j] = f * (previousSampleCount * previousMeanValues[k] + rawData.Length * means[k][j]);
+                        }
                     }
                 }
             }

@@ -13,27 +13,35 @@ namespace Test
     /// <summary>
     /// UnitTest01 is a class that contains a function to automatically generate similar functions and its test
     /// </summary>
-    public class UnitTest01
+    public class TestFunctionGenerators
     {
+        private const string cPathPrefix = "\\NRP";
+
+        private const string cGenFuncFolderRoot = "Functions";
 
         #region Tests
-        
+
+        static TestFunctionGenerators()
+        {
+            if (Directory.Exists(cGenFuncFolderRoot) == false)
+            {
+                Directory.CreateDirectory(cGenFuncFolderRoot);
+            }
+        }
+
         /// <summary>
         /// Test_GenerateSimilarFunctions is a test for generateSimilarFunctions
         /// </summary>
         [Fact]
         public void Test_GenerateSimilarFunctions()
         {
-            // Settings to Generate Similar functions
-            string FunctionName = "F1";
-            string directory = @"C:\Users\skiwa\Desktop\Thesis\Functions\" + FunctionName + "\\";
             // number of similar functions
             int NumSimFunc = 999;
             // percentage of added noise level (distortion) 
             int NRP = 10;
 
             // generate the similar functions
-            generateSimilarFunctions(directory + FunctionName + ".csv", NumSimFunc, NRP);
+            generateSimilarFunctions("F1", NumSimFunc, NRP);
         }
 
         #endregion
@@ -43,23 +51,37 @@ namespace Test
         /// <summary>
         /// generateSimilarFunctions is a function that generates and saves similar functions to the given main one by adding noise to it
         /// </summary>
-        /// <param name="path">path to main function</param>
+        /// <param name="functionName">path to main function</param>
         /// <param name="numFunctions">number of functions to generate</param>
         /// <param name="noiseRangePercentage">percentage of noise range compared to each attribute range</param>
-        private static void generateSimilarFunctions(string path, int numFunctions, int noiseRangePercentage)
+        private static void generateSimilarFunctions(string functionName, int numFunctions, int noiseRangePercentage)
         {
+            string path = Path.Combine(cGenFuncFolderRoot, functionName);
+            if (Directory.Exists(path) == false)
+            {
+                Directory.CreateDirectory(path);
+            }
+                    
+            string functionFileName = $"{functionName}.csv";
+
+            Helpers.CheckOrCreateDefaultFunction(path, functionFileName, 100, 2);
+
             // load original function
-            double[][] mFun = Helpers.cSVtoDoubleJaggedArray(path);
+            double[][] mFun = Helpers.LoadFunctionData(Path.Combine(path, functionFileName));
+
             // initialize for the similar function
             double[][] mFun2 = new double[mFun.Length][];
             for (int i = 0; i < mFun2.Length; i++)
             {
                 mFun2[i] = new double[mFun[0].Length];
             }
+
             // complete file path and name
-            string fName = Path.GetDirectoryName(path) + "\\NRP" + noiseRangePercentage + "\\" + Path.GetFileNameWithoutExtension(path) + " SimilarFunctions NRP" + noiseRangePercentage + ".csv";
+            string fName = path + "\\" + cPathPrefix + noiseRangePercentage + "\\" + Path.GetFileNameWithoutExtension(functionName) + " SimilarFunctions NRP" + noiseRangePercentage + ".csv";
+           
             // complete file path and name for the normalized version
-            string fNameNormalized = Path.GetDirectoryName(path) + "\\NRP" + noiseRangePercentage + "\\" + Path.GetFileNameWithoutExtension(path) + " SimilarFunctions Normalized NRP" + noiseRangePercentage + ".csv";
+            string fNameNormalized = path + "\\" +cPathPrefix + noiseRangePercentage + "\\" + Path.GetFileNameWithoutExtension(functionName) + " SimilarFunctions Normalized NRP" + noiseRangePercentage + ".csv";
+          
             // save original function in both new file
             Helpers.Write2CSVFile(mFun, fName);
             Helpers.Write2CSVFile(normalizeData(mFun), fNameNormalized);
