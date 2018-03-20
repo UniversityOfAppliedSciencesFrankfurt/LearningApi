@@ -9,27 +9,27 @@ namespace Test
     public static class Helpers
     {
         /// <summary>
-        /// Crates sample data distributed arround specified clusters.
+        /// CreateSampleData creates sample data distributed arround specified clusters.
         /// </summary>
-        /// <param name="clusterCentars"></param>
-        /// <param name="numSkalars"></param>
-        /// <param name="numDataSamples"></param>
-        /// <param name="maxDistanceFromClusterCentar"></param>
+        /// <param name="clusterCenters">center of clusters</param>
+        /// <param name="numSkalars">number of attributes</param>
+        /// <param name="numDataSamples">number of samples</param>
+        /// <param name="maxDistanceFromClusterCenter">maximum allowed distance from the cluster center</param>
         /// <returns></returns>
-        public static double[][] CreateSampleData(double[][] clusterCentars, int numSkalars, int numDataSamples, double maxDistanceFromClusterCentar)
+        public static double[][] CreateSampleData(double[][] clusterCenters, int numSkalars, int numDataSamples, double maxDistanceFromClusterCenter)
         {
             List<double[]> samples = new List<double[]>();
 
             Random rnd = new Random();
 
-            int numClusters = clusterCentars.Length;
+            int numClusters = clusterCenters.Length;
 
-            double[] distances = calcMinClusterDistance(clusterCentars, numSkalars);
+            double[] distances = calcMinClusterDistance(clusterCenters, numSkalars);
 
             double[] allowedDeltas = new double[distances.Length];
             for (int i = 0; i < allowedDeltas.Length; i++)
             {
-                allowedDeltas[i] = distances[i] * maxDistanceFromClusterCentar;
+                allowedDeltas[i] = distances[i] * maxDistanceFromClusterCenter;
             }
 
             for (int i = 0; i < numDataSamples; i++)
@@ -40,8 +40,8 @@ namespace Test
 
                     for (int skalar = 0; skalar < numSkalars; skalar++)
                     {
-                        double sampleVal = 1.0 * rnd.Next((int)(clusterCentars[cluster][skalar] - allowedDeltas[skalar]),
-                            (int)(clusterCentars[cluster][skalar] + allowedDeltas[skalar]));
+                        double sampleVal = 1.0 * rnd.Next((int)(clusterCenters[cluster][skalar] - allowedDeltas[skalar]),
+                            (int)(clusterCenters[cluster][skalar] + allowedDeltas[skalar]));
                         clusterSample[skalar] = sampleVal;
                     }
 
@@ -54,13 +54,12 @@ namespace Test
 
 
         /// <summary>
-        /// Calculates minimal distance between cluster centars for each dimension.
+        /// calcMinClusterDistance calculates minimal distance between cluster centars for each dimension.
         /// </summary>
         /// <param name="clusterCentars">Array of cluster centars.</param>
-        /// <param name="numAttributes"></param>
-        /// nearest cluster centars. 0.5% would generate samples directly between two cluster boundaries.</param>
-        /// <returns>Minimum distance between centars per dimension.</returns>
-        private static double[] calcMinClusterDistance(double[][] clusterCentars, int numAttributes)
+        /// <param name="numAttributes">number of attributes</param>
+        /// <returns>Minimum distance between centers per dimension.</returns>
+        private static double[] calcMinClusterDistance(double[][] clusterCenters, int numAttributes)
         {
             double[] distances = new double[numAttributes];
             for (int i = 0; i < distances.Length; i++)
@@ -68,13 +67,13 @@ namespace Test
                 distances[i] = double.MaxValue;
             }
 
-            for (int i = 0; i < clusterCentars.Length - 1; i++)
+            for (int i = 0; i < clusterCenters.Length - 1; i++)
             {
-                for (int j = i + 1; j < clusterCentars.Length; j++)
+                for (int j = i + 1; j < clusterCenters.Length; j++)
                 {
                     for (int k = 0; k < distances.Length; k++)
                     {
-                        var d = Math.Abs(clusterCentars[i][k] - clusterCentars[j][k]);
+                        var d = Math.Abs(clusterCenters[i][k] - clusterCenters[j][k]);
                         if (d < distances[k])
                             distances[k] = d;
                     }
@@ -85,7 +84,7 @@ namespace Test
         }
 
         /// <summary>
-        /// This is for converting csv file to double array
+        /// cSVtoDoubleJaggedArray loads a csv file into double array
         /// </summary>
         /// <param name="FilePath">path of file</param>
         /// <returns>the data from file</returns>
@@ -153,25 +152,13 @@ namespace Test
             }
             return null;
         }
-
-        public static void WriteToCSVFile(double[][] rawData, string path)
-        {
-            double[,] data = new double[rawData.Length,rawData.Length];
-            using (StreamWriter outfile = new StreamWriter(File.Create($"{Directory.GetCurrentDirectory()}\\{path}")))
-            {
-                for (int x = 0; x < rawData.Length; x++)
-                {
-                    string content = "";
-                    for (int y = 0; y < rawData[x].Length; y++)
-                    {
-                        content += rawData[x][y]+"," ;
-                    }
-                    outfile.WriteLine(content);
-                }
-            }
-        }
-
-        // saves data of type double[][] into CSV file with append option
+        
+        /// <summary>
+        /// Write2CSVFile saves data of type double[][] into CSV file with append option
+        /// </summary>
+        /// <param name="rawData">the data to be saved</param>
+        /// <param name="path">path to file</param>
+        /// <param name="Append">bool, if false the saving will overwrite the existing file else i will append to file</param>
         public static void Write2CSVFile(double[][] rawData, string path, bool Append=false)
         {
             double[,] data = new double[rawData.Length, rawData.Length];
@@ -207,45 +194,7 @@ namespace Test
                 }
             }
             
-        }
-
-        // saves data of type string[][] into CSV file with append option
-        public static void Write2CSVFile(string[][] rawData, string path, bool Append = false)
-        {
-            string[,] data = new string[rawData.Length, rawData.Length];
-            if (Append)
-            {
-                using (StreamWriter outfile = new StreamWriter(File.Open(path, FileMode.Append)))
-                {
-                    for (int x = 0; x < rawData.Length; x++)
-                    {
-                        string content = "";
-                        for (int y = 0; y < rawData[x].Length; y++)
-                        {
-                            // seperate data by ',' to save in CSV
-                            content += rawData[x][y] + ",";
-                        }
-                        outfile.WriteLine(content);
-                    }
-                }
-            }
-            else
-            {
-                using (StreamWriter outfile = new StreamWriter(File.Open(path, FileMode.Create)))
-                {
-                    for (int x = 0; x < rawData.Length; x++)
-                    {
-                        string content = "";
-                        for (int y = 0; y < rawData[x].Length; y++)
-                        {
-                            // seperate data by ',' to save in CSV
-                            content += rawData[x][y] + ",";
-                        }
-                        outfile.WriteLine(content);
-                    }
-                }
-            }
-
-        }
+        }       
+        
     }
 }

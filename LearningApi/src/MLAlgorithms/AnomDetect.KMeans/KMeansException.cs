@@ -1,15 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using System.Text;
 
-namespace AnomalyDetection.Interfaces
+namespace LearningFoundation.Clustering.KMeans
 {
     /// <summary>
-    /// AnomalyDetectionResponse is a class that is used to determine whether the function succeeded or encountered an error. Note that the error message is preceeded by the function name <br />
+    /// KMeansException is an exception class that is used to throw the encountered errors. Note that the error message is preceeded by the function name where the error was encountered<br />
     /// <br />
-    /// Succes/Error Codes and Messages: <br />
-    /// - success: 0-99 <br />
+    /// Error Codes and Messages: <br />
+    /// - unused for errors: 0-99 <br />
     /// - user input errors: 100-199
     /// <ul style="list-style-type:none">
     /// <li> - 100    "RawData is null" </li>
@@ -60,27 +59,28 @@ namespace AnomalyDetection.Interfaces
     /// <li> - 400     "Unhnadled exception: " + Exception </li>
     /// </ul>
     /// </summary>
-    public class AnomalyDetectionResponse
+    public class KMeansException : Exception
     {
         /// <summary>
-        /// Function state code, Succes/Error Codes
+        /// Function error code
         /// </summary>
-        public int Code { get; internal set; }
+        public int code { get; internal set; }
 
         /// <summary>
-        /// Function state message, Succes/Error Message
+        /// Function error message
         /// </summary>
-        public string Message { get; internal set; }
+        public string message { get; internal set; }
 
         /// <summary>
-        /// Constructor to create the AnomalyDetectionResponse instance
+        /// Constructor to create the KMeans Exception
         /// </summary>
-        /// <param name="Code"> Function state code, Succes/Error Codes </param>
-        /// <param name="Message"> Function state message, Succes/Error Message </param>
-        public AnomalyDetectionResponse(int Code, string Message)
+        /// <param name="Code"> Function error code </param>
+        /// <param name="Message"> Function error message </param>
+        public KMeansException(int Code, string Message)
         {
-            this.Code = Code;
-            this.Message = Message;
+            this.code = Code;
+            this.message = Message;
         }
+
     }
 }

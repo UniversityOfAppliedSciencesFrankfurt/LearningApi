@@ -4,8 +4,11 @@ using System.Linq;
 using System.Runtime.Serialization;
 using System.Threading.Tasks;
 
-namespace AnomalyDetectionApi
+namespace LearningFoundation.Clustering.KMeans
 {
+    /// <summary>
+    /// Instance is a class representing an instance of a clustering run (preliminary results). 
+    /// </summary>
     [DataContract]
     public class Instance
     {
@@ -41,7 +44,7 @@ namespace AnomalyDetectionApi
 
 
         /// <summary>
-        /// Constructor for creating AnomalyDetectionAPI object
+        /// Constructor for creating instance object
         /// </summary>
         /// <param name="data">Data to be clustered</param>
         /// <param name="numOfClusters">Desired number of clusters</param>

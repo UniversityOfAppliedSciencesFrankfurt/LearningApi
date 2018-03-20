@@ -4,15 +4,15 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace AnomalyDetection.Interfaces
+namespace LearningFoundation.Clustering.KMeans
 {
     /// <summary>
-    /// The desired settings by the user for checking to which cluster a sample belongs
+    /// CheckingSampleSettings is a class that contains the desired settings by the user for checking to which cluster a sample belongs
     /// </summary>
     public class CheckingSampleSettings
     {
         /// <summary>
-        /// Settings to the clustering intance that contains the clusters data
+        /// Path to the clustering intance that contains the clusters data
         /// </summary>
         public string Path{ get; internal set; }
 
@@ -29,7 +29,7 @@ namespace AnomalyDetection.Interfaces
         /// <summary>
         /// Constructor to create the desired settings by the user for checking to which cluster a sample belongs
         /// </summary>
-        /// <param name="LoadProjectSettings">Settings to the clustering intance that contains the clusters data</param>
+        /// <param name="path">Path to the clustering intance that contains the clusters data</param>
         /// <param name="Sample">The sample to be checked</param>
         /// <param name="tolerance">A value in % representing the tolerance to possible outliers</param>
         public CheckingSampleSettings(string path, double[] Sample, double tolerance = 0)
