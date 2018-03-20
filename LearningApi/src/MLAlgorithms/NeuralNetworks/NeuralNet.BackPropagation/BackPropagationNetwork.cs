@@ -9,10 +9,10 @@ namespace NeuralNet.BackPropagation
 {
     public class BackPropagationNetwork : NeuralNetCore
     {
-        private IActivationFunction activationFnc;
-        private int hiddenLayerCount;
-        private double learningRate;
-        private double momentum;
+        public IActivationFunction activationFnc;
+        public int hiddenLayerCount;
+        public double learningRate;
+        public double momentum;
 
         public BackPropagationNetwork()
         {

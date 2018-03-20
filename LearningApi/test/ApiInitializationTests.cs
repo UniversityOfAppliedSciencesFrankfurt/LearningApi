@@ -15,12 +15,12 @@ using NeuralNet.BackPropagation;
 
 namespace UnitTests
 {
-    
+
     public class ApiInitializationTests
     {
         string m_IrisDataPath;
 
-      
+
         public ApiInitializationTests()
         {
             //iris data file
@@ -164,6 +164,28 @@ namespace UnitTests
 
             var jsonString = JsonConvert.SerializeObject(dm);
             return jsonString;
+        }
+
+        [Fact]
+        public void Save_Test()
+        {
+            // Creates learning api object
+            LearningApi api = new LearningApi(TestHelpers.GetDescriptor());
+
+            // Initialize data provider
+            api.UseCsvDataProvider(m_IrisDataPath, ',', false, 1);
+
+            // Use mapper for data, which will extract (map) required columns 
+            api.UseDefaultDataMapper();
+
+            // Prepares the ML Algorithm and setup parameters
+            api.UseBackPropagation(1, 0.2, 1.0, null);
+            
+            api.Save("model1");
+
+            var loadedApi = LearningApi.Load("model1");
+
+            Assert.True(((BackPropagationNetwork)loadedApi.Algorithm).learningRate == ((BackPropagationNetwork)api.Algorithm).learningRate);
         }
     }
 }

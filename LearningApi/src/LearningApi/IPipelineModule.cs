@@ -7,7 +7,7 @@ namespace LearningFoundation
 {
     public interface IPipelineModule
     {
-
+       
     }
 
     public interface IPipelineModule<TIN, TOUT> : IPipelineModule

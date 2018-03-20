@@ -96,7 +96,10 @@ namespace Test
             Assert.True(result.PredictedClusters[1] == 1);
             Assert.True(result.PredictedClusters[2] == 2);
 
-            api.Save("unittestmodel.json");
+            api.Save("kmean-unittest.json");
+
+            var loadedApi = LearningApi.Load("kmean-unittest.json");
+            loadedApi.Run();
         }
 
         /// <summary>

@@ -156,21 +156,18 @@ namespace LearningFoundation
         }
 
 
-        public static LearningApi Load(string fileName)
+        public static LearningApi Load(string moduleName, IModelPersistenceProvider persistenceProvider = null)
         {
-            return null;
+            LearningApi api = new LearningApi(persistenceProvider: persistenceProvider);
+            return api.m_PersistenceProvider.Load(moduleName);
         }
 
         /// <summary>
         /// Saves the current state of algorithm.
         /// </summary>
-        public void Save(string fineName)
+        public void Save(string modelName)
         {
-            var algorithm = this.Modules.Values.OfType<IAlgorithm>().FirstOrDefault();
-            if (algorithm != null)
-            {
-               // m_PersistenceProvider
-            }
+            m_PersistenceProvider.Save(modelName, this);
         }
     }
 }
