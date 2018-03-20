@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AnomalyDetection.Interfaces;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -194,7 +195,45 @@ namespace Test
                 }
             }
             
-        }       
-        
+        }
+
+        // saves data of type string[][] into CSV file with append option
+        public static void Write2CSVFile(string[][] rawData, string path, bool Append = false)
+        {
+            string[,] data = new string[rawData.Length, rawData.Length];
+            if (Append)
+            {
+                using (StreamWriter outfile = new StreamWriter(File.Open(path, FileMode.Append)))
+                {
+                    for (int x = 0; x < rawData.Length; x++)
+                    {
+                        string content = "";
+                        for (int y = 0; y < rawData[x].Length; y++)
+                        {
+                            // seperate data by ',' to save in CSV
+                            content += rawData[x][y] + ",";
+                        }
+                        outfile.WriteLine(content);
+                    }
+                }
+            }
+            else
+            {
+                using (StreamWriter outfile = new StreamWriter(File.Open(path, FileMode.Create)))
+                {
+                    for (int x = 0; x < rawData.Length; x++)
+                    {
+                        string content = "";
+                        for (int y = 0; y < rawData[x].Length; y++)
+                        {
+                            // seperate data by ',' to save in CSV
+                            content += rawData[x][y] + ",";
+                        }
+                        outfile.WriteLine(content);
+                    }
+                }
+            }
+
+        }
     }
 }

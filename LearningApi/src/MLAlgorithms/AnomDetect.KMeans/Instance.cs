@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LearningFoundation;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
@@ -10,13 +11,13 @@ namespace LearningFoundation.Clustering.KMeans
     /// Instance is a class representing an instance of a clustering run (preliminary results). 
     /// </summary>
     [DataContract]
-    public class Instance
+    public class Instance : IModel
     {
         /// <summary>
         /// data to be clustered
         /// </summary>
-        [DataMember]
-        public double[][] RawData { get; internal set; }
+        //[DataMember]
+        //public double[][] RawData { get; internal set; }
 
         /// <summary>
         /// desired number of clusters
@@ -42,6 +43,10 @@ namespace LearningFoundation.Clustering.KMeans
         [DataMember]
         public int[] DataToClusterMapping { get; internal set; }
 
+        [DataMember]
+        public double NumOfSamples { get; set; }
+
+        public double MyProperty { get; set; }
 
         /// <summary>
         /// Constructor for creating instance object
@@ -52,10 +57,12 @@ namespace LearningFoundation.Clustering.KMeans
         /// For each pattern recognition related clustering, centroids are set on some reference value for each set of data samples.</param>
         public Instance(double[][] data, int numOfClusters, double[][] centroids = null)
         {
-            this.RawData = data;
+            //this.RawData = data;
             this.NumberOfClusters = numOfClusters;
             this.Centroids = centroids;
         }
+
+        
 
     }
 }
