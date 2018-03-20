@@ -4,8 +4,11 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Runtime.Serialization;
 
-namespace AnomalyDetection.Interfaces
+namespace LearningFoundation.Clustering.KMeans
 {
+    /// <summary>
+    /// Cluster is a class representing a cluster object (detailed results).
+    /// </summary>
     [DataContract]
     public class Cluster
     {
