@@ -10,6 +10,8 @@ namespace Test
     {
         private const string cCR = "\r\n";
 
+        private const string cSeparator = ";";
+
         /// <summary>
         /// CreateSampleData creates sample data distributed arround specified clusters.
         /// </summary>
@@ -94,16 +96,24 @@ namespace Test
 
             List<double[]> rows = new List<double[]>();
 
-            for (int y = 0; y < numOfDims; y++)
+            double[] rowX = new double[points];
+            for (int i = 0; i < points; i++)
             {
-                double[] rowData = new double[points];
+                rowX[i] = i * delta;
+            }
+
+            rows.Add(rowX);
+
+            for (int y = 0; y < numOfDims-1; y++)
+            {
+                double[] rowY = new double[points];
 
                 for (int i = 0; i < points; i++)
                 {
-                    rowData[i] = Math.Sin(i * delta);
+                    rowY[i] = Math.Sin(i * delta);
                 }
 
-                rows.Add(rowData);
+                rows.Add(rowY);
             }
 
             Write2CSVFile(rows.ToArray(), Path.Combine(rootPath, file), false);
@@ -127,10 +137,10 @@ namespace Test
                     CsvFile = System.IO.File.ReadAllText(filePath);
 
                     string RD = cCR;
-                    if (CsvFile.EndsWith($",{cCR}"))
+                    if (CsvFile.EndsWith($"{cSeparator}{cCR}"))
                     {
                         CsvFile = CsvFile.Remove(CsvFile.Length - 3, 3);
-                        RD = $",{cCR}";
+                        RD = $"{cSeparator}{cCR}";
                     }
                     else if (CsvFile.EndsWith(cCR))
                     {
@@ -138,7 +148,7 @@ namespace Test
                     }
 
                     string[] RowDelimiter = { RD };
-                    string[] CellDelimiter = { "," };
+                    string[] CellDelimiter = { cSeparator };
 
                     int CsvFileRowsNumber, CsvFileCellsNumber;
                     string[] Rows, Cells;
@@ -199,7 +209,7 @@ namespace Test
                         string content = "";
                         for (int y = 0; y < rawData[x].Length; y++)
                         {
-                            content += rawData[x][y] + ",";
+                            content += rawData[x][y] + cSeparator;
                         }
                         outfile.WriteLine(content);
                     }
@@ -215,52 +225,13 @@ namespace Test
                         string content = "";
                         for (int y = 0; y < rawData[x].Length; y++)
                         {
-                            content += rawData[x][y] + ",";
+                            content += rawData[x][y] + cSeparator;
                         }
                         outfile.WriteLine(content);
                     }
                 }
             }
             
-        }
-
-        // saves data of type string[][] into CSV file with append option
-        public static void Write2CSVFile(string[][] rawData, string path, bool Append = false)
-        {
-            string[,] data = new string[rawData.Length, rawData.Length];
-            if (Append)
-            {
-                using (StreamWriter outfile = new StreamWriter(File.Open(path, FileMode.Append)))
-                {
-                    for (int x = 0; x < rawData.Length; x++)
-                    {
-                        string content = "";
-                        for (int y = 0; y < rawData[x].Length; y++)
-                        {
-                            // seperate data by ',' to save in CSV
-                            content += rawData[x][y] + ",";
-                        }
-                        outfile.WriteLine(content);
-                    }
-                }
-            }
-            else
-            {
-                using (StreamWriter outfile = new StreamWriter(File.Open(path, FileMode.Create)))
-                {
-                    for (int x = 0; x < rawData.Length; x++)
-                    {
-                        string content = "";
-                        for (int y = 0; y < rawData[x].Length; y++)
-                        {
-                            // seperate data by ',' to save in CSV
-                            content += rawData[x][y] + ",";
-                        }
-                        outfile.WriteLine(content);
-                    }
-                }
-            }
-
-        }
+        }      
     }
 }
