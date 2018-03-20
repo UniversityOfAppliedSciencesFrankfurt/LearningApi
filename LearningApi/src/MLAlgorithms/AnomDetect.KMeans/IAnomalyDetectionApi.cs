@@ -61,7 +61,7 @@ namespace AnomalyDetection.Interfaces
         /// <li> - Code: 0, "OK" </li>
         /// </ul>
         /// </returns>
-        AnomalyDetectionResponse GetPreviousSamples(string path, out double[][] OldSamples);
+        //AnomalyDetectionResponse GetPreviousSamples(string path, out double[][] OldSamples);
 
         /// <summary>
         /// RecommendedNumberOfClusters is a function that returns a recommended number of clusters for the given samples.

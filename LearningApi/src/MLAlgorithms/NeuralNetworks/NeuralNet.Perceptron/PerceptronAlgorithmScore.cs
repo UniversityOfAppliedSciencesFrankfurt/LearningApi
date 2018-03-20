@@ -16,6 +16,7 @@ namespace NeuralNet.Perceptron
         public int Iterations { get; internal set; }
         public double TotolEpochError { get; internal set; }
         public double[] Weights { get; set; }
-    
+        public Func<double, double>  ActivationFunction { get; set; }
+
     }
 }

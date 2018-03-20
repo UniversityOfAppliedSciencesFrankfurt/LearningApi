@@ -22,6 +22,8 @@ namespace AnomDetect.KMeans
             kmeanApi = new AnomalyDetectionAPI(settings); 
         }
 
+     
+
         public IResult Predict(double[][] data, IContext ctx)
         {
             KMeansResult res = new KMeansResult()
@@ -55,5 +57,10 @@ namespace AnomDetect.KMeans
 
             return res;
         }
+
+        //public object GetModel()
+        //{
+
+        //}
     }
 }

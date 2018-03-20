@@ -26,7 +26,12 @@ namespace NeuralNet.Perceptron
 
         private double m_Threshold;
 
-        private bool m_PersistConvergenceData = false;
+        //private bool m_PersistConvergenceData = false;
+
+        public PerceptronAlgorithm(PerceptronAlgorithmScore score)
+        {
+
+        }
 
         public PerceptronAlgorithm(double threshold, double learningRate, int iterations, Func<double, double> activationFunction = null, bool traceTotalError = false)
         {

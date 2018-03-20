@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LearningFoundation;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
@@ -7,13 +8,13 @@ using System.Threading.Tasks;
 namespace AnomalyDetectionApi
 {
     [DataContract]
-    public class Instance
+    public class Instance : IModel
     {
         /// <summary>
         /// data to be clustered
         /// </summary>
-        [DataMember]
-        public double[][] RawData { get; internal set; }
+        //[DataMember]
+        //public double[][] RawData { get; internal set; }
 
         /// <summary>
         /// desired number of clusters
@@ -49,10 +50,12 @@ namespace AnomalyDetectionApi
         /// For each pattern recognition related clustering, centroids are set on some reference value for each set of data samples.</param>
         public Instance(double[][] data, int numOfClusters, double[][] centroids = null)
         {
-            this.RawData = data;
+            //this.RawData = data;
             this.NumberOfClusters = numOfClusters;
             this.Centroids = centroids;
         }
+
+        
 
     }
 }

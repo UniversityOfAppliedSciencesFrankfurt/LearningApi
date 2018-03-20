@@ -85,7 +85,7 @@ namespace AnomalyDetectionApi
                 Tuple<int[], AnomalyDetectionResponse> kMeansResponse;
 
                 //initiate the clustering process
-                kMeansResponse = runKMeansClusteringAlg(instance.RawData, instance.NumberOfClusters, clusterSettings.NumberOfAttributes, clusterSettings.KmeansMaxIterations, clusterSettings.KmeansAlgorithm, clusterSettings.InitialGuess, this.clusterSettings.InitialCentroids, out calculatedCentroids, out IterationReached);
+                kMeansResponse = runKMeansClusteringAlg(rawData, instance.NumberOfClusters, clusterSettings.NumberOfAttributes, clusterSettings.KmeansMaxIterations, clusterSettings.KmeansAlgorithm, clusterSettings.InitialGuess, this.clusterSettings.InitialCentroids, out calculatedCentroids, out IterationReached);
 
                 if (kMeansResponse.Item2.Code != 0)
                 {
@@ -99,7 +99,7 @@ namespace AnomalyDetectionApi
                 Tuple<Cluster[], AnomalyDetectionResponse> ccrResponse;
 
                 //create the clusters' result & statistics
-                ccrResponse = ClusteringResults.CreateClusteringResult(instance.RawData, instance.DataToClusterMapping, calculatedCentroids, instance.NumberOfClusters);
+                ccrResponse = ClusteringResults.CreateClusteringResult(rawData, instance.DataToClusterMapping, calculatedCentroids, instance.NumberOfClusters);
 
                 if (ccrResponse.Item2.Code != 0)
                 {
@@ -312,44 +312,44 @@ namespace AnomalyDetectionApi
             }
         }
 
-        /// <summary>
-        /// Loads samples from a previous clustering instance
-        /// </summary>
-        /// <param name="path">Json formated Instance path, which is generally saved in Instance Result folder</param>
-        /// <param name="oldSample">The variable through which the samples are returned</param>
-        /// <returns>A code and a message that state whether the function succeeded or encountered an error. When the function succeeds, it will return:
-        /// <ul style="list-style-type:none">
-        /// <li> - Code: 0, "OK" </li>
-        /// </ul>
-        /// </returns>
-        public AnomalyDetectionResponse GetPreviousSamples(string path, out double[][] oldSample)
-        {
-            try
-            {
-                JsonSerializer json = new JsonSerializer();
-                Tuple<Instance, AnomalyDetectionResponse> oldSampleResponse;
+        ///// <summary>
+        ///// Loads samples from a previous clustering instance
+        ///// </summary>
+        ///// <param name="path">Json formated Instance path, which is generally saved in Instance Result folder</param>
+        ///// <param name="oldSample">The variable through which the samples are returned</param>
+        ///// <returns>A code and a message that state whether the function succeeded or encountered an error. When the function succeeds, it will return:
+        ///// <ul style="list-style-type:none">
+        ///// <li> - Code: 0, "OK" </li>
+        ///// </ul>
+        ///// </returns>
+        //public AnomalyDetectionResponse GetPreviousSamples(string path, out double[][] oldSample)
+        //{
+        //    try
+        //    {
+        //        JsonSerializer json = new JsonSerializer();
+        //        Tuple<Instance, AnomalyDetectionResponse> oldSampleResponse;
 
-                //load the clustering instance
-                oldSampleResponse = json.ReadJsonObject(path);
+        //        //load the clustering instance
+        //        oldSampleResponse = json.ReadJsonObject(path);
 
-                if (oldSampleResponse.Item2.Code != 0)
-                {
-                    oldSample = null;
+        //        if (oldSampleResponse.Item2.Code != 0)
+        //        {
+        //            oldSample = null;
 
-                    return oldSampleResponse.Item2;
-                }
+        //            return oldSampleResponse.Item2;
+        //        }
 
-                oldSample = oldSampleResponse.Item1.RawData;
+        //        oldSample = oldSampleResponse.Item1.RawData;
 
-                return new AnomalyDetectionResponse(0, "OK");
-            }
-            catch (Exception Ex)
-            {
-                oldSample = null;
+        //        return new AnomalyDetectionResponse(0, "OK");
+        //    }
+        //    catch (Exception Ex)
+        //    {
+        //        oldSample = null;
 
-                return new AnomalyDetectionResponse(400, "Function <GetPreviousSamples>: Unhandled exception:\t" + Ex.ToString());
-            }
-        }
+        //        return new AnomalyDetectionResponse(400, "Function <GetPreviousSamples>: Unhandled exception:\t" + Ex.ToString());
+        //    }
+        //}
 
         /// <summary>
         /// RecommendedNumberOfClusters is a function that returns a recommended number of clusters for the given samples.
@@ -752,6 +752,8 @@ namespace AnomalyDetectionApi
                     }
                     else
                     {
+                        //
+                        // Sets centroids to mean value.
                         for (int i = 0; i < means.Length; i++)
                         {
                             for (int j = 0; j < means[0].Length; j++)
@@ -977,8 +979,15 @@ namespace AnomalyDetectionApi
         }
 
         /// <summary>
+        /// Number of processed data samples in model across all minibatches.
+        /// </summary>
+        public double m_ProcessedDataSamples { get; set; }
+
+        /// <summary>
         /// UpdateMeans is a function that calculates the new mean of each cluster.
         /// </summary>
+        /// <param name="previousMeanValue">The mean value of the previous minibatch.</param>
+        /// <param name="previousSampleCount">The number of samples in previous minibatch.</param>
         /// <param name="rawData">the samples to be clustered</param>
         /// <param name="clustering">contains the assigned cluster number for each sample of the RawData</param>
         /// <param name="means">mean of each cluster (Updated in the function)</param>
@@ -987,7 +996,7 @@ namespace AnomalyDetectionApi
         /// <li> - Code: 0, "OK" </li>
         /// </ul>
         /// </returns>
-        private static AnomalyDetectionResponse updateMeans(double[][] rawData, int[] clustering, double[][] means)
+        internal static AnomalyDetectionResponse updateMeans(double[][] rawData, int[] clustering, double[][] means, long previousSampleCount = 0, double previousMeanValue = 0)
         {
             try
             {
@@ -1004,7 +1013,8 @@ namespace AnomalyDetectionApi
                 // assumes means[][] exists. consider making means[][] a ref parameter
                 int numClusters = means.Length;
 
-                // zero-out means[][]
+                //
+                // Zero-out means[][]
                 for (int k = 0; k < means.Length; ++k)
                 {
                     for (int j = 0; j < means[0].Length; ++j)
@@ -1012,31 +1022,40 @@ namespace AnomalyDetectionApi
                 }
 
 
-                // make an array to hold cluster counts
+                // Make an array to hold cluster counts
                 int[] clusterCounts = new int[numClusters];
 
+                //
                 // walk through each tuple, accumulate sum for each attribute, update cluster count
                 for (int i = 0; i < rawData.Length; ++i)
                 {
                     int cluster = clustering[i];
 
+                    // Increment number of samples inside of this cluster.
                     ++clusterCounts[cluster];
 
+                    // Here we build a sum for minibatch.
                     for (int j = 0; j < rawData[i].Length; ++j)
                         means[cluster][j] += rawData[i][j];
                 }
 
-                // divide each attribute sum by cluster count to get average (mean)
+                //
+                // Divide each attribute sum by cluster count to get average (mean)
                 for (int k = 0; k < means.Length; ++k)
                 {
-                    if (clusterCounts[k] == 0)
+                    if (clusterCounts[k] != 0)
                     {
-                        continue;
-                    }
-
-                    for (int j = 0; j < means[k].Length; ++j)
-                    {
-                        means[k][j] /= clusterCounts[k];
+                        for (int j = 0; j < means[k].Length; ++j)
+                        {
+                            means[k][j] /= clusterCounts[k];
+                            //
+                            // This code recalculate sum by adding a mean from previous minibatch.
+                            if (previousSampleCount != 0 && previousMeanValue != 0)
+                            {
+                                double f = (double)1 / (rawData.Length + previousSampleCount);
+                                means[k][j] = f * (previousSampleCount * previousMeanValue + rawData.Length * means[k][j]);
+                            }
+                        }
                     }
                 }
 

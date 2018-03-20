@@ -30,7 +30,8 @@ namespace LearningFoundation
         
       
         /// <summary>
-        /// Main constructor
+        /// Main constructor.
+        /// Initializes the API with specified internally managed context and persistence provider.
         /// </summary>
         /// <param name="desc">Describes the data and features.</param>
         public LearningApi(DataDescriptor desc = null, IModelPersistenceProvider persistenceProvider = null)
@@ -168,7 +169,7 @@ namespace LearningFoundation
             var algorithm = this.Modules.Values.OfType<IAlgorithm>().FirstOrDefault();
             if (algorithm != null)
             {
-
+               // m_PersistenceProvider
             }
         }
     }

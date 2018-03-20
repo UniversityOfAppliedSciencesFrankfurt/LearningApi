@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AnomalyDetection.Interfaces;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -246,6 +247,72 @@ namespace Test
                 }
             }
 
+        }
+
+        public static AnomalyDetectionResponse UpdateMeans(double[][] rawData, int[] clustering, double[][] means, long previousSampleCount = 0, double previousMeanValue = 0)
+        {
+            try
+            {
+                if (rawData == null || rawData.Length < 1)
+                {
+                    return new AnomalyDetectionResponse(102, "Function <UpdateMeans>: RawData is empty");
+                }
+
+                if (means == null || means.Length < 1)
+                {
+                    return new AnomalyDetectionResponse(103, "Function <UpdateMeans>: Means is empty");
+                }
+
+                // assumes means[][] exists. consider making means[][] a ref parameter
+                int numClusters = means.Length;
+
+                //
+                // Zero-out means[][]
+                for (int k = 0; k < means.Length; ++k)
+                {
+                    for (int j = 0; j < means[0].Length; ++j)
+                        means[k][j] = 0.0;
+                }
+
+
+                // Make an array to hold cluster counts
+                int[] clusterCounts = new int[numClusters];
+
+                //
+                // walk through each tuple, accumulate sum for each attribute, update cluster count
+                for (int i = 0; i < rawData.Length; ++i)
+                {
+                    int cluster = clustering[i];
+
+                    // Increment number of samples inside of this cluster.
+                    ++clusterCounts[cluster];
+
+                    // Here we build a sum for minibatch.
+                    for (int j = 0; j < rawData[i].Length; ++j)
+                        means[cluster][j] += rawData[i][j];
+                }
+
+                //
+                // Divide each attribute sum by cluster count to get average (mean)
+                for (int k = 0; k < means.Length; ++k)
+                {
+                    if (clusterCounts[k] != 0)
+                    {
+                        for (int j = 0; j < means[k].Length; ++j)
+                        {
+                            means[k][j] /= clusterCounts[k];
+                            double f = (double)1/(rawData.Length + previousSampleCount);
+                            means[k][j] = f*(previousSampleCount*previousMeanValue+rawData.Length * means[k][j]);
+                        }
+                    }
+                }
+
+                return new AnomalyDetectionResponse(0, "OK");
+            }
+            catch (Exception Ex)
+            {
+                return new AnomalyDetectionResponse(400, "Function <UpdateMeans>: Unhandled exception:\t" + Ex.ToString());
+            }
         }
     }
 }
