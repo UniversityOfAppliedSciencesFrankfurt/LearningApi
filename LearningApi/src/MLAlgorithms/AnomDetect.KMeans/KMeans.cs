@@ -468,6 +468,7 @@ namespace LearningFoundation.Clustering.KMeans
 
                 centroids = allocated;
 
+                // with initial guess
                 if (initialGuess)
                 {
                     calculateInitialMeans(rawData, numClusters, out means);
@@ -500,23 +501,11 @@ namespace LearningFoundation.Clustering.KMeans
                     }
                     else
                     {
-                        for (int i = 0; i < means.Length; i++)
-                        {
-                            for (int j = 0; j < means[0].Length; j++)
-                            {
-                                if (Double.IsNaN(means[i][j]))
-                                {
-                                    centroids[i][j] = 0;
-                                }
-                                else
-                                {
-                                    centroids[i][j] = means[i][j];
-                                }
-                            }
-                        }
+                        centroidsAreMeans(means, centroids);
                     }
 
                 }
+                // without initial guess (random)
                 else
                 {
                     // 0 is a seed for random
@@ -531,20 +520,7 @@ namespace LearningFoundation.Clustering.KMeans
                     }
                     else
                     {
-                        for (int i = 0; i < means.Length; i++)
-                        {
-                            for (int j = 0; j < means[0].Length; j++)
-                            {
-                                if (Double.IsNaN(means[i][j]))
-                                {
-                                    centroids[i][j] = 0;
-                                }
-                                else
-                                {
-                                    centroids[i][j] = means[i][j];
-                                }
-                            }
-                        }
+                        centroidsAreMeans(means, centroids);
                     }
                 }
 
@@ -566,20 +542,7 @@ namespace LearningFoundation.Clustering.KMeans
                     }
                     else
                     {
-                        for (int i = 0; i < means.Length; i++)
-                        {
-                            for (int j = 0; j < means[0].Length; j++)
-                            {
-                                if (Double.IsNaN(means[i][j]))
-                                {
-                                    centroids[i][j] = 0;
-                                }
-                                else
-                                {
-                                    centroids[i][j] = means[i][j];
-                                }
-                            }
-                        }
+                        centroidsAreMeans(means, centroids);
                     }
                 }
 
@@ -800,8 +763,8 @@ namespace LearningFoundation.Clustering.KMeans
         /// <summary>
         /// UpdateMeans is a function that calculates the new mean of each cluster.
         /// </summary>
-        /// <param name="previousMeanValue">The mean value of the previous minibatch.</param>
-        /// <param name="previousSampleCount">The number of samples in previous minibatch.</param>
+        /// <param name="previousMeanValue">the mean value of the previous minibatch.</param>
+        /// <param name="previousSampleCount">the number of samples in previous minibatch.</param>
         /// <param name="rawData">the samples to be clustered</param>
         /// <param name="clustering">contains the assigned cluster number for each sample of the RawData</param>
         /// <param name="means">mean of each cluster (Updated in the function)</param>
@@ -884,10 +847,10 @@ namespace LearningFoundation.Clustering.KMeans
         /// <summary>
         /// updateCentroids is a function that assigns the nearest sample to each mean as the centroid of a cluster.
         /// </summary>
-        /// <param name="rawData">The samples to be clustered</param>
-        /// <param name="clustering">Contains the assigned cluster number for each sample of the RawData</param>
-        /// <param name="means">Mean of each cluster</param>
-        /// <param name="centroids">Centroid of each cluster (Updated in the function)</param>
+        /// <param name="rawData">the samples to be clustered</param>
+        /// <param name="clustering">contains the assigned cluster number for each sample of the RawData</param>
+        /// <param name="means">mean of each cluster</param>
+        /// <param name="centroids">centroid of each cluster (Updated in the function)</param>
         private static void updateCentroids(double[][] rawData, int[] clustering, double[][] means, double[][] centroids)
         {
             int Code;
@@ -910,7 +873,7 @@ namespace LearningFoundation.Clustering.KMeans
                 throw new KMeansException(Code, Message);
             }
         }
-
+        
         /// <summary>
         /// computeCentroid is a function that assigns the nearest sample to the mean as the centroid of a cluster.
         /// </summary>
@@ -960,6 +923,40 @@ namespace LearningFoundation.Clustering.KMeans
                 throw new KMeansException(Code, Message);
             }
 
+        }
+
+        /// <summary>
+        /// centroidsAreMeans is a function that sets the centroids to the means
+        /// </summary>
+        /// <param name="means">mean of each cluster</param>
+        /// <param name="centroids">centroid of each cluster</param>
+        public static void centroidsAreMeans(double[][] means, double[][] centroids)
+        {
+            int Code;
+            string Message = "Function <centroidsAreMeans>: ";
+            try
+            {
+                for (int i = 0; i < means.Length; i++)
+                {
+                    for (int j = 0; j < means[0].Length; j++)
+                    {
+                        if (Double.IsNaN(means[i][j]))
+                        {
+                            centroids[i][j] = 0;
+                        }
+                        else
+                        {
+                            centroids[i][j] = means[i][j];
+                        }
+                    }
+                }
+            }
+            catch (Exception Ex)
+            {
+                Code = 400;
+                Message += "Unhandled exception:\t" + Ex.ToString();
+                throw new KMeansException(Code, Message);
+            }
         }
 
         /// <summary>

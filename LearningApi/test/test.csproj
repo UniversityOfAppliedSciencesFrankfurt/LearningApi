@@ -90,6 +90,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Update="KMeans\Script.R">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Update="KMeans\TestFiles\TestFile01.csv">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

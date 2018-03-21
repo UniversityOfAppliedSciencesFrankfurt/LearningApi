@@ -199,20 +199,11 @@ namespace Test
         /// <param name="Append">bool, if false the saving will overwrite the existing file else i will append to file</param>
         public static void Write2CSVFile(double[][] rawData, string path, bool Append=false)
         {
-            double[,] data = new double[rawData.Length, rawData.Length];
             if (Append)
             {
                 using (StreamWriter outfile = new StreamWriter(File.Open(path, FileMode.Append)))
                 {
-                    for (int x = 0; x < rawData.Length; x++)
-                    {
-                        string content = "";
-                        for (int y = 0; y < rawData[x].Length; y++)
-                        {
-                            content += rawData[x][y] + cSeparator;
-                        }
-                        outfile.WriteLine(content);
-                    }
+                    FormatData(outfile, rawData);
                 }
             }
             else
@@ -220,18 +211,29 @@ namespace Test
                 System.IO.Directory.CreateDirectory(Path.GetDirectoryName(path));
                 using (StreamWriter outfile = new StreamWriter(File.Open(path, FileMode.Create)))
                 {
-                    for (int x = 0; x < rawData.Length; x++)
-                    {
-                        string content = "";
-                        for (int y = 0; y < rawData[x].Length; y++)
-                        {
-                            content += rawData[x][y] + cSeparator;
-                        }
-                        outfile.WriteLine(content);
-                    }
+                    FormatData(outfile, rawData);
                 }
             }
             
-        }      
+        }
+
+        /// <summary>
+        /// FormatData is a function that formats the data which will be saved in CSV file and uses "Write2CSV"'s StreamWriter to save the data.
+        /// </summary>
+        /// <param name="outfile">streamWriter initialized in "Write2CSVFile"</param>
+        /// <param name="rawData">the data to be saved</param>
+        private static void FormatData(StreamWriter outfile, double[][] rawData)
+        {
+            string content;
+            for (int x = 0; x < rawData.Length; x++)
+            {
+                content = "";
+                for (int y = 0; y < rawData[x].Length; y++)
+                {
+                    content += rawData[x][y] + cSeparator;
+                }
+                outfile.WriteLine(content);
+            }
+        }
     }
 }

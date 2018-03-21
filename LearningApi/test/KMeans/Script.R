@@ -120,7 +120,7 @@ startFunction = 5
 endFunction = 13
 
 # plot the function
-#functionsPlots(filepath, functionDimensions, startFunction, endFunction)
+functionsPlots(filepath, functionDimensions, startFunction, endFunction)
 
 ### Plot centroids
 
@@ -129,5 +129,5 @@ filePath = "C:/Users/skiwa/Desktop/Thesis/Functions/F2/NRP10/F2 SimilarFunctions
 numClusters = 2
 
 # plot the centroids
-centroidsPlots(filePath, numClusters)
+#centroidsPlots(filePath, numClusters)
 
