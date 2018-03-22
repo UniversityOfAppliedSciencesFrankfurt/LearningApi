@@ -107,7 +107,7 @@ namespace LearningFoundation.Clustering.KMeans
                 int IterationReached = -1;
 
                 //initiate the clustering process
-                instance.DataToClusterMapping = kMeansClusteringAlg(rawData, instance.NumberOfClusters, clusterSettings.NumberOfAttributes, clusterSettings.KmeansMaxIterations, clusterSettings.KmeansAlgorithm, clusterSettings.InitialGuess, this.clusterSettings.InitialCentroids, out calculatedCentroids, out IterationReached);
+                instance.DataToClusterMapping = runKMeansAlgorithm(rawData, instance.NumberOfClusters, clusterSettings.NumberOfAttributes, clusterSettings.KmeansMaxIterations, clusterSettings.KmeansAlgorithm, this.clusterSettings.InitialCentroids, out calculatedCentroids, out IterationReached);
 
                 instance.Centroids = calculatedCentroids;
 
@@ -443,35 +443,38 @@ namespace LearningFoundation.Clustering.KMeans
         /// <li> - 1: Centoids are the nearest samples to the means</li>
         /// <li> - 2: Centoids are the means</li>
         /// </ul></param>
-        /// <param name="initialGuess">a bool, if true Kmeans clustering start with an initial guess for the centroids else it will start with a random assignment</param>
-        /// <param name="initialCentroids">the initial centroids</param>
+        /// <param name="initialCentroids">Used as initial centroids if specified.
+        /// If not specified then Kmeans clustering starts with an initial guess for the centroids as a random assignment.</param>
         /// <param name="centroids">the variable through which the resulting centroids are returned</param>
         /// <param name="IterationReached">the variable through which the iteration reached is returned</param>
         /// <returns>the assigned cluster number for each sample of the RawData</returns>
-        internal static int[] kMeansClusteringAlg(double[][] rawData, int numClusters, int numAttributes, int maxCount, int kMeanAlgorithm, bool initialGuess, double[][] initialCentroids, out double[][] centroids, out int IterationReached)
+        internal static int[] runKMeansAlgorithm(double[][] rawData, int numClusters, int numAttributes, int maxCount, int kMeanAlgorithm, double[][] initialCentroids, out double[][] centroids, out int IterationReached)
         {
             int Code;
             string Message = "Function <KMeansClusteringAlg>: ";
-            int[] clustering;
+            int[] clusterAssignments;
             try
             {
                 bool changed = true;
                 int cnt = 0;
                 int numTuples = rawData.Length;
 
-                clustering = new int[rawData.Length];
+                clusterAssignments = new int[rawData.Length];
 
                 // just makes things a bit cleaner
-                double[][] allocated = allocate(numClusters, numAttributes, initialCentroids);
+                //centroids = allocate(numClusters, numAttributes, initialCentroids);
 
-                double[][] means = allocated;
-
-                centroids = allocated;
+                double[][] means;
 
                 // with initial guess
-                if (initialGuess)
+                if (initialCentroids == null)
                 {
-                    calculateInitialMeans(rawData, numClusters, out means);
+                    centroids = new double[numClusters][];
+
+                    for (int k = 0; k < numClusters; ++k)
+                        centroids[k] = new double[numAttributes];
+
+                    means = calculateInitialMeans(rawData, numClusters);
 
                     if (kMeanAlgorithm == 1)
                     {
@@ -479,26 +482,29 @@ namespace LearningFoundation.Clustering.KMeans
                     }
                     else
                     {
-                        assignCentroidToMean(means, centroids);
+                        assignCentroidsToMean(means, centroids);
                     }
-
                 }
                 // without initial guess (random)
                 else
                 {
+                    centroids = initialCentroids;
+
+                    means = new double[numClusters][];
+
                     // 0 is a seed for random
-                    clustering = initClustering(numTuples, numClusters, 0);
+                    clusterAssignments = initClustering(numTuples, numClusters, 0);
 
                     // could call this instead inside UpdateCentroids
-                    updateMeans(rawData, clustering, means);
+                    updateMeans(rawData, clusterAssignments, means);
 
                     if (kMeanAlgorithm == 1)
                     {
-                        updateCentroids(rawData, clustering, means, centroids);
+                        updateCentroids(rawData, clusterAssignments, means, centroids);
                     }
                     else
                     {
-                        assignCentroidToMean(means, centroids);
+                        assignCentroidsToMean(means, centroids);
                     }
                 }
 
@@ -508,25 +514,25 @@ namespace LearningFoundation.Clustering.KMeans
                     ++cnt;
 
                     // use centroids to update cluster assignment
-                    changed = assign(rawData, clustering, centroids);
+                    changed = assign(rawData, clusterAssignments, centroids);
 
                     // use new clustering to update cluster means
-                    updateMeans(rawData, clustering, means);
+                    updateMeans(rawData, clusterAssignments, means);
 
                     // use new means to update centroids
                     if (kMeanAlgorithm == 1)
                     {
-                        updateCentroids(rawData, clustering, means, centroids);
+                        updateCentroids(rawData, clusterAssignments, means, centroids);
                     }
                     else
                     {
-                        assignCentroidToMean(means, centroids);
+                        assignCentroidsToMean(means, centroids);
                     }
                 }
 
                 IterationReached = cnt;
 
-                return clustering;
+                return clusterAssignments;
             }
             catch (Exception Ex)
             {
@@ -569,7 +575,7 @@ namespace LearningFoundation.Clustering.KMeans
         /// <param name="numClusters">number of clusters</param>
         /// <param name="numAttributes">number of attributes</param>
         /// <returns>the allocated double[][]</returns>
-        private static double[][] allocate(int numClusters, int numAttributes, double[][] Item)
+        private static double[][] allocate(int numClusters, int numAttributes, double[][] initialCentroids)
         {
             double[][] newItem;
             int Code;
@@ -590,7 +596,7 @@ namespace LearningFoundation.Clustering.KMeans
                     throw new KMeansException(Code, Message);
                 }
 
-                if (Item == null)
+                if (initialCentroids == null)
                 {
                     newItem = new double[numClusters][];
 
@@ -598,7 +604,7 @@ namespace LearningFoundation.Clustering.KMeans
                         newItem[k] = new double[numAttributes];
                 }
                 else
-                    newItem = Item;
+                    newItem = initialCentroids;
 
                 return newItem;
             }
@@ -614,10 +620,11 @@ namespace LearningFoundation.Clustering.KMeans
         /// calculateInitialMeans returns initial guess for the means.
         /// </summary>
         /// <param name="rawData">The samples to be clustered</param>
-        /// <param name="numberOfClusters">Number of clusters</param>
+        /// <param name="numClusters">Number of clusters</param>
         /// <param name="initialMeans">The initial guess for the means</param></returns>
-        private static void calculateInitialMeans(double[][] rawData, int numberOfClusters, out double[][] initialMeans)
+        private static double[][] calculateInitialMeans(double[][] rawData, int numClusters)
         {
+            double[][] initialMeans = new double[numClusters][];
             int Code;
             string Message = "Function <calculateInitialMeans>: ";
             try
@@ -625,11 +632,9 @@ namespace LearningFoundation.Clustering.KMeans
                 double[] MinValues = new double[rawData[0].Length];
                 double[] MaxValues = new double[rawData[0].Length];
 
-                initialMeans = new double[numberOfClusters][];
-
                 int NumberOfAttributes = rawData[0].Length;
 
-                for (int i = 0; i < numberOfClusters; i++)
+                for (int i = 0; i < numClusters; i++)
                 {
                     initialMeans[i] = new double[NumberOfAttributes];
                 }
@@ -655,13 +660,15 @@ namespace LearningFoundation.Clustering.KMeans
                     }
                 }
 
-                for (int i = 0; i < numberOfClusters; i++)
+                for (int i = 0; i < numClusters; i++)
                 {
                     for (int j = 0; j < NumberOfAttributes; j++)
                     {
-                        initialMeans[i][j] = MinValues[j] + ((MaxValues[j] - MinValues[j]) * (i * 2 + 1)) / (numberOfClusters * 2);
+                        initialMeans[i][j] = MinValues[j] + ((MaxValues[j] - MinValues[j]) * (i * 2 + 1)) / (numClusters * 2);
                     }
                 }
+
+                return initialMeans;
             }
             catch (Exception Ex)
             {
@@ -935,7 +942,7 @@ namespace LearningFoundation.Clustering.KMeans
         /// </summary>
         /// <param name="means">mean of each cluster</param>
         /// <param name="centroids">centroid of each cluster</param>
-        public static void assignCentroidToMean(double[][] means, double[][] centroids)
+        public static void assignCentroidsToMean(double[][] means, double[][] centroids)
         {
             int Code;
             string Message = "Function <centroidsAreMeans>: ";

@@ -34,7 +34,7 @@ namespace LearningFoundation.Clustering.KMeans
         /// <summary>
         /// a bool, if true Kmeans clustering start with an initial guess for the centroids else it will start with a random assignment
         /// </summary>
-        public bool InitialGuess { get; internal set; }
+        //public bool InitialGuess { get; internal set; }
 
         /// <summary>
         /// number of attributes for each sample
@@ -60,7 +60,7 @@ namespace LearningFoundation.Clustering.KMeans
         /// </ul></param>
         /// <param name="InitialGuess">a bool, if true Kmeans clustering start with an initial guess for the centroids else it will start with a random assignment.</param>
         /// <param name="Replace"></param>
-        public ClusteringSettings(int KmeansMaxIterations, int NumberOfClusters, int NumberOfAttributes, int KmeansAlgorithm = 1, bool InitialGuess = false,  bool Replace = false,double[][] initialCentroids = null)
+        public ClusteringSettings(int KmeansMaxIterations, int NumberOfClusters, int NumberOfAttributes, int KmeansAlgorithm = 1,  bool Replace = false,double[][] initialCentroids = null)
         {
             if (KmeansAlgorithm != 2)
             {
@@ -72,7 +72,6 @@ namespace LearningFoundation.Clustering.KMeans
             }
             this.KmeansMaxIterations = KmeansMaxIterations;
             this.NumberOfClusters = NumberOfClusters;
-            this.InitialGuess = InitialGuess;
             this.NumberOfAttributes = NumberOfAttributes;
             this.InitialCentroids = initialCentroids;
         }

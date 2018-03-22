@@ -56,14 +56,18 @@ namespace Test
             int Runs = 1;
 
             // prepare the functions for clustering
-            double[][] mFun = Helpers.LoadFunctionData(directory + "\\NRP" + NRP + "\\" + FunctionName + " SimilarFunctions Normalized NRP" + NRP + ".csv");
+            // Holds the data of all function. Attribute of every function contains data in a row.
+            // N dimensions of fnctionmeans N rows per function.
+            double[][] allFunctionsData = Helpers.LoadFunctionData(directory + "\\NRP" + NRP + "\\" + FunctionName + " SimilarFunctions Normalized NRP" + NRP + ".csv");
 
-            int NumFun = mFun.Length/numAttributes;
+            int numFunc = allFunctionsData.Length/numAttributes;
 
             // Creates learning api object
             LearningApi api;
 
             ClusteringSettings clusterSettings;
+
+            double[][] lastCalculatedCentroids = null;
 
             double[][] Centroids;
             // original Centroids
@@ -78,26 +82,28 @@ namespace Test
                 for (int j = 0; j < Runs; j++)
                 {
                     // save directory
-                    string SavePath = directory + "NRP" + NRP + "\\" + FunctionName + " SimilarFunctions Normalized Centroids NRP" + NRP + " KA" + KAlg + " C" + k + " I" + maxCount + " R" + (j + 1) + ".csv";
+                    string savePath = directory + "NRP" + NRP + "\\" + FunctionName + " SimilarFunctions Normalized Centroids NRP" + NRP + " KA" + KAlg + " C" + k + " I" + maxCount + " R" + (j + 1) + ".csv";
 
-                    for (int i = 0; i < NumFun; i++)
+                    for (int funcIndx = 0; funcIndx < numFunc; funcIndx++)
                     {
-                        // cluster each function
-                        double[][] rawData = getSimilarFunctionsData(mFun, numAttributes, i + 1);
+                        // Get data of specific function with indec funcIndx.
+                        double[][] rawData = getSimilarFunctionsData(allFunctionsData, numAttributes, funcIndx + 1);
                         api = new LearningApi();
                         api.UseActionModule<object, double[][]>((data, ctx) =>
                         {
                             return rawData;
                         });
+
+                        clusterSettings.InitialCentroids = lastCalculatedCentroids;
                         api.UseKMeans(clusterSettings);
 
                         // train
                         var resp = api.Run() as KMeansScore;
                      
                         // get resulting centroids
-                        Centroids = resp.Model.Centroids;
+                        lastCalculatedCentroids = Centroids = resp.Model.Centroids;
                         // match the centroids centroids
-                        if (i == 0)
+                        if (funcIndx == 0)
                         {
                             oCentroids = Centroids;
                             mCentroids = Centroids;
@@ -108,15 +114,15 @@ namespace Test
                         }
 
                         // save centroids
-                        if (i == 0)
+                        if (funcIndx == 0)
                         {
                             // save or overwrite
-                            Helpers.Write2CSVFile(mCentroids, SavePath);
+                            Helpers.Write2CSVFile(mCentroids, savePath);
                         }
                         else
                         {
                             // append
-                            Helpers.Write2CSVFile(mCentroids, SavePath, true);
+                            Helpers.Write2CSVFile(mCentroids, savePath, true);
                         }
                     }
                 }

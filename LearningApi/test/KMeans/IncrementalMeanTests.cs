@@ -203,7 +203,7 @@ namespace Test
             int numClusters = 3;  // vary this to experiment (must be between 2 and number data tuples)
             int maxCount = 300;  // trial and error
 
-            ClusteringSettings settings = new ClusteringSettings(maxCount, numClusters, numAttributes, KmeansAlgorithm: 1, InitialGuess: true, Replace: true);
+            ClusteringSettings settings = new ClusteringSettings(maxCount, numClusters, numAttributes, KmeansAlgorithm: 1, Replace: true);
 
             // Creates learning api object
             LearningApi api = new LearningApi(loadDescriptor());

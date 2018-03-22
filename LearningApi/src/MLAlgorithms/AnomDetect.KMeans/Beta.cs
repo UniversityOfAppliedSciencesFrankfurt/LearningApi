@@ -115,12 +115,9 @@ namespace LearningFoundation.Clustering.KMeans
                 for (int i = minNumberOfClusters; i <= MaxClusters; i++)
                 {
                     //cluster the data with number of clusters equals to i
-                    kMeansResponse = KMeans.kMeansClusteringAlg(rawData, i, numberOfAttributes, kmeansMaxIterations, kmeansAlgorithm, true, centroids, out Centroids, out IterationReached);
+                    kMeansResponse = KMeans.runKMeansAlgorithm(rawData, i, numberOfAttributes, kmeansMaxIterations, kmeansAlgorithm, centroids, out Centroids, out IterationReached);
                     
-
                     cluster = ClusteringResults.CreateClusteringResult(rawData, kMeansResponse, Centroids, i);
-
-                    
 
                     isRadial = true;
 
