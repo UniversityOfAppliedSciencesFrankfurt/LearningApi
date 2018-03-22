@@ -1,5 +1,7 @@
 #install.packages("rgl")
+#install.packages("plotrix")
 library(rgl)
+library(plotrix)
 
 # functionsPlots is a function that plots 2d/3d functions. It loads the desired file, plots functions from startFunction to endFunction
 #   filepath: path to file containing the functions
@@ -32,7 +34,7 @@ functionsPlots = function(filepath, functionDimensions, startFunction, endFuncti
             }
         }
         # add legend
-        legend("topright", legend = paste('Function', startFunction:endFunction), pch = 16, col = color, inset = c(-0.50, 0), xpd = TRUE)
+        legend("topright", legend = paste('Function', startFunction:endFunction), pch = 16, col = color, inset = c(-0.30, 0), xpd = TRUE)
     }
     # 3 dimensions
     if (functionDimensions == 3) {
@@ -77,47 +79,148 @@ centroidsPlots = function(filepath, numClusters) {
         x = myCentroids$V1
         y = myCentroids$V2
         # set color vector
-        colV = c(1:NROW(myCentroids))
-        for (i in 1:numFunctions) {
+        colV = c(NROW(myCentroids))
+        for (i in 1:NROW(myCentroids)) {
             colV[i] = color[numClusters - (i %% numClusters)]
         }
         # new 2d plot
         par(mar = c(5, 5, 5, 10))
-        plot.default(x, y, type = "p", col = colV[1:numFunctions])
+        plot.default(x, y, type = "p", col = colV[1:NROW(myCentroids)])
         # add legend
-        legend("topright", legend = paste('Cluster', 1:numClusters), pch = 16, col = colV[1:numClusters], inset = c(-0.50, 0), xpd = TRUE)
+        legend("topright", legend = paste('Cluster', 1:numClusters), pch = 16, col = colV[1:numClusters], inset = c(-0.30, 0), xpd = TRUE)
     }
     # 3 dimensions
     if (dimensions == 3) {
-        # get x-coordinates, y-coordinates and ´z-coordinates
-        for (i in startFunction:endFunction) {
-            # get x-coordinates and y-coordinates
-            x = myCentroids$V1
-            y = myCentroids$V2
-            z = myCentroids$V3
-            # set color vector
-            colV = c(1:NROW(myCentroids))
-            for (i in 1:numFunctions) {
-                colV[i] = color[numClusters - (i %% numClusters)]
-            }
-            # new 3d plot
-            par3d(windowRect = c(100, 100, 700, 700))
-            plot3d(x, y, z, type = "p", col = colV[1:numFunctions])
+        # get x-coordinates, y-coordinates and z-coordinates
+        x = myCentroids$V1
+        y = myCentroids$V2
+        z = myCentroids$V3
+        # set color vector
+        colV = c(NROW(myCentroids))
+        for (i in 1:NROW(myCentroids)) {
+            colV[i] = color[numClusters - (i %% numClusters)]
         }
+        # new 3d plot
+        par3d(windowRect = c(100, 100, 700, 700))
+        plot3d(x, y, z, type = "p", col = colV[1:NROW(myCentroids)])
+
         # add legend
         legend3d("topright", legend = paste('Cluster', 1:numClusters), pch = 16, col = colV[1:numClusters])
+    }   
+}
+
+clustersAndCentroidsPlots = function(fileDirectory, numTestFunctions) {
+
+    clusterCentroids = read.csv(file = paste(fileDirectory,"Calculated Centroids.csv", sep = ""), header = FALSE)
+    distances = read.csv(file = paste(fileDirectory, "Calculated Max Distance.csv", sep = ""), header = FALSE)
+    myCentroids = read.csv(file = paste(fileDirectory, "Testing Centroids.csv", sep = ""), header = FALSE)
+
+    numClusters = NROW(clusterCentroids)
+    dimension = NCOL(distances) - 1
+    numDiffFunc = (NROW(myCentroids) / numClusters) / numTestFunctions
+
+    # creating different colors
+    color = rainbow(numDiffFunc + 1)
+
+    # set color vector
+    colV = c(1:NROW(myCentroids))
+    for (i in 1:NROW(myCentroids)) {
+        
+        colV[i] = color[i%/%(numClusters*numTestFun)+2]
+    }
+
+    if (dimension == 2) {
+        # new 2d plot
+        # plot testing centroids
+        x = myCentroids$V1
+        y = myCentroids$V2
+        par(mar = c(5, 5, 5, 15))
+        plot.default(x, y, type = "p", col = colV[1:NROW(myCentroids)])
+        # get x-coordinates and y-coordinates of cluster centroids
+        x = clusterCentroids$V1
+        y = clusterCentroids$V2
+        d = Vectorize(distances)       
+        # plot cluster centroids        
+        points.default(x, y, type = "p", col = color[1], pch = 20)
+        # plot clusters
+        for (i in 1:numClusters) {
+            draw.circle(x[i], y[i], distances[1, i], border = color[1])
+        }
+        # add legend
+        leg = character(numDiffFunc + 1)
+        leg[1] = "Clusters of Function 1"
+        for (i in 1:numDiffFunc) {
+            leg[i+1] = paste("Testing centroids of Function", i)
+        }
+        legend("topright", legend = leg, pch = 16, col = color, inset = c(-0.80, 0), xpd = TRUE)
+    }
+    if (dimension == 3) {
+        # new 3d plot
+        # plot testing centroids
+        x = myCentroids$V1
+        y = myCentroids$V2
+        z = myCentroids$V3
+        par3d(windowRect = c(100, 100, 700, 700))
+        plot3d(x, y, z, type = "p", col = colV[1:NROW(myCentroids)])
+        # get x-coordinates and y-coordinates of cluster centroids
+        x = clusterCentroids$V1
+        y = clusterCentroids$V2
+        z = clusterCentroids$V3
+        d = Vectorize(distances)
+        # new 2d plot
+        # plot cluster centroids
+        points3d(x, y, type = "p", col = color[1], pch = 20)
+        # plot clusters
+        for (i in 1:numClusters) {
+            #rgl.spheres(x[i], y[i], z[i], distances[1, i], color = color[1])
+        }
     }
 }
+
+FunctionDetectionResultsPlots = function(fileDirectory, numTestFunctions) {
+
+    results = read.csv(file = paste(fileDirectory, "Results.csv", sep = ""), header = FALSE)
+    res = Vectorize(results)
+
+    numTotalFunc = NCOL(results) - 1
+    numDiffFunc = numTotalFunc / numTestFunctions
+
+    # creating different colors
+    color = rainbow(numDiffFunc)
+
+    # set color vector
+    colV = c(numTotalFunc)
+    x = c(numTotalFunc)
+    y = c(numTotalFunc)
+
+    for (i in 1:numTotalFunc) {
+        x[i] = i%% numTestFunctions
+        y[i] = res[1,i]
+        colV[i] = color[i %/% numTestFunctions + 1]
+    }
+
+    # new 2d plot
+    par(mar = c(5, 5, 5, 10))
+    plot.default(x[1:numTestFunctions], y[1:numTestFunctions], type = "l", ylim = c(-0.5, 1.5), lwd = "2", col = color[1])
+    for (i in 2:numDiffFunc) {
+        lines.default(x[(i - 1) * numTestFunctions + 1:numTestFunctions * i], y[(i - 1) * numTestFunctions + 1:numTestFunctions * i], type = "l", lwd = "2", col = color[i])
+    }
+
+    # add legend
+    legend("topright", legend = paste('Function', 1:numDiffFunc), pch = 16, col = color, inset = c(-0.30, 0), xpd = TRUE)
+}
+
+sourceDir = getSrcDirectory(functionsPlots)
+paste(sourceDir)
+
 
 ### Plot a Function
 
 # settings for plotting similar functions
-filePath = "C:/Users/skiwa/Desktop/Thesis/Functions/F2/NRP10/F2 SimilarFunctions NRP10.csv"
-functionDimensions = 3
-#filePath = "~/KMeans/TestFiles/TestFile01.csv"
-#functionDimensions = 2
-startFunction = 5
-endFunction = 13
+filePath = paste(sourceDir,"/TestFiles/Functions/TestFile01/NRP10/TestFile01 SimilarFunctions Normalized NRP10.csv",sep = "")
+functionDimensions = 2
+startFunction = 1
+endFunction = 9
 
 # plot the function
 functionsPlots(filepath, functionDimensions, startFunction, endFunction)
@@ -125,9 +228,15 @@ functionsPlots(filepath, functionDimensions, startFunction, endFunction)
 ### Plot centroids
 
 # settings for plotting centroids of similar functions
-filePath = "C:/Users/skiwa/Desktop/Thesis/Functions/F2/NRP10/F2 SimilarFunctions Centroids NRP10 KA2 C2 I500 R1.csv"
 numClusters = 2
-
+filePath = paste(sourceDir,"/TestFiles/Functions/TestFile01/NRP10/TestFile01 SimilarFunctions Normalized Centroids NRP10 KA2 C2 I500 R1.csv",sep = "")
 # plot the centroids
-#centroidsPlots(filePath, numClusters)
+centroidsPlots(filePath, numClusters)
 
+### Plot clusters and Testing Centroids
+
+# settings
+fileDir = paste(sourceDir, "/TestFiles/Function Recognition/",sep = "")
+numTestFun = 200
+clustersAndCentroidsPlots(fileDir, numTestFun)
+FunctionDetectionResultsPlots(fileDir, numTestFun)
