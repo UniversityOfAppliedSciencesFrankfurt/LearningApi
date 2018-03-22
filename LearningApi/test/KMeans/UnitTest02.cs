@@ -14,12 +14,27 @@ namespace Test
     {
         // a global needed for creating permutations
         public static int PermCount;
-    }
+    }  
+
     /// <summary>
     /// UnitTest02 is a test/application for KMeans algorithm (function recognition).
     /// </summary>
     public class UnitTest02
     {
+        
+        //private const string cPathPrefix = "NRP";
+
+        //private const string rootFolder = "Functions";
+        private static string rootFolder = System.IO.Path.GetFullPath(@"..\..\..\") + "KMeans\\TestFiles\\";
+        /*
+        static UnitTest02()
+        {
+            if (Directory.Exists(rootFolder) == false)
+            {
+                Directory.CreateDirectory(rootFolder);
+            }
+        }*/
+
         #region Tests
 
         /// <summary>
@@ -29,8 +44,8 @@ namespace Test
         public void Test_TrainingSimilarFunctions()
         {
             // Settings to import the functions (NRP should match the desired loading file)
-            string FunctionName = "F1";
-            string directory = @"C:\Users\skiwa\Desktop\Thesis\Functions\" + FunctionName + "\\";
+            string FunctionName = "TestFile02"; //without extension
+            string directory = rootFolder + "Functions\\" + FunctionName + "\\";
             int NRP = 10;
             
             // Settings for the K-Means Alg
@@ -38,7 +53,7 @@ namespace Test
             int numClusters = 6;
             int numAttributes = 2;
             int KAlg = 2;
-            int Runs = 3;
+            int Runs = 1;
 
             // prepare the functions for clustering
             double[][] mFun = Helpers.LoadFunctionData(directory + "\\NRP" + NRP + "\\" + FunctionName + " SimilarFunctions Normalized NRP" + NRP + ".csv");
@@ -63,7 +78,7 @@ namespace Test
                 for (int j = 0; j < Runs; j++)
                 {
                     // save directory
-                    string SavePath = directory + "NRP" + NRP + "\\" + FunctionName + " SimilarFunctions Centroids NRP" + NRP + " KA" + KAlg + " C" + k + " I" + maxCount + " R" + (j + 1) + ".csv";
+                    string SavePath = directory + "NRP" + NRP + "\\" + FunctionName + " SimilarFunctions Normalized Centroids NRP" + NRP + " KA" + KAlg + " C" + k + " I" + maxCount + " R" + (j + 1) + ".csv";
 
                     for (int i = 0; i < NumFun; i++)
                     {
@@ -116,17 +131,17 @@ namespace Test
         {
             int numCluster = 2;
             // directory to load
-            string myDirectory = @"C:\Users\skiwa\Desktop\Thesis\Functions\";
+            string loadDirectory = rootFolder + "Functions\\";
             // directory to save
-            string saveDirectory = @"C:\Users\skiwa\Desktop\Thesis\Pattern Recognition\";
+            string saveDirectory = rootFolder + "Function Recognition\\";
 
-            Assert.True(File.Exists("KMeans\\TestFiles\\TestFile01.csv"), "Expected file was not deployed to unit test foilder.");
+            //Assert.True(File.Exists("KMeans\\TestFiles\\TestFile01.csv"), "Expected file was not deployed to unit test foilder.");
 
             // functions' paths
             string[] FunctionPaths = new string[]
             {
-                myDirectory + "F2\\NRP10\\F2 SimilarFunctions Centroids NRP10 KA2 C" + numCluster + " I500 R1.csv",
-                myDirectory + "F2\\NRP10\\F2 SimilarFunctions Centroids NRP10 KA2 C" + numCluster + " I500 R1.csv"
+                loadDirectory + "TestFile01\\NRP10\\TestFile01 SimilarFunctions Normalized Centroids NRP10 KA2 C" + numCluster + " I500 R1.csv",
+                loadDirectory + "TestFile02\\NRP10\\TestFile02 SimilarFunctions Normalized Centroids NRP10 KA2 C" + numCluster + " I500 R1.csv"
             };
 
             int numTrainFun = 800;
