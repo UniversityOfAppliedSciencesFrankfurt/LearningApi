@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -174,7 +175,7 @@ namespace Test
                         {
                             try
                             {
-                                CsvData[i][j] = Convert.ToDouble(Cells[j]);
+                                CsvData[i][j] = Convert.ToDouble(Cells[j], CultureInfo.InvariantCulture);
                             }
                             catch (FormatException)
                             {
@@ -233,7 +234,7 @@ namespace Test
                 content = "";
                 for (int y = 0; y < rawData[x].Length; y++)
                 {
-                    content += rawData[x][y] + cSeparator;
+                    content += (rawData[x][y]).ToString(CultureInfo.InvariantCulture) + cSeparator;
                 }
                 outfile.WriteLine(content);
             }
