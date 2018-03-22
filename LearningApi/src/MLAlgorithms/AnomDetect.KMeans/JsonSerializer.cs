@@ -18,7 +18,7 @@ namespace LearningFoundation.Clustering.KMeans
         /// </summary>
         /// <param name="path">path to save the clustering Instance object</param>
         /// <param name="instance">the clustering Instance object to be saved</param>
-        public void Save(string path, Instance instance)
+        public void Save(string path, KMeansModel instance)
         {
             int Code;
             string Message = "Function <Save>: ";
@@ -33,7 +33,7 @@ namespace LearningFoundation.Clustering.KMeans
 
                 FileStream fs = new FileStream(saveInstancePath + "\\" + Path.GetFileName(path), FileMode.Create);
 
-                DataContractJsonSerializer jsonSerializer = new DataContractJsonSerializer(typeof(Instance));
+                DataContractJsonSerializer jsonSerializer = new DataContractJsonSerializer(typeof(KMeansModel));
 
                 jsonSerializer.WriteObject(fs, instance);
 
@@ -87,9 +87,9 @@ namespace LearningFoundation.Clustering.KMeans
         /// </summary>
         /// <param name="path">path to load the clustering Instance object</param>
         /// <returns>The loaded clustering Instance object</returns>
-        public Instance LoadInstance(string path)
+        public KMeansModel LoadInstance(string path)
         {
-            Instance instance;
+            KMeansModel instance;
             int Code;
             string Message = "Function <LoadInstance>: ";
 
@@ -101,9 +101,9 @@ namespace LearningFoundation.Clustering.KMeans
 
                 FileStream fs = new FileStream(InstanceResultPath, FileMode.Open);
 
-                DataContractJsonSerializer jsonSerializer = new DataContractJsonSerializer(typeof(Instance));
+                DataContractJsonSerializer jsonSerializer = new DataContractJsonSerializer(typeof(KMeansModel));
 
-                instance = (Instance)jsonSerializer.ReadObject(fs);
+                instance = (KMeansModel)jsonSerializer.ReadObject(fs);
 
                 fs.Dispose();
 

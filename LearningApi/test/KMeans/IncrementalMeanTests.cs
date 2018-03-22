@@ -217,8 +217,8 @@ namespace Test
 
             var resp = api.Run() as KMeansScore;
 
-            Assert.True(resp.Clusters != null);
-            Assert.True(resp.Clusters.Length == clusterCentars.Length);
+            Assert.True(resp.Model.Clusters != null);
+            Assert.True(resp.Model.Clusters.Length == clusterCentars.Length);
 
             var result = api.Algorithm.Predict(clusterCentars, api.Context) as KMeansResult;
             Assert.True(result.PredictedClusters[0] == 0);

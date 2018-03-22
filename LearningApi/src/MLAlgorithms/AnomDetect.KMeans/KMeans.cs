@@ -17,12 +17,12 @@ namespace LearningFoundation.Clustering.KMeans
         /// <summary>
         /// Instance object
         /// </summary>
-        private Instance m_instance;
+        private KMeansModel m_instance;
 
         /// <summary>
         /// array of Cluster objects
         /// </summary>
-        private Cluster[] m_cluster;
+        //private Cluster[] m_cluster;
 
         /// <summary>
         /// ClusteringSettings object
@@ -38,14 +38,14 @@ namespace LearningFoundation.Clustering.KMeans
         /// <summary>
         /// method to get the Cluster object
         /// </summary>
-        public Cluster[] clusters { get => m_cluster; }
+        //public Cluster[] clusters { get => m_cluster; }
 
 
         /// <summary>
         /// method to get the Instance object
         /// </summary>
         /// <returns></returns>
-        public Instance instance { get => m_instance; }
+        public KMeansModel Instance { get => m_instance; }
 
         /// <summary>
         /// setTrivialClusters creates a very basic instance for clusters
@@ -55,7 +55,7 @@ namespace LearningFoundation.Clustering.KMeans
         /// <param name="maxDistance">maximum distance per cluster</param>
         public void setTrivialClusters(int numCLusters, double[][] centroids, double[] maxDistance)
         {
-            this.m_instance = new Instance(null, numCLusters, centroids);
+            this.m_instance = new KMeansModel(null, numCLusters, centroids);
             this.m_instance.InClusterMaxDistance = maxDistance;
         }
 
@@ -100,7 +100,7 @@ namespace LearningFoundation.Clustering.KMeans
                 // does some checks on the passed parameters by the user
                 validateParams(rawData, clusterSettings.KmeansAlgorithm, clusterSettings.KmeansMaxIterations, clusterSettings.NumberOfClusters, clusterSettings.NumberOfAttributes);
 
-                Instance instance = new Instance(rawData, clusterSettings.NumberOfClusters);
+                KMeansModel instance = new KMeansModel(rawData, clusterSettings.NumberOfClusters);
 
                 double[][] calculatedCentroids;
 
@@ -113,13 +113,13 @@ namespace LearningFoundation.Clustering.KMeans
 
 
                 //create the clusters' result & statistics
-                m_cluster = ClusteringResults.CreateClusteringResult(rawData, instance.DataToClusterMapping, calculatedCentroids, instance.NumberOfClusters);
+                instance.Clusters = ClusteringResults.CreateClusteringResult(rawData, instance.DataToClusterMapping, calculatedCentroids, instance.NumberOfClusters);
 
                 instance.InClusterMaxDistance = new double[instance.NumberOfClusters];
 
                 for (int i = 0; i < instance.NumberOfClusters; i++)
                 {
-                    instance.InClusterMaxDistance[i] = m_cluster[i].InClusterMaxDistance;
+                    instance.InClusterMaxDistance[i] = instance.Clusters[i].InClusterMaxDistance;
                 }
 
                 this.m_instance = instance;
@@ -132,8 +132,8 @@ namespace LearningFoundation.Clustering.KMeans
                 {
                     res.Message = "Clustering Complete. K-means converged at iteration: " + IterationReached;
                 }
-                res.Clusters = this.m_cluster;
-                res.instance = this.m_instance;
+                //res.Clusters = this.m_cluster;
+                res.Model = this.m_instance;
 
                 return res;
             }
@@ -158,7 +158,7 @@ namespace LearningFoundation.Clustering.KMeans
             string Message = "Function <PredictSample>: ";
             try
             {
-                Instance instance = null;
+                KMeansModel instance = null;
                 JsonSerializer json = new JsonSerializer();
 
                 //some checks on the passed parameters by the user
@@ -274,7 +274,7 @@ namespace LearningFoundation.Clustering.KMeans
                 JsonSerializer json = new JsonSerializer();
 
                 json.Save(path, this.m_instance);
-                json.Save(path, this.m_cluster);
+               // json.Save(path, this.m_cluster);
             }
             catch (Exception Ex)
             {
@@ -298,7 +298,7 @@ namespace LearningFoundation.Clustering.KMeans
                 JsonSerializer json = new JsonSerializer();
 
                 this.m_instance = json.LoadInstance(path);
-                this.m_cluster = json.LoadClusters(path);
+                //this.m_cluster = json.LoadClusters(path);
             }
             catch (Exception Ex)
             {

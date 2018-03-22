@@ -19,12 +19,12 @@ namespace LearningFoundation.Clustering.KMeans
         /// <summary>
         /// Array of the obtained clusters
         /// </summary>
-        public Cluster[] Clusters { get; internal set; }
+        //public Cluster[] Clusters { get; internal set; }
 
         /// <summary>
         /// the obtained clustering instance
         /// </summary>
-        public Instance instance { get; internal set; }
+        public KMeansModel Model { get; internal set; }
 
         /// <summary>
         /// A message to the user

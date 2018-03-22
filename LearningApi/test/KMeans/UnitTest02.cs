@@ -95,7 +95,7 @@ namespace Test
                         var resp = api.Run() as KMeansScore;
                      
                         // get resulting centroids
-                        Centroids = resp.instance.Centroids;
+                        Centroids = resp.Model.Centroids;
                         // match the centroids centroids
                         if (i == 0)
                         {

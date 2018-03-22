@@ -60,8 +60,8 @@ namespace Test
             // train
             var resp = api.Run() as KMeansScore;
             
-            Assert.True(resp.Clusters != null);
-            Assert.True(resp.Clusters.Length == clusterCentars.Length);
+            Assert.True(resp.Model.Clusters != null);
+            Assert.True(resp.Model.Clusters.Length == clusterCentars.Length);
 
             // Predict
             var result = api.Algorithm.Predict(clusterCentars, api.Context) as KMeansResult;
@@ -115,8 +115,8 @@ namespace Test
             KMeans kMeans = new KMeans();
             kMeans.Load(rootFolder + fileName);
 
-            Assert.True(kMeans.instance != null);
-            Assert.True(kMeans.clusters != null);
+            Assert.True(kMeans.Instance != null);
+            Assert.True(kMeans.Instance.Clusters != null);
         }
 
         /// <summary>
@@ -150,8 +150,8 @@ namespace Test
 
             var resp = api.Run() as KMeansScore;
 
-            Assert.True(resp.Clusters != null);
-            Assert.True(resp.Clusters.Length == clusterCentars.Length);
+            Assert.True(resp.Model.Clusters != null);
+            Assert.True(resp.Model.Clusters.Length == clusterCentars.Length);
 
             var result = api.Algorithm.Predict(clusterCentars, api.Context) as KMeansResult;
             Assert.True(result.PredictedClusters[0] == 0);

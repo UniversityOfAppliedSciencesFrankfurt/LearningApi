@@ -11,7 +11,7 @@ namespace LearningFoundation.Clustering.KMeans
     /// Instance is a class representing an instance of a clustering run (preliminary results). 
     /// </summary>
     [DataContract]
-    public class Instance : IModel
+    public class KMeansModel : IModel
     {
         /// <summary>
         /// desired number of clusters
@@ -56,13 +56,20 @@ namespace LearningFoundation.Clustering.KMeans
 
 
         /// <summary>
+        /// Cluster statistics.
+        /// </summary>
+        [DataMember]
+        public Cluster[] Clusters { get; set; }
+
+
+        /// <summary>
         /// Constructor for creating instance object
         /// </summary>
         /// <param name="data">Data to be clustered</param>
         /// <param name="numOfClusters">Desired number of clusters</param>
         /// <param name="centroids">Explicitelly set centroids. This value is typically set in a case of pattern recognition.
         /// For each pattern recognition related clustering, centroids are set on some reference value for each set of data samples.</param>
-        public Instance(double[][] data, int numOfClusters, double[][] centroids = null)
+        public KMeansModel(double[][] data, int numOfClusters, double[][] centroids = null)
         {
             //this.RawData = data;
             this.NumberOfClusters = numOfClusters;
