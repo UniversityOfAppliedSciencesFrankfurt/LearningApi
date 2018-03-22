@@ -475,33 +475,11 @@ namespace LearningFoundation.Clustering.KMeans
 
                     if (kMeanAlgorithm == 1)
                     {
-                        double[] currDist = new double[numClusters];
-                        double[] minDist = new double[numClusters];
-
-                        for (int i = 0; i < numClusters; i++)
-                        {
-                            minDist[i] = double.MaxValue;
-                        }
-
-
-                        for (int i = 0; i < rawData.Length; ++i)
-                        {
-                            for (int j = 0; j < numClusters; j++)
-                            {
-                                currDist[j] = calculateDistance(rawData[i], means[j]);
-
-                                if (currDist[j] < minDist[j])
-                                {
-                                    minDist[j] = currDist[j];
-
-                                    centroids[j] = rawData[i];
-                                }
-                            }
-                        }
+                        assignCentroidsToNearestMeanSample(rawData, numClusters, centroids, means);
                     }
                     else
                     {
-                        centroidsAreMeans(means, centroids);
+                        assignCentroidToMean(means, centroids);
                     }
 
                 }
@@ -520,7 +498,7 @@ namespace LearningFoundation.Clustering.KMeans
                     }
                     else
                     {
-                        centroidsAreMeans(means, centroids);
+                        assignCentroidToMean(means, centroids);
                     }
                 }
 
@@ -542,7 +520,7 @@ namespace LearningFoundation.Clustering.KMeans
                     }
                     else
                     {
-                        centroidsAreMeans(means, centroids);
+                        assignCentroidToMean(means, centroids);
                     }
                 }
 
@@ -555,6 +533,33 @@ namespace LearningFoundation.Clustering.KMeans
                 Code = 400;
                 Message += "Unhandled exception:\t" + Ex.ToString();
                 throw new KMeansException(Code, Message);
+            }
+        }
+
+        private static void assignCentroidsToNearestMeanSample(double[][] rawData, int numClusters, double[][] centroids, double[][] means)
+        {
+            double[] currDist = new double[numClusters];
+            double[] minDist = new double[numClusters];
+
+            for (int i = 0; i < numClusters; i++)
+            {
+                minDist[i] = double.MaxValue;
+            }
+
+
+            for (int i = 0; i < rawData.Length; ++i)
+            {
+                for (int j = 0; j < numClusters; j++)
+                {
+                    currDist[j] = calculateDistance(rawData[i], means[j]);
+
+                    if (currDist[j] < minDist[j])
+                    {
+                        minDist[j] = currDist[j];
+
+                        centroids[j] = rawData[i];
+                    }
+                }
             }
         }
 
@@ -930,7 +935,7 @@ namespace LearningFoundation.Clustering.KMeans
         /// </summary>
         /// <param name="means">mean of each cluster</param>
         /// <param name="centroids">centroid of each cluster</param>
-        public static void centroidsAreMeans(double[][] means, double[][] centroids)
+        public static void assignCentroidToMean(double[][] means, double[][] centroids)
         {
             int Code;
             string Message = "Function <centroidsAreMeans>: ";
