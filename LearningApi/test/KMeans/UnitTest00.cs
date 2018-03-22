@@ -7,7 +7,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Xunit;
 using LearningFoundation.Clustering.KMeans;
-
+using System.Reflection;
 
 namespace Test
 {
@@ -16,6 +16,16 @@ namespace Test
     /// </summary>
     public class UnitTest00
     {
+        private static string rootFolder = System.IO.Path.GetFullPath(@"..\..\..\") + "KMeans\\TestFiles\\JsonSaves\\";
+
+        static UnitTest00()
+        {
+            if (Directory.Exists(rootFolder) == false)
+            {
+                Directory.CreateDirectory(rootFolder);
+            }
+        }
+
         #region Tests
 
         /// <summary>
@@ -89,8 +99,9 @@ namespace Test
             // train
             var response = kMeans.Run(rawData, api.Context);
 
-            string path = @"C:\Users\skiwa\Desktop\Thesis\Test01.json";
-            kMeans.Save(path);
+            string fileName = "Test01.json";
+
+            kMeans.Save(rootFolder + fileName);
         }
 
         /// <summary>
@@ -99,9 +110,10 @@ namespace Test
         [Fact]
         public void Test_Load()
         {
-            string path = @"C:\Users\skiwa\Desktop\Thesis\Test01.json";
+            string fileName = "Test01.json";
+
             KMeans kMeans = new KMeans();
-            kMeans.Load(path);
+            kMeans.Load(rootFolder + fileName);
 
             Assert.True(kMeans.instance != null);
             Assert.True(kMeans.clusters != null);

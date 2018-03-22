@@ -10,7 +10,7 @@ namespace Test
     {
         private const string cCR = "\r\n";
 
-        private const string cSeparator = ";";
+        private const string cSeparator = ",";
 
         /// <summary>
         /// CreateSampleData creates sample data distributed arround specified clusters.
@@ -90,6 +90,9 @@ namespace Test
         public static bool CheckOrCreateDefaultFunction(string rootPath, string file, int points, int numOfDims)
         {
             if (File.Exists(file))
+                return true;
+
+            if (File.Exists(Path.Combine(rootPath, file)))
                 return true;
 
             var delta = 2 * Math.PI / points;

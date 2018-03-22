@@ -9,25 +9,26 @@ using Xunit;
 using LearningFoundation.Clustering.KMeans;
 
 namespace Test
-{   
+{
     /// <summary>
     /// UnitTest01 is a class that contains a function to automatically generate similar functions and its test
     /// </summary>
-    public class TestFunctionGenerators
+    public class UnitTest01
     {
-        private const string cPathPrefix = "\\NRP";
+        private const string cPathPrefix = "NRP";
 
-        private const string cGenFuncFolderRoot = "Functions";
+        //private const string cGenFuncFolderRoot = "Functions";
+        private static string rootFolder = System.IO.Path.GetFullPath(@"..\..\..\") + "KMeans\\TestFiles\\Functions\\";
 
-        #region Tests
-
-        static TestFunctionGenerators()
+        static UnitTest01()
         {
-            if (Directory.Exists(cGenFuncFolderRoot) == false)
+            if (Directory.Exists(rootFolder) == false)
             {
-                Directory.CreateDirectory(cGenFuncFolderRoot);
+                Directory.CreateDirectory(rootFolder);
             }
         }
+
+        #region Tests
 
         /// <summary>
         /// Test_GenerateSimilarFunctions is a test for generateSimilarFunctions
@@ -35,13 +36,14 @@ namespace Test
         [Fact]
         public void Test_GenerateSimilarFunctions()
         {
+            
             // number of similar functions
             int NumSimFunc = 999;
             // percentage of added noise level (distortion) 
             int NRP = 10;
 
             // generate the similar functions
-            generateSimilarFunctions("TestFile01", NumSimFunc, NRP);
+            generateSimilarFunctions("TestFile02", NumSimFunc, NRP);
         }
 
         #endregion
@@ -56,12 +58,12 @@ namespace Test
         /// <param name="noiseRangePercentage">percentage of noise range compared to each attribute range</param>
         private static void generateSimilarFunctions(string functionName, int numFunctions, int noiseRangePercentage)
         {
-            string path = Path.Combine(cGenFuncFolderRoot, functionName);
+            string path = Path.Combine(rootFolder, functionName);
             if (Directory.Exists(path) == false)
             {
                 Directory.CreateDirectory(path);
             }
-                    
+
             string functionFileName = $"{functionName}.csv";
 
             Helpers.CheckOrCreateDefaultFunction(path, functionFileName, 100, 2);
@@ -78,10 +80,10 @@ namespace Test
 
             // complete file path and name
             string fName = path + "\\" + cPathPrefix + noiseRangePercentage + "\\" + Path.GetFileNameWithoutExtension(functionName) + " SimilarFunctions NRP" + noiseRangePercentage + ".csv";
-           
+
             // complete file path and name for the normalized version
-            string fNameNormalized = path + "\\" +cPathPrefix + noiseRangePercentage + "\\" + Path.GetFileNameWithoutExtension(functionName) + " SimilarFunctions Normalized NRP" + noiseRangePercentage + ".csv";
-          
+            string fNameNormalized = path + "\\" + cPathPrefix + noiseRangePercentage + "\\" + Path.GetFileNameWithoutExtension(functionName) + " SimilarFunctions Normalized NRP" + noiseRangePercentage + ".csv";
+
             // save original function in both new file
             Helpers.Write2CSVFile(mFun, fName);
             Helpers.Write2CSVFile(normalizeData(mFun), fNameNormalized);
@@ -117,7 +119,7 @@ namespace Test
         /// <param name="baseFunction">main function</param>
         /// <param name="noiseRangePercentage">percentage of noise range compared to each attribute range</param>
         /// <returns>the noise limit of each attribute</returns>
-        private static double[] noiseLimit (double[][] baseFunction, int noiseRangePercentage)
+        private static double[] noiseLimit(double[][] baseFunction, int noiseRangePercentage)
         {
             // initialize the minimum, maximum and noise limit vectors
             double[] min = new double[baseFunction.Length];
@@ -139,19 +141,19 @@ namespace Test
                         {
                             min[i] = baseFunction[i][j];
                         }
-                        else if(baseFunction[i][j] > max[i])
+                        else if (baseFunction[i][j] > max[i])
                         {
                             max[i] = baseFunction[i][j];
                         }
                     }
                 }
                 // calculate noise limit of the current dimension
-                nl[i] = (max[i] - min[i])*noiseRangePercentage/200;
+                nl[i] = (max[i] - min[i]) * noiseRangePercentage / 200;
             }
 
             return nl;
         }
-        
+
         /// <summary>
         /// getRandomNumber is a function that generates a random number between a desired minimum and maximum
         /// </summary>
@@ -232,6 +234,6 @@ namespace Test
         }
 
         #endregion
-        
+
     }
 }
