@@ -11,7 +11,7 @@ namespace Test
     {
         private const string cCR = "\r\n";
 
-        private const string cSeparator = ",";
+        private const string cSeparator = ";";
 
         /// <summary>
         /// CreateSampleData creates sample data distributed arround specified clusters.
@@ -236,6 +236,7 @@ namespace Test
                 {
                     content += (rawData[x][y]).ToString(CultureInfo.InvariantCulture) + cSeparator;
                 }
+                content = content.Remove(content.Length - cSeparator.Length);
                 outfile.WriteLine(content);
             }
         }

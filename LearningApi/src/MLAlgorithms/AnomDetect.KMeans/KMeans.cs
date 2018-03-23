@@ -171,7 +171,7 @@ namespace LearningFoundation.Clustering.KMeans
                 if (settings.Path != null)
                 {
                     //load the clustering project containing the clusters to one of which, if any, the sample will be assigned to
-                    instance = json.LoadInstance(settings.Path);
+                    instance = json.Load(settings.Path);
 
                 }
                 else
@@ -297,7 +297,7 @@ namespace LearningFoundation.Clustering.KMeans
             {
                 JsonSerializer json = new JsonSerializer();
 
-                this.m_instance = json.LoadInstance(path);
+                this.m_instance = json.Load(path);
                 //this.m_cluster = json.LoadClusters(path);
             }
             catch (Exception Ex)
@@ -464,7 +464,7 @@ namespace LearningFoundation.Clustering.KMeans
                 // just makes things a bit cleaner
                 //centroids = allocate(numClusters, numAttributes, initialCentroids);
 
-                double[][] means;
+                double[][] means = new double[numClusters][];
 
                 // with initial guess
                 if (initialCentroids == null)
@@ -490,10 +490,13 @@ namespace LearningFoundation.Clustering.KMeans
                 {
                     centroids = initialCentroids;
 
-                    means = new double[numClusters][];
+                    /*
 
                     // 0 is a seed for random
-                    clusterAssignments = initClustering(numTuples, numClusters, 0);
+                    //clusterAssignments = initClustering(numTuples, numClusters, 0);
+
+                    // use centroids to update cluster assignment
+                    changed = assign(rawData, clusterAssignments, centroids);
 
                     // could call this instead inside UpdateCentroids
                     updateMeans(rawData, clusterAssignments, means);
@@ -505,7 +508,7 @@ namespace LearningFoundation.Clustering.KMeans
                     else
                     {
                         assignCentroidsToMean(means, centroids);
-                    }
+                    }*/
                 }
 
 
@@ -807,8 +810,9 @@ namespace LearningFoundation.Clustering.KMeans
                 // zero-out means[][]
                 for (int k = 0; k < means.Length; ++k)
                 {
-                    for (int j = 0; j < means[0].Length; ++j)
-                        means[k][j] = 0.0;
+                    //for (int j = 0; j < means[0].Length; ++j)
+                    // means[k][j] = 0.0;
+                    means[k] = new double[rawData[0].Length];
                 }
 
 

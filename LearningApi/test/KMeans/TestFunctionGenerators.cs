@@ -17,15 +17,16 @@ namespace Test
     {
         private const string cPathPrefix = "\\NRP";
 
-        private const string cGenFuncFolderRoot = "Functions";
+        //private const string rootFolder = "Functions";
+        private static string rootFolder = System.IO.Path.GetFullPath(@"..\..\..\") + "KMeans\\TestFiles\\Functions\\";
 
         #region Tests
 
         static TestFunctionGenerators()
         {
-            if (Directory.Exists(cGenFuncFolderRoot) == false)
+            if (Directory.Exists(rootFolder) == false)
             {
-                Directory.CreateDirectory(cGenFuncFolderRoot);
+                Directory.CreateDirectory(rootFolder);
             }
         }
 
@@ -56,7 +57,7 @@ namespace Test
         /// <param name="noiseRangePercentage">percentage of noise range compared to each attribute range</param>
         private static void generateSimilarFunctions(string functionName, int numFunctions, int noiseRangePercentage)
         {
-            string path = Path.Combine(cGenFuncFolderRoot, functionName);
+            string path = Path.Combine(rootFolder, functionName);
             if (Directory.Exists(path) == false)
             {
                 Directory.CreateDirectory(path);

@@ -26,7 +26,7 @@ namespace LearningFoundation.Clustering.KMeans
             {
                 var absolutePath = path.Substring(0, path.IndexOf(Path.GetFileName(path)));
 
-                var saveInstancePath = System.IO.Path.Combine(Directory.GetCurrentDirectory(), absolutePath) + "Instance Result";
+                var saveInstancePath = System.IO.Path.Combine(Directory.GetCurrentDirectory(), absolutePath) + "KMeans Clustering Results";
 
                 if (!Directory.Exists(saveInstancePath))
                     Directory.CreateDirectory(saveInstancePath);
@@ -48,46 +48,11 @@ namespace LearningFoundation.Clustering.KMeans
         }
 
         /// <summary>
-        /// Save is a function that saves the Cluster object.
-        /// </summary>
-        /// <param name="path">path to save the Cluster object</param>
-        /// <param name="clusters">the array of Cluster object to be saved</param>
-        public void Save(string path, Cluster[] clusters)
-        {
-            int Code;
-            string Message = "Function <Save>: ";
-            try
-            {
-                var absolutePath = path.Substring(0, path.IndexOf(Path.GetFileName(path)));
-
-                var clusterResultPath = System.IO.Path.Combine(Directory.GetCurrentDirectory(), absolutePath) + "Cluster Result";
-
-                if (!Directory.Exists(clusterResultPath))
-                    Directory.CreateDirectory(clusterResultPath);
-
-                FileStream fs = new FileStream(clusterResultPath + "\\" + Path.GetFileName(path), FileMode.Create);
-
-                DataContractJsonSerializer jsonSerializer = new DataContractJsonSerializer(typeof(Cluster[]));
-
-                jsonSerializer.WriteObject(fs, clusters);
-
-                fs.Dispose();
-            }
-            catch (Exception Ex)
-            {
-                Code = 400;
-                Message += "Unhandled exception:\t" + Ex.ToString();
-                throw new KMeansException(Code, Message);
-            }
-        }
-
-
-        /// <summary>
         /// Deserializes and loads a clustering Instance object from a JSON file.
         /// </summary>
         /// <param name="path">path to load the clustering Instance object</param>
         /// <returns>The loaded clustering Instance object</returns>
-        public KMeansModel LoadInstance(string path)
+        public KMeansModel Load(string path)
         {
             KMeansModel instance;
             int Code;
@@ -97,7 +62,7 @@ namespace LearningFoundation.Clustering.KMeans
             {
                 var absolutePath = path.Substring(0, path.IndexOf(Path.GetFileName(path)));
 
-                var InstanceResultPath = System.IO.Path.Combine(Directory.GetCurrentDirectory(), absolutePath) + "Instance Result\\" + Path.GetFileName(path);
+                var InstanceResultPath = System.IO.Path.Combine(Directory.GetCurrentDirectory(), absolutePath) + "KMeans Clustering Results\\" + Path.GetFileName(path);
 
                 FileStream fs = new FileStream(InstanceResultPath, FileMode.Open);
 
@@ -146,6 +111,41 @@ namespace LearningFoundation.Clustering.KMeans
                     throw new KMeansException(Code, Message);
                 }
 
+                Code = 400;
+                Message += "Unhandled exception:\t" + Ex.ToString();
+                throw new KMeansException(Code, Message);
+            }
+        }
+
+        /*
+        /// <summary>
+        /// Save is a function that saves the Cluster object.
+        /// </summary>
+        /// <param name="path">path to save the Cluster object</param>
+        /// <param name="clusters">the array of Cluster object to be saved</param>
+        public void Save(string path, Cluster[] clusters)
+        {
+            int Code;
+            string Message = "Function <Save>: ";
+            try
+            {
+                var absolutePath = path.Substring(0, path.IndexOf(Path.GetFileName(path)));
+
+                var clusterResultPath = System.IO.Path.Combine(Directory.GetCurrentDirectory(), absolutePath) + "Cluster Result";
+
+                if (!Directory.Exists(clusterResultPath))
+                    Directory.CreateDirectory(clusterResultPath);
+
+                FileStream fs = new FileStream(clusterResultPath + "\\" + Path.GetFileName(path), FileMode.Create);
+
+                DataContractJsonSerializer jsonSerializer = new DataContractJsonSerializer(typeof(Cluster[]));
+
+                jsonSerializer.WriteObject(fs, clusters);
+
+                fs.Dispose();
+            }
+            catch (Exception Ex)
+            {
                 Code = 400;
                 Message += "Unhandled exception:\t" + Ex.ToString();
                 throw new KMeansException(Code, Message);
@@ -223,7 +223,7 @@ namespace LearningFoundation.Clustering.KMeans
                 throw new KMeansException(Code, Message);
             }
         }
-
+        */
         
     }
 }
