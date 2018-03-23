@@ -70,6 +70,70 @@ namespace Test
             Assert.True(result.PredictedClusters[2] == 2);
         }
 
+
+        [Fact]
+        public void Test_TrainAndPredict2()
+        {
+            double[][] clusterCentars = new double[3][];
+            clusterCentars[0] = new double[] { 5.0, 5.0 };
+            clusterCentars[1] = new double[] { 15.0, 15.0 };
+            clusterCentars[2] = new double[] { 30.0, 30.0 };
+
+            string[] attributes = new string[] { "Height", "Weight" };
+
+            int numAttributes = attributes.Length;  // 2 in this demo (height,weight)
+            int numClusters = 3;  // vary this to experiment (must be between 2 and number data tuples)
+            int maxCount = 300;  // trial and error
+
+            ClusteringSettings settings = new ClusteringSettings(maxCount, numClusters, numAttributes, KmeansAlgorithm: 1, Replace: true);
+
+            int runNum = 0;
+
+            // Creates learning api object
+            LearningApi api = new LearningApi(loadDescriptor());
+            api.UseActionModule<object, double[][]>((data, ctx) =>
+            {
+                if (runNum == 0)
+                {
+                    var rawData = Helpers.CreateSampleData(clusterCentars, 2, 10000, 0.5);
+                    return rawData;
+                }
+                else
+                {
+                    var rawData = Helpers.CreateSampleData(clusterCentars, 2, 10000, 0.5);
+                    return rawData;
+                }
+            });
+
+            api.UseKMeans(settings);
+
+            // train
+            var resp = api.Run() as KMeansScore;
+
+            Assert.True(resp.Model.Clusters != null);
+            Assert.True(resp.Model.Clusters.Length == clusterCentars.Length);
+
+            // Predict
+            var result = api.Algorithm.Predict(clusterCentars, api.Context) as KMeansResult;
+            Assert.True(result.PredictedClusters[0] == 0);
+            Assert.True(result.PredictedClusters[1] == 1);
+            Assert.True(result.PredictedClusters[2] == 2);
+
+            runNum = 1;
+            while(true)
+                resp = api.Run() as KMeansScore;
+
+            Assert.True(resp.Model.Clusters != null);
+            Assert.True(resp.Model.Clusters.Length == clusterCentars.Length);
+
+            // Predict
+            result = api.Algorithm.Predict(clusterCentars, api.Context) as KMeansResult;
+            Assert.True(result.PredictedClusters[0] == 0);
+            Assert.True(result.PredictedClusters[1] == 1);
+            Assert.True(result.PredictedClusters[2] == 2);
+        }
+
+
         /// <summary>
         /// Test_Save is a test for KMeans.Save function
         /// </summary>

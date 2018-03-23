@@ -274,7 +274,7 @@ namespace LearningFoundation.Clustering.KMeans
                 JsonSerializer json = new JsonSerializer();
 
                 json.Save(path, this.m_instance);
-               // json.Save(path, this.m_cluster);
+                // json.Save(path, this.m_cluster);
             }
             catch (Exception Ex)
             {
@@ -533,6 +533,8 @@ namespace LearningFoundation.Clustering.KMeans
                     }
                 }
 
+                recalcPartialCentroids(centroids, rawData.Length);
+
                 IterationReached = cnt;
 
                 return clusterAssignments;
@@ -542,6 +544,26 @@ namespace LearningFoundation.Clustering.KMeans
                 Code = 400;
                 Message += "Unhandled exception:\t" + Ex.ToString();
                 throw new KMeansException(Code, Message);
+            }
+        }
+
+        private void recalcPartialCentroids(double[][] centroids, int numOfSamples)
+        {
+            //
+            // This code recalculate sum by adding a mean from previous minibatch.
+            for (int i = 0; i < centroids.Length; i++)
+            {
+                if (this.Instance.Clusters[i].PreviousCentroid != null)
+                {
+
+                    for (int j = 0; j < centroids[i].Length; j++)
+                    {
+                        double f = (double)1 / (numOfSamples + this.Instance.Clusters[i].PreviousNumberOfSamples);
+                        centroids[i][j] = f * (this.Instance.Clusters[i].PreviousNumberOfSamples * this.Instance.Clusters[i].PreviousCentroid[j] + numOfSamples * centroids[i][j]);
+
+                        this.Instance.Clusters[i].PreviousCentroid[j] = centroids[i][j];
+                    }
+                }
             }
         }
 
@@ -783,7 +805,7 @@ namespace LearningFoundation.Clustering.KMeans
         /// <param name="rawData">the samples to be clustered</param>
         /// <param name="clustering">contains the assigned cluster number for each sample of the RawData</param>
         /// <param name="means">mean of each cluster (Updated in the function)</param>
-      
+
         internal static void updateMeans(double[][] rawData, int[] clustering, double[][] means, long previousSampleCount = 0, double[] previousMeanValues = null)
         {
             int Code;
@@ -889,7 +911,7 @@ namespace LearningFoundation.Clustering.KMeans
                 throw new KMeansException(Code, Message);
             }
         }
-        
+
         /// <summary>
         /// computeCentroid is a function that assigns the nearest sample to the mean as the centroid of a cluster.
         /// </summary>

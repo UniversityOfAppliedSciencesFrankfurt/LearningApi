@@ -15,36 +15,28 @@ namespace LearningFoundation.Clustering.KMeans
         /// <summary>
         /// The original index of this cluster's samples before clustering
         /// </summary>
-        [DataMember]
-        public int[] ClusterDataOriginalIndex { get; internal set; }
+        public int[] ClusterDataOriginalIndex { get; set; }
 
         /// <summary>
         /// The samples that belong to this cluster
         /// </summary>
-        [DataMember]
-        public double[][] ClusterData { get; internal set; }
+        public double[][] ClusterData { get;  set; }
 
         /// <summary>
         /// Distance between eanch sample of this cluster and it's cetroid
         /// </summary>
-        [DataMember]
-        public double[] ClusterDataDistanceToCentroid { get; internal set; }
+        public double[] ClusterDataDistanceToCentroid { get;  set; }
 
         /// <summary>
-        /// The centroid of the cluster
+        /// The centroid of the cluster calculated in the current step.
         /// </summary>
         [DataMember]
         public double[] Centroid { get; internal set; }
 
         /// <summary>
-        /// Currentlly calculated mean value of the cluster.
-        /// M1 = mean of numOfSamples/2 (minibatch 1)
-        /// M2 = mean for numbers from numOfSamples/2 to numOfSamples (minibatch 2)
-        /// mean is batch for numbers from 1 to numOfSamples
-        /// (1/q1+q2)[q1*M1+q2*M2]
-        /// where q1 is number of elements inside of M1 and q2 number of elements inside of M2
+        /// Currentlly calculated position of centroid.
         /// </summary>
-        [DataMember]
+        
         public double[] Mean { get; internal set; }
 
         /// <summary>
@@ -112,5 +104,23 @@ namespace LearningFoundation.Clustering.KMeans
         /// </summary>
         [DataMember]
         public int ClusterOfNearestForeignSample { get; internal set; }
+
+        /// <summary>
+        /// Cumulated number of samples
+        /// </summary>
+        [DataMember]
+        public long PreviousNumberOfSamples { get; set; }
+
+        /// <summary>
+        /// Previouslly calculated mean value of the cluster.
+        /// M1 = mean of numOfSamples/2 (minibatch 1)
+        /// M2 = mean for numbers from numOfSamples/2 to numOfSamples (minibatch 2)
+        /// mean is batch for numbers from 1 to numOfSamples
+        /// (1/q1+q2)[q1*M1+q2*M2]
+        /// where q1 is number of elements inside of M1 and q2 number of elements inside of M2
+        /// </summary>
+        [DataMember]
+        public double[] PreviousCentroid { get; set; }
+        
     }
 }
