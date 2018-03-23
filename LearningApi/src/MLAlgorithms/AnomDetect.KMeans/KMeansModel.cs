@@ -43,18 +43,7 @@ namespace LearningFoundation.Clustering.KMeans
         [DataMember]
         public double NumOfSamples { get; set; }
 
-        /// <summary>
-        /// Currentlly calculated mean values of clusters.
-        /// M1 = mean of numOfSamples/2 (minibatch 1)
-        /// M2 = mean for numbers from numOfSamples/2 to numOfSamples (minibatch 2)
-        /// mean is batch for numbers from 1 to numOfSamples
-        /// (1/q1+q2)[q1*M1+q2*M2]
-        /// where q1 is number of elements inside of M1 and q2 number of elements inside of M2
-        /// </summary>
-        [DataMember]
-        public double[] MeanValues { get; set; }
-
-
+  
         /// <summary>
         /// Cluster statistics.
         /// </summary>

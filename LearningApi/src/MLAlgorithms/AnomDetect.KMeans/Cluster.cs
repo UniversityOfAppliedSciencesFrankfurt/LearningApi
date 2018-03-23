@@ -37,7 +37,12 @@ namespace LearningFoundation.Clustering.KMeans
         public double[] Centroid { get; internal set; }
 
         /// <summary>
-        /// The mean of the cluster
+        /// Currentlly calculated mean value of the cluster.
+        /// M1 = mean of numOfSamples/2 (minibatch 1)
+        /// M2 = mean for numbers from numOfSamples/2 to numOfSamples (minibatch 2)
+        /// mean is batch for numbers from 1 to numOfSamples
+        /// (1/q1+q2)[q1*M1+q2*M2]
+        /// where q1 is number of elements inside of M1 and q2 number of elements inside of M2
         /// </summary>
         [DataMember]
         public double[] Mean { get; internal set; }
