@@ -19,21 +19,11 @@ namespace Test
     /// <summary>
     /// UnitTest02 is a test/application for KMeans algorithm (function recognition).
     /// </summary>
-    public class UnitTest02
+    public class TestTrainingSimilarFunctions
     {
-        
-        //private const string cPathPrefix = "NRP";
 
-        //private const string rootFolder = "Functions";
-        private static string rootFolder = System.IO.Path.GetFullPath(@"..\..\..\") + "KMeans\\TestFiles\\";
-        /*
-        static UnitTest02()
-        {
-            if (Directory.Exists(rootFolder) == false)
-            {
-                Directory.CreateDirectory(rootFolder);
-            }
-        }*/
+        private static string rootFolder = System.IO.Path.GetFullPath(@"..\..\..\") + "KMeans\\TestFiles\\Functions\\";
+
 
         #region Tests
 
@@ -44,8 +34,8 @@ namespace Test
         public void Test_TrainingSimilarFunctions()
         {
             // Settings to import the functions (NRP should match the desired loading file)
-            string FunctionName = "TestFile02"; //without extension
-            string directory = rootFolder + "Functions\\" + FunctionName + "\\";
+            string FunctionName = "TestFile01"; //without extension
+            string directory = rootFolder + FunctionName + "\\";
             int NRP = 10;
             
             // Settings for the K-Means Alg
@@ -83,7 +73,7 @@ namespace Test
                 {
                     // save directory
                     string savePath = directory + "NRP" + NRP + "\\" + FunctionName + " SimilarFunctions Normalized Centroids NRP" + NRP + " KA" + KAlg + " C" + k + " I" + maxCount + " R" + (j + 1) + ".csv";
-
+                    lastCalculatedCentroids = null;
                     for (int funcIndx = 0; funcIndx < numFunc; funcIndx++)
                     {
                         // Get data of specific function with indec funcIndx.
@@ -102,6 +92,7 @@ namespace Test
                      
                         // get resulting centroids
                         lastCalculatedCentroids = Centroids = resp.Model.Centroids;
+                        /*
                         // match the centroids centroids
                         if (funcIndx == 0)
                         {
@@ -111,87 +102,25 @@ namespace Test
                         else
                         {
                             mCentroids = matchCentroids(Centroids, oCentroids);
-                        }
+                        }*/
 
                         // save centroids
                         if (funcIndx == 0)
                         {
                             // save or overwrite
-                            Helpers.Write2CSVFile(mCentroids, savePath);
+                            Helpers.Write2CSVFile(Centroids, savePath);
                         }
                         else
                         {
                             // append
-                            Helpers.Write2CSVFile(mCentroids, savePath, true);
+                            Helpers.Write2CSVFile(Centroids, savePath, true);
                         }
                     }
                 }
             }
         }
 
-        /// <summary>
-        /// Test_FunctionRecognition is an application for KMeans where the algorithm is used to detect a function
-        /// </summary>
-        [Fact]
-        public void Test_FunctionRecognition()
-        {
-            int numCluster = 2;
-            // directory to load
-            string loadDirectory = rootFolder + "Functions\\";
-            // directory to save
-            string saveDirectory = rootFolder + "Function Recognition\\";
-
-            //Assert.True(File.Exists("KMeans\\TestFiles\\TestFile01.csv"), "Expected file was not deployed to unit test foilder.");
-
-            // functions' paths
-            string[] FunctionPaths = new string[]
-            {
-                loadDirectory + "TestFile01\\NRP10\\TestFile01 SimilarFunctions Normalized Centroids NRP10 KA2 C" + numCluster + " I500 R1.csv",
-                loadDirectory + "TestFile02\\NRP10\\TestFile02 SimilarFunctions Normalized Centroids NRP10 KA2 C" + numCluster + " I500 R1.csv"
-            };
-
-            int numTrainFun = 800;
-            int numTestFun = 200;
-
-            Tuple<double[][], double[]> trainedClusters = formClusters(FunctionPaths[0], numCluster, numTrainFun);
-
-            // save the formed clusters
-            Helpers.Write2CSVFile(trainedClusters.Item1, saveDirectory + "Calculated Centroids.csv");
-            double[][] tempMaxDistance = new double[1][];
-            tempMaxDistance[0] = trainedClusters.Item2;
-            Helpers.Write2CSVFile(tempMaxDistance, saveDirectory + "Calculated Max Distance.csv");
-
-            // start testing for function recognition
-            int tolerance = 0;
-
-            // combine testing data
-            double[][] testingCentroids = new double[FunctionPaths.Length * numTestFun * numCluster][];
-            double[][] loadedCentroids;
-            int testingCentroidsOffset = numTrainFun * numCluster;
-            for (int i = 0; i < FunctionPaths.Length; i++)
-            {
-                loadedCentroids = Helpers.LoadFunctionData(FunctionPaths[i]);
-                for(int j = 0; j < numTestFun * numCluster; j++)
-                {
-                    testingCentroids[i * numTestFun * numCluster + j] = loadedCentroids[j + testingCentroidsOffset];
-                }
-                // only needed for to avoid training centroids
-                testingCentroidsOffset = 0;
-            }
-            // save the testing centroids
-            Helpers.Write2CSVFile(testingCentroids, saveDirectory + "Testing Centroids.csv");
-
-            // check functions
-            KMeans kMeans = new KMeans();
-            kMeans.setTrivialClusters(numCluster, trainedClusters.Item1, trainedClusters.Item2);
-            double[] funResults = patternTesting(testingCentroids, numCluster, kMeans, tolerance);
-
-            // save results
-            double[][] tempFunResults = new double[1][];
-            tempFunResults[0] = funResults;
-            Helpers.Write2CSVFile(tempFunResults, saveDirectory + "Results.csv");
-
-        }
+        
 
         #endregion
 
@@ -282,7 +211,7 @@ namespace Test
         /// <param name="A">first double array</param>
         /// <param name="B">second double array</param>
         /// <returns>the distance between the two points</returns>
-        private static double squaredDistance(double[] A, double[] B)
+        internal static double squaredDistance(double[] A, double[] B)
         {
             double SquaredDistance = 0;
             for (int i = 0; i < A.Length; i++)

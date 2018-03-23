@@ -14,11 +14,11 @@ namespace Test
     /// <summary>
     /// UnitTest00 is a class that contains tests for the main functions of "KMeans.cs" 
     /// </summary>
-    public class UnitTest00
+    public class TestKMeansMainFunctions
     {
         private static string rootFolder = System.IO.Path.GetFullPath(@"..\..\..\") + "KMeans\\TestFiles\\JsonSaves\\";
 
-        static UnitTest00()
+        static TestKMeansMainFunctions()
         {
             if (Directory.Exists(rootFolder) == false)
             {

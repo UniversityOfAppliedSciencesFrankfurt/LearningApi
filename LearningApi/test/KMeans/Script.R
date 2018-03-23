@@ -14,7 +14,7 @@ functionsPlots = function(filepath, functionDimensions, startFunction, endFuncti
     color = rainbow(endFunction - startFunction + 1)
 
     # load all functions from file
-    myFunctions = read.csv(file = filePath, header = FALSE)
+    myFunctions = read.csv(file = filePath, header = FALSE, sep = ";")
 
     # 2 dimensions
     if (functionDimensions == 2) {
@@ -68,10 +68,10 @@ centroidsPlots = function(filepath, numClusters) {
     color = rainbow(numClusters)
 
     # load all functions from file
-    myCentroids = read.csv(file = filePath, header = FALSE)
+    myCentroids = read.csv(file = filePath, header = FALSE, sep = ";")
 
     numFunctions = NROW(myCentroids) / numClusters
-    dimensions = NCOL(myCentroids) - 1
+    dimensions = NCOL(myCentroids)
 
     # 2 dimensions
     if (dimensions == 2) {
@@ -111,12 +111,12 @@ centroidsPlots = function(filepath, numClusters) {
 
 clustersAndCentroidsPlots = function(fileDirectory, numTestFunctions) {
 
-    clusterCentroids = read.csv(file = paste(fileDirectory,"Calculated Centroids.csv", sep = ""), header = FALSE)
-    distances = read.csv(file = paste(fileDirectory, "Calculated Max Distance.csv", sep = ""), header = FALSE)
-    myCentroids = read.csv(file = paste(fileDirectory, "Testing Centroids.csv", sep = ""), header = FALSE)
+    clusterCentroids = read.csv(file = paste(fileDirectory, "Calculated Centroids.csv", sep = ""), header = FALSE, sep = ";")
+    distances = read.csv(file = paste(fileDirectory, "Calculated Max Distance.csv", sep = ""), header = FALSE, sep = ";")
+    myCentroids = read.csv(file = paste(fileDirectory, "Testing Centroids.csv", sep = ""), header = FALSE, sep = ";")
 
     numClusters = NROW(clusterCentroids)
-    dimension = NCOL(distances) - 1
+    dimension = NCOL(distances)
     numDiffFunc = (NROW(myCentroids) / numClusters) / numTestFunctions
 
     # creating different colors
@@ -179,10 +179,10 @@ clustersAndCentroidsPlots = function(fileDirectory, numTestFunctions) {
 
 FunctionDetectionResultsPlots = function(fileDirectory, numTestFunctions) {
 
-    results = read.csv(file = paste(fileDirectory, "Results.csv", sep = ""), header = FALSE)
+    results = read.csv(file = paste(fileDirectory, "Results.csv", sep = ""), header = FALSE, sep = ";")
     res = Vectorize(results)
 
-    numTotalFunc = NCOL(results) - 1
+    numTotalFunc = NCOL(results)
     numDiffFunc = numTotalFunc / numTestFunctions
 
     # creating different colors
@@ -198,7 +198,7 @@ FunctionDetectionResultsPlots = function(fileDirectory, numTestFunctions) {
         y[i] = res[1,i]
         colV[i] = color[i %/% numTestFunctions + 1]
     }
-
+    
     # new 2d plot
     par(mar = c(5, 5, 5, 10))
     plot.default(x[1:numTestFunctions], y[1:numTestFunctions], type = "l", ylim = c(-0.5, 1.5), lwd = "2", col = color[1])
