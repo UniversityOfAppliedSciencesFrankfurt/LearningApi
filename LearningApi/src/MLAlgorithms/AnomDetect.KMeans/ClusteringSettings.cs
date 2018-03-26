@@ -47,6 +47,11 @@ namespace LearningFoundation.Clustering.KMeans
         public double[][] InitialCentroids { get; set; }
 
         /// <summary>
+        /// A value in % representing the tolerance to possible outliers
+        /// </summary>
+        public double Tolerance { get; internal set; }
+
+        /// <summary>
         /// Constructor to create the desired settings by the user for clustering.
         /// </summary>
         /// <param name="RawData">data to be clustered</param>
@@ -58,9 +63,8 @@ namespace LearningFoundation.Clustering.KMeans
         /// <li> - 1: Centoids are the nearest samples to the means</li>
         /// <li> - 2: Centoids are the means</li>
         /// </ul></param>
-        /// <param name="InitialGuess">a bool, if true Kmeans clustering start with an initial guess for the centroids else it will start with a random assignment.</param>
-        /// <param name="Replace"></param>
-        public ClusteringSettings(int KmeansMaxIterations, int NumberOfClusters, int NumberOfAttributes, int KmeansAlgorithm = 1,  bool Replace = false,double[][] initialCentroids = null)
+        /// <param name="initialCentroids">???</param>
+        public ClusteringSettings(int KmeansMaxIterations, int NumberOfClusters, int NumberOfAttributes, int KmeansAlgorithm = 1, double[][] initialCentroids = null, double tolerance = 0)
         {
             if (KmeansAlgorithm != 2)
             {
@@ -74,6 +78,7 @@ namespace LearningFoundation.Clustering.KMeans
             this.NumberOfClusters = NumberOfClusters;
             this.NumberOfAttributes = NumberOfAttributes;
             this.InitialCentroids = initialCentroids;
+            this.Tolerance = tolerance;
         }
 
     }

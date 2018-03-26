@@ -12,11 +12,6 @@ namespace LearningFoundation.Clustering.KMeans
     public class CheckingSampleSettings
     {
         /// <summary>
-        /// Path to the clustering intance that contains the clusters data
-        /// </summary>
-        public string Path{ get; internal set; }
-
-        /// <summary>
         /// The sample to be checked
         /// </summary>
         public double[] Sample { get; internal set; }
@@ -29,12 +24,10 @@ namespace LearningFoundation.Clustering.KMeans
         /// <summary>
         /// Constructor to create the desired settings by the user for checking to which cluster a sample belongs
         /// </summary>
-        /// <param name="path">Path to the clustering intance that contains the clusters data</param>
         /// <param name="Sample">The sample to be checked</param>
         /// <param name="tolerance">A value in % representing the tolerance to possible outliers</param>
-        public CheckingSampleSettings(string path, double[] Sample, double tolerance = 0)
+        public CheckingSampleSettings(double[] Sample, double tolerance = 0)
         {
-            this.Path =  path;
             this.Sample = Sample;
             this.Tolerance = tolerance;
         }

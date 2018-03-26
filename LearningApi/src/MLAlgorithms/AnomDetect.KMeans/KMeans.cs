@@ -47,25 +47,42 @@ namespace LearningFoundation.Clustering.KMeans
         /// <returns></returns>
         public KMeansModel Instance { get => m_instance; }
 
+        /*
         /// <summary>
         /// setTrivialClusters creates a very basic instance for clusters
         /// </summary>
-        /// <param name="numCLusters">number of clusters</param>
+        /// <param name="numClusters">number of clusters</param>
         /// <param name="centroids">centroids of the clusters</param>
         /// <param name="maxDistance">maximum distance per cluster</param>
-        public void setTrivialClusters(int numCLusters, double[][] centroids, double[] maxDistance)
+        public void setTrivialClusters(int numClusters, double[][] centroids, double[] maxDistance)
         {
-            this.m_instance = new KMeansModel(null, numCLusters, centroids);
-            this.m_instance.InClusterMaxDistance = maxDistance;
-        }
+            this.m_instance = new KMeansModel(numClusters, centroids);
+            for (int i = 0; i < numClusters; i++)
+            {
+                this.m_instance.Clusters[i].InClusterMaxDistance = maxDistance[i];
+            }
+        }*/
 
         /// <summary>
-        /// Constructor for Kmeans
+        /// Constructor for Kmeans. If settings was provided, it will create KMeans object with those settings. If all arguments are provided, it will set the desired trivial clusters.
         /// </summary>
         /// <param name="settings">contains settings for clustering (should not be null when training)</param>
-        public KMeans(ClusteringSettings settings = null)
+        /// <param name="centroids">centroids of the clusters</param>
+        /// <param name="centroids">maximum distance per cluster</param>
+        public KMeans(ClusteringSettings settings = null, double[][] centroids = null, double[] maxDistance = null)
         {
             this.ClusterSettings = settings;
+            if (centroids!=null && maxDistance!=null && settings!=null)
+            {
+                this.m_instance = new KMeansModel(settings.NumberOfClusters);
+                this.m_instance.Clusters = new Cluster[settings.NumberOfClusters];
+                for (int i = 0; i < settings.NumberOfClusters; i++)
+                {
+                    this.m_instance.Clusters[i] = new Cluster();
+                    this.m_instance.Clusters[i].Centroid = centroids[i];
+                    this.m_instance.Clusters[i].InClusterMaxDistance = maxDistance[i];
+                }
+            }
         }
 
         #endregion
@@ -100,7 +117,7 @@ namespace LearningFoundation.Clustering.KMeans
                 // does some checks on the passed parameters by the user
                 validateParams(rawData, ClusterSettings.KmeansAlgorithm, ClusterSettings.KmeansMaxIterations, ClusterSettings.NumberOfClusters, ClusterSettings.NumberOfAttributes);
 
-                KMeansModel instance = new KMeansModel(rawData, ClusterSettings.NumberOfClusters);
+                KMeansModel instance = new KMeansModel(ClusterSettings.NumberOfClusters);
 
                 double[][] calculatedCentroids;
 
@@ -109,18 +126,26 @@ namespace LearningFoundation.Clustering.KMeans
                 //initiate the clustering process
                 instance.DataToClusterMapping = runKMeansAlgorithm(rawData, instance.NumberOfClusters, ClusterSettings.NumberOfAttributes, ClusterSettings.KmeansMaxIterations, ClusterSettings.KmeansAlgorithm, this.ClusterSettings.InitialCentroids, out calculatedCentroids, out IterationReached);
 
-                instance.Centroids = calculatedCentroids;
+                // adjust  centroids (partial)
+                //recalcPartialCentroids(calculatedCentroids, rawData.Length);
+
+                // should be done in recalcPartialcentroids
+                for (int i = 0; i < instance.NumberOfClusters; i++)
+                {
+                    instance.Clusters[i].Centroid = calculatedCentroids[i];
+                }
 
 
                 //create the clusters' result & statistics
                 instance.Clusters = ClusteringResults.CreateClusteringResult(rawData, instance.DataToClusterMapping, calculatedCentroids, instance.NumberOfClusters);
 
+                /*
                 instance.InClusterMaxDistance = new double[instance.NumberOfClusters];
 
                 for (int i = 0; i < instance.NumberOfClusters; i++)
                 {
                     instance.InClusterMaxDistance[i] = instance.Clusters[i].InClusterMaxDistance;
-                }
+                }*/
 
                 this.m_instance = instance;
 
@@ -147,85 +172,6 @@ namespace LearningFoundation.Clustering.KMeans
         }
 
         /// <summary>
-        /// 
-        /// detects to which cluster the given sample belongs to.
-        /// </summary>
-        /// <param name="settings">the desired settings for detecting to which, if any, cluster the sample belongs.(Path can be null if you use Run() or Train() before)</param>
-        /// <returns>the cluster number to which the sample belongs (-1 if the sample doesn't belong to any cluster).</returns>
-        public int PredictSample(CheckingSampleSettings settings)
-        {
-            int clusterIndex;
-            int Code;
-            string Message = "Function <PredictSample>: ";
-            try
-            {
-                KMeansModel instance = null;
-                JsonSerializer json = new JsonSerializer();
-
-                //some checks on the passed parameters by the user
-                if (settings.Tolerance < 0)
-                {
-                    Code = 110;
-                    Message += "Unacceptable tolerance value";
-                    throw new KMeansException(Code, Message);
-                }
-                if (settings.Path != null)
-                {
-                    //load the clustering project containing the clusters to one of which, if any, the sample will be assigned to
-                    instance = json.Load(settings.Path);
-
-                }
-                else
-                {
-                    instance = this.m_instance;
-                }
-
-                //returns error if the new sample has different number of attributes compared to the samples in the desired project
-                if (instance.Centroids[0].Length != settings.Sample.Length)
-                {
-                    Code = 114;
-                    Message += "Mismatch in number of attributes";
-                    throw new KMeansException(Code, Message);
-                }
-
-                double calculatedDistance;
-                double minDistance = double.MaxValue;
-                int closestCentroid = -1;
-
-                //determines to which centroid the sample is closest and the distance
-                for (int j = 0; j < instance.NumberOfClusters; j++)
-                {
-                    calculatedDistance = calculateDistance(settings.Sample, instance.Centroids[j]);
-
-                    if (calculatedDistance < minDistance)
-                    {
-                        minDistance = calculatedDistance;
-
-                        closestCentroid = j;
-                    }
-                }
-
-                //decides based on the maximum distance in the cluster & the tolerance whether the sample really belongs to the cluster or not 
-                if (minDistance < instance.InClusterMaxDistance[closestCentroid] * (1.0 + settings.Tolerance / 100.0))
-                {
-                    clusterIndex = closestCentroid;
-                }
-                else
-                {
-                    clusterIndex = -1;
-                }
-
-                return clusterIndex;
-            }
-            catch (Exception Ex)
-            {
-                Code = 400;
-                Message += "Unhandled exception:\t" + Ex.ToString();
-                throw new KMeansException(Code, Message);
-            }
-        }
-
-        /// <summary>
         /// Predict is a function that detects to which clusters a set of samples belongs.
         /// </summary>
         /// <param name="data">the set of samples</param>
@@ -242,17 +188,92 @@ namespace LearningFoundation.Clustering.KMeans
                     PredictedClusters = new int[data.Length],
                 };
 
+                /*
+                if (this.m_instance==null)
+                {
+                    
+                }*/
+
                 int clusterIndex = -1;
                 List<double> list = new List<double>();
 
                 int n = 0;
                 foreach (var item in data)
                 {
-                    clusterIndex = PredictSample(new CheckingSampleSettings(null, item, 0));
+                    clusterIndex = PredictSample(item,this.ClusterSettings.Tolerance);
                     res.PredictedClusters[n++] = clusterIndex;
                 }
 
                 return res;
+            }
+            catch (Exception Ex)
+            {
+                Code = 400;
+                Message += "Unhandled exception:\t" + Ex.ToString();
+                throw new KMeansException(Code, Message);
+            }
+        }
+
+        /// <summary>
+        /// 
+        /// detects to which cluster the given sample belongs to.
+        /// </summary>
+        /// <param name="Sample">the sample to be predicted</param>
+        /// <param name="Tolerance">a value in % representing the tolerance to possible outliers</param>
+        /// <returns>the cluster number to which the sample belongs (-1 if the sample doesn't belong to any cluster).</returns>
+        private int PredictSample(double[] Sample, double Tolerance)
+        {
+            int clusterIndex;
+            int Code;
+            string Message = "Function <PredictSample>: ";
+            try
+            {
+                //JsonSerializer json = new JsonSerializer();
+
+                //some checks on the passed parameters by the user
+                if (Tolerance < 0)
+                {
+                    Code = 110;
+                    Message += "Unacceptable tolerance value";
+                    throw new KMeansException(Code, Message);
+                }
+
+                //returns error if the new sample has different number of attributes compared to the samples in the desired project
+                if (this.m_instance.Clusters[0].Centroid.Length != Sample.Length)
+                {
+                    Code = 114;
+                    Message += "Mismatch in number of attributes";
+                    throw new KMeansException(Code, Message);
+                }
+
+                double calculatedDistance;
+                double minDistance = double.MaxValue;
+                int closestCentroid = -1;
+
+                //determines to which centroid the sample is closest and the distance
+                for (int j = 0; j < this.m_instance.NumberOfClusters; j++)
+                {
+                    calculatedDistance = calculateDistance(Sample, this.m_instance.Clusters[j].Centroid);
+
+                    if (calculatedDistance < minDistance)
+                    {
+                        minDistance = calculatedDistance;
+
+                        closestCentroid = j;
+                    }
+                }
+
+                //decides based on the maximum distance in the cluster & the tolerance whether the sample really belongs to the cluster or not 
+                if (minDistance < this.m_instance.Clusters[closestCentroid].InClusterMaxDistance * (1.0 + Tolerance / 100.0))
+                {
+                    clusterIndex = closestCentroid;
+                }
+                else
+                {
+                    clusterIndex = -1;
+                }
+
+                return clusterIndex;
             }
             catch (Exception Ex)
             {
@@ -449,7 +470,7 @@ namespace LearningFoundation.Clustering.KMeans
         /// <param name="centroids">the variable through which the resulting centroids are returned</param>
         /// <param name="IterationReached">the variable through which the iteration reached is returned</param>
         /// <returns>the assigned cluster number for each sample of the RawData</returns>
-        internal  int[] runKMeansAlgorithm(double[][] rawData, int numClusters, int numAttributes, int maxCount, int kMeanAlgorithm, double[][] initialCentroids, out double[][] centroids, out int IterationReached)
+        internal static int[] runKMeansAlgorithm(double[][] rawData, int numClusters, int numAttributes, int maxCount, int kMeanAlgorithm, double[][] initialCentroids, out double[][] centroids, out int IterationReached)
         {
             int Code;
             string Message = "Function <KMeansClusteringAlg>: ";
@@ -462,12 +483,10 @@ namespace LearningFoundation.Clustering.KMeans
 
                 clusterAssignments = new int[rawData.Length];
 
-                // just makes things a bit cleaner
-                //centroids = allocate(numClusters, numAttributes, initialCentroids);
-
+                // means must be initialized (declared row number) before calling updateMeans
                 double[][] means = new double[numClusters][];
 
-                // with initial guess
+                // claculate initial centroids (educated initial guess)
                 if (initialCentroids == null)
                 {
                     centroids = new double[numClusters][];
@@ -486,30 +505,10 @@ namespace LearningFoundation.Clustering.KMeans
                         assignCentroidsToMean(means, centroids);
                     }
                 }
-                // without initial guess (random)
+                // use specified initial centroids
                 else
                 {
                     centroids = initialCentroids;
-
-                    /*
-
-                    // 0 is a seed for random
-                    //clusterAssignments = initClustering(numTuples, numClusters, 0);
-
-                    // use centroids to update cluster assignment
-                    changed = assign(rawData, clusterAssignments, centroids);
-
-                    // could call this instead inside UpdateCentroids
-                    updateMeans(rawData, clusterAssignments, means);
-
-                    if (kMeanAlgorithm == 1)
-                    {
-                        updateCentroids(rawData, clusterAssignments, means, centroids);
-                    }
-                    else
-                    {
-                        assignCentroidsToMean(means, centroids);
-                    }*/
                 }
 
 
@@ -534,7 +533,7 @@ namespace LearningFoundation.Clustering.KMeans
                     }
                 }
 
-                recalcPartialCentroids(centroids, rawData.Length);
+                //recalcPartialCentroids(centroids, rawData.Length);
 
                 IterationReached = cnt;
 
@@ -554,16 +553,33 @@ namespace LearningFoundation.Clustering.KMeans
             // This code recalculate sum by adding a mean from previous minibatch.
             for (int i = 0; i < centroids.Length; i++)
             {
+
+                // do we need centroids????
+                // initialize centroids until decision is made
+                this.Instance.Clusters[i].Centroid = new double[centroids[0].Length];
+
                 if (this.Instance.Clusters[i].PreviousCentroid != null)
                 {
-
+                    /////
+                    ///// issue with previous number of samples and centroids
+                    /////
                     for (int j = 0; j < centroids[i].Length; j++)
                     {
                         double f = (double)1 / (numOfSamples + this.Instance.Clusters[i].PreviousNumberOfSamples);
                         centroids[i][j] = f * (this.Instance.Clusters[i].PreviousNumberOfSamples * this.Instance.Clusters[i].PreviousCentroid[j] + numOfSamples * centroids[i][j]);
 
                         this.Instance.Clusters[i].PreviousCentroid[j] = centroids[i][j];
+                        this.Instance.Clusters[i].Centroid[i] = centroids[i][j];
                     }
+
+                    //adjust number of samples
+                }
+                else
+                {
+                    //set previous samples
+
+                    // do we need centroids????
+                    this.Instance.Clusters[i].Centroid = centroids[i];
                 }
             }
         }
