@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Serialization;
 using System.Threading.Tasks;
 
 
@@ -19,15 +20,20 @@ namespace LearningFoundation.Clustering.KMeans
         /// </summary>
         private KMeansModel m_instance;
 
-        /// <summary>
-        /// array of Cluster objects
-        /// </summary>
-        //private Cluster[] m_cluster;
 
         /// <summary>
         /// ClusteringSettings object
         /// </summary>
-        public ClusteringSettings ClusterSettings { get; internal set; }
+        [DataMember]
+        public ClusteringSettings ClusterSettings { get; set; }
+
+
+        /// <summary>
+        /// method to get the Instance object
+        /// </summary>
+        /// <returns></returns>
+        [DataMember]
+        public KMeansModel Instance { get => m_instance; set => m_instance = value; }
 
         #endregion
 
@@ -35,33 +41,8 @@ namespace LearningFoundation.Clustering.KMeans
 
         #region Basic Functions
 
-        /// <summary>
-        /// method to get the Cluster object
-        /// </summary>
-        //public Cluster[] clusters { get => m_cluster; }
 
 
-        /// <summary>
-        /// method to get the Instance object
-        /// </summary>
-        /// <returns></returns>
-        public KMeansModel Instance { get => m_instance; }
-
-        /*
-        /// <summary>
-        /// setTrivialClusters creates a very basic instance for clusters
-        /// </summary>
-        /// <param name="numClusters">number of clusters</param>
-        /// <param name="centroids">centroids of the clusters</param>
-        /// <param name="maxDistance">maximum distance per cluster</param>
-        public void setTrivialClusters(int numClusters, double[][] centroids, double[] maxDistance)
-        {
-            this.m_instance = new KMeansModel(numClusters, centroids);
-            for (int i = 0; i < numClusters; i++)
-            {
-                this.m_instance.Clusters[i].InClusterMaxDistance = maxDistance[i];
-            }
-        }*/
 
         /// <summary>
         /// Constructor for Kmeans. If settings was provided, it will create KMeans object with those settings. If all arguments are provided, it will set the desired trivial clusters.
@@ -113,41 +94,28 @@ namespace LearningFoundation.Clustering.KMeans
             string Message = "Function <Train>: ";
             try
             {
-
                 // does some checks on the passed parameters by the user
                 validateParams(rawData, ClusterSettings.KmeansAlgorithm, ClusterSettings.KmeansMaxIterations, ClusterSettings.NumberOfClusters, ClusterSettings.NumberOfAttributes);
 
-                KMeansModel instance = new KMeansModel(ClusterSettings.NumberOfClusters);
+                // If first run. No load model done.
+                if(this.m_instance == null)
+                    this.m_instance = new KMeansModel(ClusterSettings.NumberOfClusters);
 
                 double[][] calculatedCentroids;
 
                 int IterationReached = -1;
 
                 //initiate the clustering process
-                instance.DataToClusterMapping = runKMeansAlgorithm(rawData, instance.NumberOfClusters, ClusterSettings.NumberOfAttributes, ClusterSettings.KmeansMaxIterations, ClusterSettings.KmeansAlgorithm, this.ClusterSettings.InitialCentroids, out calculatedCentroids, out IterationReached);
-
-                // adjust  centroids (partial)
-                //recalcPartialCentroids(calculatedCentroids, rawData.Length);
+                this.m_instance.DataToClusterMapping = runKMeansAlgorithm(rawData, this.m_instance.NumberOfClusters, ClusterSettings.NumberOfAttributes, ClusterSettings.KmeansMaxIterations, ClusterSettings.KmeansAlgorithm, this.ClusterSettings.InitialCentroids, out calculatedCentroids, out IterationReached);
 
                 // should be done in recalcPartialcentroids
-                for (int i = 0; i < instance.NumberOfClusters; i++)
+                for (int i = 0; i < this.m_instance.NumberOfClusters; i++)
                 {
-                    instance.Clusters[i].Centroid = calculatedCentroids[i];
+                    this.m_instance.Clusters[i].Centroid = calculatedCentroids[i];
                 }
 
-
                 //create the clusters' result & statistics
-                instance.Clusters = ClusteringResults.CreateClusteringResult(rawData, instance.DataToClusterMapping, calculatedCentroids, instance.NumberOfClusters);
-
-                /*
-                instance.InClusterMaxDistance = new double[instance.NumberOfClusters];
-
-                for (int i = 0; i < instance.NumberOfClusters; i++)
-                {
-                    instance.InClusterMaxDistance[i] = instance.Clusters[i].InClusterMaxDistance;
-                }*/
-
-                this.m_instance = instance;
+                this.m_instance.Clusters = ClusteringResults.CreateClusteringResult(rawData, this.m_instance.DataToClusterMapping, calculatedCentroids, this.m_instance.NumberOfClusters);
 
                 if (ClusterSettings.KmeansMaxIterations <= IterationReached)
                 {
@@ -157,7 +125,7 @@ namespace LearningFoundation.Clustering.KMeans
                 {
                     res.Message = "Clustering Complete. K-means converged at iteration: " + IterationReached;
                 }
-                //res.Clusters = this.m_cluster;
+        
                 res.Model = this.m_instance;
 
                 return res;

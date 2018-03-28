@@ -20,12 +20,47 @@ namespace LearningFoundation
         /// <typeparam name="TOUT">Function output value.</typeparam>
         /// <param name="api"></param>
         /// <param name="moduleFunction">Function, which implements the module functionality.</param>
+        /// <param name="moduleName">The unique module name. If not specified it is automatically created.
+        /// If loading and saving of model is used and action modules are used, then action modules cannot be persisted.
+        /// In this case after loading of the model, you will need to use ReplaceActionModule by giving the name, which was
+        /// used by calling UseActionModule before model was saved.</param>        
         /// <returns>Output value of the module defined by <see cref="TOUT"/></returns>
-        public static LearningApi UseActionModule<TIN, TOUT>(this LearningApi api, Func<TIN, IContext, TOUT> moduleFunction)
+        public static LearningApi UseActionModule<TIN, TOUT>(this LearningApi api, Func<TIN, IContext, TOUT> moduleFunction, string moduleName = null)
         {
            var mod = new FunctionModule<TIN, TOUT>(moduleFunction);
-           api.AddModule(mod, $"ActionModule-{Guid.NewGuid().ToString()}");
+
+            if (String.IsNullOrEmpty(moduleName))
+                moduleName = $"ActionModule-{Guid.NewGuid().ToString()}";
+
+           api.AddModule(mod, moduleName);
+
            return api;
+        }
+
+
+        /// <summary>
+        /// Replaces existing module
+        /// </summary>
+        /// <typeparam name="TIN">Input value.</typeparam>
+        /// <typeparam name="TOUT">Function output value.</typeparam>
+        /// <param name="api"></param>
+        /// <param name="moduleFunction">Function, which implements the module functionality.</param>
+        /// <param name="moduleName">The unique module name. If not specified it is automatically created.
+        /// If loading and saving of model is used and action modules are used, then action modules cannot be persisted.
+        /// In this case after loading of the model, you will need to use ReplaceActionModule by giving the name, which was
+        /// used by calling UseActionModule before model was saved.</param>        
+        /// <returns>Output value of the module defined by <see cref="TOUT"/></returns>
+        /// <returns></returns>
+        public static LearningApi ReplaceActionModule<TIN, TOUT>(this LearningApi api, string moduleName, Func<TIN, IContext, TOUT> moduleFunction)
+        {
+            var existingModule = api.Modules.Keys.FirstOrDefault((m)=>m == moduleName);
+
+            if (existingModule != null)
+            {
+                api.Modules[moduleName] = new FunctionModule<TIN, TOUT>(moduleFunction);
+            }
+           
+            return api;
         }
     }
 
@@ -41,7 +76,9 @@ namespace LearningFoundation
 
         public TOUT Run(TIN data, IContext ctx)
         {
-           return m_ModuleFunction(data, ctx);
+            if (m_ModuleFunction == null)
+                throw new ArgumentException("Module incorrecly initialized!");
+           return m_ModuleFunction.Invoke(data, ctx);
         }
     }
 }

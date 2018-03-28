@@ -19,26 +19,16 @@ namespace LearningFoundation.Clustering.KMeans
         [DataMember]
         public int NumberOfClusters { get; internal set; }
 
-        /// <summary>
-        /// the resulting centroids
-        /// </summary>
-        //public double[][] Centroids { get; internal set; }
-
-        /// <summary>
-        /// distance between the centroid and the farthest smaple in each cluster
-        /// </summary>
-        //public double[] InClusterMaxDistance { get; internal set; }
-
+      
         /// <summary>
         /// contains the assigned cluster number for each sample of the RawData
         /// </summary>
         public int[] DataToClusterMapping { get; internal set; }
 
         /// <summary>
-        /// Number of currentlly calculated sampes in cluster.
+        /// Number of currentlly calculated samples in cluster.
         /// </summary>
-        [DataMember]
-        public double NumOfSamples { get; set; }
+        public int NumOfSamples { get; set; }
 
   
         /// <summary>

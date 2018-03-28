@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using System.Reflection;
 using LearningFoundation.DataMappers;
 using LearningFoundation.PersistenceProviders;
+using System.Runtime.Serialization;
 
 namespace LearningFoundation
 {
@@ -20,12 +21,19 @@ namespace LearningFoundation
 
         public IContext Context { get; set; }
 
-        protected Dictionary<string, IPipelineModule> Modules { get; set; }
-        
+        [DataMember]
+        public Dictionary<string, IPipelineModule> Modules { get; set; }
+
+        /// <summary>
+        /// QNames of registered modules.
+        /// </summary>
+        [DataMember]
+        protected Dictionary<string, string> ModulesQulifiedNames { get; set; }
 
         /// <summary>
         /// Gets/Sets specifics ML algortim for training
         /// </summary>
+        [IgnoreDataMember]
         public IAlgorithm Algorithm { get; set; }
         
       
@@ -156,10 +164,10 @@ namespace LearningFoundation
         }
 
 
-        public static LearningApi Load(string moduleName, IModelPersistenceProvider persistenceProvider = null)
+        public static LearningApi Load(string modelName, IModelPersistenceProvider persistenceProvider = null)
         {
             LearningApi api = new LearningApi(persistenceProvider: persistenceProvider);
-            return api.m_PersistenceProvider.Load(moduleName);
+            return api.m_PersistenceProvider.Load(modelName);
         }
 
         /// <summary>
