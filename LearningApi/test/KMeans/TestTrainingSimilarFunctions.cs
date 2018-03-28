@@ -59,7 +59,7 @@ namespace Test
 
             double[][] lastCalculatedCentroids = null;
 
-            double[][] Centroids;
+            double[][] Centroids = null;
             // original Centroids
             double[][] oCentroids;
             // matched Centroids
@@ -68,7 +68,7 @@ namespace Test
             for (int k = 2; k < numClusters + 1; k++)
             {
                 oCentroids = new double[k][];
-                clusterSettings = new ClusteringSettings(maxCount, k, numAttributes, KmeansAlgorithm: KAlg, Replace: true);
+                clusterSettings = new ClusteringSettings(maxCount, k, numAttributes, KmeansAlgorithm: KAlg);
                 for (int j = 0; j < Runs; j++)
                 {
                     // save directory
@@ -89,9 +89,15 @@ namespace Test
 
                         // train
                         var resp = api.Run() as KMeansScore;
-                     
+
                         // get resulting centroids
-                        lastCalculatedCentroids = Centroids = resp.Model.Centroids;
+                        lastCalculatedCentroids = new double[k][];
+                        for (int i = 0; i < k; i++)
+                        {
+                            lastCalculatedCentroids[i] = resp.Model.Clusters[i].Centroid;
+                        }
+
+                        Centroids = lastCalculatedCentroids;
                         /*
                         // match the centroids centroids
                         if (funcIndx == 0)
@@ -337,103 +343,7 @@ namespace Test
         }
 
         #endregion
-
-        /// <summary>
-        /// formClusters is a function that calculates the centroids and maximum distance of the clusters based on the centroids of the trained similar functions
-        /// </summary>
-        /// <param name="path">path to the centroids of trained similar functions</param>
-        /// <param name="numClusters">number of clusters</param>
-        /// <param name="numTrainFun">number of training functions</param>
-        /// <returns>Tuple of two Items: <br />
-        /// - Item 1: the centroids of the clusters<br />
-        /// - Item 2: maximum distance in each cluster
-        /// </returns>
-        private static Tuple<double[][], double[]> formClusters(string path, int numClusters, int numTrainFun)
-        {
-            // get centroids of training functions
-            double[][] trainedCentroids = Helpers.LoadFunctionData(path);
-            // number of attributes
-            int dimenions = trainedCentroids[0].Length;
-            // initialize cluster centroids
-            double[][] clusterCentroids = new double[numClusters][];
-            for (int i = 0; i < numClusters; i++)
-            {
-                clusterCentroids[i] = new double[dimenions];
-            }
-            // calculate the clusters
-            for (int i = 0; i < numTrainFun; i++)
-            {
-                for (int j=0; j < numClusters; j++)
-                {
-                    for (int a = 0; a < dimenions; a++)
-                    {
-                        clusterCentroids[j][a] += trainedCentroids[i * numClusters + j][a] / numTrainFun;
-                    }
-                }
-            }
-
-            // initialize distances
-            double[] maxDistance = new double[numClusters];
-            // get max distance in each cluster
-            double calDist;
-            for (int i = 0; i < numTrainFun; i++)
-            {
-                for (int j = 0; j < numClusters; j++)
-                {
-                    calDist = Math.Sqrt(squaredDistance(clusterCentroids[j], trainedCentroids[i * numClusters + j]));
-                    if (calDist > maxDistance[j])
-                    {
-                        maxDistance[j] = calDist;
-                    }
-                }
-            }
-
-            return Tuple.Create(clusterCentroids, maxDistance);
-        }
         
-        /// <summary>
-        /// patternTesting is a function that checks and returns result of pattern testing (1 for matching, 0 otherwise)
-        /// </summary>
-        /// <param name="testCentroids">the testing centroids of the testing functions</param>
-        /// <param name="numClusters">number of cluster</param>
-        /// <param name="kmeanApi">a KMeans object</param>
-        /// <param name="tolerance">tolerance for prediction</param>
-        /// <returns>a result of the pattern testing for each function</returns>
-        private static double[] patternTesting(double[][] testCentroids, int numClusters, KMeans kmeanApi, int tolerance)
-        {
-            CheckingSampleSettings SampleSettings;
-            int clusterIndex;
-            bool fitsPattern;
-            double[] result = new double[testCentroids.Length / numClusters];
-            for (int i = 0; i < testCentroids.Length; i = i + numClusters)
-            {
-                fitsPattern = true;
-                // check each centroid of each function
-                for (int j = 0; j < numClusters; j++)
-                {
-                    // check centroids
-                    SampleSettings = new CheckingSampleSettings(null, testCentroids[i + j], tolerance: tolerance);
-                    clusterIndex = kmeanApi.PredictSample(SampleSettings);
-                    // if a centroid doesn't belong to any cluster
-                    if (clusterIndex == -1)
-                    {
-                        fitsPattern = false;
-                        break;
-                    }
-                }
-                if (fitsPattern)
-                {
-                    result[i / numClusters] = 1;
-                }
-                else
-                {
-                    result[i / numClusters] = 0;
-                }
-            }
-            // contains results of pattern testing (1 for matching, 0 otherwise)
-            return result;
-        }
-
         #endregion
 
 

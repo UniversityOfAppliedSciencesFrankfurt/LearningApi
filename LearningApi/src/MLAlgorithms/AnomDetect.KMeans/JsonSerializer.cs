@@ -72,7 +72,7 @@ namespace LearningFoundation.Clustering.KMeans
 
                 fs.Dispose();
 
-                if (instance.Centroids == null)
+                if (instance.Clusters[0].Centroid == null)
                 {
                     Code = 206;
                     Message += "Can't deserialize file";

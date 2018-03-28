@@ -13,10 +13,12 @@
 
   <ItemGroup>
     <Compile Remove="REMOVE_AnomalyDetectionAPI.cs" />
+    <Compile Remove="REMOVE_CheckingSampleSettings.cs" />
     <Compile Remove="REMOVE_IAnomalyDetectionApi.cs" />
   </ItemGroup>
 
   <ItemGroup>
+    <None Include="REMOVE_CheckingSampleSettings.cs" />
     <None Include="REMOVE_AnomalyDetectionAPI.cs" />
     <None Include="REMOVE_IAnomalyDetectionApi.cs" />
   </ItemGroup>

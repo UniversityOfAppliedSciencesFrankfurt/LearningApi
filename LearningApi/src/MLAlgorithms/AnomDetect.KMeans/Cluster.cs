@@ -35,8 +35,7 @@ namespace LearningFoundation.Clustering.KMeans
 
         /// <summary>
         /// Currentlly calculated position of centroid.
-        /// </summary>
-        
+        /// </summary>      
         internal double[] Mean { get; set; }
 
         /// <summary>
@@ -48,13 +47,11 @@ namespace LearningFoundation.Clustering.KMeans
         /// <summary>
         /// The index of the farthest sample, of this cluster, from centroid (not original index)
         /// </summary>
-       // [DataMember]
         internal int InClusterFarthestSampleIndex { get;  set; }
 
         /// <summary>
         /// The farthest sample, of this cluster, from centroid
         /// </summary>
-        //[DataMember]
         internal double[] InClusterFarthestSample { get;  set; }
 
         /// <summary>
@@ -78,7 +75,6 @@ namespace LearningFoundation.Clustering.KMeans
         /// <summary>
         /// Nearest sample belonging of the nearest cluster to this cluster's centroid
         /// </summary>
-        [DataMember]
         public double[] NearestForeignSampleInNearestCluster { get; internal set; }
 
         /// <summary>
@@ -90,7 +86,6 @@ namespace LearningFoundation.Clustering.KMeans
         /// <summary>
         /// Nearest sample not belonging to this cluster and this cluster's centroid
         /// </summary>
-        [DataMember]
         public double[] NearestForeignSample { get; internal set; }
 
         /// <summary>

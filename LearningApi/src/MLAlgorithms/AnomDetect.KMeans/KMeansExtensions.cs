@@ -16,9 +16,9 @@ namespace LearningFoundation.Clustering.KMeans
         /// <param name="api">the LearningAPI object</param>
         /// <param name="settings">the desired clustering settings</param>
         /// <returns></returns>
-        public static LearningApi UseKMeans(this LearningApi api, ClusteringSettings settings)
+        public static LearningApi UseKMeans(this LearningApi api, ClusteringSettings settings, double[][] centroids = null, double[] maxDistance = null)
         {
-            var alg = new KMeans(settings);
+            var alg = new KMeans(settings, centroids, maxDistance);
             api.AddModule(alg, "Rbm");
             return api;
         }
