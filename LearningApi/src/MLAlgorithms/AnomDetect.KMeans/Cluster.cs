@@ -60,6 +60,14 @@ namespace LearningFoundation.Clustering.KMeans
         [DataMember]
         public double InClusterMaxDistance { get; internal set; }
 
+
+        /// <summary>
+        /// The farthest sample in the cluster. This value is used in iterative minibatch calculation.
+        /// It is compared with the farthest sample in the minibatch respective to the new position of centroid.
+        /// </summary>
+        [DataMember]
+        public double[] InClusterMaxDistanceSample { get; set; }
+
         /// <summary>
         /// Nearest cluster number
         /// </summary>
