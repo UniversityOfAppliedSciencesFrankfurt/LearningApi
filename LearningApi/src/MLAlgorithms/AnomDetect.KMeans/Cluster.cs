@@ -13,6 +13,12 @@ namespace LearningFoundation.Clustering.KMeans
     public class Cluster
     {
         /// <summary>
+        /// Cumulated number of samples
+        /// </summary>
+        [DataMember]
+        public long NumberOfSamples { get; set; }
+
+        /// <summary>
         /// The original index of this cluster's samples before clustering
         /// </summary>
         public int[] ClusterDataOriginalIndex { get; set; }
@@ -58,15 +64,7 @@ namespace LearningFoundation.Clustering.KMeans
         /// Distance between the centroid and the farthest sample of this cluster
         /// </summary>
         [DataMember]
-        public double InClusterMaxDistance { get; internal set; }
-
-
-        /// <summary>
-        /// The farthest sample in the cluster. This value is used in iterative minibatch calculation.
-        /// It is compared with the farthest sample in the minibatch respective to the new position of centroid.
-        /// </summary>
-        [DataMember]
-        public double[] InClusterMaxDistanceSample { get; set; }
+        public double InClusterMaxDistance { get; internal set; }    
 
         /// <summary>
         /// Nearest cluster number
@@ -124,6 +122,13 @@ namespace LearningFoundation.Clustering.KMeans
         /// </summary>
         [DataMember]
         public double[] PreviousCentroid { get; set; }
-        
+
+        /// <summary>
+        /// The farthest sample in the cluster. This value is used in iterative minibatch calculation.
+        /// It is compared with the farthest sample in the minibatch respective to the new position of centroid.
+        /// </summary>
+        [DataMember]
+        internal double[] PreviousInClusterFarthestSample { get; set; }
+
     }
 }

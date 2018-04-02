@@ -98,8 +98,10 @@ namespace LearningFoundation.Clustering.KMeans
                 validateParams(rawData, ClusterSettings.KmeansAlgorithm, ClusterSettings.KmeansMaxIterations, ClusterSettings.NumberOfClusters, ClusterSettings.NumberOfAttributes);
 
                 // If first run. No load model done.
-                if(this.m_instance == null)
-                    this.m_instance = new KMeansModel(ClusterSettings.NumberOfClusters);
+                if (this.m_instance == null)
+                    this.m_instance = new KMeansModel(ClusterSettings.NumberOfClusters, rawData.Length);
+                else
+                    this.m_instance.NumOfSamples += rawData.Length;
 
                 double[][] calculatedCentroids;
 
@@ -115,7 +117,12 @@ namespace LearningFoundation.Clustering.KMeans
                 }
 
                 //create the clusters' result & statistics
-                this.m_instance.Clusters = ClusteringResults.CreateClusteringResult(rawData, this.m_instance.DataToClusterMapping, calculatedCentroids, this.m_instance.NumberOfClusters);
+                Cluster[] cluster;
+                cluster = ClusteringResults.CreateClusteringResult(rawData, this.m_instance.DataToClusterMapping, calculatedCentroids, this.m_instance.NumberOfClusters);
+                getNewStats(cluster);
+
+                //adjust due to partials
+                recalcPartialCentroids();
 
                 if (ClusterSettings.KmeansMaxIterations <= IterationReached)
                 {
@@ -515,40 +522,91 @@ namespace LearningFoundation.Clustering.KMeans
             }
         }
 
-        private  void recalcPartialCentroids(double[][] centroids, int numOfSamples)
+        private  void recalcPartialCentroids()
         {
             //
             // This code recalculate sum by adding a mean from previous minibatch.
-            for (int i = 0; i < centroids.Length; i++)
+            for (int i = 0; i < this.Instance.NumberOfClusters; i++)
             {
-
-                // do we need centroids????
-                // initialize centroids until decision is made
-                this.Instance.Clusters[i].Centroid = new double[centroids[0].Length];
+                
 
                 if (this.Instance.Clusters[i].PreviousCentroid != null)
                 {
+                    double f = (double)1 / (this.Instance.Clusters[i].NumberOfSamples + this.Instance.Clusters[i].PreviousNumberOfSamples);
+
                     /////
                     ///// issue with previous number of samples and centroids
                     /////
-                    for (int j = 0; j < centroids[i].Length; j++)
+                    for (int j = 0; j < this.Instance.Clusters[0].Centroid.Length; j++)
                     {
-                        double f = (double)1 / (numOfSamples + this.Instance.Clusters[i].PreviousNumberOfSamples);
-                        centroids[i][j] = f * (this.Instance.Clusters[i].PreviousNumberOfSamples * this.Instance.Clusters[i].PreviousCentroid[j] + numOfSamples * centroids[i][j]);
+                        this.Instance.Clusters[i].Centroid[j] = f * (this.Instance.Clusters[i].PreviousNumberOfSamples * this.Instance.Clusters[i].PreviousCentroid[j] + this.Instance.Clusters[i].NumberOfSamples * this.Instance.Clusters[i].Centroid[j]);
 
-                        this.Instance.Clusters[i].PreviousCentroid[j] = centroids[i][j];
-                        this.Instance.Clusters[i].Centroid[i] = centroids[i][j];
+                        //this.Instance.Clusters[i].PreviousCentroid[j] = this.Instance.Clusters[i].Centroid[j];
                     }
 
-                    //adjust number of samples
+                    adjustCurrentInClusterMaxDistance(i);
+                    checkOldInClusterMaxDistance(i);
+                    
                 }
                 else
                 {
-                    //set previous samples
-
-                    // do we need centroids????
-                    this.Instance.Clusters[i].Centroid = centroids[i];
+                    this.Instance.Clusters[i].PreviousInClusterFarthestSample = this.Instance.Clusters[i].InClusterFarthestSample;
                 }
+
+                this.Instance.Clusters[i].PreviousCentroid = this.Instance.Clusters[i].Centroid;
+                this.Instance.Clusters[i].PreviousNumberOfSamples += this.Instance.Clusters[i].NumberOfSamples;
+            }
+        }
+
+        private void checkOldInClusterMaxDistance(int cluster)
+        {
+            double oldDistance = calculateDistance(this.Instance.Clusters[cluster].Centroid, this.Instance.Clusters[cluster].PreviousInClusterFarthestSample);
+            if (oldDistance > this.Instance.Clusters[cluster].InClusterMaxDistance)
+            {
+                this.Instance.Clusters[cluster].InClusterMaxDistance = oldDistance;
+            }
+            else
+            {
+                this.Instance.Clusters[cluster].PreviousInClusterFarthestSample = this.Instance.Clusters[cluster].InClusterFarthestSample;
+            }
+        }
+
+        private void adjustCurrentInClusterMaxDistance(int cluster)
+        {
+            this.Instance.Clusters[cluster].InClusterMaxDistance = 0;
+            double curDistance;
+            for (int i = 0; i < this.Instance.Clusters[cluster].NumberOfSamples; i++)
+            {
+                curDistance = calculateDistance(this.Instance.Clusters[cluster].Centroid, this.Instance.Clusters[cluster].ClusterData[i]);
+                if (curDistance > this.Instance.Clusters[cluster].InClusterMaxDistance)
+                {
+                    this.Instance.Clusters[cluster].InClusterMaxDistance = curDistance;
+                    this.Instance.Clusters[cluster].InClusterFarthestSample = this.Instance.Clusters[cluster].ClusterData[i];
+                }
+            }
+        }
+
+        private void getNewStats(Cluster[] cluster)
+        {
+            for (int i = 0; i < cluster.Length; i++)
+            {
+                this.Instance.Clusters[i].Centroid = cluster[i].Centroid;
+                this.Instance.Clusters[i].ClusterData = cluster[i].ClusterData;
+                this.Instance.Clusters[i].ClusterDataDistanceToCentroid = cluster[i].ClusterDataDistanceToCentroid;
+                this.Instance.Clusters[i].ClusterDataOriginalIndex = cluster[i].ClusterDataOriginalIndex;
+                this.Instance.Clusters[i].ClusterOfNearestForeignSample = cluster[i].ClusterOfNearestForeignSample;
+                this.Instance.Clusters[i].DistanceToNearestClusterCentroid = cluster[i].DistanceToNearestClusterCentroid;
+                this.Instance.Clusters[i].DistanceToNearestForeignSample = cluster[i].DistanceToNearestForeignSample;
+                this.Instance.Clusters[i].DistanceToNearestForeignSampleInNearestCluster = cluster[i].DistanceToNearestForeignSampleInNearestCluster;
+                this.Instance.Clusters[i].InClusterFarthestSample = cluster[i].InClusterFarthestSample;
+                this.Instance.Clusters[i].InClusterFarthestSampleIndex = cluster[i].InClusterFarthestSampleIndex;
+                this.Instance.Clusters[i].InClusterMaxDistance = cluster[i].InClusterMaxDistance;
+                this.Instance.Clusters[i].Mean = cluster[i].Mean;
+                this.Instance.Clusters[i].NearestCluster = cluster[i].NearestCluster;
+                this.Instance.Clusters[i].NearestForeignSample = cluster[i].NearestForeignSample;
+                this.Instance.Clusters[i].NearestForeignSampleInNearestCluster = cluster[i].NearestForeignSampleInNearestCluster;
+                this.Instance.Clusters[i].NumberOfSamples = cluster[i].NumberOfSamples;
+                this.Instance.Clusters[i].StandardDeviation = cluster[i].StandardDeviation;
             }
         }
 

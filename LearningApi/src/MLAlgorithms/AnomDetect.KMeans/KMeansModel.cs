@@ -43,11 +43,11 @@ namespace LearningFoundation.Clustering.KMeans
         /// </summary>
         /// <param name="numOfClusters">Desired number of clusters</param>
         /// <param name="numOfSamples">number of samples</param>
-        public KMeansModel(int numOfClusters, int numOfSamples = -1)
+        public KMeansModel(int numOfClusters, int numOfSamples = 0)
         {
             //this.RawData = data;
             this.NumberOfClusters = numOfClusters;
-            this.NumOfSamples = numOfSamples;
+            this.NumOfSamples = numOfSamples;            
             this.Clusters = new Cluster[numOfClusters];
             for (int i = 0; i < numOfClusters; i++)
             {

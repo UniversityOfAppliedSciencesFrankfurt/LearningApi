@@ -37,6 +37,7 @@ namespace LearningFoundation.Clustering.KMeans
                 {
                     cluster[i] = new Cluster();
                     cluster[i].Centroid = Centroids[i];
+                    cluster[i].NumberOfSamples = clusterSamplesCounter[i];
                     cluster[i].ClusterData = new double[clusterSamplesCounter[i]][];
                     cluster[i].ClusterDataOriginalIndex = new int[clusterSamplesCounter[i]];
 

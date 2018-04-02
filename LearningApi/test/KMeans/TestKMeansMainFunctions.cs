@@ -80,15 +80,19 @@ namespace Test
             clusterCenters[2] = new double[] { 30.0, 30.0 };
 
             double[][] clusterCenters2 = new double[3][];
-            clusterCenters2[0] = new double[] { 5.2, 4.9 };
-            clusterCenters2[1] = new double[] { 14.8, 15.1 };
-            clusterCenters2[2] = new double[] { 29.5, 29.7 };
+            clusterCenters2[0] = new double[] { 6, 5 };
+            clusterCenters2[1] = new double[] { 17, 18};
+            clusterCenters2[2] = new double[] { 28, 30 };
 
             string[] attributes = new string[] { "Height", "Weight" };
 
             int numAttributes = attributes.Length;  // 2 in this demo (height,weight)
             int numClusters = 3;  // vary this to experiment (must be between 2 and number data tuples)
             int maxCount = 300;  // trial and error
+
+            double[][] apiResp1Centroid = new double[numClusters][];
+            double[][] apiResp2Centroid = new double[numClusters][];
+            double[][] api2Resp1Centroid = new double[numClusters][];
 
             ClusteringSettings settings = new ClusteringSettings(maxCount, numClusters, numAttributes, KmeansAlgorithm: 2);
 
@@ -118,54 +122,64 @@ namespace Test
             api.UseKMeans(settings);
 
             // train
-            var apiResp1 = api.Run() as KMeansScore;
+            var apiResp = api.Run() as KMeansScore;
 
-            Assert.True(apiResp1.Model.Clusters != null);
-            Assert.True(apiResp1.Model.Clusters.Length == clusterCenters.Length);
+            Assert.True(apiResp.Model.Clusters != null);
+            Assert.True(apiResp.Model.Clusters.Length == clusterCenters.Length);
 
+            for (int i = 0; i < numClusters; i++)
+            {
+                apiResp1Centroid[i] = apiResp.Model.Clusters[i].Centroid;
+            }
+            
+            
             // Predict
-            var apiResult1 = api.Algorithm.Predict(clusterCenters, api.Context) as KMeansResult;
-            Assert.True(apiResult1.PredictedClusters[0] == 0);
-            Assert.True(apiResult1.PredictedClusters[1] == 1);
-            Assert.True(apiResult1.PredictedClusters[2] == 2);
+            var apiResult = api.Algorithm.Predict(clusterCenters, api.Context) as KMeansResult;
+            Assert.True(apiResult.PredictedClusters[0] == 0);
+            Assert.True(apiResult.PredictedClusters[1] == 1);
+            Assert.True(apiResult.PredictedClusters[2] == 2);
 
             /// run with new data
             runNum++;
 
-            double[][] initCentroids = new double[numClusters][];
-            for (int i = 0; i < numClusters; i++)
-            {
-                initCentroids[i] = apiResp1.Model.Clusters[i].Centroid;
-            }
-
-            settings = new ClusteringSettings(maxCount, numClusters, numAttributes, KmeansAlgorithm: 2, initialCentroids: initCentroids);
+            settings = new ClusteringSettings(maxCount, numClusters, numAttributes, KmeansAlgorithm: 2, initialCentroids: apiResp1Centroid);
             
             // train
-            var apiResp2 = api.Run() as KMeansScore;
+            apiResp = api.Run() as KMeansScore;
 
-            Assert.True(apiResp2.Model.Clusters != null);
-            Assert.True(apiResp2.Model.Clusters.Length == clusterCenters.Length);
+            Assert.True(apiResp.Model.Clusters != null);
+            Assert.True(apiResp.Model.Clusters.Length == clusterCenters.Length);
+
+            for (int i = 0; i < numClusters; i++)
+            {
+                apiResp2Centroid[i] = apiResp.Model.Clusters[i].Centroid;
+            }
 
             // Predict
-            var apiResult2 = api.Algorithm.Predict(clusterCenters, api.Context) as KMeansResult;
-            Assert.True(apiResult2.PredictedClusters[0] == 0);
-            Assert.True(apiResult2.PredictedClusters[1] == 1);
-            Assert.True(apiResult2.PredictedClusters[2] == 2);
+            apiResult = api.Algorithm.Predict(clusterCenters, api.Context) as KMeansResult;
+            Assert.True(apiResult.PredictedClusters[0] == 0);
+            Assert.True(apiResult.PredictedClusters[1] == 1);
+            Assert.True(apiResult.PredictedClusters[2] == 2);
 
 
             api2.UseKMeans(settings);
 
             // train
-            var api2Resp1 = api.Run() as KMeansScore;
+            var api2Resp = api2.Run() as KMeansScore;
 
-            Assert.True(api2Resp1.Model.Clusters != null);
-            Assert.True(api2Resp1.Model.Clusters.Length == clusterCenters.Length);
+            Assert.True(api2Resp.Model.Clusters != null);
+            Assert.True(api2Resp.Model.Clusters.Length == clusterCenters.Length);
+
+            for (int i = 0; i < numClusters; i++)
+            {
+                api2Resp1Centroid[i] = api2Resp.Model.Clusters[i].Centroid;
+            }
 
             // Predict
-            var api2Result1 = api.Algorithm.Predict(clusterCenters, api.Context) as KMeansResult;
-            Assert.True(api2Result1.PredictedClusters[0] == 0);
-            Assert.True(api2Result1.PredictedClusters[1] == 1);
-            Assert.True(api2Result1.PredictedClusters[2] == 2);
+            var api2Result = api2.Algorithm.Predict(clusterCenters, api2.Context) as KMeansResult;
+            Assert.True(api2Result.PredictedClusters[0] == 0);
+            Assert.True(api2Result.PredictedClusters[1] == 1);
+            Assert.True(api2Result.PredictedClusters[2] == 2);
 
             //// compare
 
