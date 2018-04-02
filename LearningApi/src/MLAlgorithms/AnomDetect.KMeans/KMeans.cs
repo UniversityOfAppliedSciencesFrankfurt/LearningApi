@@ -515,7 +515,7 @@ namespace LearningFoundation.Clustering.KMeans
             }
         }
 
-        private  void recalcPartialCentroids(double[][] centroids, int numOfSamples)
+        private void recalcPartialCentroids(double[][] centroids, int numOfSamples)
         {
             //
             // This code recalculate sum by adding a mean from previous minibatch.
