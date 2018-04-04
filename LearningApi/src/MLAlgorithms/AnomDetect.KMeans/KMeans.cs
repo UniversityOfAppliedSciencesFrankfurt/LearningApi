@@ -544,22 +544,25 @@ namespace LearningFoundation.Clustering.KMeans
                         //this.Instance.Clusters[i].PreviousCentroid[j] = this.Instance.Clusters[i].Centroid[j];
                     }
 
-                    adjustCurrentInClusterMaxDistance(i);
-                    checkOldInClusterMaxDistance(i);
+                    adjustInClusterMaxDistance(i);
+                    //checkOldInClusterMaxDistance(i);
                     
                 }
+                /*
                 else
                 {
                     this.Instance.Clusters[i].PreviousInClusterFarthestSample = this.Instance.Clusters[i].InClusterFarthestSample;
-                }
+                }*/
 
                 this.Instance.Clusters[i].PreviousCentroid = this.Instance.Clusters[i].Centroid;
                 this.Instance.Clusters[i].PreviousNumberOfSamples += this.Instance.Clusters[i].NumberOfSamples;
+                this.Instance.Clusters[i].PreviousInClusterMaxDistance = this.Instance.Clusters[i].InClusterMaxDistance;
             }
         }
 
         private void checkOldInClusterMaxDistance(int cluster)
         {
+            
             double oldDistance = calculateDistance(this.Instance.Clusters[cluster].Centroid, this.Instance.Clusters[cluster].PreviousInClusterFarthestSample);
             if (oldDistance > this.Instance.Clusters[cluster].InClusterMaxDistance)
             {
@@ -568,12 +571,13 @@ namespace LearningFoundation.Clustering.KMeans
             else
             {
                 this.Instance.Clusters[cluster].PreviousInClusterFarthestSample = this.Instance.Clusters[cluster].InClusterFarthestSample;
-            }
+            }        
         }
 
-        private void adjustCurrentInClusterMaxDistance(int cluster)
+        private void adjustInClusterMaxDistance(int cluster)
         {
             this.Instance.Clusters[cluster].InClusterMaxDistance = 0;
+            // calculate new in cluster max distance
             double curDistance;
             for (int i = 0; i < this.Instance.Clusters[cluster].NumberOfSamples; i++)
             {
@@ -581,8 +585,15 @@ namespace LearningFoundation.Clustering.KMeans
                 if (curDistance > this.Instance.Clusters[cluster].InClusterMaxDistance)
                 {
                     this.Instance.Clusters[cluster].InClusterMaxDistance = curDistance;
-                    this.Instance.Clusters[cluster].InClusterFarthestSample = this.Instance.Clusters[cluster].ClusterData[i];
+                    //this.Instance.Clusters[cluster].InClusterFarthestSample = this.Instance.Clusters[cluster].ClusterData[i];
                 }
+            }
+
+            // compare to max possible old in cluster max distance
+            double oldDistance = this.Instance.Clusters[cluster].PreviousInClusterMaxDistance + calculateDistance(this.Instance.Clusters[cluster].Centroid, this.Instance.Clusters[cluster].PreviousCentroid);
+            if (oldDistance > this.Instance.Clusters[cluster].InClusterMaxDistance)
+            {
+                this.Instance.Clusters[cluster].InClusterMaxDistance = oldDistance;
             }
         }
 

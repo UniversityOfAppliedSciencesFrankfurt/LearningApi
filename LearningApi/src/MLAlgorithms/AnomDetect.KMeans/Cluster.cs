@@ -130,5 +130,8 @@ namespace LearningFoundation.Clustering.KMeans
         [DataMember]
         internal double[] PreviousInClusterFarthestSample { get; set; }
 
+        [DataMember]
+        public double PreviousInClusterMaxDistance { get; set; }
+
     }
 }
