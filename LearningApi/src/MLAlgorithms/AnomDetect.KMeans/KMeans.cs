@@ -554,8 +554,9 @@ namespace LearningFoundation.Clustering.KMeans
                     this.Instance.Clusters[i].PreviousInClusterFarthestSample = this.Instance.Clusters[i].InClusterFarthestSample;
                 }*/
 
+                this.Instance.Clusters[i].NumberOfSamples += this.Instance.Clusters[i].PreviousNumberOfSamples;
+                this.Instance.Clusters[i].PreviousNumberOfSamples = this.Instance.Clusters[i].NumberOfSamples;
                 this.Instance.Clusters[i].PreviousCentroid = this.Instance.Clusters[i].Centroid;
-                this.Instance.Clusters[i].PreviousNumberOfSamples += this.Instance.Clusters[i].NumberOfSamples;
                 this.Instance.Clusters[i].PreviousInClusterMaxDistance = this.Instance.Clusters[i].InClusterMaxDistance;
             }
         }

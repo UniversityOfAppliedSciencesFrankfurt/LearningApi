@@ -72,7 +72,7 @@ namespace Test
 
 
         [Fact]
-        public void Test_TrainAndPredictPartials()
+        public void Test_TrainPartials()
         {
             double[][] clusterCenters = new double[3][];
             clusterCenters[0] = new double[] { 5.0, 5.0 };
@@ -91,8 +91,8 @@ namespace Test
             int maxCount = 300;  // trial and error
 
             double[][] apiResp1Centroid = new double[numClusters][];
-            double[][] apiResp2Centroid = new double[numClusters][];
-            double[][] api2Resp1Centroid = new double[numClusters][];
+            double[] apiResp1MaxDistance = new double[numClusters];
+            double[] apiResp1NumSamples = new double[numClusters];
 
             ClusteringSettings settings = new ClusteringSettings(maxCount, numClusters, numAttributes, KmeansAlgorithm: 2);
 
@@ -119,49 +119,7 @@ namespace Test
                 return rawData2;
             });
 
-            api.UseKMeans(settings);
-
-            // train
-            var apiResp = api.Run() as KMeansScore;
-
-            Assert.True(apiResp.Model.Clusters != null);
-            Assert.True(apiResp.Model.Clusters.Length == clusterCenters.Length);
-
-            for (int i = 0; i < numClusters; i++)
-            {
-                apiResp1Centroid[i] = apiResp.Model.Clusters[i].Centroid;
-            }
-            
-            
-            // Predict
-            var apiResult = api.Algorithm.Predict(clusterCenters, api.Context) as KMeansResult;
-            Assert.True(apiResult.PredictedClusters[0] == 0);
-            Assert.True(apiResult.PredictedClusters[1] == 1);
-            Assert.True(apiResult.PredictedClusters[2] == 2);
-
-            /// run with new data
-            runNum++;
-
-            settings = new ClusteringSettings(maxCount, numClusters, numAttributes, KmeansAlgorithm: 2, initialCentroids: apiResp1Centroid);
-            
-            // train
-            apiResp = api.Run() as KMeansScore;
-
-            Assert.True(apiResp.Model.Clusters != null);
-            Assert.True(apiResp.Model.Clusters.Length == clusterCenters.Length);
-
-            for (int i = 0; i < numClusters; i++)
-            {
-                apiResp2Centroid[i] = apiResp.Model.Clusters[i].Centroid;
-            }
-
-            // Predict
-            apiResult = api.Algorithm.Predict(clusterCenters, api.Context) as KMeansResult;
-            Assert.True(apiResult.PredictedClusters[0] == 0);
-            Assert.True(apiResult.PredictedClusters[1] == 1);
-            Assert.True(apiResult.PredictedClusters[2] == 2);
-
-
+            // start api2 that runs only second raw data (rawData2)
             api2.UseKMeans(settings);
 
             // train
@@ -170,18 +128,53 @@ namespace Test
             Assert.True(api2Resp.Model.Clusters != null);
             Assert.True(api2Resp.Model.Clusters.Length == clusterCenters.Length);
 
+            // start api that runs first raw data (rawData) and save results in variables
+            api.UseKMeans(settings);
+
+            // train
+            var apiResp = api.Run() as KMeansScore;
+
+            Assert.True(apiResp.Model.Clusters != null);
+            Assert.True(apiResp.Model.Clusters.Length == clusterCenters.Length);
+
+            // save first run results in variables
             for (int i = 0; i < numClusters; i++)
             {
-                api2Resp1Centroid[i] = api2Resp.Model.Clusters[i].Centroid;
+                apiResp1Centroid[i] = apiResp.Model.Clusters[i].Centroid;
+                apiResp1MaxDistance[i] = apiResp.Model.Clusters[i].InClusterMaxDistance;
+                apiResp1NumSamples[i] = apiResp.Model.Clusters[i].NumberOfSamples;
             }
+            
 
-            // Predict
-            var api2Result = api2.Algorithm.Predict(clusterCenters, api2.Context) as KMeansResult;
-            Assert.True(api2Result.PredictedClusters[0] == 0);
-            Assert.True(api2Result.PredictedClusters[1] == 1);
-            Assert.True(api2Result.PredictedClusters[2] == 2);
+            /// run with new data
+            runNum++;
 
-            //// compare
+            // continue partial api run using second raw data (rawData2)
+            settings = new ClusteringSettings(maxCount, numClusters, numAttributes, KmeansAlgorithm: 2, initialCentroids: apiResp1Centroid);
+            
+            // train
+            apiResp = api.Run() as KMeansScore;
+
+            Assert.True(apiResp.Model.Clusters != null);
+            Assert.True(apiResp.Model.Clusters.Length == clusterCenters.Length);
+
+            //// compare results 
+
+            double f, res;
+            
+            for (int i = 0; i < numClusters; i++)
+            {
+                // partial formula f*res
+                f = (double)1 / apiResp.Model.Clusters[i].NumberOfSamples;
+                for (int j = 0; j < numAttributes; j++)
+                {
+                    res = apiResp1Centroid[i][j] * apiResp1NumSamples[i] + api2Resp.Model.Clusters[i].Centroid[j] * api2Resp.Model.Clusters[i].NumberOfSamples;
+                    // partial centroid check
+                    Assert.True(apiResp.Model.Clusters[i].Centroid[j] == f * res);
+                }
+                // max distance in cluster check
+                Assert.True(apiResp.Model.Clusters[i].InClusterMaxDistance >= apiResp1MaxDistance[i] + KMeans.calculateDistance(apiResp1Centroid[i], apiResp.Model.Clusters[i].Centroid));
+            }
 
         }
 
