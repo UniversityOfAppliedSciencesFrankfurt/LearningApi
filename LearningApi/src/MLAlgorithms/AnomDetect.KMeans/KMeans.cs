@@ -495,7 +495,7 @@ namespace LearningFoundation.Clustering.KMeans
                     changed = assign(rawData, clusterAssignments, centroids);
 
                     // use new clustering to update cluster means
-                    updateMeans(rawData, clusterAssignments, means);
+                    UpdateMeans(rawData, clusterAssignments, means);
 
                     // use new means to update centroids
                     if (kMeanAlgorithm == 1)
@@ -861,7 +861,7 @@ namespace LearningFoundation.Clustering.KMeans
         /// <param name="clustering">contains the assigned cluster number for each sample of the RawData</param>
         /// <param name="means">mean of each cluster (Updated in the function)</param>
 
-        internal static void updateMeans(double[][] rawData, int[] clustering, double[][] means, long previousSampleCount = 0, double[] previousMeanValues = null)
+        internal static void UpdateMeans(double[][] rawData, int[] clustering, double[][] means, long previousSampleCount = 0, double[] previousMeanValues = null)
         {
             int Code;
             string Message = "Function <updateMeans>: ";

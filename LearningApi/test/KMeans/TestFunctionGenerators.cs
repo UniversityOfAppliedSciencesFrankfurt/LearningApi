@@ -7,6 +7,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Xunit;
 using LearningFoundation.Clustering.KMeans;
+using LearningFoundation.Helpers;
 
 namespace Test
 {   
@@ -39,10 +40,10 @@ namespace Test
             // number of similar functions
             int NumSimFunc = 999;
             // percentage of added noise level (distortion) 
-            int NRP = 10;
+            int noice = 10;
 
             // generate the similar functions
-            generateSimilarFunctions("TestFile01", NumSimFunc, NRP);
+            generateSimilarFunctions("TestFile01", NumSimFunc, noice);
         }
 
         #endregion
@@ -68,15 +69,8 @@ namespace Test
             Helpers.CheckOrCreateDefaultFunction(path, functionFileName, 100, 2);
 
             // load original function
-            double[][] mFun = Helpers.LoadFunctionData(Path.Combine(path, functionFileName));
-
-            // initialize for the similar function
-            double[][] mFun2 = new double[mFun.Length][];
-            for (int i = 0; i < mFun2.Length; i++)
-            {
-                mFun2[i] = new double[mFun[0].Length];
-            }
-
+            double[][] referenceFunction = Helpers.LoadFunctionData(Path.Combine(path, functionFileName));
+            
             // complete file path and name
             string fName = path + "\\" + cPathPrefix + noiseRangePercentage + "\\" + Path.GetFileNameWithoutExtension(functionName) + " SimilarFunctions NRP" + noiseRangePercentage + ".csv";
            
@@ -84,74 +78,22 @@ namespace Test
             string fNameNormalized = path + "\\" +cPathPrefix + noiseRangePercentage + "\\" + Path.GetFileNameWithoutExtension(functionName) + " SimilarFunctions Normalized NRP" + noiseRangePercentage + ".csv";
           
             // save original function in both new file
-            Helpers.Write2CSVFile(mFun, fName);
-            Helpers.Write2CSVFile(normalizeData(mFun), fNameNormalized);
-
-            // seed for random numbers
-            int seed = 0;
-            // calculte random noise limits
-            double[] randomNoiseLimit = noiseLimit(mFun, noiseRangePercentage);
+            Helpers.Write2CSVFile(referenceFunction, fName);
+            Helpers.Write2CSVFile(normalizeData(referenceFunction), fNameNormalized);
 
             for (int i = 0; i < numFunctions; i++)
             {
-                mFun2[0] = mFun[0];
-                //for all other dimensions
-                for (int d = 1; d < mFun.Length; d++)
-                {
-                    // add noise on each point of the function
-                    for (int j = 0; j < mFun[0].Length; j++)
-                    {
-                        // add random noise (between -NL & +NL of the dimension) to the coordinates                 
-                        mFun2[d][j] = mFun[d][j] + getRandomNumber(randomNoiseLimit[d] * -1, randomNoiseLimit[d], seed);
-                        seed++;
-                    }
-                }
+                double[][] similarFuncData = FunctionGenerator.CreateSimilarFromReferenceFunc(referenceFunction, noiseRangePercentage);
+
                 // append the newly generated similar function
-                Helpers.Write2CSVFile(mFun2, fName, true);
-                Helpers.Write2CSVFile(normalizeData(mFun2), fNameNormalized, true);
+                Helpers.Write2CSVFile(similarFuncData, fName, true);
+                Helpers.Write2CSVFile(normalizeData(similarFuncData), fNameNormalized, true);
             }
         }
 
-        /// <summary>
-        /// noiseLimit is a function that calculates the limits of the noise based on the noise range percentge provided by the user
-        /// </summary>
-        /// <param name="baseFunction">main function</param>
-        /// <param name="noiseRangePercentage">percentage of noise range compared to each attribute range</param>
-        /// <returns>the noise limit of each attribute</returns>
-        private static double[] noiseLimit (double[][] baseFunction, int noiseRangePercentage)
-        {
-            // initialize the minimum, maximum and noise limit vectors
-            double[] min = new double[baseFunction.Length];
-            double[] max = new double[baseFunction.Length];
-            double[] nl = new double[baseFunction.Length];
-            // get the minimum, maximum and noise limit of each dimension
-            for (int i = 0; i < baseFunction.Length; i++)
-            {
-                for (int j = 0; j < baseFunction[0].Length; j++)
-                {
-                    if (j == 0)
-                    {
-                        min[i] = baseFunction[i][j];
-                        max[i] = baseFunction[i][j];
-                    }
-                    else
-                    {
-                        if (baseFunction[i][j] < min[i])
-                        {
-                            min[i] = baseFunction[i][j];
-                        }
-                        else if(baseFunction[i][j] > max[i])
-                        {
-                            max[i] = baseFunction[i][j];
-                        }
-                    }
-                }
-                // calculate noise limit of the current dimension
-                nl[i] = (max[i] - min[i])*noiseRangePercentage/200;
-            }
+     
 
-            return nl;
-        }
+       
         
         /// <summary>
         /// getRandomNumber is a function that generates a random number between a desired minimum and maximum

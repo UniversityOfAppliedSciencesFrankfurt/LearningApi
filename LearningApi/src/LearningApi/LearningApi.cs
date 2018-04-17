@@ -171,7 +171,7 @@ namespace LearningFoundation
         }
 
         /// <summary>
-        /// Saves the current state of algorithm.
+        /// Saves the current state of algorithm.This method saves all LearningApi instance.
         /// </summary>
         public void Save(string modelName)
         {
