@@ -288,8 +288,9 @@ namespace Test
         [InlineData(1000, 35)]
         public void Test_FunctionRecognitionModule(int points, int noiceForPrediction)
         {
+            #region Training
             var batch = 100;
-            
+
             var funcData = FunctionGenerator.CreateFunction(points, 2, 2 * Math.PI / 100);
 
             LearningApi api = new LearningApi();
@@ -318,7 +319,9 @@ namespace Test
             {
                 res = api.RunBatch() as KMeansFunctionRecognitonScore;
             }
-            
+            #endregion
+
+            #region Prediction
             var noicedFunc = FunctionGenerator.CreateSimilarFromReferenceFunc(funcData.ToArray(), noiceForPrediction);
 
             double[][] data = formatData(noicedFunc);
@@ -335,8 +338,75 @@ namespace Test
             {
                 Assert.False(predictionResult.Loss == 1.0);
             }
+            #endregion
         }
 
+        [InlineData(10)]
+        [InlineData(9)]
+        [InlineData(5)]
+        [InlineData(1)]
+        [InlineData(28)]
+        [InlineData(25)]
+        [InlineData(30)]
+        [InlineData(35)]
+        [Theory]
+        public void Test_FunctionRecognitionModuleSave(int noiceForPrediction)
+        {
+            #region Train and Save
+            var batch = 100;
+
+            var funcData = FunctionGenerator.CreateFunction(500, 2, 2 * Math.PI / 100);
+
+            LearningApi api = new LearningApi();
+            api.UseActionModule<object, double[][]>((notUsed, ctx) =>
+            {
+                var similarFuncData = FunctionGenerator.CreateSimilarFromReferenceFunc(funcData.ToArray(), 10);
+
+                double[][] formattedData = formatData(similarFuncData);
+
+                return formattedData;
+            });
+
+            double[][] initCentroids = new double[4][];
+            initCentroids[0] = new double[] { 1.53, 0.63 };
+            initCentroids[1] = new double[] { 4.68, -0.63 };
+            initCentroids[2] = new double[] { 7.85, 0.62 };
+            initCentroids[3] = new double[] { 10.99, -0.64 };
+
+            ClusteringSettings settings = new ClusteringSettings(0, numClusters: 4, numDims: 2, KmeansAlgorithm: 2, initialCentroids: initCentroids, tolerance: 0) { KmeansMaxIterations = 1000 };
+
+            api.UseKMeansFunctionRecognitionModule(settings);
+
+            KMeansFunctionRecognitonScore res;
+
+            while (batch-- > 0)
+            {
+                res = api.RunBatch() as KMeansFunctionRecognitonScore;
+            }
+
+            api.Save("sinusmodel");
+            #endregion
+
+            #region Load And Predict
+            var api2 = LearningApi.Load("sinusmodel");
+            var noicedFunc = FunctionGenerator.CreateSimilarFromReferenceFunc(funcData.ToArray(), noiceForPrediction);
+
+            double[][] data = formatData(noicedFunc);
+
+            var predictionResult = api2.Algorithm.Predict(data, null) as KMeansFuncionRecognitionResult;
+
+            // TRUE positives
+            if (noiceForPrediction <= 10)
+            {
+                Assert.True(predictionResult.Loss == 1.0);
+            }
+            // TRUE negatives
+            else if (noiceForPrediction >= 25)
+            {
+                Assert.False(predictionResult.Loss == 1.0);
+            }
+            #endregion
+        }
         private static double[][] formatData(double[][] similarFuncData)
         {
             double[][] data = new double[similarFuncData[0].Length][];

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Runtime.Serialization;
 using System.Threading.Tasks;
 
 
@@ -10,6 +11,7 @@ namespace LearningFoundation.Clustering.KMeans
     /// <summary>
     /// ClusteringSettings is a class that contains the desired settings by the user for clustering.
     /// </summary>
+    [DataContract]
     public class ClusteringSettings
     {
         /// <summary>
@@ -19,16 +21,19 @@ namespace LearningFoundation.Clustering.KMeans
         /// <li> - 2: Centoids are the means</li>
         /// </ul>
         /// </summary>
+        [DataMember]
         public int KmeansAlgorithm { get; internal set; }
 
         /// <summary>
         /// maximum allowed number of Kmeans iteration for clustering
         /// </summary>
+        [DataMember]
         public int KmeansMaxIterations { get; internal set; }
 
         /// <summary>
         /// number of clusters
         /// </summary>
+        [DataMember]
         public int NumberOfClusters { get; internal set; }
 
         /// <summary>
@@ -39,16 +44,19 @@ namespace LearningFoundation.Clustering.KMeans
         /// <summary>
         /// Number of dimensions.
         /// </summary>
+        [DataMember]
         public int NumOfDimensions { get; internal set; }
 
         /// <summary>
         /// If set, it will be used as initial centroids.
         /// </summary>
+        [DataMember]
         public double[][] InitialCentroids { get; set; }
 
         /// <summary>
         /// A value in % representing the tolerance to possible outliers
         /// </summary>
+        [DataMember]
         public double Tolerance { get; internal set; }
 
         /// <summary>

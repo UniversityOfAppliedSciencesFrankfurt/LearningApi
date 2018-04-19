@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text;
 using System.Linq;
-
+using System.Runtime.Serialization;
 
 namespace AnomDetect.KMeans.FunctionRecognition
 {
@@ -21,28 +21,30 @@ namespace AnomDetect.KMeans.FunctionRecognition
     /// </summary>
     public class KMeansFunctionRecognitionAlgorithm : IAlgorithm
     {
-        private ClusteringSettings m_Settings;
+        [DataMember]
+        public ClusteringSettings Settings;
 
-        private KMeansFunctionRecognitonScore m_Score;
+        [DataMember]
+        public KMeansFunctionRecognitonScore Score;
 
         public KMeansFunctionRecognitionAlgorithm(ClusteringSettings settings)
         {
-            this.m_Settings = settings;
-            this.m_Score = new KMeansFunctionRecognitonScore();
-            this.m_Score.MaxCentroid = new double[settings.NumberOfClusters][];
-            this.m_Score.MinCentroid = new double[settings.NumberOfClusters][];
-            this.m_Score.Centroids = new double[settings.NumberOfClusters][];
+            this.Settings = settings;
+            this.Score = new KMeansFunctionRecognitonScore();
+            this.Score.MaxCentroid = new double[settings.NumberOfClusters][];
+            this.Score.MinCentroid = new double[settings.NumberOfClusters][];
+            this.Score.Centroids = new double[settings.NumberOfClusters][];
 
             for (int i = 0; i < settings.NumberOfClusters; i++)
             {
-                this.m_Score.MaxCentroid[i] = new double[settings.NumOfDimensions];
-                this.m_Score.MinCentroid[i] = new double[settings.NumOfDimensions];
-                this.m_Score.Centroids[i] = new double[settings.NumOfDimensions];
+                this.Score.MaxCentroid[i] = new double[settings.NumOfDimensions];
+                this.Score.MinCentroid[i] = new double[settings.NumOfDimensions];
+                this.Score.Centroids[i] = new double[settings.NumOfDimensions];
 
                 for (int dim = 0; dim < settings.NumOfDimensions; dim++)
                 {
-                    this.m_Score.MaxCentroid[i][dim] = double.MinValue;
-                    this.m_Score.MinCentroid[i][dim] = double.MaxValue;
+                    this.Score.MaxCentroid[i][dim] = double.MinValue;
+                    this.Score.MinCentroid[i][dim] = double.MaxValue;
                 }
             }
         }
@@ -56,7 +58,7 @@ namespace AnomDetect.KMeans.FunctionRecognition
         /// <returns></returns>
         public IScore Run(double[][] data, IContext ctx)
         {
-            KMeansAlgorithm kmeans = new KMeansAlgorithm(this.m_Settings);
+            KMeansAlgorithm kmeans = new KMeansAlgorithm(this.Settings);
 
             KMeansScore res = kmeans.Train(data, ctx) as KMeansScore;
 
@@ -67,40 +69,40 @@ namespace AnomDetect.KMeans.FunctionRecognition
 
             for (int clusterIndx=0; clusterIndx < res.Model.Clusters.Length;clusterIndx++)
             {
-                for (int dim = 0; dim < this.m_Settings.NumOfDimensions; dim++)
+                for (int dim = 0; dim < this.Settings.NumOfDimensions; dim++)
                 {
-                    if (res.Model.Clusters[clusterIndx].Centroid[dim] > this.m_Score.MaxCentroid[clusterIndx][dim])
+                    if (res.Model.Clusters[clusterIndx].Centroid[dim] > this.Score.MaxCentroid[clusterIndx][dim])
                     {
-                        this.m_Score.MaxCentroid[clusterIndx][dim] = res.Model.Clusters[clusterIndx].Centroid[dim];
+                        this.Score.MaxCentroid[clusterIndx][dim] = res.Model.Clusters[clusterIndx].Centroid[dim];
                     }
 
-                    if (res.Model.Clusters[clusterIndx].Centroid[dim] < this.m_Score.MinCentroid[clusterIndx][dim])
+                    if (res.Model.Clusters[clusterIndx].Centroid[dim] < this.Score.MinCentroid[clusterIndx][dim])
                     {
-                        this.m_Score.MinCentroid[clusterIndx][dim] = res.Model.Clusters[clusterIndx].Centroid[dim];
+                        this.Score.MinCentroid[clusterIndx][dim] = res.Model.Clusters[clusterIndx].Centroid[dim];
                     }
                 }
             }
 
-            this.m_Score.NomOfSamples += data.Length;
+            this.Score.NomOfSamples += data.Length;
 
             for (int clusterIndex = 0; clusterIndex < res.Model.Clusters.Length; clusterIndex++)
             {
-                this.m_Score.Centroids[clusterIndex] = new double[m_Settings.NumOfDimensions];
+                this.Score.Centroids[clusterIndex] = new double[Settings.NumOfDimensions];
 
-                for (int dim = 0; dim < m_Settings.NumOfDimensions; dim++)
+                for (int dim = 0; dim < Settings.NumOfDimensions; dim++)
                 {
-                    if (this.m_Score.MinCentroid[clusterIndex][dim] >= 0)
+                    if (this.Score.MinCentroid[clusterIndex][dim] >= 0)
                     {
-                        this.m_Score.Centroids[clusterIndex][dim] = (this.m_Score.MaxCentroid[clusterIndex][dim] + this.m_Score.MinCentroid[clusterIndex][dim])/2;
+                        this.Score.Centroids[clusterIndex][dim] = (this.Score.MaxCentroid[clusterIndex][dim] + this.Score.MinCentroid[clusterIndex][dim])/2;
                     }
                     else
                     {
-                        this.m_Score.Centroids[clusterIndex][dim] = ((this.m_Score.MaxCentroid[clusterIndex][dim] - this.m_Score.MinCentroid[clusterIndex][dim]) / 2) + this.m_Score.MinCentroid[clusterIndex][dim];
+                        this.Score.Centroids[clusterIndex][dim] = ((this.Score.MaxCentroid[clusterIndex][dim] - this.Score.MinCentroid[clusterIndex][dim]) / 2) + this.Score.MinCentroid[clusterIndex][dim];
                     }
                 }
             }
 
-            return m_Score;
+            return Score;
         }
 
         /// <summary>
@@ -124,23 +126,23 @@ namespace AnomDetect.KMeans.FunctionRecognition
         /// <returns></returns>
         public IResult Predict(double[][] funcData, IContext ctx)
         {
-            KMeansAlgorithm kmeans = new KMeansAlgorithm(this.m_Settings);
+            KMeansAlgorithm kmeans = new KMeansAlgorithm(this.Settings);
 
             KMeansScore res = kmeans.Train(funcData, ctx) as KMeansScore;
 
             int scores = 0;
 
             KMeansFuncionRecognitionResult predRes = new KMeansFuncionRecognitionResult();
-            predRes.ResultsPerCluster = new bool[m_Settings.NumberOfClusters];
+            predRes.ResultsPerCluster = new bool[Settings.NumberOfClusters];
      
-            double[][] results = new double[m_Settings.NumberOfClusters][];
+            double[][] results = new double[Settings.NumberOfClusters][];
             for (int i = 0; i < results.Length; i++)
             {
-                results[i] = new double[m_Settings.NumOfDimensions];
-                for (int dim = 0; dim < m_Settings.NumOfDimensions; dim++)
+                results[i] = new double[Settings.NumOfDimensions];
+                for (int dim = 0; dim < Settings.NumOfDimensions; dim++)
                 {
-                    if (res.Model.Clusters[i].Centroid[dim] >= m_Score.MinCentroid[i][dim] &&
-                        res.Model.Clusters[i].Centroid[dim] <= m_Score.MaxCentroid[i][dim])
+                    if (res.Model.Clusters[i].Centroid[dim] >= Score.MinCentroid[i][dim] &&
+                        res.Model.Clusters[i].Centroid[dim] <= Score.MaxCentroid[i][dim])
                     {
                         results[i][dim] = 1;
                         scores++;                       
@@ -152,7 +154,7 @@ namespace AnomDetect.KMeans.FunctionRecognition
 
                     //
                     // We calculate here the result of cluster over all dimensions. If all dimensions fits then cluster result is true.
-                    if (results[i].Count(r => r == 1) == m_Settings.NumOfDimensions)
+                    if (results[i].Count(r => r == 1) == Settings.NumOfDimensions)
                         predRes.ResultsPerCluster[i] = true;
                     else
                         predRes.ResultsPerCluster[i] = false;
@@ -160,8 +162,8 @@ namespace AnomDetect.KMeans.FunctionRecognition
             }
 
            
-            predRes.Result = (scores == m_Settings.NumberOfClusters * m_Settings.NumOfDimensions);
-            predRes.Loss = ((float)scores) / (m_Settings.NumberOfClusters * m_Settings.NumOfDimensions);
+            predRes.Result = (scores == Settings.NumberOfClusters * Settings.NumOfDimensions);
+            predRes.Loss = ((float)scores) / (Settings.NumberOfClusters * Settings.NumOfDimensions);
    
             return predRes;
         }

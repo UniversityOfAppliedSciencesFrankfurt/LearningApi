@@ -98,6 +98,9 @@ namespace LearningFoundation.DataProviders
         {
             get
             {
+                if (m_CurrentLine == null)
+                    return null;
+
                 var strCols = m_CurrentLine.Split(m_Delimiter);
 
                 //

@@ -34,9 +34,21 @@ namespace LearningFoundation
         /// Gets/Sets specifics ML algortim for training
         /// </summary>
         [IgnoreDataMember]
-        public IAlgorithm Algorithm { get; set; }
-        
-      
+        public IAlgorithm Algorithm
+        {
+            get
+            {
+                foreach (var module in this.Modules)
+                {
+                    if (module.Value is IAlgorithm)
+                        return module.Value as IAlgorithm;
+                }
+
+                return null;
+            }
+        }
+
+
         /// <summary>
         /// Main constructor.
         /// Initializes the API with specified internally managed context and persistence provider.
@@ -44,7 +56,7 @@ namespace LearningFoundation
         /// <param name="desc">Describes the data and features.</param>
         public LearningApi(DataDescriptor desc = null, IModelPersistenceProvider persistenceProvider = null)
         {
-            this.Context = new Context() { DataDescriptor = desc};
+            this.Context = new Context() { DataDescriptor = desc };
 
             this.Modules = new Dictionary<string, LearningFoundation.IPipelineModule>();
 
@@ -76,8 +88,8 @@ namespace LearningFoundation
 
             this.Modules.Add(name, module);
 
-            if (module is IAlgorithm)
-                this.Algorithm = module as IAlgorithm;
+            //if (module is IAlgorithm)
+            //    this.Algorithm = module as IAlgorithm;
 
             return this;
         }
@@ -96,7 +108,7 @@ namespace LearningFoundation
         public object Run()
         {
             dynamic data = null;
-            
+
             foreach (var item in this.Modules)
             {
                 dynamic module = item.Value;
