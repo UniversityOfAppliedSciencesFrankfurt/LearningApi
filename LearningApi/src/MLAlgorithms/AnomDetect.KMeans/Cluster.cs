@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Runtime.Serialization;
+using System.Text;
 
 namespace LearningFoundation.Clustering.KMeans
 {
@@ -130,5 +131,28 @@ namespace LearningFoundation.Clustering.KMeans
         [DataMember]
         public double PreviousInClusterMaxDistance { get; set; }
 
+        /// <summary>
+        /// Converts the cluster to string.
+        /// </summary>
+        /// <returns></returns>
+        public override string ToString()
+        {
+            return $"Cetroid: {fromArray(this.Centroid)}";
+        }
+
+        private static string fromArray(double[] centroid)
+        {
+            StringBuilder sb = new StringBuilder("{");
+
+            foreach (var item in centroid)
+            {
+                sb.Append(item);
+                sb.Append(", ");
+            }
+
+            sb.Append("}");
+
+            return sb.ToString();
+        }
     }
 }

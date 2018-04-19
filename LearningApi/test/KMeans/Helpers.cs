@@ -4,6 +4,7 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using LearningFoundation.Helpers;
 
 namespace Test
 {
@@ -98,32 +99,15 @@ namespace Test
 
             var delta = 2 * Math.PI / points;
 
-            List<double[]> rows = new List<double[]>();
-
-            double[] rowX = new double[points];
-            for (int i = 0; i < points; i++)
-            {
-                rowX[i] = i * delta;
-            }
-
-            rows.Add(rowX);
-
-            for (int y = 0; y < numOfDims-1; y++)
-            {
-                double[] rowY = new double[points];
-
-                for (int i = 0; i < points; i++)
-                {
-                    rowY[i] = Math.Sin(i * delta);
-                }
-
-                rows.Add(rowY);
-            }
+            List<double[]> rows = FunctionGenerator.CreateFunction(points, numOfDims, delta);
 
             Write2CSVFile(rows.ToArray(), Path.Combine(rootPath, file), false);
 
             return false;
         }
+
+
+     
 
         /// <summary>
         /// Loads a csv file into double array

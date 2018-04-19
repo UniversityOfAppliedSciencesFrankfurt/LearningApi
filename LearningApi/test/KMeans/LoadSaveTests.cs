@@ -10,7 +10,10 @@ namespace Test
     public class LoadSaveTests
     {
 
-
+        /// <summary>
+        /// Demonstrates how to use Save and Load of KMeans.
+        /// Same principal can be used for every other algorithm, as long algoritm does support model persistence.
+        /// </summary>
         [Fact]
         public void Test_LoadSave()
         {
@@ -31,6 +34,9 @@ namespace Test
 
             // Creates learning api object
             LearningApi api = new LearningApi(loadDescriptor());
+
+            //
+            // Defines action method, which will generate training data.
             api.UseActionModule<object, double[][]>((data, ctx) =>
             {
                 var rawData = Helpers.CreateSampleData(clusterCentars, 2, 10000, 0.5);
@@ -49,10 +55,15 @@ namespace Test
             Assert.True(result.PredictedClusters[1] == 1);
             Assert.True(result.PredictedClusters[2] == 2);
 
+            // This is where trained model is saved.
             api.Save(nameof(LoadSaveTests));
 
+            // Loads the saved model.
             var loadedApi = LearningApi.Load(nameof(LoadSaveTests));
 
+            //
+            // Because we have used action method in the LearningApi, we will have to setup it again.
+            // This is not required because API design limitation. It is restriction of .NET framework. It cannot persist code.
             loadedApi.ReplaceActionModule<object, double[][]>(moduleName, (data, ctx) =>
             {
                 var rawData = Helpers.CreateSampleData(clusterCentars, 2, 10000, 0.5);

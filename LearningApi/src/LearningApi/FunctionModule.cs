@@ -64,7 +64,13 @@ namespace LearningFoundation
         }
     }
 
-    
+    /// <summary>n
+    /// Used as predefault module, which can be directly injected in a code without of need to 
+    /// implement custom module.
+    /// It is usefull for testig.
+    /// </summary>
+    /// <typeparam name="TIN"></typeparam>
+    /// <typeparam name="TOUT"></typeparam>
     public class FunctionModule<TIN, TOUT> : IPipelineModule<TIN, TOUT>
     {
         private Func<TIN, IContext, TOUT> m_ModuleFunction;

@@ -7,6 +7,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using Xunit;
 using LearningFoundation.Clustering.KMeans;
+using LearningFoundation.Helpers;
+using AnomDetect.KMeans.FunctionRecognition;
 
 namespace Test
 {
@@ -51,7 +53,7 @@ namespace Test
             Helpers.Write2CSVFile(tempMaxDistance, saveDirectory + "Calculated Max Distance.csv");
 
             // start testing for function recognition
-            
+
             // combine testing data
             double[][] testingCentroids = new double[FunctionPaths.Length * numTestFun * numCluster][];
             double[][] loadedCentroids;
@@ -83,9 +85,10 @@ namespace Test
             });
 
             // basic settings for prediction
-            ClusteringSettings settings = new ClusteringSettings(0, numCluster, 0, tolerance: tolerance);
+            ClusteringSettings settings = new ClusteringSettings(0, numCluster, 0, tolerance: tolerance, initialCentroids: trainedClusters.Item1);
+
             // construct trivial clusters
-            api.UseKMeans(settings, trainedClusters.Item1, trainedClusters.Item2);
+            api.UseKMeans(settings, trainedClusters.Item2);
 
             double[] funResults = patternTesting(api, settings.NumberOfClusters, testingCentroids);
 
@@ -153,7 +156,7 @@ namespace Test
 
             return Tuple.Create(clusterCentroids, maxDistance);
         }
-        
+
         /*
         /// <summary>
         /// patternTesting is a function that checks and returns result of pattern testing (1 for matching, 0 otherwise)
@@ -209,7 +212,7 @@ namespace Test
         /// <returns>a result of the pattern testing for each function</returns>
         private static double[] patternTesting(LearningApi api, int numClusters, double[][] testCentroids)
         {
-            
+
             double[][] oneFunctionData = new double[numClusters][];
             //api kmeanApi.Instance;
 
@@ -217,7 +220,7 @@ namespace Test
             double[] result = new double[testCentroids.Length / numClusters];
             for (int i = 0; i < testCentroids.Length; i = i + numClusters)
             {
-                
+
                 // check each centroid of each function
                 for (int j = 0; j < numClusters; j++)
                 {
@@ -248,7 +251,7 @@ namespace Test
             }
             for (int i = 0; i < results.Length; i++)
             {
-                if(clusters.Contains(";" + results[i] + ";"))
+                if (clusters.Contains(";" + results[i] + ";"))
                 {
                     clusters.Replace(";" + results[i] + ";", "");
                 }
@@ -258,6 +261,95 @@ namespace Test
                 }
             }
             return 1;
+        }
+
+
+        /// <summary>
+        /// Creates 100 (batch=100) similar SIN functions, which differ in 10% of theit Y values.
+        /// Functions are 2D=>{X,Y}. As next it creates predicting functions, which differ in value specified by 
+        /// noiceForPrediction.
+        /// </summary>
+        /// <param name="points"></param>
+        /// <param name="noiceForPrediction">Noice for SIN reference function. Algorithm is trained with noic 10%.
+        /// That means all noices less than 10% (plus/minus some delta) should be recognized as true positives.
+        /// All values higher than 25% should be recognized as true negatives.
+        /// All other values between 10 and 24 are most likely recognized as true negatives. This is not mathematicall 100% safe, so we excluded these values 
+        /// from tests.</param>
+        [Theory]
+        [InlineData(200, 10)]
+        [InlineData(200, 9)]
+        [InlineData(200, 5)]
+        [InlineData(200, 1)]
+        [InlineData(400, 28)]
+        [InlineData(200, 25)]
+        [InlineData(400, 30)]
+        [InlineData(1000, 30)]
+        [InlineData(1000, 25)]
+        [InlineData(1000, 35)]
+        public void Test_FunctionRecognitionModule(int points, int noiceForPrediction)
+        {
+            var batch = 100;
+            
+            var funcData = FunctionGenerator.CreateFunction(points, 2, 2 * Math.PI / 100);
+
+            LearningApi api = new LearningApi();
+            api.UseActionModule<object, double[][]>((notUsed, ctx) =>
+            {
+                var similarFuncData = FunctionGenerator.CreateSimilarFromReferenceFunc(funcData.ToArray(), 10);
+
+                double[][] formattedData = formatData(similarFuncData);
+
+                return formattedData;
+            });
+
+            double[][] initCentroids = new double[4][];
+            initCentroids[0] = new double[] { 1.53, 0.63 };
+            initCentroids[1] = new double[] { 4.68, -0.63 };
+            initCentroids[2] = new double[] { 7.85, 0.62 };
+            initCentroids[3] = new double[] { 10.99, -0.64 };
+
+            ClusteringSettings settings = new ClusteringSettings(0, numClusters: 4, numDims: 2, KmeansAlgorithm: 2, initialCentroids: initCentroids, tolerance: 0) { KmeansMaxIterations = 1000 };
+
+            api.UseKMeansFunctionRecognitionModule(settings);
+
+            KMeansFunctionRecognitonScore res;
+
+            while (batch-- > 0)
+            {
+                res = api.RunBatch() as KMeansFunctionRecognitonScore;
+            }
+            
+            var noicedFunc = FunctionGenerator.CreateSimilarFromReferenceFunc(funcData.ToArray(), noiceForPrediction);
+
+            double[][] data = formatData(noicedFunc);
+
+            var predictionResult = api.Algorithm.Predict(data, null) as KMeansFuncionRecognitionResult;
+
+            // TRUE positives
+            if (noiceForPrediction <= 10)
+            {
+                Assert.True(predictionResult.Loss == 1.0);
+            }
+            // TRUE negatives
+            else if (noiceForPrediction >= 25)
+            {
+                Assert.False(predictionResult.Loss == 1.0);
+            }
+        }
+
+        private static double[][] formatData(double[][] similarFuncData)
+        {
+            double[][] data = new double[similarFuncData[0].Length][];
+            for (int i = 0; i < similarFuncData[0].Length; i++)
+            {
+                data[i] = new double[similarFuncData.Length];
+                for (int j = 0; j < similarFuncData.Length; j++)
+                {
+                    data[i][j] = similarFuncData[j][i];
+                }
+            }
+
+            return data;
         }
         #endregion
     }
