@@ -37,9 +37,9 @@ namespace LearningFoundation.Clustering.KMeans
         //public bool InitialGuess { get; internal set; }
 
         /// <summary>
-        /// number of attributes for each sample
+        /// Number of dimensions.
         /// </summary>
-        public int NumberOfAttributes { get; internal set; }
+        public int NumOfDimensions { get; internal set; }
 
         /// <summary>
         /// If set, it will be used as initial centroids.
@@ -56,15 +56,15 @@ namespace LearningFoundation.Clustering.KMeans
         /// </summary>
         /// <param name="RawData">data to be clustered</param>
         /// <param name="KmeansMaxIterations">maximum allowed number of Kmeans iteration for clustering</param>
-        /// <param name="NumberOfClusters">number of clusters</param>
-        /// <param name="NumberOfAttributes">number of attributes for each sample</param>
+        /// <param name="numClusters">number of clusters</param>
+        /// <param name="numDims">Number of dimensions.</param>
         /// <param name="KmeansAlgorithm">the desired Kmeans clustering algorithm (1 or 2)
         /// <ul style="list-style-type:none">
         /// <li> - 1: Centoids are the nearest samples to the means</li>
         /// <li> - 2: Centoids are the means</li>
         /// </ul></param>
         /// <param name="initialCentroids">???</param>
-        public ClusteringSettings(int KmeansMaxIterations, int NumberOfClusters, int NumberOfAttributes, int KmeansAlgorithm = 1, double[][] initialCentroids = null, double tolerance = 0)
+        public ClusteringSettings(int KmeansMaxIterations, int numClusters, int numDims, int KmeansAlgorithm = 1, double[][] initialCentroids = null, double tolerance = 0)
         {
             if (KmeansAlgorithm != 2)
             {
@@ -75,8 +75,8 @@ namespace LearningFoundation.Clustering.KMeans
                 this.KmeansAlgorithm = 2;
             }
             this.KmeansMaxIterations = KmeansMaxIterations;
-            this.NumberOfClusters = NumberOfClusters;
-            this.NumberOfAttributes = NumberOfAttributes;
+            this.NumberOfClusters = numClusters;
+            this.NumOfDimensions = numDims;
             this.InitialCentroids = initialCentroids;
             this.Tolerance = tolerance;
         }

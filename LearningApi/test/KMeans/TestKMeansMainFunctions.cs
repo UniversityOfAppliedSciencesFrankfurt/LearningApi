@@ -173,7 +173,7 @@ namespace Test
                     Assert.True(apiResp.Model.Clusters[i].Centroid[j] == f * res);
                 }
                 // max distance in cluster check
-                Assert.True(apiResp.Model.Clusters[i].InClusterMaxDistance >= apiResp1MaxDistance[i] + KMeans.calculateDistance(apiResp1Centroid[i], apiResp.Model.Clusters[i].Centroid));
+                Assert.True(apiResp.Model.Clusters[i].InClusterMaxDistance >= apiResp1MaxDistance[i] + KMeansAlgorithm.calculateDistance(apiResp1Centroid[i], apiResp.Model.Clusters[i].Centroid));
             }
 
         }
@@ -204,7 +204,7 @@ namespace Test
 
             // creates data
             var rawData = Helpers.CreateSampleData(clusterCenters, 2, 10000, 0.5);
-            KMeans kMeans = new KMeans(settings);
+            KMeansAlgorithm kMeans = new KMeansAlgorithm(settings);
             // train
             var response = kMeans.Run(rawData, api.Context);
 
@@ -221,7 +221,7 @@ namespace Test
         {
             string fileName = "Test01.json";
 
-            KMeans kMeans = new KMeans();
+            KMeansAlgorithm kMeans = new KMeansAlgorithm(new ClusteringSettings(0,2,2));
             kMeans.Load(rootFolder + fileName);
 
             Assert.True(kMeans.Instance != null);

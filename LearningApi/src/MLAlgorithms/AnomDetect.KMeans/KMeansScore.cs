@@ -13,14 +13,7 @@ namespace LearningFoundation.Clustering.KMeans
         public KMeansScore()
         {
         }
-        //public double[] Errors { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        //public double[] Weights { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-
-        /// <summary>
-        /// Array of the obtained clusters
-        /// </summary>
-        //public Cluster[] Clusters { get; internal set; }
-
+      
         /// <summary>
         /// the obtained clustering instance
         /// </summary>

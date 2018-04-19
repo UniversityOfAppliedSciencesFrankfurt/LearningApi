@@ -19,10 +19,11 @@ namespace LearningFoundation.Clustering.KMeans
         [DataMember]
         public int NumberOfClusters { get; internal set; }
 
-      
+
         /// <summary>
-        /// contains the assigned cluster number for each sample of the RawData
+        /// Contains the assigned cluster number for each sample of the RawData.
         /// </summary>
+        /// <remarks>Not persistable.</remarks>
         public int[] DataToClusterMapping { get; internal set; }
 
         /// <summary>

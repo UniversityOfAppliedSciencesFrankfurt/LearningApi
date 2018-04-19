@@ -188,7 +188,7 @@ namespace LearningFoundation.Clustering.KMeans
                     for (int i = 0; i < NumberOfSamples; i++)
                     {
                         //calculate distance for each sample
-                        cls.ClusterDataDistanceToCentroid[i] = KMeans.calculateDistance(cls.ClusterData[i], cls.Centroid);
+                        cls.ClusterDataDistanceToCentroid[i] = KMeansAlgorithm.calculateDistance(cls.ClusterData[i], cls.Centroid);
                         if (cls.ClusterDataDistanceToCentroid[i] > cls.InClusterMaxDistance)
                         {
                             //farthest sample
@@ -265,7 +265,7 @@ namespace LearningFoundation.Clustering.KMeans
                             continue;
                         }
 
-                        curDistance = KMeans.calculateDistance(Centroids[i], Centroids[j]);
+                        curDistance = KMeansAlgorithm.calculateDistance(Centroids[i], Centroids[j]);
 
                         if (curDistance < DistanceToNearestClusterArray[i])
                         {
@@ -340,7 +340,7 @@ namespace LearningFoundation.Clustering.KMeans
                             continue;
                         }
 
-                        curDistance = KMeans.calculateDistance(RawData[i], Centroids[j]);
+                        curDistance = KMeansAlgorithm.calculateDistance(RawData[i], Centroids[j]);
                         
                         if (curDistance < DistanceToNearestForeignSample[j])
                         {

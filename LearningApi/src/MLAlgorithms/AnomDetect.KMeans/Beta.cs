@@ -102,7 +102,7 @@ namespace LearningFoundation.Clustering.KMeans
                 }
 
                 //checks that all the samples have same number of attributes
-                KMeans.verifyRawDataConsistency(rawData, numberOfAttributes);
+                KMeansAlgorithm.verifyRawDataConsistency(rawData, numberOfAttributes);
                 
 
                 double[][] Centroids;
@@ -115,7 +115,7 @@ namespace LearningFoundation.Clustering.KMeans
                 for (int i = minNumberOfClusters; i <= MaxClusters; i++)
                 {
                     //cluster the data with number of clusters equals to i
-                    kMeansResponse = KMeans.runKMeansAlgorithm(rawData, i, numberOfAttributes, kmeansMaxIterations, kmeansAlgorithm, centroids, out Centroids, out IterationReached);
+                    kMeansResponse = KMeansAlgorithm.runKMeansAlgorithm(rawData, i, numberOfAttributes, kmeansMaxIterations, kmeansAlgorithm, centroids, out Centroids, out IterationReached);
                     
                     cluster = ClusteringResults.CreateClusteringResult(rawData, kMeansResponse, Centroids, i);
 

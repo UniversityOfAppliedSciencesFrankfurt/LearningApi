@@ -11,7 +11,7 @@ namespace LearningFoundation.Clustering.KMeans
     /// <summary>
     /// KMeans is the class responsible for clustering data based on K-means algorithm
     /// </summary>
-    public class KMeans : IAlgorithm
+    public class KMeansAlgorithm : IAlgorithm
     {
         #region Properties
 
@@ -40,27 +40,25 @@ namespace LearningFoundation.Clustering.KMeans
         #region Public Function
 
         #region Basic Functions
-
-
-
+        
 
         /// <summary>
         /// Constructor for Kmeans. If settings was provided, it will create KMeans object with those settings. If all arguments are provided, it will set the desired trivial clusters.
         /// </summary>
         /// <param name="settings">contains settings for clustering (should not be null when training)</param>
         /// <param name="centroids">centroids of the clusters</param>
-        /// <param name="centroids">maximum distance per cluster</param>
-        public KMeans(ClusteringSettings settings = null, double[][] centroids = null, double[] maxDistance = null)
+        /// <param name="maxDistance">maximum distance per cluster</param>
+        public KMeansAlgorithm(ClusteringSettings settings, double[] maxDistance = null)
         {
             this.ClusterSettings = settings;
-            if (centroids!=null && maxDistance!=null && settings!=null)
+            if (maxDistance!=null && settings!=null)
             {
                 this.m_instance = new KMeansModel(settings.NumberOfClusters);
                 this.m_instance.Clusters = new Cluster[settings.NumberOfClusters];
                 for (int i = 0; i < settings.NumberOfClusters; i++)
                 {
                     this.m_instance.Clusters[i] = new Cluster();
-                    this.m_instance.Clusters[i].Centroid = centroids[i];
+                    this.m_instance.Clusters[i].Centroid = settings.InitialCentroids[i];
                     this.m_instance.Clusters[i].InClusterMaxDistance = maxDistance[i];
                 }
             }
@@ -95,7 +93,7 @@ namespace LearningFoundation.Clustering.KMeans
             try
             {
                 // does some checks on the passed parameters by the user
-                validateParams(rawData, ClusterSettings.KmeansAlgorithm, ClusterSettings.KmeansMaxIterations, ClusterSettings.NumberOfClusters, ClusterSettings.NumberOfAttributes);
+                validateParams(rawData, ClusterSettings.KmeansAlgorithm, ClusterSettings.KmeansMaxIterations, ClusterSettings.NumberOfClusters, ClusterSettings.NumOfDimensions);
 
                 // If first run. No load model done.
                 if (this.m_instance == null)
@@ -108,7 +106,7 @@ namespace LearningFoundation.Clustering.KMeans
                 int IterationReached = -1;
 
                 //initiate the clustering process
-                this.m_instance.DataToClusterMapping = runKMeansAlgorithm(rawData, this.m_instance.NumberOfClusters, ClusterSettings.NumberOfAttributes, ClusterSettings.KmeansMaxIterations, ClusterSettings.KmeansAlgorithm, this.ClusterSettings.InitialCentroids, out calculatedCentroids, out IterationReached);
+                this.m_instance.DataToClusterMapping = runKMeansAlgorithm(rawData, this.m_instance.NumberOfClusters, ClusterSettings.NumOfDimensions, ClusterSettings.KmeansMaxIterations, ClusterSettings.KmeansAlgorithm, this.ClusterSettings.InitialCentroids, out calculatedCentroids, out IterationReached);
 
                 // should be done in recalcPartialcentroids
                 for (int i = 0; i < this.m_instance.NumberOfClusters; i++)
@@ -143,7 +141,6 @@ namespace LearningFoundation.Clustering.KMeans
                 Message += "Unhandled exception:\t" + Ex.ToString();
                 throw new KMeansException(Code, Message);
             }
-
         }
 
         /// <summary>
@@ -433,7 +430,7 @@ namespace LearningFoundation.Clustering.KMeans
         /// </summary>
         /// <param name="rawData">the samples to be clustered</param>
         /// <param name="numClusters">desired number of clusters</param>
-        /// <param name="numAttributes">number of attributes for each sample</param>
+        /// <param name="numDims">Number of dimensions.</param>
         /// <param name="maxCount">maximum allowed number of Kmeans iteration for clustering</param>
         /// <param name="kMeanAlgorithm">the desired Kmeans clustering algorithm (1 or 2)
         /// <ul style="list-style-type:none">
@@ -445,7 +442,7 @@ namespace LearningFoundation.Clustering.KMeans
         /// <param name="centroids">the variable through which the resulting centroids are returned</param>
         /// <param name="IterationReached">the variable through which the iteration reached is returned</param>
         /// <returns>the assigned cluster number for each sample of the RawData</returns>
-        internal static int[] runKMeansAlgorithm(double[][] rawData, int numClusters, int numAttributes, int maxCount, int kMeanAlgorithm, double[][] initialCentroids, out double[][] centroids, out int IterationReached)
+        internal static int[] runKMeansAlgorithm(double[][] rawData, int numClusters, int numDims, int maxCount, int kMeanAlgorithm, double[][] initialCentroids, out double[][] centroids, out int IterationReached)
         {
             int Code;
             string Message = "Function <KMeansClusteringAlg>: ";
@@ -467,7 +464,7 @@ namespace LearningFoundation.Clustering.KMeans
                     centroids = new double[numClusters][];
 
                     for (int k = 0; k < numClusters; ++k)
-                        centroids[k] = new double[numAttributes];
+                        centroids[k] = new double[numDims];
 
                     means = calculateInitialMeans(rawData, numClusters);
 
