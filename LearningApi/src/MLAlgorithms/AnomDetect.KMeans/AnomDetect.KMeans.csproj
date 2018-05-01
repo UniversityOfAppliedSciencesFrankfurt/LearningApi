@@ -8,7 +8,7 @@
     <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
     <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
     <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
-    <Version>1.0.5</Version>
+    <Version>1.0.6</Version>
     <Authors>daenet GmbH</Authors>
     <Description>KMeans Algorithm for LearningApi</Description>
     <Copyright>daenet GmbH</Copyright>

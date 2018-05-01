@@ -9,6 +9,7 @@ using Xunit;
 using LearningFoundation.Clustering.KMeans;
 using LearningFoundation.Helpers;
 using AnomDetect.KMeans.FunctionRecognition;
+using System.Diagnostics;
 
 namespace Test
 {
@@ -99,170 +100,6 @@ namespace Test
 
         }
 
-        #endregion
-
-        #region Private Functions
-
-
-        /// <summary>
-        /// formClusters is a function that calculates the centroids and maximum distance of the clusters based on the centroids of the trained similar functions
-        /// </summary>
-        /// <param name="path">path to the centroids of trained similar functions</param>
-        /// <param name="numClusters">number of clusters</param>
-        /// <param name="numTrainFun">number of training functions</param>
-        /// <returns>Tuple of two Items: <br />
-        /// - Item 1: the centroids of the clusters<br />
-        /// - Item 2: maximum distance in each cluster
-        /// </returns>
-        private static Tuple<double[][], double[]> formClusters(string path, int numClusters, int numTrainFun)
-        {
-            // get centroids of training functions
-            double[][] trainedCentroids = Helpers.LoadFunctionData(path);
-            // number of attributes
-            int dimenions = trainedCentroids[0].Length;
-            // initialize cluster centroids
-            double[][] clusterCentroids = new double[numClusters][];
-            for (int i = 0; i < numClusters; i++)
-            {
-                clusterCentroids[i] = new double[dimenions];
-            }
-            // calculate the clusters
-            for (int i = 0; i < numTrainFun; i++)
-            {
-                for (int j = 0; j < numClusters; j++)
-                {
-                    for (int a = 0; a < dimenions; a++)
-                    {
-                        clusterCentroids[j][a] += trainedCentroids[i * numClusters + j][a] / numTrainFun;
-                    }
-                }
-            }
-
-            // initialize distances
-            double[] maxDistance = new double[numClusters];
-            // get max distance in each cluster
-            double calDist;
-            for (int i = 0; i < numTrainFun; i++)
-            {
-                for (int j = 0; j < numClusters; j++)
-                {
-                    calDist = Math.Sqrt(TestTrainingSimilarFunctions.squaredDistance(clusterCentroids[j], trainedCentroids[i * numClusters + j]));
-                    if (calDist > maxDistance[j])
-                    {
-                        maxDistance[j] = calDist;
-                    }
-                }
-            }
-
-            return Tuple.Create(clusterCentroids, maxDistance);
-        }
-
-        /*
-        /// <summary>
-        /// patternTesting is a function that checks and returns result of pattern testing (1 for matching, 0 otherwise)
-        /// </summary>
-        /// <param name="testCentroids">the testing centroids of the testing functions</param>
-        /// <param name="numClusters">number of cluster</param>
-        /// <param name="kmeanApi">a KMeans object</param>
-        /// <param name="tolerance">tolerance for prediction</param>
-        /// <returns>a result of the pattern testing for each function</returns>
-        private static double[] patternTesting2(double[][] testCentroids, int numClusters, KMeans kmeanApi, int tolerance)
-        {
-            CheckingSampleSettings SampleSettings;
-            int clusterIndex;
-            bool fitsPattern;
-            double[] result = new double[testCentroids.Length / numClusters];
-            for (int i = 0; i < testCentroids.Length; i = i + numClusters)
-            {
-                fitsPattern = true;
-                // check each centroid of each function
-                for (int j = 0; j < numClusters; j++)
-                {
-                    // check centroids
-                    SampleSettings = new CheckingSampleSettings(testCentroids[i + j], tolerance: tolerance);
-                    clusterIndex = kmeanApi.PredictSample(SampleSettings);
-                    // if a centroid doesn't belong to any cluster
-                    if (clusterIndex == -1)
-                    {
-                        fitsPattern = false;
-                        break;
-                    }
-                }
-                if (fitsPattern)
-                {
-                    result[i / numClusters] = 1;
-                }
-                else
-                {
-                    result[i / numClusters] = 0;
-                }
-            }
-            // contains results of pattern testing (1 for matching, 0 otherwise)
-            return result;
-        }
-        */
-
-        /// <summary>
-        /// patternTesting is a function that checks and returns result of pattern testing (1 for matching, 0 otherwise)
-        /// </summary>
-        /// <param name="testCentroids">the testing centroids of the testing functions</param>
-        /// <param name="numClusters">number of cluster</param>
-        /// <param name="kmeanApi">a KMeans object</param>
-        /// <param name="tolerance">tolerance for prediction</param>
-        /// <returns>a result of the pattern testing for each function</returns>
-        private static double[] patternTesting(LearningApi api, int numClusters, double[][] testCentroids)
-        {
-
-            double[][] oneFunctionData = new double[numClusters][];
-            //api kmeanApi.Instance;
-
-            //double[] oneFunctionResult = new double[numClusters];
-            double[] result = new double[testCentroids.Length / numClusters];
-            for (int i = 0; i < testCentroids.Length; i = i + numClusters)
-            {
-
-                // check each centroid of each function
-                for (int j = 0; j < numClusters; j++)
-                {
-                    // fill function centroids
-                    oneFunctionData[j] = testCentroids[i + j];
-                }
-
-                //get prediction
-                var res = api.Algorithm.Predict(oneFunctionData, api.Context) as KMeansResult;
-
-                result[i / numClusters] = checkPredictions(res.PredictedClusters);
-            }
-            // contains results of pattern testing (1 for matching, 0 otherwise)
-            return result;
-        }
-
-        /// <summary>
-        /// checkPredictions is a function that checks if prediction of the centroids of 1 function fits in the clusters (one centroid for each cluster) 
-        /// </summary>
-        /// <param name="results">prediction of each centroid of one function</param>
-        /// <returns></returns>
-        private static int checkPredictions(int[] results)
-        {
-            string clusters = "";
-            for (int i = 0; i < results.Length; i++)
-            {
-                clusters += ";" + i + ";";
-            }
-            for (int i = 0; i < results.Length; i++)
-            {
-                if (clusters.Contains(";" + results[i] + ";"))
-                {
-                    clusters.Replace(";" + results[i] + ";", "");
-                }
-                else
-                {
-                    return 0;
-                }
-            }
-            return 1;
-        }
-
 
         /// <summary>
         /// Creates 100 (batch=100) similar SIN functions, which differ in 10% of theit Y values.
@@ -291,6 +128,10 @@ namespace Test
             #region Training
             var batch = 100;
 
+            /// If 2 dimensions are used, then data is formatted as:
+            /// ret[dim1] = {x1,x2,..xN},
+            /// ret[dim2] = {y1,y2,..,yN},
+            /// Every dimension is returned as a row. Poinst of dimension are cells.
             var funcData = FunctionGenerator.CreateFunction(points, 2, 2 * Math.PI / 100);
 
             LearningApi api = new LearningApi();
@@ -298,6 +139,7 @@ namespace Test
             {
                 var similarFuncData = FunctionGenerator.CreateSimilarFromReferenceFunc(funcData.ToArray(), 10);
 
+                // Formats the data to mlitidimensional array.
                 double[][] formattedData = formatData(similarFuncData);
 
                 return formattedData;
@@ -407,6 +249,232 @@ namespace Test
             }
             #endregion
         }
+
+
+        /// <summary>
+        /// Traines and predicts the model from custom function defined by customFunc1().
+        /// </summary>      
+
+        [Fact]
+        public void Test_FunctionRecognitionModule_CustomFunc()
+        {
+            #region Training
+            int points = 22;
+            var batch = 100;
+
+            /// If 2 dimensions are used, then data is formatted as:
+            /// ret[dim1] = {x1,x2,..xN},
+            /// ret[dim2] = {y1,y2,..,yN},
+            /// Every dimension is returned as a row. Poinst of dimension are cells.
+            var funcData = FunctionGenerator.CreateFunction(points, 2, 2 * Math.PI / 100, customFunc1);
+
+            LearningApi api = new LearningApi();
+            api.UseActionModule<object, double[][]>((notUsed, ctx) =>
+            {
+                var similarFuncData = FunctionGenerator.CreateSimilarFromReferenceFunc(funcData.ToArray(), 10);
+
+                // Formats the data to mlitidimensional array.
+                double[][] formattedData = formatData(similarFuncData);
+
+                return formattedData;
+            });
+
+            double[][] initCentroids = new double[2][];
+            initCentroids[0] = new double[] { 5.0, 10.0 };
+            initCentroids[1] = new double[] { 15.0, 20.0 };
+
+            ClusteringSettings settings = new ClusteringSettings(0, numClusters: 2, numDims: 2, KmeansAlgorithm: 2, initialCentroids: initCentroids, tolerance: 0) { KmeansMaxIterations = 1000 };
+
+            api.UseKMeansFunctionRecognitionModule(settings);
+
+            KMeansFunctionRecognitonScore res;
+
+            while (batch-- > 0)
+            {
+                res = api.RunBatch() as KMeansFunctionRecognitonScore;
+            }
+            #endregion
+
+            #region Prediction
+            int[] noices = new int[] { 5, 7, 9, 10, 3, 15, 20, 25, 30, 35, 40, 22, 15, 17, 12 };
+            int numOfAnomalliesDetected = 0;
+
+            foreach (var noiceForPrediction in noices)
+            {
+                var noicedFunc = FunctionGenerator.CreateSimilarFromReferenceFunc(funcData.ToArray(), noiceForPrediction);
+
+                m_CustFncIndx = 0;
+
+                double[][] data = formatData(noicedFunc);
+
+                var predictionResult = api.Algorithm.Predict(data, null) as KMeansFuncionRecognitionResult;
+
+                //// TRUE positives
+                if (noiceForPrediction <= 10)
+                {
+                    Assert.True(predictionResult.Loss == 1.0);
+                    Debug.WriteLine($"Recognized: Noice: {noiceForPrediction} - {predictionResult.Result} - {predictionResult.Loss}");
+
+                }
+                // TRUE negatives
+                else if (noiceForPrediction >= 10)
+                {   
+                    if (predictionResult.Result == false)
+                    {
+                        numOfAnomalliesDetected++;
+
+                        // Result can be statistically true positive or true negative. This is because similar functions are genarated in +/- range to specified noice.
+                        // If model is trained to 10% and sinilar function is created to 25%, it means that values of similar function
+                        // fit range from 0-25% of referenced value. If it is below 10% (used for training in this test) then resut will be true positive.
+                        Debug.WriteLine($"Anomally detected: Noice: {noiceForPrediction} - {predictionResult.Result} - {predictionResult.Loss}");
+                    }
+                }
+            }
+
+            // This is a statistical value. Test might theoretically fail.
+            Assert.True(numOfAnomalliesDetected > 2, $"Num of anomallies detected = {numOfAnomalliesDetected}. Expected at least 2.");
+            #endregion
+        }
+        #endregion
+
+        #region Private Functions
+
+        static int m_CustFncIndx = 0;
+
+        /// <summary>
+        /// It represents a custom function for testing. 
+        /// Gets the Y coordinate for specified X coordinate.
+        /// </summary>
+        /// <param name="x">Point X for which Y has to be calculated.</param>
+        /// <param name="numPoints">Number of points</param>
+        /// <returns></returns>
+        private static double customFunc1(double x, int numPoints)
+        {
+            double[] data = new double[] { 10.0, 11.0, 10.5, 11.7, 9.9, 9.4, 10.0, 10.1, 10.3, 9.4, 9.3, 20.0, 21.0, 20.5, 21.7, 19.9, 19.4, 20.0, 20.1, 20.3, 19.4, 19.3 };
+            if (m_CustFncIndx < data.Length)
+                return data[m_CustFncIndx++];
+            else
+                return 0;
+        }
+
+        /// <summary>
+        /// formClusters is a function that calculates the centroids and maximum distance of the clusters based on the centroids of the trained similar functions
+        /// </summary>
+        /// <param name="path">path to the centroids of trained similar functions</param>
+        /// <param name="numClusters">number of clusters</param>
+        /// <param name="numTrainFun">number of training functions</param>
+        /// <returns>Tuple of two Items: <br />
+        /// - Item 1: the centroids of the clusters<br />
+        /// - Item 2: maximum distance in each cluster
+        /// </returns>
+        private static Tuple<double[][], double[]> formClusters(string path, int numClusters, int numTrainFun)
+        {
+            // get centroids of training functions
+            double[][] trainedCentroids = Helpers.LoadFunctionData(path);
+            // number of attributes
+            int dimenions = trainedCentroids[0].Length;
+            // initialize cluster centroids
+            double[][] clusterCentroids = new double[numClusters][];
+            for (int i = 0; i < numClusters; i++)
+            {
+                clusterCentroids[i] = new double[dimenions];
+            }
+            // calculate the clusters
+            for (int i = 0; i < numTrainFun; i++)
+            {
+                for (int j = 0; j < numClusters; j++)
+                {
+                    for (int a = 0; a < dimenions; a++)
+                    {
+                        clusterCentroids[j][a] += trainedCentroids[i * numClusters + j][a] / numTrainFun;
+                    }
+                }
+            }
+
+            // initialize distances
+            double[] maxDistance = new double[numClusters];
+            // get max distance in each cluster
+            double calDist;
+            for (int i = 0; i < numTrainFun; i++)
+            {
+                for (int j = 0; j < numClusters; j++)
+                {
+                    calDist = Math.Sqrt(TestTrainingSimilarFunctions.squaredDistance(clusterCentroids[j], trainedCentroids[i * numClusters + j]));
+                    if (calDist > maxDistance[j])
+                    {
+                        maxDistance[j] = calDist;
+                    }
+                }
+            }
+
+            return Tuple.Create(clusterCentroids, maxDistance);
+        }
+
+
+
+        /// <summary>
+        /// patternTesting is a function that checks and returns result of pattern testing (1 for matching, 0 otherwise)
+        /// </summary>
+        /// <param name="testCentroids">the testing centroids of the testing functions</param>
+        /// <param name="numClusters">number of cluster</param>
+        /// <param name="kmeanApi">a KMeans object</param>
+        /// <param name="tolerance">tolerance for prediction</param>
+        /// <returns>a result of the pattern testing for each function</returns>
+        private static double[] patternTesting(LearningApi api, int numClusters, double[][] testCentroids)
+        {
+
+            double[][] oneFunctionData = new double[numClusters][];
+            //api kmeanApi.Instance;
+
+            //double[] oneFunctionResult = new double[numClusters];
+            double[] result = new double[testCentroids.Length / numClusters];
+            for (int i = 0; i < testCentroids.Length; i = i + numClusters)
+            {
+
+                // check each centroid of each function
+                for (int j = 0; j < numClusters; j++)
+                {
+                    // fill function centroids
+                    oneFunctionData[j] = testCentroids[i + j];
+                }
+
+                //get prediction
+                var res = api.Algorithm.Predict(oneFunctionData, api.Context) as KMeansResult;
+
+                result[i / numClusters] = checkPredictions(res.PredictedClusters);
+            }
+            // contains results of pattern testing (1 for matching, 0 otherwise)
+            return result;
+        }
+
+        /// <summary>
+        /// checkPredictions is a function that checks if prediction of the centroids of 1 function fits in the clusters (one centroid for each cluster) 
+        /// </summary>
+        /// <param name="results">prediction of each centroid of one function</param>
+        /// <returns></returns>
+        private static int checkPredictions(int[] results)
+        {
+            string clusters = "";
+            for (int i = 0; i < results.Length; i++)
+            {
+                clusters += ";" + i + ";";
+            }
+            for (int i = 0; i < results.Length; i++)
+            {
+                if (clusters.Contains(";" + results[i] + ";"))
+                {
+                    clusters.Replace(";" + results[i] + ";", "");
+                }
+                else
+                {
+                    return 0;
+                }
+            }
+            return 1;
+        }
+
+
+
         private static double[][] formatData(double[][] similarFuncData)
         {
             double[][] data = new double[similarFuncData[0].Length][];

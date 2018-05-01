@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Text;
 
 namespace LearningFoundation.Helpers
@@ -16,11 +17,12 @@ namespace LearningFoundation.Helpers
         /// <param name="func">Function to be used to create y from x. </param>
         /// <returns>Array of coordinates of generated function for every dimension.
         /// If 3 dimensions are used, then 
-        /// ret[0] = {x1,x2,..xN},
-        /// ret[1] = {y1,y2,..,yN},
-        /// ret[2] = {z1,z2,..,zN},
+        /// ret[dim1] = {x1,x2,..xN},
+        /// ret[dim2] = {y1,y2,..,yN},
+        /// ret[dim3] = {z1,z2,..,zN},
         /// where N = points</returns>
-        public static List<double[]> CreateFunction(int points, int numOfDims, double delta, Func<double, double> func = null)
+        /// First dimension X contains reference points.
+        public static List<double[]> CreateFunction(int points, int numOfDims, double delta, Func<double, int, double> func = null)
         {
             List<double[]> rows = new List<double[]>();
 
@@ -41,7 +43,7 @@ namespace LearningFoundation.Helpers
                     if (func == null)
                         dimCoord[i] = Math.Sin(i * delta);
                     else
-                        dimCoord[i] = func(i * delta);
+                        dimCoord[i] = func(i * delta, points);
                 }
 
                 rows.Add(dimCoord);
@@ -60,7 +62,7 @@ namespace LearningFoundation.Helpers
         public static double[][] CreateSimilarFromReferenceFunc(double[][] referenceFuncData,
             int noiseRangePercentage)
         {
-            // calculte random noise limits
+            // calculte random noise limits for every dimension instead of the first (referenc one).
             double[] randomNoiseLimit = noiseLimit(referenceFuncData, noiseRangePercentage);
 
             // initialize for the similar function
@@ -74,16 +76,17 @@ namespace LearningFoundation.Helpers
 
             Random rnd = new Random((int)DateTime.Now.Ticks * DateTime.Now.Millisecond);
 
-            //for all other dimensions
             for (int dim = 1; dim < referenceFuncData.Length; dim++)
             {
                 // add noise on each point of the function
                 for (int j = 0; j < referenceFuncData[0].Length; j++)
                 {
-                    var random = rnd.NextDouble() * (randomNoiseLimit[dim] - randomNoiseLimit[dim] * -1) + randomNoiseLimit[dim] * -1;
+                    double rndNoice = rnd.NextDouble();
+                    var distorsion = rndNoice * (randomNoiseLimit[dim] - randomNoiseLimit[dim] * -1) + randomNoiseLimit[dim] * -1;
 
                     // add random noise (between -NL & +NL of the dimension) to the coordinates                 
-                    similarFunction[dim][j] = referenceFuncData[dim][j] + random;
+                    similarFunction[dim][j] = referenceFuncData[dim][j] + distorsion;
+                   // Debug.WriteLine($"{referenceFuncData[dim][j]} - {similarFunction[dim][j]} - {rndNoice}% - {distorsion}");
                 }
             }
 
@@ -107,22 +110,22 @@ namespace LearningFoundation.Helpers
             // Get the minimum, maximum and noise limit of each dimension
             for (int i = 0; i < referenceFuncData.Length; i++)
             {
-                for (int j = 0; j < referenceFuncData[0].Length; j++)
+                for (int dimIndx = 0; dimIndx < referenceFuncData[0].Length; dimIndx++)
                 {
-                    if (j == 0)
+                    if (dimIndx == 0)
                     {
-                        min[i] = referenceFuncData[i][j];
-                        max[i] = referenceFuncData[i][j];
+                        min[i] = referenceFuncData[i][dimIndx];
+                        max[i] = referenceFuncData[i][dimIndx];
                     }
                     else
                     {
-                        if (referenceFuncData[i][j] < min[i])
+                        if (referenceFuncData[i][dimIndx] < min[i])
                         {
-                            min[i] = referenceFuncData[i][j];
+                            min[i] = referenceFuncData[i][dimIndx];
                         }
-                        else if (referenceFuncData[i][j] > max[i])
+                        else if (referenceFuncData[i][dimIndx] > max[i])
                         {
-                            max[i] = referenceFuncData[i][j];
+                            max[i] = referenceFuncData[i][dimIndx];
                         }
                     }
                 }
