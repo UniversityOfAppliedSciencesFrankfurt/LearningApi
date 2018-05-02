@@ -266,14 +266,14 @@ namespace Test
             /// ret[dim1] = {x1,x2,..xN},
             /// ret[dim2] = {y1,y2,..,yN},
             /// Every dimension is returned as a row. Poinst of dimension are cells.
-            var funcData = FunctionGenerator.CreateFunction(points, 2, 2 * Math.PI / 100, customFunc1);
+            var funcData = FunctionGenerator.CreateFunction(points, 2,1, customFunc1);
 
             LearningApi api = new LearningApi();
             api.UseActionModule<object, double[][]>((notUsed, ctx) =>
             {
                 var similarFuncData = FunctionGenerator.CreateSimilarFromReferenceFunc(funcData.ToArray(), 10);
 
-                // Formats the data to mlitidimensional array.
+                // Formats the data to mulitidimensional array.
                 double[][] formattedData = formatData(similarFuncData);
 
                 return formattedData;
@@ -296,7 +296,7 @@ namespace Test
             #endregion
 
             #region Prediction
-            int[] noices = new int[] { 5, 7, 9, 10, 3, 15, 20, 25, 30, 35, 40, 22, 15, 17, 12 };
+            int[] noices = new int[] { 5, 7, 9, 10, 3, 15, 20, 25, 30, 35, 40, 22, 15, 17, 12 , 48, 61};
             int numOfAnomalliesDetected = 0;
 
             foreach (var noiceForPrediction in noices)
