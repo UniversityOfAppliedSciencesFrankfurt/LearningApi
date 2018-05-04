@@ -20,7 +20,7 @@ namespace LearningFoundation.Clustering.KMeans
         /// <returns></returns>
         public static LearningApi UseKMeans(this LearningApi api, ClusteringSettings settings, double[] maxDistance = null)
         {
-            var alg = new KMeansAlgorithm(settings, maxDistance);
+            var alg = new KMeansAlgorithm(settings.Clone(), maxDistance);
             api.AddModule(alg, "Rbm");
             return api;
         }

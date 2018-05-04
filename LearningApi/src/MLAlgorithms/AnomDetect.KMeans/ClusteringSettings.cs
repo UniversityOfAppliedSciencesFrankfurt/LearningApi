@@ -89,5 +89,28 @@ namespace LearningFoundation.Clustering.KMeans
             this.Tolerance = tolerance;
         }
 
+        /// <summary>
+        /// Clonses settings object.
+        /// </summary>
+        /// <returns></returns>
+        internal ClusteringSettings Clone()
+        {
+            ClusteringSettings sett = this.MemberwiseClone() as ClusteringSettings;
+            if (this.InitialCentroids != null)
+            {
+                List<double[]> copyCentroids = new List<double[]>();
+
+                foreach (var centroid in this.InitialCentroids)
+                {
+                    Array arr = new double[centroid.Length];
+                    centroid.CopyTo(arr, 0);
+                    copyCentroids.Add(arr as double[]);
+                }
+
+                sett.InitialCentroids = copyCentroids.ToArray();
+            }
+
+            return sett;
+        }
     }
 }

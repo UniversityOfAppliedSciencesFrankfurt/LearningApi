@@ -58,7 +58,7 @@ namespace AnomDetect.KMeans.FunctionRecognition
         /// <returns></returns>
         public IScore Run(double[][] data, IContext ctx)
         {
-            KMeansAlgorithm kmeans = new KMeansAlgorithm(this.Settings);
+            KMeansAlgorithm kmeans = new KMeansAlgorithm(this.Settings.Clone());
 
             KMeansScore res = kmeans.Train(data, ctx) as KMeansScore;
 
@@ -126,7 +126,7 @@ namespace AnomDetect.KMeans.FunctionRecognition
         /// <returns></returns>
         public IResult Predict(double[][] funcData, IContext ctx)
         {
-            KMeansAlgorithm kmeans = new KMeansAlgorithm(this.Settings);
+            KMeansAlgorithm kmeans = new KMeansAlgorithm(this.Settings.Clone());
 
             KMeansScore res = kmeans.Train(funcData, ctx) as KMeansScore;
 
