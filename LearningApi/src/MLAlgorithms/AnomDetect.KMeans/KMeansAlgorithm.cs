@@ -108,7 +108,7 @@ namespace LearningFoundation.Clustering.KMeans
                 //initiate the clustering process
                 this.m_instance.DataToClusterMapping = runKMeansAlgorithm(rawData, this.m_instance.NumberOfClusters, ClusterSettings.NumOfDimensions, ClusterSettings.KmeansMaxIterations, ClusterSettings.KmeansAlgorithm, this.ClusterSettings.InitialCentroids, out calculatedCentroids, out IterationReached);
 
-                // should be done in recalcPartialcentroids
+                //update centroids
                 for (int i = 0; i < this.m_instance.NumberOfClusters; i++)
                 {
                     this.m_instance.Clusters[i].Centroid = calculatedCentroids[i];
@@ -117,10 +117,12 @@ namespace LearningFoundation.Clustering.KMeans
                 //create the clusters' result & statistics
                 Cluster[] cluster;
                 cluster = ClusteringResults.CreateClusteringResult(rawData, this.m_instance.DataToClusterMapping, calculatedCentroids, this.m_instance.NumberOfClusters);
+
+                //import new results into current clusters
                 getNewStats(cluster);
 
                 //adjust due to partials
-                recalcPartialCentroids();
+                recalcPartialClusters();
 
                 if (ClusterSettings.KmeansMaxIterations <= IterationReached)
                 {
@@ -187,8 +189,59 @@ namespace LearningFoundation.Clustering.KMeans
         }
 
         /// <summary>
-        /// 
-        /// detects to which cluster the given sample belongs to.
+        /// Save is a function that saves Instance and Cluster results in json file. Instance will be saved in 'Instance Result' folder and Cluster will be saved in 'Cluster Result' folder.
+        /// </summary>
+        /// <param name="path">Where it should be saved to</param>
+        public void Save(string path)
+        {
+            int Code;
+            string Message = "Function <Save>: ";
+            try
+            {
+                JsonSerializer json = new JsonSerializer();
+
+                json.Save(path, this.m_instance);
+                // json.Save(path, this.m_cluster);
+            }
+            catch (Exception Ex)
+            {
+                Code = 400;
+                Message += "Unhandled exception:\t" + Ex.ToString();
+                throw new KMeansException(Code, Message);
+            }
+
+        }
+
+        /// <summary>
+        /// Load is a function that loads Instance and Cluster results from json file to the calling KMeans object.
+        /// </summary>
+        /// <param name="path">Where it should be loaded from</param>
+        public void Load(string path)
+        {
+            int Code;
+            string Message = "Function <Load>: ";
+            try
+            {
+                JsonSerializer json = new JsonSerializer();
+
+                this.m_instance = json.Load(path);
+                //this.m_cluster = json.LoadClusters(path);
+            }
+            catch (Exception Ex)
+            {
+                Code = 400;
+                Message += "Unhandled exception:\t" + Ex.ToString();
+                throw new KMeansException(Code, Message);
+            }
+
+        }
+
+        #endregion
+
+        #region Private Functoins
+
+        /// <summary>
+        /// PredictSample detects to which cluster the given sample belongs to.
         /// </summary>
         /// <param name="Sample">the sample to be predicted</param>
         /// <param name="Tolerance">a value in % representing the tolerance to possible outliers</param>
@@ -254,58 +307,6 @@ namespace LearningFoundation.Clustering.KMeans
                 throw new KMeansException(Code, Message);
             }
         }
-
-        /// <summary>
-        /// Save is a function that saves Instance and Cluster results in json file. Instance will be saved in 'Instance Result' folder and Cluster will be saved in 'Cluster Result' folder.
-        /// </summary>
-        /// <param name="path">Where it should be saved to</param>
-        public void Save(string path)
-        {
-            int Code;
-            string Message = "Function <Save>: ";
-            try
-            {
-                JsonSerializer json = new JsonSerializer();
-
-                json.Save(path, this.m_instance);
-                // json.Save(path, this.m_cluster);
-            }
-            catch (Exception Ex)
-            {
-                Code = 400;
-                Message += "Unhandled exception:\t" + Ex.ToString();
-                throw new KMeansException(Code, Message);
-            }
-
-        }
-
-        /// <summary>
-        /// Load is a function that loads Instance and Cluster results from json file to the calling KMeans object.
-        /// </summary>
-        /// <param name="path">Where it should be loaded from</param>
-        public void Load(string path)
-        {
-            int Code;
-            string Message = "Function <Load>: ";
-            try
-            {
-                JsonSerializer json = new JsonSerializer();
-
-                this.m_instance = json.Load(path);
-                //this.m_cluster = json.LoadClusters(path);
-            }
-            catch (Exception Ex)
-            {
-                Code = 400;
-                Message += "Unhandled exception:\t" + Ex.ToString();
-                throw new KMeansException(Code, Message);
-            }
-
-        }
-
-        #endregion
-
-        #region Private Functoins
 
         /// <summary>
         /// validateParams is a function that does some checks on the passed parameters by the user.
@@ -426,7 +427,7 @@ namespace LearningFoundation.Clustering.KMeans
         }
 
         /// <summary>
-        /// KMeansClusteringAlg is a function that clusters the given samples based on the K-means algorithm.
+        /// runKMeansAlgorithm is a function that clusters the given samples based on the K-means algorithm.
         /// </summary>
         /// <param name="rawData">the samples to be clustered</param>
         /// <param name="numClusters">desired number of clusters</param>
@@ -445,7 +446,7 @@ namespace LearningFoundation.Clustering.KMeans
         internal static int[] runKMeansAlgorithm(double[][] rawData, int numClusters, int numDims, int maxCount, int kMeanAlgorithm, double[][] initialCentroids, out double[][] centroids, out int IterationReached)
         {
             int Code;
-            string Message = "Function <KMeansClusteringAlg>: ";
+            string Message = "Function <runKMeansAlgorithm>: ";
             int[] clusterAssignments;
             try
             {
@@ -470,7 +471,7 @@ namespace LearningFoundation.Clustering.KMeans
 
                     if (kMeanAlgorithm == 1)
                     {
-                        assignCentroidsToNearestMeanSample(rawData, numClusters, centroids, means);
+                        assignCentroidsToNearestMeanSample(rawData, numClusters, means, centroids);
                     }
                     else
                     {
@@ -519,130 +520,168 @@ namespace LearningFoundation.Clustering.KMeans
             }
         }
 
-        private  void recalcPartialCentroids()
+        /// <summary>
+        /// recalcPartialClusters is a function that recaculates clusters' centroids and maximum distance in clusters based on the new minibatch and the old cluster results
+        /// </summary>
+        private void recalcPartialClusters()
         {
-            //
-            // This code recalculate sum by adding a mean from previous minibatch.
-            for (int i = 0; i < this.Instance.NumberOfClusters; i++)
+            int Code;
+            string Message = "Function <recalcPartialClusters>: ";
+            try
             {
-                
-
-                if (this.Instance.Clusters[i].PreviousCentroid != null)
+                // This code recalculate sum by adding a mean from previous minibatch.
+                for (int i = 0; i < this.Instance.NumberOfClusters; i++)
                 {
-                    double f = (double)1 / (this.Instance.Clusters[i].NumberOfSamples + this.Instance.Clusters[i].PreviousNumberOfSamples);
 
-                    /////
-                    ///// issue with previous number of samples and centroids
-                    /////
-                    for (int j = 0; j < this.Instance.Clusters[0].Centroid.Length; j++)
+                    //if it's a partial cluster calculation
+                    if (this.Instance.Clusters[i].PreviousCentroid != null)
                     {
-                        this.Instance.Clusters[i].Centroid[j] = f * (this.Instance.Clusters[i].PreviousNumberOfSamples * this.Instance.Clusters[i].PreviousCentroid[j] + this.Instance.Clusters[i].NumberOfSamples * this.Instance.Clusters[i].Centroid[j]);
+                        double f = (double)1 / (this.Instance.Clusters[i].NumberOfSamples + this.Instance.Clusters[i].PreviousNumberOfSamples);
 
-                        //this.Instance.Clusters[i].PreviousCentroid[j] = this.Instance.Clusters[i].Centroid[j];
+                        //for each attribute
+                        for (int j = 0; j < this.Instance.Clusters[0].Centroid.Length; j++)
+                        {
+                            //recalculate cetroid
+                            this.Instance.Clusters[i].Centroid[j] = f * (this.Instance.Clusters[i].PreviousNumberOfSamples * this.Instance.Clusters[i].PreviousCentroid[j] + this.Instance.Clusters[i].NumberOfSamples * this.Instance.Clusters[i].Centroid[j]);
+                        }
+
+                        //recalculate maximum distance
+                        adjustInClusterMaxDistance(i);
                     }
 
-                    adjustInClusterMaxDistance(i);
-                    //checkOldInClusterMaxDistance(i);
-                    
+                    //adjust cluster properties
+                    this.Instance.Clusters[i].NumberOfSamples += this.Instance.Clusters[i].PreviousNumberOfSamples;
+                    this.Instance.Clusters[i].PreviousNumberOfSamples = this.Instance.Clusters[i].NumberOfSamples;
+                    this.Instance.Clusters[i].PreviousCentroid = this.Instance.Clusters[i].Centroid;
+                    this.Instance.Clusters[i].PreviousInClusterMaxDistance = this.Instance.Clusters[i].InClusterMaxDistance;
                 }
-                /*
-                else
-                {
-                    this.Instance.Clusters[i].PreviousInClusterFarthestSample = this.Instance.Clusters[i].InClusterFarthestSample;
-                }*/
-
-                this.Instance.Clusters[i].NumberOfSamples += this.Instance.Clusters[i].PreviousNumberOfSamples;
-                this.Instance.Clusters[i].PreviousNumberOfSamples = this.Instance.Clusters[i].NumberOfSamples;
-                this.Instance.Clusters[i].PreviousCentroid = this.Instance.Clusters[i].Centroid;
-                this.Instance.Clusters[i].PreviousInClusterMaxDistance = this.Instance.Clusters[i].InClusterMaxDistance;
             }
+            catch (Exception Ex)
+            {
+                Code = 400;
+                Message += "Unhandled exception:\t" + Ex.ToString();
+                throw new KMeansException(Code, Message);
+            }          
         }
 
-        private void checkOldInClusterMaxDistance(int cluster)
-        {
-            
-            double oldDistance = calculateDistance(this.Instance.Clusters[cluster].Centroid, this.Instance.Clusters[cluster].PreviousInClusterFarthestSample);
-            if (oldDistance > this.Instance.Clusters[cluster].InClusterMaxDistance)
-            {
-                this.Instance.Clusters[cluster].InClusterMaxDistance = oldDistance;
-            }
-            else
-            {
-                this.Instance.Clusters[cluster].PreviousInClusterFarthestSample = this.Instance.Clusters[cluster].InClusterFarthestSample;
-            }        
-        }
-
+        /// <summary>
+        /// adjustInClusterMaxDistance is a function that recalculates/approximate the maximum distance in the cluster for partial clustering
+        /// </summary>
+        /// <param name="cluster">index of the cluster</param>
         private void adjustInClusterMaxDistance(int cluster)
         {
-            this.Instance.Clusters[cluster].InClusterMaxDistance = 0;
-            // calculate new in cluster max distance
-            double curDistance;
-            for (int i = 0; i < this.Instance.Clusters[cluster].NumberOfSamples; i++)
+            int Code;
+            string Message = "Function <adjustInClusterMaxDistance>: ";
+            try
             {
-                curDistance = calculateDistance(this.Instance.Clusters[cluster].Centroid, this.Instance.Clusters[cluster].ClusterData[i]);
-                if (curDistance > this.Instance.Clusters[cluster].InClusterMaxDistance)
+                this.Instance.Clusters[cluster].InClusterMaxDistance = 0;
+                // calculate new in cluster max distance
+                double curDistance;
+                for (int i = 0; i < this.Instance.Clusters[cluster].NumberOfSamples; i++)
                 {
-                    this.Instance.Clusters[cluster].InClusterMaxDistance = curDistance;
-                    //this.Instance.Clusters[cluster].InClusterFarthestSample = this.Instance.Clusters[cluster].ClusterData[i];
-                }
-            }
-
-            // compare to max possible old in cluster max distance
-            double oldDistance = this.Instance.Clusters[cluster].PreviousInClusterMaxDistance + calculateDistance(this.Instance.Clusters[cluster].Centroid, this.Instance.Clusters[cluster].PreviousCentroid);
-            if (oldDistance > this.Instance.Clusters[cluster].InClusterMaxDistance)
-            {
-                this.Instance.Clusters[cluster].InClusterMaxDistance = oldDistance;
-            }
-        }
-
-        private void getNewStats(Cluster[] cluster)
-        {
-            for (int i = 0; i < cluster.Length; i++)
-            {
-                this.Instance.Clusters[i].Centroid = cluster[i].Centroid;
-                this.Instance.Clusters[i].ClusterData = cluster[i].ClusterData;
-                this.Instance.Clusters[i].ClusterDataDistanceToCentroid = cluster[i].ClusterDataDistanceToCentroid;
-                this.Instance.Clusters[i].ClusterDataOriginalIndex = cluster[i].ClusterDataOriginalIndex;
-                this.Instance.Clusters[i].ClusterOfNearestForeignSample = cluster[i].ClusterOfNearestForeignSample;
-                this.Instance.Clusters[i].DistanceToNearestClusterCentroid = cluster[i].DistanceToNearestClusterCentroid;
-                this.Instance.Clusters[i].DistanceToNearestForeignSample = cluster[i].DistanceToNearestForeignSample;
-                this.Instance.Clusters[i].DistanceToNearestForeignSampleInNearestCluster = cluster[i].DistanceToNearestForeignSampleInNearestCluster;
-                this.Instance.Clusters[i].InClusterFarthestSample = cluster[i].InClusterFarthestSample;
-                this.Instance.Clusters[i].InClusterFarthestSampleIndex = cluster[i].InClusterFarthestSampleIndex;
-                this.Instance.Clusters[i].InClusterMaxDistance = cluster[i].InClusterMaxDistance;
-                this.Instance.Clusters[i].Mean = cluster[i].Mean;
-                this.Instance.Clusters[i].NearestCluster = cluster[i].NearestCluster;
-                this.Instance.Clusters[i].NearestForeignSample = cluster[i].NearestForeignSample;
-                this.Instance.Clusters[i].NearestForeignSampleInNearestCluster = cluster[i].NearestForeignSampleInNearestCluster;
-                this.Instance.Clusters[i].NumberOfSamples = cluster[i].NumberOfSamples;
-                this.Instance.Clusters[i].StandardDeviation = cluster[i].StandardDeviation;
-            }
-        }
-
-        private static void assignCentroidsToNearestMeanSample(double[][] rawData, int numClusters, double[][] centroids, double[][] means)
-        {
-            double[] currDist = new double[numClusters];
-            double[] minDist = new double[numClusters];
-
-            for (int i = 0; i < numClusters; i++)
-            {
-                minDist[i] = double.MaxValue;
-            }
-
-
-            for (int i = 0; i < rawData.Length; ++i)
-            {
-                for (int j = 0; j < numClusters; j++)
-                {
-                    currDist[j] = calculateDistance(rawData[i], means[j]);
-
-                    if (currDist[j] < minDist[j])
+                    curDistance = calculateDistance(this.Instance.Clusters[cluster].Centroid, this.Instance.Clusters[cluster].ClusterData[i]);
+                    if (curDistance > this.Instance.Clusters[cluster].InClusterMaxDistance)
                     {
-                        minDist[j] = currDist[j];
-
-                        centroids[j] = rawData[i];
+                        this.Instance.Clusters[cluster].InClusterMaxDistance = curDistance;
                     }
                 }
+
+                // compare to max possible old in cluster max distance
+                double oldDistance = this.Instance.Clusters[cluster].PreviousInClusterMaxDistance + calculateDistance(this.Instance.Clusters[cluster].Centroid, this.Instance.Clusters[cluster].PreviousCentroid);
+                if (oldDistance > this.Instance.Clusters[cluster].InClusterMaxDistance)
+                {
+                    this.Instance.Clusters[cluster].InClusterMaxDistance = oldDistance;
+                }
+            }
+            catch (Exception Ex)
+            {
+                Code = 400;
+                Message += "Unhandled exception:\t" + Ex.ToString();
+                throw new KMeansException(Code, Message);
+            }           
+        }
+
+        /// <summary>
+        /// getNewStats is a function that loads the new cluster stats from cluster array while preserving the previously calculated properties
+        /// </summary>
+        /// <param name="cluster">array containing the new cluster stats</param>
+        private void getNewStats(Cluster[] cluster)
+        {
+            int Code;
+            string Message = "Function <getNewStats>: ";
+            try
+            {
+                for (int i = 0; i < cluster.Length; i++)
+                {
+                    this.Instance.Clusters[i].Centroid = cluster[i].Centroid;
+                    this.Instance.Clusters[i].ClusterData = cluster[i].ClusterData;
+                    this.Instance.Clusters[i].ClusterDataDistanceToCentroid = cluster[i].ClusterDataDistanceToCentroid;
+                    this.Instance.Clusters[i].ClusterDataOriginalIndex = cluster[i].ClusterDataOriginalIndex;
+                    this.Instance.Clusters[i].ClusterOfNearestForeignSample = cluster[i].ClusterOfNearestForeignSample;
+                    this.Instance.Clusters[i].DistanceToNearestClusterCentroid = cluster[i].DistanceToNearestClusterCentroid;
+                    this.Instance.Clusters[i].DistanceToNearestForeignSample = cluster[i].DistanceToNearestForeignSample;
+                    this.Instance.Clusters[i].DistanceToNearestForeignSampleInNearestCluster = cluster[i].DistanceToNearestForeignSampleInNearestCluster;
+                    this.Instance.Clusters[i].InClusterFarthestSample = cluster[i].InClusterFarthestSample;
+                    this.Instance.Clusters[i].InClusterFarthestSampleIndex = cluster[i].InClusterFarthestSampleIndex;
+                    this.Instance.Clusters[i].InClusterMaxDistance = cluster[i].InClusterMaxDistance;
+                    this.Instance.Clusters[i].Mean = cluster[i].Mean;
+                    this.Instance.Clusters[i].NearestCluster = cluster[i].NearestCluster;
+                    this.Instance.Clusters[i].NearestForeignSample = cluster[i].NearestForeignSample;
+                    this.Instance.Clusters[i].NearestForeignSampleInNearestCluster = cluster[i].NearestForeignSampleInNearestCluster;
+                    this.Instance.Clusters[i].NumberOfSamples = cluster[i].NumberOfSamples;
+                    this.Instance.Clusters[i].StandardDeviation = cluster[i].StandardDeviation;
+                }
+            }
+            catch (Exception Ex)
+            {
+                Code = 400;
+                Message += "Unhandled exception:\t" + Ex.ToString();
+                throw new KMeansException(Code, Message);
+            }            
+        }
+
+        /// <summary>
+        /// is a function that assigns the centroid to the nearest sample to the calculated mean
+        /// </summary>
+        /// <param name="rawData">the samples to be clustered</param>
+        /// <param name="numClusters">desired number of clusters</param>
+        /// <param name="means">mean of clusters</param>
+        /// <param name="centroids">centroids of clusters (Updated in the function)</param>
+        private static void assignCentroidsToNearestMeanSample(double[][] rawData, int numClusters, double[][] means, double[][] centroids)
+        {   
+            int Code;
+            string Message = "Function <>: ";
+            try
+            {
+                double[] currDist = new double[numClusters];
+                double[] minDist = new double[numClusters];
+
+                for (int i = 0; i < numClusters; i++)
+                {
+                    minDist[i] = double.MaxValue;
+                }
+
+
+                for (int i = 0; i < rawData.Length; ++i)
+                {
+                    for (int j = 0; j < numClusters; j++)
+                    {
+                        currDist[j] = calculateDistance(rawData[i], means[j]);
+
+                        if (currDist[j] < minDist[j])
+                        {
+                            minDist[j] = currDist[j];
+
+                            centroids[j] = rawData[i];
+                        }
+                    }
+                }
+            }
+            catch (Exception Ex)
+            {
+                Code = 400;
+                Message += "Unhandled exception:\t" + Ex.ToString();
+                throw new KMeansException(Code, Message);
             }
         }
 
@@ -916,13 +955,13 @@ namespace LearningFoundation.Clustering.KMeans
                     {
                         means[k][j] /= clusterCounts[k];
 
-                        //
+                        /*
                         // This code recalculate sum by adding a mean from previous minibatch.
                         if (previousSampleCount != 0 && previousMeanValues != null)
                         {
                             double f = (double)1 / (rawData.Length + previousSampleCount);
                             means[k][j] = f * (previousSampleCount * previousMeanValues[k] + rawData.Length * means[k][j]);
-                        }
+                        }*/
                     }
                 }
             }
@@ -1016,7 +1055,7 @@ namespace LearningFoundation.Clustering.KMeans
         }
 
         /// <summary>
-        /// centroidsAreMeans is a function that sets the centroids to the means
+        /// assignCentroidsToMean is a function that sets the centroids to the means
         /// </summary>
         /// <param name="means">mean of each cluster</param>
         /// <param name="centroids">centroid of each cluster</param>
@@ -1071,7 +1110,7 @@ namespace LearningFoundation.Clustering.KMeans
 
                 double[] distances = new double[numClusters]; // distance from current tuple to each cluster mean
 
-                for (int i = 0; i < rawData.Length; ++i)      // walk thru each tuple
+                for (int i = 0; i < rawData.Length; ++i)      // walk through each sample
                 {
                     for (int k = 0; k < numClusters; ++k)       // compute distances to all centroids
                     {
