@@ -104,26 +104,26 @@ namespace Test
         /// <summary>
         /// Creates 100 (batch=100) similar SIN functions, which differ in 10% of theit Y values.
         /// Functions are 2D=>{X,Y}. As next it creates predicting functions, which differ in value specified by 
-        /// noiceForPrediction.
+        /// noiseForPrediction.
         /// </summary>
         /// <param name="points"></param>
-        /// <param name="noiceForPrediction">Noice for SIN reference function. Algorithm is trained with noic 10%.
-        /// That means all noices less than 10% (plus/minus some delta) should be recognized as true positives.
+        /// <param name="noiseForPrediction">noise for SIN reference function. Algorithm is trained with noic 10%.
+        /// That means all noises less than 10% (plus/minus some delta) should be recognized as true positives.
         /// All values higher than 25% should be recognized as true negatives.
         /// All other values between 10 and 24 are most likely recognized as true negatives. This is not mathematicall 100% safe, so we excluded these values 
         /// from tests.</param>
         [Theory]
-        [InlineData(200, 10)]
-        [InlineData(200, 9)]
-        [InlineData(200, 5)]
-        [InlineData(200, 1)]
-        [InlineData(400, 28)]
-        [InlineData(200, 25)]
-        [InlineData(400, 30)]
-        [InlineData(1000, 30)]
-        [InlineData(1000, 25)]
-        [InlineData(1000, 35)]
-        public void Test_FunctionRecognitionModule(int points, int noiceForPrediction)
+        [InlineData(200, 7, 10)]
+        [InlineData(200, 5, 9)]
+        [InlineData(200, 2, 5)]
+        [InlineData(200, 0, 1)]
+        [InlineData(400, 25, 28)]
+        [InlineData(200, 21, 25)]
+        [InlineData(400, 25, 30)]
+        [InlineData(1000, 27, 30)]
+        [InlineData(1000, 22, 25)]
+        [InlineData(1000, 30, 35)]
+        public void Test_FunctionRecognitionModule(int points, int MinNoiseForPrediction, int MaxNoiseForPrediction)
         {
             #region Training
             var batch = 100;
@@ -137,7 +137,7 @@ namespace Test
             LearningApi api = new LearningApi();
             api.UseActionModule<object, double[][]>((notUsed, ctx) =>
             {
-                var similarFuncData = FunctionGenerator.CreateSimilarFromReferenceFunc(funcData.ToArray(), 10);
+                var similarFuncData = FunctionGenerator.CreateSimilarFromReferenceFunc(funcData.ToArray(), 7, 10);
 
                 // Formats the data to mlitidimensional array.
                 double[][] formattedData = formatData(similarFuncData);
@@ -151,7 +151,7 @@ namespace Test
             initCentroids[2] = new double[] { 7.85, 0.62 };
             initCentroids[3] = new double[] { 10.99, -0.64 };
 
-            ClusteringSettings settings = new ClusteringSettings(0, numClusters: 4, numDims: 2, KmeansAlgorithm: 2, initialCentroids: initCentroids, tolerance: 0) { KmeansMaxIterations = 1000 };
+            ClusteringSettings settings = new ClusteringSettings(0, numClusters: 4, numDims: 2, KmeansAlgorithm: 2, initialCentroids: initCentroids, tolerance: 0, funcRecogMethod: 2) { KmeansMaxIterations = 1000 };
 
             api.UseKMeansFunctionRecognitionModule(settings);
 
@@ -164,35 +164,35 @@ namespace Test
             #endregion
 
             #region Prediction
-            var noicedFunc = FunctionGenerator.CreateSimilarFromReferenceFunc(funcData.ToArray(), noiceForPrediction);
+            var noisedFunc = FunctionGenerator.CreateSimilarFromReferenceFunc(funcData.ToArray(), MinNoiseForPrediction, MaxNoiseForPrediction);
 
-            double[][] data = formatData(noicedFunc);
+            double[][] data = formatData(noisedFunc);
 
             var predictionResult = api.Algorithm.Predict(data, null) as KMeansFuncionRecognitionResult;
 
             // TRUE positives
-            if (noiceForPrediction <= 10)
+            if (MaxNoiseForPrediction <= 10)
             {
                 Assert.True(predictionResult.Loss == 1.0);
             }
             // TRUE negatives
-            else if (noiceForPrediction >= 25)
+            else if (MaxNoiseForPrediction >= 25)
             {
                 Assert.False(predictionResult.Loss == 1.0);
             }
             #endregion
         }
 
-        [InlineData(10)]
-        [InlineData(9)]
-        [InlineData(5)]
-        [InlineData(1)]
-        [InlineData(28)]
-        [InlineData(25)]
-        [InlineData(30)]
-        [InlineData(35)]
+        [InlineData(7, 10)]
+        [InlineData(7, 9)]
+        [InlineData(2, 5)]
+        [InlineData(0, 1)]
+        [InlineData(24, 28)]
+        [InlineData(20, 25)]
+        [InlineData(25, 30)]
+        [InlineData(32, 35)]
         [Theory]
-        public void Test_FunctionRecognitionModuleSave(int noiceForPrediction)
+        public void Test_FunctionRecognitionModuleSave(int MinNoiseForPrediction, int MaxNoiseForPrediction)
         {
             #region Train and Save
             var batch = 100;
@@ -202,7 +202,7 @@ namespace Test
             LearningApi api = new LearningApi();
             api.UseActionModule<object, double[][]>((notUsed, ctx) =>
             {
-                var similarFuncData = FunctionGenerator.CreateSimilarFromReferenceFunc(funcData.ToArray(), 10);
+                var similarFuncData = FunctionGenerator.CreateSimilarFromReferenceFunc(funcData.ToArray(), 7, 10);
 
                 double[][] formattedData = formatData(similarFuncData);
 
@@ -231,19 +231,19 @@ namespace Test
 
             #region Load And Predict
             var api2 = LearningApi.Load("sinusmodel");
-            var noicedFunc = FunctionGenerator.CreateSimilarFromReferenceFunc(funcData.ToArray(), noiceForPrediction);
+            var noisedFunc = FunctionGenerator.CreateSimilarFromReferenceFunc(funcData.ToArray(), MinNoiseForPrediction, MaxNoiseForPrediction);
 
-            double[][] data = formatData(noicedFunc);
+            double[][] data = formatData(noisedFunc);
 
             var predictionResult = api2.Algorithm.Predict(data, null) as KMeansFuncionRecognitionResult;
 
             // TRUE positives
-            if (noiceForPrediction <= 10)
+            if (MaxNoiseForPrediction <= 10)
             {
                 Assert.True(predictionResult.Loss == 1.0);
             }
             // TRUE negatives
-            else if (noiceForPrediction >= 25)
+            else if (MaxNoiseForPrediction >= 25)
             {
                 Assert.False(predictionResult.Loss == 1.0);
             }
@@ -254,7 +254,6 @@ namespace Test
         /// <summary>
         /// Traines and predicts the model from custom function defined by customFunc1().
         /// </summary>      
-
         [Fact]
         public void Test_FunctionRecognitionModule_CustomFunc()
         {
@@ -271,7 +270,7 @@ namespace Test
             LearningApi api = new LearningApi();
             api.UseActionModule<object, double[][]>((notUsed, ctx) =>
             {
-                var similarFuncData = FunctionGenerator.CreateSimilarFromReferenceFunc(funcData.ToArray(), 10);
+                var similarFuncData = FunctionGenerator.CreateSimilarFromReferenceFunc(funcData.ToArray(), 7, 10);
 
                 // Formats the data to mulitidimensional array.
                 double[][] formattedData = formatData(similarFuncData);
@@ -296,37 +295,37 @@ namespace Test
             #endregion
 
             #region Prediction
-            int[] noices = new int[] { 5, 7, 9, 10, 3, 15, 20, 25, 30, 35, 40, 22, 15, 17, 12 , 48, 61};
+            int[] noises = new int[] { 5, 7, 9, 10, 3, 15, 20, 25, 30, 35, 40, 22, 15, 17, 12 , 48, 61};
             int numOfAnomalliesDetected = 0;
 
-            foreach (var noiceForPrediction in noices)
+            foreach (var noiseForPrediction in noises)
             {
-                var noicedFunc = FunctionGenerator.CreateSimilarFromReferenceFunc(funcData.ToArray(), noiceForPrediction);
+                var noisedFunc = FunctionGenerator.CreateSimilarFromReferenceFunc(funcData.ToArray(), noiseForPrediction - 2, noiseForPrediction);
 
                 m_CustFncIndx = 0;
 
-                double[][] data = formatData(noicedFunc);
+                double[][] data = formatData(noisedFunc);
 
                 var predictionResult = api.Algorithm.Predict(data, null) as KMeansFuncionRecognitionResult;
 
                 //// TRUE positives
-                if (noiceForPrediction <= 10)
+                if (noiseForPrediction <= 10)
                 {
                     Assert.True(predictionResult.Loss == 1.0);
-                    Debug.WriteLine($"Recognized: Noice: {noiceForPrediction} - {predictionResult.Result} - {predictionResult.Loss}");
+                    Debug.WriteLine($"Recognized: noise: {noiseForPrediction} - {predictionResult.Result} - {predictionResult.Loss}");
 
                 }
                 // TRUE negatives
-                else if (noiceForPrediction >= 10)
+                else if (noiseForPrediction >= 10)
                 {   
                     if (predictionResult.Result == false)
                     {
                         numOfAnomalliesDetected++;
 
-                        // Result can be statistically true positive or true negative. This is because similar functions are genarated in +/- range to specified noice.
+                        // Result can be statistically true positive or true negative. This is because similar functions are genarated in +/- range to specified noise.
                         // If model is trained to 10% and sinilar function is created to 25%, it means that values of similar function
                         // fit range from 0-25% of referenced value. If it is below 10% (used for training in this test) then resut will be true positive.
-                        Debug.WriteLine($"Anomally detected: Noice: {noiceForPrediction} - {predictionResult.Result} - {predictionResult.Loss}");
+                        Debug.WriteLine($"Anomally detected: Noise: {noiseForPrediction} - {predictionResult.Result} - {predictionResult.Loss}");
                     }
                 }
             }

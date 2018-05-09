@@ -22,7 +22,6 @@ namespace AnomDetect.KMeans.FunctionRecognition
         /// <summary>
         /// TRUE if the cluster fits between Min and Max.
         /// </summary>
-
         public bool[] ResultsPerCluster { get; set; }
     }
 }

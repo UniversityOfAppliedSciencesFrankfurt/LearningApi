@@ -40,10 +40,10 @@ namespace Test
             // number of similar functions
             int NumSimFunc = 999;
             // percentage of added noise level (distortion) 
-            int noice = 10;
+            int noise = 10;
 
             // generate the similar functions
-            generateSimilarFunctions("TestFile01", NumSimFunc, noice);
+            generateSimilarFunctions("TestFile01", NumSimFunc, noise - 3, noise);
         }
 
         #endregion
@@ -55,8 +55,9 @@ namespace Test
         /// </summary>
         /// <param name="functionName">path to main function</param>
         /// <param name="numFunctions">number of functions to generate</param>
-        /// <param name="noiseRangePercentage">percentage of noise range compared to each attribute range</param>
-        private static void generateSimilarFunctions(string functionName, int numFunctions, int noiseRangePercentage)
+        /// <param name="MinNoiseRangePercentage">minimum percentage of noise range compared to each attribute range</param>
+        /// <param name="MaxNoiseRangePercentage">maximum percentage of noise range compared to each attribute range</param>
+        private static void generateSimilarFunctions(string functionName, int numFunctions, int MinNoiseRangePercentage, int MaxNoiseRangePercentage)
         {
             string path = Path.Combine(rootFolder, functionName);
             if (Directory.Exists(path) == false)
@@ -72,10 +73,10 @@ namespace Test
             double[][] referenceFunction = Helpers.LoadFunctionData(Path.Combine(path, functionFileName));
             
             // complete file path and name
-            string fName = path + "\\" + cPathPrefix + noiseRangePercentage + "\\" + Path.GetFileNameWithoutExtension(functionName) + " SimilarFunctions NRP" + noiseRangePercentage + ".csv";
+            string fName = path + "\\" + cPathPrefix + MaxNoiseRangePercentage + "\\" + Path.GetFileNameWithoutExtension(functionName) + " SimilarFunctions NRP" + MaxNoiseRangePercentage + ".csv";
            
             // complete file path and name for the normalized version
-            string fNameNormalized = path + "\\" +cPathPrefix + noiseRangePercentage + "\\" + Path.GetFileNameWithoutExtension(functionName) + " SimilarFunctions Normalized NRP" + noiseRangePercentage + ".csv";
+            string fNameNormalized = path + "\\" +cPathPrefix + MaxNoiseRangePercentage + "\\" + Path.GetFileNameWithoutExtension(functionName) + " SimilarFunctions Normalized NRP" + MaxNoiseRangePercentage + ".csv";
           
             // save original function in both new file
             Helpers.Write2CSVFile(referenceFunction, fName);
@@ -83,7 +84,7 @@ namespace Test
 
             for (int i = 0; i < numFunctions; i++)
             {
-                double[][] similarFuncData = FunctionGenerator.CreateSimilarFromReferenceFunc(referenceFunction, noiseRangePercentage);
+                double[][] similarFuncData = FunctionGenerator.CreateSimilarFromReferenceFunc(referenceFunction, MinNoiseRangePercentage, MaxNoiseRangePercentage);
 
                 // append the newly generated similar function
                 Helpers.Write2CSVFile(similarFuncData, fName, true);
