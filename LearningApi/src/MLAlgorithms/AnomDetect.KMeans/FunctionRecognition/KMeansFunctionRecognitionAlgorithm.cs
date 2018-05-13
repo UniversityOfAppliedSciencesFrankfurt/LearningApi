@@ -31,22 +31,39 @@ namespace AnomDetect.KMeans.FunctionRecognition
         {
             this.Settings = settings;
             this.Score = new KMeansFunctionRecognitonScore();
-            this.Score.MaxCentroid = new double[settings.NumberOfClusters][];
-            this.Score.MinCentroid = new double[settings.NumberOfClusters][];
             this.Score.Centroids = new double[settings.NumberOfClusters][];
 
-            for (int i = 0; i < settings.NumberOfClusters; i++)
+            if(this.Settings.FuncRecogMethod == 1)
             {
-                this.Score.MaxCentroid[i] = new double[settings.NumOfDimensions];
-                this.Score.MinCentroid[i] = new double[settings.NumOfDimensions];
-                this.Score.Centroids[i] = new double[settings.NumOfDimensions];
+                this.Score.InClusterMaxDistance = new double[settings.NumberOfClusters];
+                this.Score.MaxCentroid = null;
+                this.Score.MinCentroid = null;
 
-                for (int dim = 0; dim < settings.NumOfDimensions; dim++)
+                for (int i = 0; i < settings.NumberOfClusters; i++)
                 {
-                    this.Score.MaxCentroid[i][dim] = double.MinValue;
-                    this.Score.MinCentroid[i][dim] = double.MaxValue;
+                    this.Score.Centroids[i] = new double[settings.NumOfDimensions];
                 }
             }
+            else
+            {
+                this.Score.InClusterMaxDistance = null;
+                this.Score.MaxCentroid = new double[settings.NumberOfClusters][];
+                this.Score.MinCentroid = new double[settings.NumberOfClusters][];
+
+                for (int i = 0; i < settings.NumberOfClusters; i++)
+                {
+                    this.Score.MaxCentroid[i] = new double[settings.NumOfDimensions];
+                    this.Score.MinCentroid[i] = new double[settings.NumOfDimensions];
+                    this.Score.Centroids[i] = new double[settings.NumOfDimensions];
+
+                    for (int dim = 0; dim < settings.NumOfDimensions; dim++)
+                    {
+                        this.Score.MaxCentroid[i][dim] = double.MinValue;
+                        this.Score.MinCentroid[i][dim] = double.MaxValue;
+                    }
+                }
+            }
+  
         }
 
 
@@ -61,46 +78,59 @@ namespace AnomDetect.KMeans.FunctionRecognition
             KMeansAlgorithm kmeans = new KMeansAlgorithm(this.Settings.Clone());
 
             KMeansScore res = kmeans.Train(data, ctx) as KMeansScore;
+            this.Score.NomOfTrainedFunctions += 1;
 
-            //Debug.WriteLine($"C0: {res.Model.Clusters[0].Centroid[0]},{res.Model.Clusters[0].Centroid[1]}");
-            //Debug.WriteLine($"C1: {res.Model.Clusters[1].Centroid[0]},{res.Model.Clusters[0].Centroid[1]}");
-            //Debug.WriteLine($"C2: {res.Model.Clusters[2].Centroid[0]},{res.Model.Clusters[0].Centroid[1]}");
-            //Debug.WriteLine($"C3: {res.Model.Clusters[3].Centroid[0]},{res.Model.Clusters[0].Centroid[1]}");
-
-            for (int clusterIndx=0; clusterIndx < res.Model.Clusters.Length;clusterIndx++)
+            if (this.Settings.FuncRecogMethod == 1)
             {
-                for (int dim = 0; dim < this.Settings.NumOfDimensions; dim++)
+                for (int clusterIndx = 0; clusterIndx < res.Model.Clusters.Length; clusterIndx++)
                 {
-                    if (res.Model.Clusters[clusterIndx].Centroid[dim] > this.Score.MaxCentroid[clusterIndx][dim])
-                    {
-                        this.Score.MaxCentroid[clusterIndx][dim] = res.Model.Clusters[clusterIndx].Centroid[dim];
-                    }
+                    this.Score.Centroids[clusterIndx] = res.Model.Clusters[clusterIndx].Centroid;
+                    this.Score.InClusterMaxDistance[clusterIndx] = res.Model.Clusters[clusterIndx].InClusterMaxDistance;
+                }
+            }
+            else
+            {
+                //Debug.WriteLine($"C0: {res.Model.Clusters[0].Centroid[0]},{res.Model.Clusters[0].Centroid[1]}");
+                //Debug.WriteLine($"C1: {res.Model.Clusters[1].Centroid[0]},{res.Model.Clusters[0].Centroid[1]}");
+                //Debug.WriteLine($"C2: {res.Model.Clusters[2].Centroid[0]},{res.Model.Clusters[0].Centroid[1]}");
+                //Debug.WriteLine($"C3: {res.Model.Clusters[3].Centroid[0]},{res.Model.Clusters[0].Centroid[1]}");
 
-                    if (res.Model.Clusters[clusterIndx].Centroid[dim] < this.Score.MinCentroid[clusterIndx][dim])
+                for (int clusterIndx = 0; clusterIndx < res.Model.Clusters.Length; clusterIndx++)
+                {
+                    for (int dim = 0; dim < this.Settings.NumOfDimensions; dim++)
                     {
-                        this.Score.MinCentroid[clusterIndx][dim] = res.Model.Clusters[clusterIndx].Centroid[dim];
+                        if (res.Model.Clusters[clusterIndx].Centroid[dim] > this.Score.MaxCentroid[clusterIndx][dim])
+                        {
+                            this.Score.MaxCentroid[clusterIndx][dim] = res.Model.Clusters[clusterIndx].Centroid[dim];
+                        }
+
+                        if (res.Model.Clusters[clusterIndx].Centroid[dim] < this.Score.MinCentroid[clusterIndx][dim])
+                        {
+                            this.Score.MinCentroid[clusterIndx][dim] = res.Model.Clusters[clusterIndx].Centroid[dim];
+                        }
+                    }
+                }
+
+
+
+                for (int clusterIndex = 0; clusterIndex < res.Model.Clusters.Length; clusterIndex++)
+                {
+                    this.Score.Centroids[clusterIndex] = new double[Settings.NumOfDimensions];
+
+                    for (int dim = 0; dim < Settings.NumOfDimensions; dim++)
+                    {
+                        if (this.Score.MinCentroid[clusterIndex][dim] >= 0)
+                        {
+                            this.Score.Centroids[clusterIndex][dim] = (this.Score.MaxCentroid[clusterIndex][dim] + this.Score.MinCentroid[clusterIndex][dim]) / 2;
+                        }
+                        else
+                        {
+                            this.Score.Centroids[clusterIndex][dim] = ((this.Score.MaxCentroid[clusterIndex][dim] - this.Score.MinCentroid[clusterIndex][dim]) / 2) + this.Score.MinCentroid[clusterIndex][dim];
+                        }
                     }
                 }
             }
-
-            this.Score.NomOfSamples += data.Length;
-
-            for (int clusterIndex = 0; clusterIndex < res.Model.Clusters.Length; clusterIndex++)
-            {
-                this.Score.Centroids[clusterIndex] = new double[Settings.NumOfDimensions];
-
-                for (int dim = 0; dim < Settings.NumOfDimensions; dim++)
-                {
-                    if (this.Score.MinCentroid[clusterIndex][dim] >= 0)
-                    {
-                        this.Score.Centroids[clusterIndex][dim] = (this.Score.MaxCentroid[clusterIndex][dim] + this.Score.MinCentroid[clusterIndex][dim])/2;
-                    }
-                    else
-                    {
-                        this.Score.Centroids[clusterIndex][dim] = ((this.Score.MaxCentroid[clusterIndex][dim] - this.Score.MinCentroid[clusterIndex][dim]) / 2) + this.Score.MinCentroid[clusterIndex][dim];
-                    }
-                }
-            }
+            
 
             return Score;
         }
@@ -136,36 +166,65 @@ namespace AnomDetect.KMeans.FunctionRecognition
             predRes.ResultsPerCluster = new bool[Settings.NumberOfClusters];
      
             double[][] results = new double[Settings.NumberOfClusters][];
-            for (int i = 0; i < results.Length; i++)
-            {
-                results[i] = new double[Settings.NumOfDimensions];
-                for (int dim = 0; dim < Settings.NumOfDimensions; dim++)
-                {
-                    if (res.Model.Clusters[i].Centroid[dim] >= Score.MinCentroid[i][dim] &&
-                        res.Model.Clusters[i].Centroid[dim] <= Score.MaxCentroid[i][dim])
-                    {
-                        results[i][dim] = 1;
-                        scores++;                       
-                    }
-                    else
-                    {
-                        results[i][dim] = 0;
-                    }
 
-                    //
-                    // We calculate here the result of cluster over all dimensions. If all dimensions fits then cluster result is true.
-                    if (results[i].Count(r => r == 1) == Settings.NumOfDimensions)
+            if (this.Settings.FuncRecogMethod == 1)
+            {
+                //double[] currDistance = new double[results.Length];
+                double currDistance;
+                for (int i = 0; i < results.Length; i++)
+                {
+                    currDistance = KMeansAlgorithm.calculateDistance(Score.Centroids[i], res.Model.Clusters[i].Centroid);
+
+                    if (currDistance <= res.Model.Clusters[i].InClusterMaxDistance * (1.0 + this.Settings.Tolerance / 100.0))
+                    {
                         predRes.ResultsPerCluster[i] = true;
+                        scores++;
+                    }
                     else
+                    {
                         predRes.ResultsPerCluster[i] = false;
-                }     
+                    }
+                }
+                predRes.Result = (scores == Settings.NumberOfClusters);
+                predRes.Loss = ((float)scores) / (Settings.NumberOfClusters);
+            }
+            else
+            {
+                for (int i = 0; i < results.Length; i++)
+                {
+                    results[i] = new double[Settings.NumOfDimensions];
+                    for (int dim = 0; dim < Settings.NumOfDimensions; dim++)
+                    {
+                        if (res.Model.Clusters[i].Centroid[dim] >= Score.MinCentroid[i][dim] &&
+                            res.Model.Clusters[i].Centroid[dim] <= Score.MaxCentroid[i][dim])
+                        {
+                            results[i][dim] = 1;
+                            scores++;
+                        }
+                        else
+                        {
+                            results[i][dim] = 0;
+                        }
+
+                        //
+                        // We calculate here the result of cluster over all dimensions. If all dimensions fits then cluster result is true.
+                        if (results[i].Count(r => r == 1) == Settings.NumOfDimensions)
+                            predRes.ResultsPerCluster[i] = true;
+                        else
+                            predRes.ResultsPerCluster[i] = false;
+                    }
+                }
+
+
+                predRes.Result = (scores == Settings.NumberOfClusters * Settings.NumOfDimensions);
+                predRes.Loss = ((float)scores) / (Settings.NumberOfClusters * Settings.NumOfDimensions);
+
             }
 
-           
-            predRes.Result = (scores == Settings.NumberOfClusters * Settings.NumOfDimensions);
-            predRes.Loss = ((float)scores) / (Settings.NumberOfClusters * Settings.NumOfDimensions);
-   
+
             return predRes;
+
         }
+
     }
 }

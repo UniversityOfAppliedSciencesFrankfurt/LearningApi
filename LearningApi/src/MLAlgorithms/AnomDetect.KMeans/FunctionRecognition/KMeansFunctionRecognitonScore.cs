@@ -16,11 +16,7 @@ namespace AnomDetect.KMeans.FunctionRecognition
         {
         }
 
-        /// <summary>
-        /// Number of data samples across all trained functions.
-        /// </summary>
-        [DataMember]
-        public int NomOfSamples { get; set; }
+        
 
         /// <summary>
         /// Number of trained functions.
@@ -33,6 +29,12 @@ namespace AnomDetect.KMeans.FunctionRecognition
         /// </summary>
         [DataMember]
         public double[][] Centroids { get; set; }
+
+        /// <summary>
+        /// Distance between the centroid and the farthest sample of each cluster
+        /// </summary>
+        [DataMember]
+        public double[] InClusterMaxDistance { get; set; }
 
         /// <summary>
         /// The minimum centroid value per each dimension.

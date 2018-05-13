@@ -55,15 +55,15 @@ namespace LearningFoundation.Helpers
         /// <summary>
         /// Creates function, which is similar to the reference function.
         /// </summary>
-        /// <param name="referenceFuncData"></param>
-        /// <param name="seed"></param>
-        /// <param name="randomNoiseLimit"></param>
+        /// <param name="referenceFuncData">the reference function</param>
+        /// <param name="MinNoiseRangePercentage">minimum percentage of noise range compared to each attribute range</param>
+        /// <param name="MaxNoiseRangePercentage">maximum percentage of noise range compared to each attribute range</param>
         /// <returns></returns>
         public static double[][] CreateSimilarFromReferenceFunc(double[][] referenceFuncData,
-            int noiseRangePercentage)
+            int MinNoiseRangePercentage, int MaxNoiseRangePercentage)
         {
             // calculte random noise limits for every dimension instead of the first (referenc one).
-            double[] randomNoiseLimit = noiseLimit(referenceFuncData, noiseRangePercentage);
+            double[][] randomNoiseLimit = noiseLimit(referenceFuncData, MinNoiseRangePercentage, MaxNoiseRangePercentage);
 
             // initialize for the similar function
             double[][] similarFunction = new double[referenceFuncData.Length][];
@@ -81,8 +81,15 @@ namespace LearningFoundation.Helpers
                 // add noise on each point of the function
                 for (int j = 0; j < referenceFuncData[0].Length; j++)
                 {
-                    double rndNoice = rnd.NextDouble();
-                    var distorsion = rndNoice * (randomNoiseLimit[dim] - randomNoiseLimit[dim] * -1) + randomNoiseLimit[dim] * -1;
+                    double rndNoise = rnd.NextDouble();
+                    var distorsion = rndNoise * (randomNoiseLimit[1][dim] - randomNoiseLimit[0][dim]) + randomNoiseLimit[0][dim];
+
+                    // randomize whether the noise is positive or negative
+                    bool negativeNoise = rnd.NextDouble() < 0.5;
+                    if (negativeNoise)
+                    {
+                        distorsion = distorsion * -1;
+                    }
 
                     // add random noise (between -NL & +NL of the dimension) to the coordinates                 
                     similarFunction[dim][j] = referenceFuncData[dim][j] + distorsion;
@@ -97,14 +104,17 @@ namespace LearningFoundation.Helpers
         /// Calculates the limits of the noise based on the noise range provided percentge.
         /// </summary>
         /// <param name="referenceFuncData">Reference function data</param>
-        /// <param name="noiseRangePercentage">percentage of noise range compared to each attribute range</param>
-        /// <returns>the noise limit of each attribute</returns>
-        private static double[] noiseLimit(double[][] referenceFuncData, int noiseRangePercentage)
+        /// <param name="MinNoiseRangePercentage">minimum percentage of noise range compared to each attribute range</param>
+        /// <param name="MaxNoiseRangePercentage">maximum percentage of noise range compared to each attribute range</param>
+        /// <returns>the noise limits (first row: min and second row: max) of each attribute</returns>
+        private static double[][] noiseLimit(double[][] referenceFuncData, int MinNoiseRangePercentage, int MaxNoiseRangePercentage)
         {
             // initialize the minimum, maximum and noise limit vectors
             double[] min = new double[referenceFuncData.Length];
             double[] max = new double[referenceFuncData.Length];
-            double[] nl = new double[referenceFuncData.Length];
+            double[][] nl = new double[2][];
+            nl[0] = new double[referenceFuncData.Length];
+            nl[1] = new double[referenceFuncData.Length];
 
             //
             // Get the minimum, maximum and noise limit of each dimension
@@ -130,8 +140,10 @@ namespace LearningFoundation.Helpers
                     }
                 }
 
-                // calculate noise limit of the current dimension
-                nl[i] = (max[i] - min[i]) * noiseRangePercentage / 200;
+                // calculate the minimum noise limit of the current dimension
+                nl[0][i] = (max[i] - min[i]) * MinNoiseRangePercentage / 200;
+                // calculate the maximum noise limit of the current dimension
+                nl[0][i] = (max[i] - min[i]) * MaxNoiseRangePercentage / 200;
             }
 
             return nl;

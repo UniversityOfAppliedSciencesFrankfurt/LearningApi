@@ -60,6 +60,16 @@ namespace LearningFoundation.Clustering.KMeans
         public double Tolerance { get; internal set; }
 
         /// <summary>
+        /// Method to be used in function recognition (1 or 2)
+        /// <ul style="list-style-type:none">
+        /// <li> - 1: Centoids and In cluster Max Distance</li>
+        /// <li> - 2: Min and Max Centoids</li>
+        /// </ul>
+        /// </summary>
+        [DataMember]
+        public int FuncRecogMethod { get; internal set; }
+
+        /// <summary>
         /// Constructor to create the desired settings by the user for clustering.
         /// </summary>
         /// <param name="RawData">data to be clustered</param>
@@ -72,7 +82,12 @@ namespace LearningFoundation.Clustering.KMeans
         /// <li> - 2: Centoids are the means</li>
         /// </ul></param>
         /// <param name="initialCentroids">???</param>
-        public ClusteringSettings(int KmeansMaxIterations, int numClusters, int numDims, int KmeansAlgorithm = 1, double[][] initialCentroids = null, double tolerance = 0)
+        /// <param name="funcRecogMethod">Method to be used in function recognition (1 or 2)
+        /// <ul style="list-style-type:none">
+        /// <li> - 1: Centoids and In cluster Max Distance</li>
+        /// <li> - 2: Min and Max Centoids</li>
+        /// </ul></param>
+        public ClusteringSettings(int KmeansMaxIterations, int numClusters, int numDims, int KmeansAlgorithm = 1, double[][] initialCentroids = null, double tolerance = 0, int funcRecogMethod = 1)
         {
             if (KmeansAlgorithm != 2)
             {
@@ -81,6 +96,14 @@ namespace LearningFoundation.Clustering.KMeans
             else
             {
                 this.KmeansAlgorithm = 2;
+            }
+            if (funcRecogMethod != 2)
+            {
+                this.FuncRecogMethod = 1;
+            }
+            else
+            {
+                this.FuncRecogMethod = 2;
             }
             this.KmeansMaxIterations = KmeansMaxIterations;
             this.NumberOfClusters = numClusters;
