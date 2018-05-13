@@ -30,12 +30,12 @@ namespace LearningFoundation.Statistics
 
             //calculate sum of the square residuals
             double ssr = 0;
-            for(int i=0; i < data1.Length; i++)
+            for (int i = 0; i < data1.Length; i++)
             {
                 var r = (data1[i] - data2[i]);
                 ssr += r * r;
             }
-               
+
 
             return ssr;
         }
@@ -77,6 +77,8 @@ namespace LearningFoundation.Statistics
 
             return corr;
         }
+
+
         /// <summary>
         /// Calculates the Spearman correlation coefficient of two data sets
         /// </summary>
@@ -98,7 +100,7 @@ namespace LearningFoundation.Statistics
             var list = new List<DataPoint>();
             for (var i = 0; i < n; i++)
             {
-                list.Add(new DataPoint(){ xValue = data1[i], yValue = data2[i] });
+                list.Add(new DataPoint() { xValue = data1[i], yValue = data2[i] });
             }
             var byXList = list.OrderBy(r => r.xValue).ToArray();
             var byYList = list.OrderBy(r => r.yValue).ToArray();
@@ -108,7 +110,7 @@ namespace LearningFoundation.Statistics
                 byYList[i].RankByY = i + 1;
             }
             //fix rank for the same value
-            foreach(var g in byXList.GroupBy(x=>x.xValue))
+            foreach (var g in byXList.GroupBy(x => x.xValue))
             {
                 var cc = g.Count();
                 if (g.Count() > 1)
@@ -127,21 +129,22 @@ namespace LearningFoundation.Statistics
                 var rankSum = g.Sum(y => y.RankByY);
                 if (g.Count() > 1)
                 {
-                    foreach(var gg in g)
+                    foreach (var gg in g)
                     {
-                       gg.RankByY= rankSum / (float)cc;
+                        gg.RankByY = rankSum / (float)cc;
                     }
 
                 }
             }
             //
             var sumRankDiff
-              = list.Aggregate(0f, (total, r) => total += (r.RankByX - r.RankByY)* (r.RankByX - r.RankByY));
-            var rankCorrelation 
+              = list.Aggregate(0f, (total, r) => total += (r.RankByX - r.RankByY) * (r.RankByX - r.RankByY));
+            var rankCorrelation
               = 1 - (double)(6 * sumRankDiff) / (n * (n * n - 1L));
 
             return rankCorrelation;
         }
+
 
         /// <summary>
         /// Point Biserial Correlation coefficient
@@ -185,7 +188,7 @@ namespace LearningFoundation.Statistics
             if (data1.Length != data2.Length)
                 throw new MLException("Both datasets must be of the same size!");
 
-            if(data2.Distinct().Count()!=2)
+            if (data2.Distinct().Count() != 2)
                 throw new MLException("Data2 must be dichotomous!");
 
             //implementation in excel
@@ -197,7 +200,7 @@ namespace LearningFoundation.Statistics
             int n0 = 0;
             double s1 = 0;
             double s0 = 0;
-            for(int i=0; i< data1.Length; i++)
+            for (int i = 0; i < data1.Length; i++)
             {
                 if (data2[i] == 1)
                 {
@@ -210,7 +213,7 @@ namespace LearningFoundation.Statistics
                     s0 = s0 + data1[i];
                 }
             }
-            if(n!=n0+n1)
+            if (n != n0 + n1)
                 throw new MLException("Data2 must be dichotomous!");
             //
             var m1 = s1 / (double)n1;
@@ -219,16 +222,49 @@ namespace LearningFoundation.Statistics
             var p1 = n1 / (double)n;
             var s = data1.Stdev();
             var z = Distributions.NormSInverse(p1);
-            var y = Distributions.NormDist(z, 0,1,false);
-            return (m1-m0)*p0*p1/(s*y);
+            var y = Distributions.NormDist(z, 0, 1, false);
+            return (m1 - m0) * p0 * p1 / (s * y);
         }
 
-       
 
-        class DataPoint
+        /// <summary>
+        /// Autocorrelation function.
+        /// </summary>
+        /// <param name="fncData">The function to be autocorrelated.</param>
+        /// <returns>Autocorrelation values.</returns>
+        public static double[] Autocorelate(this double[] fncData)
         {
-            public double xValue,yValue;
-            public float RankByX, RankByY;
+            double mean = fncData.MeanOf();
+
+            double[] autocorrelation = new double[fncData.Length / 2];
+
+            for (int i = 0; i < autocorrelation.Length; i++)
+            {
+                double n = 0; // Numerator
+                double d = 0; // Denominator
+
+                for (int j = 0; j < fncData.Length; j++)
+                {
+                    // diff from mean = delta
+                    double deltaX = fncData[j] - mean;
+
+                    n += deltaX * (fncData[(j + i) % fncData.Length] - mean);
+
+                    d += deltaX * deltaX;
+                }
+
+                // autocorr(i)=
+                autocorrelation[i] = n / d;
+            }
+
+            return autocorrelation;
         }
     }
+
+    class DataPoint
+    {
+        public double xValue, yValue;
+        public float RankByX, RankByY;
+    }
+
 }
