@@ -29,6 +29,25 @@ namespace test.statistics
             //Sperman correlation
             var result1 = dataSample1.CorrCoeffRankOf(dataSample2);
             Assert.Equal(Math.Round(result1, 4), 0.7182);
+
+            dataSample1 = new double[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
+            dataSample2 = new double[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
+                       
+            result = dataSample1.CorrCoeffOf(dataSample2);
+            Assert.Equal(result,1);
+
+            dataSample1 = new double[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
+            dataSample2 = new double[] { -1,- 2, -3, -4, -5, -6, -7, -8, -9, -10 };
+
+            result = dataSample1.CorrCoeffOf(dataSample2);
+            Assert.Equal(result, -1);
+
+            dataSample1 = new double[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
+            dataSample2 = new double[] { 4, 5, 4, 4, 4, 4, 4, 4, 4, 4 };
+
+            result = dataSample1.CorrCoeffOf(dataSample2);
+            Assert.Equal(-0.4062, Math.Round(result, 4));
+
         }
 
 
@@ -83,6 +102,18 @@ namespace test.statistics
 
         }
 
+        [Fact]
+        public void AutocorrelationTests()
+        {
+          
+            //test 1
+            var dataSample1 = new double[24] { 23, 15, 16, 25, 20, 17, 18, 14, 12, 19, 21, 22, 16, 21, 16, 11, 24, 21, 18, 15, 19, 22, 13, 24 };
+          
+            //Point Biserial correlation
+            var result = dataSample1.Autocorelate();
+            //Assert.Equal(Math.Round(result, 4), -0.0682);
+
+        }
 
         private double[][] getSampleDataSet()
         {
