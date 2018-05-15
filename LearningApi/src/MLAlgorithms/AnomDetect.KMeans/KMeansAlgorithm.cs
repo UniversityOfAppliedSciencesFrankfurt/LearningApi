@@ -108,7 +108,7 @@ namespace LearningFoundation.Clustering.KMeans
 
             for (int i = 2; i < 100; i++)
             {
-                IScore score = runCalculation(rawData);
+                KMeansScore score = runCalculation(rawData) as KMeansScore;
 
                 float fMin = calcFMin(score);
 
@@ -122,9 +122,24 @@ namespace LearningFoundation.Clustering.KMeans
             return optimalNumOfClusters;
         }
 
-        private float calcFMin(IScore score)
+        private float calcFMin(KMeansScore score)
         {
-            return 3f;
+            float FMin = float.MaxValue;
+            float Fcur = 0f;
+            double distance = 0;
+            for (int k = 0; k < score.Model.NumberOfClusters-1; k++)
+            {
+                for (int i = k+1; i < score.Model.NumberOfClusters; i++)
+                {
+                    distance = calculateDistance(score.Model.Clusters[k].Centroid, score.Model.Clusters[i].Centroid);
+                    Fcur = (float)(distance / (score.Model.Clusters[k].InClusterMaxDistance + score.Model.Clusters[i].InClusterMaxDistance));
+                    if (Fcur < FMin)
+                    {
+                        FMin = Fcur;
+                    }
+                }
+            }
+            return FMin;
         }
 
         private IScore runCalculation(double[][] rawData)
