@@ -40,7 +40,7 @@ namespace LearningFoundation.Clustering.KMeans
         #region Public Function
 
         #region Basic Functions
-        
+
 
         /// <summary>
         /// Constructor for Kmeans. If settings was provided, it will create KMeans object with those settings. If all arguments are provided, it will set the desired trivial clusters.
@@ -51,7 +51,7 @@ namespace LearningFoundation.Clustering.KMeans
         public KMeansAlgorithm(ClusteringSettings settings, double[] maxDistance = null)
         {
             this.ClusterSettings = settings;
-            if (maxDistance!=null && settings!=null)
+            if (maxDistance != null && settings != null)
             {
                 this.m_instance = new KMeansModel(settings.NumberOfClusters);
                 this.m_instance.Clusters = new Cluster[settings.NumberOfClusters];
@@ -86,6 +86,48 @@ namespace LearningFoundation.Clustering.KMeans
         /// <param name="ctx"></param>
         /// <returns>the training results</returns>
         public IScore Train(double[][] rawData, IContext ctx)
+        {
+            if (ClusterSettings.NumberOfClusters <= 1)
+            {
+                ClusterSettings.NumberOfClusters = estimateOptimalNumOfClusters(rawData);
+            }
+
+            return runCalculation(rawData);
+        }
+
+        /// <summary>
+        /// Calculates the optimal number of clusters.
+        /// </summary>
+        /// <param name="rawData"></param>
+        /// <returns></returns>
+        private int estimateOptimalNumOfClusters(double[][] rawData)
+        {
+            float fMax = 0f;
+
+            int optimalNumOfClusters = 0;
+
+            for (int i = 2; i < 100; i++)
+            {
+                IScore score = runCalculation(rawData);
+
+                float fMin = calcFMin(score);
+
+                if (fMin > fMax)
+                {
+                    fMax = fMin;
+                    optimalNumOfClusters = i;
+                }
+            }
+
+            return optimalNumOfClusters;
+        }
+
+        private float calcFMin(IScore score)
+        {
+            return 3f;
+        }
+
+        private IScore runCalculation(double[][] rawData)
         {
             KMeansScore res = new KMeansScore();
             int Code;
@@ -132,7 +174,7 @@ namespace LearningFoundation.Clustering.KMeans
                 {
                     res.Message = "Clustering Complete. K-means converged at iteration: " + IterationReached;
                 }
-        
+
                 res.Model = this.m_instance;
 
                 return res;
@@ -174,7 +216,7 @@ namespace LearningFoundation.Clustering.KMeans
                 int n = 0;
                 foreach (var item in data)
                 {
-                    clusterIndex = PredictSample(item,this.ClusterSettings.Tolerance);
+                    clusterIndex = PredictSample(item, this.ClusterSettings.Tolerance);
                     res.PredictedClusters[n++] = clusterIndex;
                 }
 
@@ -561,7 +603,7 @@ namespace LearningFoundation.Clustering.KMeans
                 Code = 400;
                 Message += "Unhandled exception:\t" + Ex.ToString();
                 throw new KMeansException(Code, Message);
-            }          
+            }
         }
 
         /// <summary>
@@ -598,7 +640,7 @@ namespace LearningFoundation.Clustering.KMeans
                 Code = 400;
                 Message += "Unhandled exception:\t" + Ex.ToString();
                 throw new KMeansException(Code, Message);
-            }           
+            }
         }
 
         /// <summary>
@@ -637,7 +679,7 @@ namespace LearningFoundation.Clustering.KMeans
                 Code = 400;
                 Message += "Unhandled exception:\t" + Ex.ToString();
                 throw new KMeansException(Code, Message);
-            }            
+            }
         }
 
         /// <summary>
@@ -648,7 +690,7 @@ namespace LearningFoundation.Clustering.KMeans
         /// <param name="means">mean of clusters</param>
         /// <param name="centroids">centroids of clusters (Updated in the function)</param>
         private static void assignCentroidsToNearestMeanSample(double[][] rawData, int numClusters, double[][] means, double[][] centroids)
-        {   
+        {
             int Code;
             string Message = "Function <>: ";
             try

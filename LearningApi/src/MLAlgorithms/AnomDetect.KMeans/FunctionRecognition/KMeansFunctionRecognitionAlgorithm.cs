@@ -187,7 +187,7 @@ namespace AnomDetect.KMeans.FunctionRecognition
                 {
                     currDistance = KMeansAlgorithm.calculateDistance(Score.Centroids[i], res.Model.Clusters[i].Centroid);
 
-                    if (currDistance <= res.Model.Clusters[i].InClusterMaxDistance * (1.0 + this.Settings.Tolerance / 100.0))
+                    if (currDistance <= Score.InClusterMaxDistance[i] * (1.0 + this.Settings.Tolerance / 100.0))
                     {
                         predRes.ResultsPerCluster[i] = true;
                         scores++;
