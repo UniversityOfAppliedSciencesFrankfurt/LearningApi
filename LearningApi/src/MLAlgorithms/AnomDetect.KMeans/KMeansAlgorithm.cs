@@ -106,8 +106,9 @@ namespace LearningFoundation.Clustering.KMeans
 
             int optimalNumOfClusters = 0;
 
-            for (int i = 2; i < 100; i++)
+            for (int i = 2; i < 10; i++)
             {
+                ClusterSettings.NumberOfClusters = i;
                 KMeansScore score = runCalculation(rawData) as KMeansScore;
 
                 float fMin = calcFMin(score);
