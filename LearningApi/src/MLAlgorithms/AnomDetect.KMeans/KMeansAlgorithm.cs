@@ -87,12 +87,24 @@ namespace LearningFoundation.Clustering.KMeans
         /// <returns>the training results</returns>
         public IScore Train(double[][] rawData, IContext ctx)
         {
+            KMeansScore score = new KMeansScore();
+            double[] Fmin = null, D = null, DPrime = null;
             if (ClusterSettings.NumberOfClusters <= 1)
             {
-                ClusterSettings.NumberOfClusters = estimateOptimalNumOfClusters(rawData);
+                ClusterSettings.NumberOfClusters = estimateOptimalNumOfClusters(rawData, out Fmin, out D, out DPrime);
             }
 
-            return runCalculation(rawData);
+            this.m_instance = null;
+            score = runCalculation(rawData);
+            if (Fmin != null)
+            {
+                score.Model.Fmin = Fmin;
+                score.Model.D = D;
+                score.Model.DPrime = DPrime;
+            }
+
+            return score;
+
         }
 
         /// <summary>
@@ -100,18 +112,47 @@ namespace LearningFoundation.Clustering.KMeans
         /// </summary>
         /// <param name="rawData"></param>
         /// <returns></returns>
-        private int estimateOptimalNumOfClusters(double[][] rawData)
+        private int estimateOptimalNumOfClusters(double[][] rawData, out double[] Fmin, out double[] D, out double[] DPrime)
         {
+            int numFunctions = 50;
+            int minClusters = 2;
+            int maxClusters = 10;
+            double[][] funcData = transposeFunction(rawData);
+            double[][] similarFunctions = getSimilarFunctions(funcData, numFunctions);
+            double[][] trainedCentroids;
+
+            Fmin = new double[maxClusters - minClusters + 1];
+            D = new double[maxClusters - minClusters + 1];
+            DPrime = new double[maxClusters - minClusters + 1];
+
             float fMax = 0f;
+            KMeansScore score = new KMeansScore();
 
             int optimalNumOfClusters = 0;
 
-            for (int i = 2; i < 10; i++)
+            for (int i = minClusters; i < maxClusters+1; i++)
             {
                 ClusterSettings.NumberOfClusters = i;
-                KMeansScore score = runCalculation(rawData) as KMeansScore;
+                trainedCentroids = new double[numFunctions * i][];
 
-                float fMin = calcFMin(score);
+                for (int f = 0; f < numFunctions; f++)
+                {
+                    rawData = transposeFunction(selectFunction(similarFunctions, f + 1, funcData.Length));
+
+                    this.m_instance = null;
+                    score = runCalculation(rawData);
+                    for (int k = 0; k < i; k++)
+                    {
+                        trainedCentroids[f * i + k] = score.Model.Clusters[k].Centroid;
+                    }
+                }
+
+                this.m_instance = null;
+                //score = runCalculation(trainedCentroids);
+                formClusters(score, trainedCentroids, i, numFunctions);
+                
+
+                float fMin = calcFMin(score, Fmin, D, DPrime);
 
                 if (fMin > fMax)
                 {
@@ -119,18 +160,30 @@ namespace LearningFoundation.Clustering.KMeans
                     optimalNumOfClusters = i;
                 }
             }
+            /*
+            score.Model.Fmin = Fmin;
+            score.Model.FminPrime = FminPrime;
+            score.Model.D = D;
+            score.Model.DPrime = DPrime;*/
 
             return optimalNumOfClusters;
         }
 
-        private float calcFMin(KMeansScore score)
+        private static float calcFMin(KMeansScore score, double[] Fmin, double[] D, double[] DPrime)
         {
             float FMin = float.MaxValue;
             float Fcur = 0f;
+
+            ///// other calcultion for testing
+            double DMin = Double.MaxValue;
+            double DMinPrime = Double.MaxValue;
+            double distancePrime = 0;
+            /////
+
             double distance = 0;
-            for (int k = 0; k < score.Model.NumberOfClusters-1; k++)
+            for (int k = 0; k < score.Model.NumberOfClusters - 1; k++)
             {
-                for (int i = k+1; i < score.Model.NumberOfClusters; i++)
+                for (int i = k + 1; i < score.Model.NumberOfClusters; i++)
                 {
                     distance = calculateDistance(score.Model.Clusters[k].Centroid, score.Model.Clusters[i].Centroid);
                     Fcur = (float)(distance / (score.Model.Clusters[k].InClusterMaxDistance + score.Model.Clusters[i].InClusterMaxDistance));
@@ -138,12 +191,110 @@ namespace LearningFoundation.Clustering.KMeans
                     {
                         FMin = Fcur;
                     }
+
+                    ///// other calcultion for testing
+                    if (distance < DMin)
+                    {
+                        DMin = distance;
+                    }
+                    distancePrime = distance - (double)(score.Model.Clusters[k].InClusterMaxDistance + score.Model.Clusters[i].InClusterMaxDistance);
+                    if (distancePrime < DMinPrime)
+                    {
+                        DMinPrime = distancePrime;
+                    }
+                    /////
+
                 }
             }
+
+            ///// other calcultion for testing
+            Fmin[score.Model.NumberOfClusters - 2] = (double)FMin;
+            D[score.Model.NumberOfClusters - 2] = DMin;
+            DPrime[score.Model.NumberOfClusters - 2] = DMinPrime;
+            /////
+
             return FMin;
         }
 
-        private IScore runCalculation(double[][] rawData)
+        private static double[][] getSimilarFunctions(double[][] refFunction, int numFunctions)
+        {
+            double[][] SimFunctions = new double[refFunction.Length * numFunctions][];
+            double[][] curSimFunc = new double[refFunction.Length][];
+            for (int n = 0; n < numFunctions; n++)
+            {
+                if (n == 0)
+                {
+                    curSimFunc = refFunction;
+                }
+                else
+                {
+                    curSimFunc = LearningFoundation.Helpers.FunctionGenerator.CreateSimilarFromReferenceFunc(refFunction, 5, 10);
+                }
+                for (int d = 0; d < refFunction.Length; d++)
+                {
+                    SimFunctions[n * refFunction.Length + d] = curSimFunc[d];
+                }
+            }
+            return SimFunctions;
+        }
+
+        private static double[][] selectFunction(double[][] Functions, int numFunction, int dimension)
+        {
+            double[][] curFunc = new double[dimension][];
+            for (int d = 0; d < dimension; d++)
+            {
+                curFunc[d] = Functions[(numFunction - 1) * dimension + d];
+            }
+            return curFunc;
+        }
+
+        private static void formClusters(KMeansScore score, double[][] trainedCentroids, int numClusters, int numTrainFun)
+        {
+            // number of attributes
+            int dimenions = trainedCentroids[0].Length;
+            // initialize cluster centroids
+            double[][] clusterCentroids = new double[numClusters][];
+            for (int i = 0; i < numClusters; i++)
+            {
+                clusterCentroids[i] = new double[dimenions];
+            }
+            // calculate the clusters
+            for (int i = 0; i < numTrainFun; i++)
+            {
+                for (int j = 0; j < numClusters; j++)
+                {
+                    for (int a = 0; a < dimenions; a++)
+                    {
+                        clusterCentroids[j][a] += trainedCentroids[i * numClusters + j][a] / numTrainFun;
+                    }
+                }
+            }
+
+            // initialize distances
+            double[] maxDistance = new double[numClusters];
+            // get max distance in each cluster
+            double calDist;
+            for (int i = 0; i < numTrainFun; i++)
+            {
+                for (int j = 0; j < numClusters; j++)
+                {
+                    calDist = calculateDistance(clusterCentroids[j], trainedCentroids[i * numClusters + j]);
+                    if (calDist > maxDistance[j])
+                    {
+                        maxDistance[j] = calDist;
+                    }
+                }
+            }
+
+            for (int i = 0; i < numClusters; i++)
+            {
+                score.Model.Clusters[i].Centroid = clusterCentroids[i];
+                score.Model.Clusters[i].InClusterMaxDistance = maxDistance[i];
+            }
+        }
+
+
+        private KMeansScore runCalculation(double[][] rawData)
         {
             KMeansScore res = new KMeansScore();
             int Code;
@@ -1230,6 +1381,21 @@ namespace LearningFoundation.Clustering.KMeans
                 Message += "Unhandled exception:\t" + Ex.ToString();
                 throw new KMeansException(Code, Message);
             }
+        }
+
+        internal static double[][] transposeFunction(double[][] similarFuncData)
+        {
+            double[][] data = new double[similarFuncData[0].Length][];
+            for (int i = 0; i < similarFuncData[0].Length; i++)
+            {
+                data[i] = new double[similarFuncData.Length];
+                for (int j = 0; j < similarFuncData.Length; j++)
+                {
+                    data[i][j] = similarFuncData[j][i];
+                }
+            }
+
+            return data;
         }
 
         #endregion

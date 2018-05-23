@@ -176,68 +176,7 @@ namespace Test
                 Assert.True(apiResp.Model.Clusters[i].InClusterMaxDistance >= apiResp1MaxDistance[i] + KMeansAlgorithm.calculateDistance(apiResp1Centroid[i], apiResp.Model.Clusters[i].Centroid));
             }
 
-        }
-
-        [Fact]
-        public void Test_OptimalNumberOfCLusters()
-        {
-            double[][] clusterCenters = new double[3][];
-            clusterCenters[0] = new double[] { 5.0, 5.0 };
-            clusterCenters[1] = new double[] { 15.0, 15.0 };
-            clusterCenters[2] = new double[] { 30.0, 30.0 };
-
-            string[] attributes = new string[] { "Height", "Weight" };
-
-            int numAttributes = attributes.Length;  // 2 in this demo (height,weight)
-            int numClusters = 0;  // vary this to experiment (must be between 2 and number data tuples)
-            int maxCount = 300;  // trial and error
-
-            ClusteringSettings settings = new ClusteringSettings(maxCount, numClusters, numAttributes, KmeansAlgorithm: 2);
-
-            // Creates learning api object
-            LearningApi api = new LearningApi(loadDescriptor());
-            api.UseActionModule<object, double[][]>((data, ctx) =>
-            {
-                var rawData = Helpers.CreateSampleData(clusterCenters, 2, 10000, 0.5);
-                return rawData;
-            });
-
-            api.UseKMeans(settings);
-
-            // train
-            var resp = api.Run() as KMeansScore;
-
-            Assert.True(resp.Model.NumberOfClusters > 1);
-
-            int points = 150;
-            var delta = 2 * Math.PI / 100;
-            List<double[]> rows = LearningFoundation.Helpers.FunctionGenerator.CreateFunction(points, 2, delta);
-            double[][] rawData2 = new double[points][];
-            for (int i = 0; i < points; i++)
-            {
-                rawData2[i] = new double[2];
-                for (int j = 0; j < 2; j++)
-                {
-                    rawData2[i][j] = rows[j][i];
-                }
-            }
-            
-
-            // Creates learning api object
-            LearningApi api2 = new LearningApi(loadDescriptor());
-            api2.UseActionModule<object, double[][]>((data, ctx) =>
-            {
-                return rawData2;
-            });
-
-            api2.UseKMeans(settings);
-
-            // train
-            var resp2 = api2.Run() as KMeansScore;
-
-            Assert.True(resp2.Model.NumberOfClusters > 1);
-
-        }
+        }      
 
         /// <summary>
         /// Test_Save is a test for KMeans.Save function

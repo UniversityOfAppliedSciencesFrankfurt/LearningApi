@@ -38,6 +38,11 @@ namespace LearningFoundation.Clustering.KMeans
         [DataMember]
         public Cluster[] Clusters { get; set; }
 
+        public double[] Fmin { get; set; }
+
+        public double[] D { get; set; }
+
+        public double[] DPrime { get; set; }
 
         /// <summary>
         /// Constructor for creating instance object

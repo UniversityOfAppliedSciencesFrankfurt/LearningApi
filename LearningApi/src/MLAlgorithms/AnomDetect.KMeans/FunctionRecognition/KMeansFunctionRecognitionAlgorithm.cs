@@ -80,6 +80,14 @@ namespace AnomDetect.KMeans.FunctionRecognition
             KMeansScore res = kmeans.Train(data, ctx) as KMeansScore;
             this.Score.NomOfTrainedFunctions += 1;
 
+            if (this.Score.NomOfTrainedFunctions == 1)
+            {
+                for (int i = 0; i < this.Settings.NumberOfClusters; i++)
+                {
+                    this.Settings.InitialCentroids[i] = res.Model.Clusters[i].Centroid;
+                }
+            }
+
             if (this.Settings.FuncRecogMethod == 1)
             {
                 double[][] oldCentroids = this.Score.Centroids;
@@ -252,25 +260,24 @@ namespace AnomDetect.KMeans.FunctionRecognition
             LearningApi api = new LearningApi();
             api.UseActionModule<object, double[][]>((data, ctx) =>
             {
-                return transposeFunction(oneFunction1);
+                return KMeansAlgorithm.transposeFunction(oneFunction1);
             });
 
             // Creates learning api object
             LearningApi api2 = new LearningApi();
             api.UseActionModule<object, double[][]>((data, ctx) =>
             {
-                return transposeFunction(oneFunction2);
+                return KMeansAlgorithm.transposeFunction(oneFunction2);
             });
 
             
-            ClusteringSettings newSettings;
             KMeansFunctionRecognitonScore res1 = new KMeansFunctionRecognitonScore();
             KMeansFunctionRecognitonScore res2 = new KMeansFunctionRecognitonScore();
             double dist;
 
             for (int k = MinNumClusters; k <= MaxNumClusters; k++)
             {
-                newSettings = new ClusteringSettings(settings.KmeansMaxIterations, k, settings.NumOfDimensions, settings.KmeansAlgorithm, settings.InitialCentroids, settings.Tolerance, settings.FuncRecogMethod);
+                settings.NumberOfClusters = k;
 
                 api.UseKMeansFunctionRecognitionModule(settings);
                 for (int f = 0; f < functions1.Length; f+=settings.NumOfDimensions)
@@ -308,7 +315,7 @@ namespace AnomDetect.KMeans.FunctionRecognition
 
             return -1;
         }
-
+        /*
         private static double[][] transposeFunction(double[][] similarFuncData)
         {
             double[][] data = new double[similarFuncData[0].Length][];
@@ -322,7 +329,7 @@ namespace AnomDetect.KMeans.FunctionRecognition
             }
 
             return data;
-        }
+        }*/
 
         /// <summary>
         /// adjustInClusterMaxDistance is a function that recalculates/approximate the maximum distance in the cluster for partial clustering

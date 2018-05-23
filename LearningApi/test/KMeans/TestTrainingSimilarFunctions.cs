@@ -34,13 +34,15 @@ namespace Test
         public void Test_TrainingSimilarFunctions()
         {
             // Settings to import the functions (NRP should match the desired loading file)
-            string FunctionName = "TestFile01"; //without extension
+            string FunctionName = "SIN X"; //without extension
             string directory = rootFolder + FunctionName + "\\";
-            int NRP = 10;
+            int NRPmin = 5;
+            int NRPmax = 10;
+            string NRP = NRPmin + "-" + NRPmax;
             
             // Settings for the K-Means Alg
             int maxCount = 500;
-            int numClusters = 6;
+            int numClusters = 10;
             int numAttributes = 2;
             int KAlg = 2;
             int Runs = 1;
