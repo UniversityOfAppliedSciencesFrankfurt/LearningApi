@@ -238,7 +238,7 @@ namespace LearningFoundation.Clustering.KMeans
             return SimFunctions;
         }
 
-        private static double[][] selectFunction(double[][] Functions, int numFunction, int dimension)
+        public static double[][] selectFunction(double[][] Functions, int numFunction, int dimension)
         {
             double[][] curFunc = new double[dimension][];
             for (int d = 0; d < dimension; d++)

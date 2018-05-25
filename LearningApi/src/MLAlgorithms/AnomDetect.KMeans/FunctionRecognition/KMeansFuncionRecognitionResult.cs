@@ -3,7 +3,9 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace AnomDetect.KMeans.FunctionRecognition
+
+//namespace AnomDetect.KMeans.FunctionRecognition
+namespace LearningFoundation.Clustering.KMeans.FunctionRecognition
 {
     public class KMeansFuncionRecognitionResult : IResult
     {

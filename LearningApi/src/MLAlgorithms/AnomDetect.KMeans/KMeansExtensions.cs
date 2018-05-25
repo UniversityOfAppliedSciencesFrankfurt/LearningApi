@@ -1,6 +1,7 @@
-﻿using AnomDetect.KMeans;
-using AnomDetect.KMeans.FunctionRecognition;
+﻿//using AnomDetect.KMeans;
+//using AnomDetect.KMeans.FunctionRecognition;
 using LearningFoundation;
+using LearningFoundation.Clustering.KMeans.FunctionRecognition;
 using System;
 using System.Collections.Generic;
 using System.Text;

@@ -7,6 +7,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Xunit;
 using LearningFoundation.Clustering.KMeans;
+using LearningFoundation.Clustering.KMeans.FunctionRecognition;
 using System.Reflection;
 
 namespace Test
@@ -116,6 +117,27 @@ namespace Test
             Helpers.Write2CSVFile(OptimalClustersResults, savePath);
 
             // implement
+        }
+
+        [Fact]
+        public void Test_SupervisedRecNumClusters()
+        {
+            int numAttributes = 2;
+            int MinNumClusters = 2;
+            int MaxNumClusters = 10;
+            int maxCount = 300;
+
+            // directory to load
+            string loadDirectory = rootFolder + "Functions\\";
+
+            // load Data
+            double[][] loadedSimFunctions1 = Helpers.LoadFunctionData(loadDirectory + "SIN X\\NRP5-10\\SIN X SimilarFunctions Normalized NRP5-10.csv");
+            double[][] loadedSimFunctions2 = Helpers.LoadFunctionData(loadDirectory + "SIN 1.5X\\NRP5-10\\SIN 1.5X SimilarFunctions Normalized NRP5-10.csv");
+
+            ClusteringSettings settings = new ClusteringSettings(maxCount, MinNumClusters, numAttributes, KmeansAlgorithm: 2);
+
+            int recNumClusters = KMeansFunctionRecognitionAlgorithm.SupervisedRecNumClusters(loadedSimFunctions1, loadedSimFunctions2, settings, MinNumClusters, MaxNumClusters);
+           
         }
     }
 }

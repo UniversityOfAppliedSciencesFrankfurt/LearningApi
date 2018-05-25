@@ -7,7 +7,8 @@ using System.Text;
 using System.Linq;
 using System.Runtime.Serialization;
 
-namespace AnomDetect.KMeans.FunctionRecognition
+//namespace AnomDetect.KMeans.FunctionRecognition
+namespace LearningFoundation.Clustering.KMeans.FunctionRecognition
 {
     /// <summary>
     /// Module, which implements algorithm for function recognition based on KMeans.
@@ -75,18 +76,21 @@ namespace AnomDetect.KMeans.FunctionRecognition
         /// <returns></returns>
         public IScore Run(double[][] data, IContext ctx)
         {
+            if (this.Score.NomOfTrainedFunctions == 1)
+            {
+                this.Settings.InitialCentroids = new double[this.Settings.NumberOfClusters][];
+                for (int i = 0; i < this.Settings.NumberOfClusters; i++)
+                {
+                    this.Settings.InitialCentroids[i] = this.Score.Centroids[i];
+                }
+            }
+
             KMeansAlgorithm kmeans = new KMeansAlgorithm(this.Settings.Clone());
 
             KMeansScore res = kmeans.Train(data, ctx) as KMeansScore;
             this.Score.NomOfTrainedFunctions += 1;
 
-            if (this.Score.NomOfTrainedFunctions == 1)
-            {
-                for (int i = 0; i < this.Settings.NumberOfClusters; i++)
-                {
-                    this.Settings.InitialCentroids[i] = res.Model.Clusters[i].Centroid;
-                }
-            }
+            
 
             if (this.Settings.FuncRecogMethod == 1)
             {
@@ -96,7 +100,7 @@ namespace AnomDetect.KMeans.FunctionRecognition
                     if (this.Score.NomOfTrainedFunctions == 1)
                     {
                         this.Score.Centroids[clusterIndx] = res.Model.Clusters[clusterIndx].Centroid;
-                        this.Score.InClusterMaxDistance[clusterIndx] = res.Model.Clusters[clusterIndx].InClusterMaxDistance;
+                        //this.Score.InClusterMaxDistance[clusterIndx] = res.Model.Clusters[clusterIndx].InClusterMaxDistance;
                     }
                     else
                     {
@@ -176,6 +180,11 @@ namespace AnomDetect.KMeans.FunctionRecognition
         /// <returns></returns>
         public IResult Predict(double[][] funcData, IContext ctx)
         {
+            for (int i = 0; i < this.Settings.NumberOfClusters; i++)
+            {
+                this.Settings.InitialCentroids[i] = this.Score.Centroids[i];
+            }
+
             KMeansAlgorithm kmeans = new KMeansAlgorithm(this.Settings.Clone());
 
             KMeansScore res = kmeans.Train(funcData, ctx) as KMeansScore;
@@ -246,90 +255,67 @@ namespace AnomDetect.KMeans.FunctionRecognition
 
         }
 
-        public int SupervisedRecNumClusters(double[][] functions1, double[][] functions2, ClusteringSettings settings, int MinNumClusters, int MaxNumClusters)
+        public static int SupervisedRecNumClusters(double[][] functions1, double[][] functions2, ClusteringSettings settings, int MinNumClusters, int MaxNumClusters)
         {
             if (MinNumClusters < 2)
             {
-                return -1;
+                MinNumClusters = 2;
             }
-
-            double[][] oneFunction1 = new double[settings.NumOfDimensions][];
-            double[][] oneFunction2 = new double[settings.NumOfDimensions][];
-
-            // Creates learning api object
-            LearningApi api = new LearningApi();
-            api.UseActionModule<object, double[][]>((data, ctx) =>
-            {
-                return KMeansAlgorithm.transposeFunction(oneFunction1);
-            });
-
-            // Creates learning api object
-            LearningApi api2 = new LearningApi();
-            api.UseActionModule<object, double[][]>((data, ctx) =>
-            {
-                return KMeansAlgorithm.transposeFunction(oneFunction2);
-            });
-
             
-            KMeansFunctionRecognitonScore res1 = new KMeansFunctionRecognitonScore();
-            KMeansFunctionRecognitonScore res2 = new KMeansFunctionRecognitonScore();
+            double[][] oneFunction = new double[settings.NumOfDimensions][];
+            int numFun = 0;
             double dist;
+            int score = 0;
+            KMeansFunctionRecognitionAlgorithm kMeansFR1, kMeansFR2;
+            KMeansFunctionRecognitonScore res1, res2;
 
             for (int k = MinNumClusters; k <= MaxNumClusters; k++)
             {
+                settings.InitialCentroids = null;
                 settings.NumberOfClusters = k;
 
-                api.UseKMeansFunctionRecognitionModule(settings);
-                for (int f = 0; f < functions1.Length; f+=settings.NumOfDimensions)
-                {
-                    for (int d = 0; d < settings.NumOfDimensions; d++)
-                    {
-                        oneFunction1[d] = functions1[f + d];
-                    }
+                kMeansFR1 = new KMeansFunctionRecognitionAlgorithm(settings);
+                kMeansFR2 = new KMeansFunctionRecognitionAlgorithm(settings);
+                res1 = new KMeansFunctionRecognitonScore();
+                res2 = new KMeansFunctionRecognitonScore();
 
-                    res1 = api.Run() as KMeansFunctionRecognitonScore;
-                }
-                api2.UseKMeansFunctionRecognitionModule(settings);
-                for (int f = 0; f < functions2.Length; f += settings.NumOfDimensions)
+                numFun = functions1.Length / settings.NumOfDimensions;
+                for (int f = 0; f < numFun; f++)
                 {
-                    for (int d = 0; d < settings.NumOfDimensions; d++)
-                    {
-                        oneFunction2[d] = functions2[f + d];
-                    }
-
-                    res2 = api2.Run() as KMeansFunctionRecognitonScore;
+                    oneFunction = KMeansAlgorithm.transposeFunction(KMeansAlgorithm.selectFunction(functions1, f + 1, settings.NumOfDimensions));
+                    res1 = kMeansFR1.Run(oneFunction, null) as KMeansFunctionRecognitonScore;
                 }
 
+                numFun = functions2.Length / settings.NumOfDimensions;
+                for (int f = 0; f < numFun; f++)
+                {
+                    oneFunction = KMeansAlgorithm.transposeFunction(KMeansAlgorithm.selectFunction(functions2, f + 1, settings.NumOfDimensions));
+                    res2 = kMeansFR2.Run(oneFunction, null) as KMeansFunctionRecognitonScore;
+                }
+
+                // check if there is a non intersection cluster
                 for (int i = 0; i < k; i++)
                 {
+                    score = 0;
                     for (int j = 0; j < k; j++)
                     {
                         dist = KMeansAlgorithm.calculateDistance(res1.Centroids[i], res2.Centroids[j]);
                         if (dist > res1.InClusterMaxDistance[i] + res2.InClusterMaxDistance[j])
                         {
-                            return k;
-                        }                       
+                            score++;
+                        }
+                    }
+
+                    if (score == k)
+                    {
+                        return k;
                     }
                 }
             }
 
             return -1;
         }
-        /*
-        private static double[][] transposeFunction(double[][] similarFuncData)
-        {
-            double[][] data = new double[similarFuncData[0].Length][];
-            for (int i = 0; i < similarFuncData[0].Length; i++)
-            {
-                data[i] = new double[similarFuncData.Length];
-                for (int j = 0; j < similarFuncData.Length; j++)
-                {
-                    data[i][j] = similarFuncData[j][i];
-                }
-            }
-
-            return data;
-        }*/
+       
 
         /// <summary>
         /// adjustInClusterMaxDistance is a function that recalculates/approximate the maximum distance in the cluster for partial clustering
@@ -337,27 +323,19 @@ namespace AnomDetect.KMeans.FunctionRecognition
         /// <param name="cluster">index of the cluster</param>
         private void adjustInClusterMaxDistance(int cluster, KMeansScore res, double[][] oldCentroids)
         {
-            double maxDistance = 0;
             // calculate new in cluster max distance
-            double curDistance;
-            long numSamples = res.Model.Clusters[cluster].NumberOfSamples;
-            for (int i = 0; i < numSamples; i++)
-            {
-                curDistance = KMeansAlgorithm.calculateDistance(res.Model.Clusters[cluster].Centroid, res.Model.Clusters[cluster].ClusterData[i]);
-                if (curDistance > maxDistance)
-                {
-                    maxDistance = curDistance;
-                }
-            }
+            double curDistance = KMeansAlgorithm.calculateDistance(res.Model.Clusters[cluster].Centroid, this.Score.Centroids[cluster]);
+            
 
             // compare to max possible old in cluster max distance
             double oldDistance = this.Score.InClusterMaxDistance[cluster] + KMeansAlgorithm.calculateDistance(this.Score.Centroids[cluster], oldCentroids[cluster]);
-            if (oldDistance > maxDistance)
+
+            if (oldDistance > curDistance)
             {
-                maxDistance = oldDistance;
+                curDistance = oldDistance;
             }
 
-            this.Score.InClusterMaxDistance[cluster] = maxDistance;
+            this.Score.InClusterMaxDistance[cluster] = curDistance;
         }
 
     }

@@ -217,7 +217,7 @@ paste(sourceDir)
 ### Plot a Function
 
 # settings for plotting similar functions
-filePath = paste(sourceDir,"/TestFiles/Functions/TestFile01/NRP10/TestFile01 SimilarFunctions Normalized NRP10.csv",sep = "")
+filePath = paste(sourceDir, "/TestFiles/Functions/SIN X/NRP5-10/SIN X SimilarFunctions Normalized NRP5-10.csv", sep = "")
 functionDimensions = 2
 startFunction = 1
 endFunction = 9
@@ -229,7 +229,7 @@ functionsPlots(filepath, functionDimensions, startFunction, endFunction)
 
 # settings for plotting centroids of similar functions
 numClusters = 2
-filePath = paste(sourceDir,"/TestFiles/Functions/TestFile01/NRP10/TestFile01 SimilarFunctions Normalized Centroids NRP10 KA2 C2 I500 R1.csv",sep = "")
+filePath = paste(sourceDir,"/TestFiles/Functions/SIN X/NRP5-10/SIN X SimilarFunctions Normalized Centroids NRP5-10 KA2 C2 I500 R1.csv",sep = "")
 # plot the centroids
 centroidsPlots(filePath, numClusters)
 
