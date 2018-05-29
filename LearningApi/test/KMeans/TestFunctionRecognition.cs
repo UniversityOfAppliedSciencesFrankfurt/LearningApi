@@ -106,7 +106,7 @@ namespace Test
         [Fact]
         public void Test_FunctionRecognition()
         {
-            int numAttributes = 2;
+            int numAttributes = 3;
             int numClusters = 2;
             int maxCount = 300;
 
@@ -119,14 +119,46 @@ namespace Test
             string saveDirectory = rootFolder + "Function Recognition\\";
 
             
-            string TrainedFuncName = "SIN X";
+            string TrainedFuncName = "SIN_SIN X";
+
+            /*
             // functions' paths
             string[] FunctionPaths = new string[]
             {
                 loadDirectory + TrainedFuncName + "\\NRP5-10\\" + TrainedFuncName + " SimilarFunctions Normalized NRP5-10.csv",
-                loadDirectory + "SIN 1.5X\\NRP5-10\\SIN 1.5X SimilarFunctions Normalized NRP5-10.csv"
-            };
+                loadDirectory + "COS X\\NRP5-10\\COS X SimilarFunctions Normalized NRP5-10.csv",
+                loadDirectory + "Triangular\\NRP5-10\\Triangular SimilarFunctions Normalized NRP5-10.csv",
+                loadDirectory + "Square\\NRP5-10\\Square SimilarFunctions Normalized NRP5-10.csv",
+                loadDirectory + "Line -X\\NRP5-10\\Line -X SimilarFunctions Normalized NRP5-10.csv"
+            };*/
 
+            /*
+            // functions' paths
+            string[] FunctionPaths = new string[]
+            {
+                loadDirectory + TrainedFuncName + "\\NRP5-10\\" + TrainedFuncName + " SimilarFunctions NRP5-10.csv",
+                loadDirectory + "5 SIN 2X\\NRP5-10\\5 SIN 2X SimilarFunctions NRP5-10.csv"
+            };*/
+
+
+            /*
+            // functions' paths
+            string[] FunctionPaths = new string[]
+            {
+                loadDirectory + TrainedFuncName + "\\NRP5-10\\" + TrainedFuncName + " SimilarFunctions Normalized NRP5-10.csv",
+                loadDirectory + "SIN 1.5X\\NRP5-10\\SIN 1.5X SimilarFunctions Normalized NRP5-10.csv",
+                loadDirectory + "SIN 2X\\NRP5-10\\SIN 2X SimilarFunctions Normalized NRP5-10.csv"
+            };*/
+
+            
+            // functions' paths
+            string[] FunctionPaths = new string[]
+            {
+                loadDirectory + TrainedFuncName + "\\NRP5-10\\" + TrainedFuncName + " SimilarFunctions Normalized NRP5-10.csv",
+                loadDirectory + "SIN_COS X\\NRP5-10\\SIN_COS X SimilarFunctions Normalized NRP5-10.csv",
+                loadDirectory + "COS_COS X\\NRP5-10\\COS_COS X SimilarFunctions Normalized NRP5-10.csv",
+                loadDirectory + "COS_SIN X\\NRP5-10\\COS_SIN X SimilarFunctions Normalized NRP5-10.csv"
+            };
 
             int numTrainFun = 800;
             int numTestFun = 200;
@@ -150,7 +182,7 @@ namespace Test
             //train
             for (int i = 0; i < numTrainFun; i++)
             {
-                res = api.RunBatch() as KMeansFunctionRecognitonScore;
+                res = api.Run() as KMeansFunctionRecognitonScore;
             }
 
             // save the formed clusters (just for plotting the function recognition results)
@@ -164,6 +196,7 @@ namespace Test
             Helpers.Write2CSVFile(tempMaxDistance, saveDirectory + TrainedFuncName + "\\Calculated Max Distance C" + numClusters + ".csv");
 
             // start testing for function recognition
+            
             double[] testingResults = new double[numTestFun * FunctionPaths.Length];
             double[][] data;
             for (int l = 0; l < FunctionPaths.Length; l++)
@@ -173,7 +206,7 @@ namespace Test
                 {
                     data = KMeansAlgorithm.transposeFunction(KMeansAlgorithm.selectFunction(loadedSimFunctions, numTrainFun + i + 1, numAttributes));
 
-                    var predictionResult = api.Algorithm.Predict(data, null) as KMeansFuncionRecognitionResult;
+                    var predictionResult = api.Algorithm.Predict(data, null) as KMeansFunctionRecognitionResult;
                     
                     if (predictionResult.Result)
                     {
@@ -191,7 +224,32 @@ namespace Test
             tempFunResults[0] = testingResults;
             Helpers.Write2CSVFile(tempFunResults, saveDirectory + "Results.csv");
 
-            
+            double[][] TFMat = createTrueFalseMatrix(testingResults, FunctionPaths.Length);
+            Helpers.Write2CSVFile(TFMat, saveDirectory + "TrueFalseMatrix.csv");
+        }
+
+        private double[][] createTrueFalseMatrix(double[] testingResults, int numFunctions)
+        {
+            int testSamples = testingResults.Length / numFunctions;
+
+            double[][] confMatrix = new double[numFunctions][];
+            for (int n = 0; n < numFunctions; n++)
+            {
+                confMatrix[n] = new double[2];
+                for (int i = 0; i < testSamples; i++)
+                {
+                    if (testingResults[i + n*testSamples] == 1)
+                    {
+                        confMatrix[n][0]++;
+                    }
+                    else
+                    {
+                        confMatrix[n][1]++;
+                    }
+                }
+            }
+
+            return confMatrix;
         }
 
 
@@ -262,7 +320,7 @@ namespace Test
 
             double[][] data = formatData(noisedFunc);
 
-            var predictionResult = api.Algorithm.Predict(data, null) as KMeansFuncionRecognitionResult;
+            var predictionResult = api.Algorithm.Predict(data, null) as KMeansFunctionRecognitionResult;
 
             // TRUE positives
             if (MaxNoiseForPrediction <= 10)
@@ -329,7 +387,7 @@ namespace Test
 
             double[][] data = formatData(noisedFunc);
 
-            var predictionResult = api2.Algorithm.Predict(data, null) as KMeansFuncionRecognitionResult;
+            var predictionResult = api2.Algorithm.Predict(data, null) as KMeansFunctionRecognitionResult;
 
             // TRUE positives
             if (MaxNoiseForPrediction <= 10)
@@ -400,7 +458,7 @@ namespace Test
 
                 double[][] data = formatData(noisedFunc);
 
-                var predictionResult = api.Algorithm.Predict(data, null) as KMeansFuncionRecognitionResult;
+                var predictionResult = api.Algorithm.Predict(data, null) as KMeansFunctionRecognitionResult;
 
                 //// TRUE positives
                 if (noiseForPrediction <= 10)

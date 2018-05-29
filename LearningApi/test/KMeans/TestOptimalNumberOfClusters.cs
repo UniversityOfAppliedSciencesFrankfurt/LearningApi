@@ -82,7 +82,7 @@ namespace Test
         {
             // directory to load
             string loadDirectory = rootFolder + "Functions\\";           
-            string FunctionName = "SIN 2X"; //without extension
+            string FunctionName = "SIN X"; //without extension
             string savePath = rootFolder + "Optimal Clusters\\" + FunctionName +" Results.csv";
 
             double[][] function = Helpers.LoadFunctionData(loadDirectory + FunctionName + "\\" + FunctionName + ".csv");
@@ -120,23 +120,27 @@ namespace Test
         }
 
         [Fact]
-        public void Test_SupervisedRecNumClusters()
+        public void Test_OptimalNumberOfClusters_TwoFunctions()
         {
-            int numAttributes = 2;
+            int numAttributes = 3;
             int MinNumClusters = 2;
             int MaxNumClusters = 10;
             int maxCount = 300;
 
+            double[] Fmins;
+
             // directory to load
             string loadDirectory = rootFolder + "Functions\\";
 
+            string functionA = "SIN_SIN X";
+            string functionB = "SIN_COS X";
             // load Data
-            double[][] loadedSimFunctions1 = Helpers.LoadFunctionData(loadDirectory + "SIN X\\NRP5-10\\SIN X SimilarFunctions Normalized NRP5-10.csv");
-            double[][] loadedSimFunctions2 = Helpers.LoadFunctionData(loadDirectory + "SIN 1.5X\\NRP5-10\\SIN 1.5X SimilarFunctions Normalized NRP5-10.csv");
+            double[][] loadedSimFunctions1 = Helpers.LoadFunctionData(loadDirectory + functionA + "\\NRP5-10\\" + functionA + " SimilarFunctions Normalized NRP5-10.csv");
+            double[][] loadedSimFunctions2 = Helpers.LoadFunctionData(loadDirectory + functionB + "\\NRP5-10\\" + functionB + " SimilarFunctions Normalized NRP5-10.csv");
 
             ClusteringSettings settings = new ClusteringSettings(maxCount, MinNumClusters, numAttributes, KmeansAlgorithm: 2);
 
-            int recNumClusters = KMeansFunctionRecognitionAlgorithm.SupervisedRecNumClusters(loadedSimFunctions1, loadedSimFunctions2, settings, MinNumClusters, MaxNumClusters);
+            int recNumClusters = KMeansFunctionRecognitionAlgorithm.OptimalNumberOfClusters_TwoFunctions(loadedSimFunctions1, loadedSimFunctions2, settings, MinNumClusters, MaxNumClusters, out Fmins);
            
         }
     }

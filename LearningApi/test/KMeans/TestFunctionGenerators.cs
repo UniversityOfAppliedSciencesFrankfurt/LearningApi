@@ -44,7 +44,7 @@ namespace Test
             int MaxNoise = 10;
 
             // generate the similar functions
-            generateSimilarFunctions("SIN 1.5X", NumSimFunc, MinNoise, MaxNoise);
+            generateSimilarFunctions("COS_SIN X", NumSimFunc, MinNoise, MaxNoise);
         }
 
         #endregion
