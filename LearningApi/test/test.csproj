@@ -67,6 +67,7 @@
     <ProjectReference Include="..\src\MLAlgorithms\DeltaRuleLearning\DeltaRuleLearning.csproj" />
     <ProjectReference Include="..\src\MLAlgorithms\GaussianAndMeanFilter\GaussianAndMeanFilter.csproj" />
     <ProjectReference Include="..\src\MLAlgorithms\NeuralNetworks\NeuralNet.BackPropagation\NeuralNet.BackPropagation.csproj" />
+    <ProjectReference Include="..\src\MLAlgorithms\NeuralNetworks\NeuralNet.MLPerceptron\NeuralNet.MLPerceptron.csproj" />
     <ProjectReference Include="..\src\MLAlgorithms\NeuralNetworks\NeuralNet.RestrictedBolzmannMachine2\NeuralNet.RestrictedBolzmannMachine2.csproj" />
     <ProjectReference Include="..\src\MLAlgorithms\NeuralNetworks\NeuralNetworks.Core\NeuralNetworks.Core.csproj" />
     <ProjectReference Include="..\src\MLAlgorithms\SelfOrganizingMap\SelfOrganizingMap.csproj" />
@@ -91,6 +92,24 @@
 
   <ItemGroup>
     <None Update="KMeans\Script.R">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="MLPerceptron\TestFiles\TestData.csv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="MLPerceptron\TestFiles\TestDataCreditApproval.csv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="MLPerceptron\TestFiles\TestDataIris.csv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="MLPerceptron\TestFiles\TrainingData.csv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="MLPerceptron\TestFiles\TrainingDataCreditApproval.csv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="MLPerceptron\TestFiles\TrainingDataIris.csv">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Update="RestrictedBolzmannMachine2\rbm_twoclass_sample.csv">
