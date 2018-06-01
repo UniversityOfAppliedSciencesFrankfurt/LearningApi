@@ -176,8 +176,7 @@ namespace Test
                 Assert.True(apiResp.Model.Clusters[i].InClusterMaxDistance >= apiResp1MaxDistance[i] + KMeansAlgorithm.calculateDistance(apiResp1Centroid[i], apiResp.Model.Clusters[i].Centroid));
             }
 
-        }
-
+        }      
 
         /// <summary>
         /// Test_Save is a test for KMeans.Save function

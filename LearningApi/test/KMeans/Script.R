@@ -154,7 +154,9 @@ clustersAndCentroidsPlots = function(fileDirectory, numTestFunctions) {
         }
         legend("topright", legend = leg, pch = 16, col = color, inset = c(-0.80, 0), xpd = TRUE)
     }
-    if (dimension == 3) {
+
+    # not working yet for 3d
+    if (false) {
         # new 3d plot
         # plot testing centroids
         x = myCentroids$V1
@@ -210,6 +212,58 @@ FunctionDetectionResultsPlots = function(fileDirectory, numTestFunctions) {
     legend("topright", legend = paste('Function', 1:numDiffFunc), pch = 16, col = color, inset = c(-0.30, 0), xpd = TRUE)
 }
 
+TwoFunctionsClustersPlot = function(fileDirectory, f1Name, f2Name, numClusters) {
+    clusters1 = read.csv(file = paste(fileDirectory, f1Name, "/Calculated Centroids C", numClusters, ".csv", sep = ""), header = FALSE, sep = ";")
+    distances1 = read.csv(file = paste(fileDirectory, f1Name, "/Calculated Max Distance C", numClusters, ".csv", sep = ""), header = FALSE, sep = ";")
+    clusters2 = read.csv(file = paste(fileDirectory, f2Name, "/Calculated Centroids C", numClusters, ".csv", sep = ""), header = FALSE, sep = ";")
+    distances2 = read.csv(file = paste(fileDirectory, f2Name, "/Calculated Max Distance C", numClusters, ".csv", sep = ""), header = FALSE, sep = ";")
+
+    # creating different colors
+    color = rainbow(2)
+
+    dimension = NCOL(clusters1)
+
+    if (dimension == 2) {
+        # get x-coordinates and y-coordinates of cluster centroids
+        x = clusters1$V1
+        y = clusters1$V2
+        x2 = clusters2$V1
+        y2 = clusters2$V2
+        par(mar = c(5, 5, 5, 10))
+        # plot cluster centroids        
+        plot.default(x, y, type = "p", col = color[1], pch = 20)
+        points.default(x2, y2, type = "p", col = color[2], pch = 20)
+        # plot clusters
+        for (i in 1:numClusters) {
+            draw.circle(x[i], y[i], distances1[1, i], border = color[1])
+            draw.circle(x2[i], y2[i], distances2[1, i], border = color[2])
+        }
+        names = c(f1Name,f2Name)
+        legend("topright", legend = names[1:2], pch = 16, col = color, inset = c(-0.30, 0), xpd = TRUE)
+        
+    }
+
+    if (dimension == 3) {
+        # get x-coordinates and y-coordinates of cluster centroids
+        x = clusters1$V1
+        y = clusters1$V2
+        z = clusters1$V3
+        x2 = clusters2$V1
+        y2 = clusters2$V2
+        z2 = clusters1$V3
+        par3d(windowRect = c(100, 100, 700, 700))
+        # plot clusters
+        for (i in 1:numClusters) {
+            plot3d(x[i], y[i], z[i], type = "s", col = color[1], add = TRUE, radius = distances1[1, i])
+            plot3d(x2[i], y2[i], z2[i], type = "s", col = color[2], add = TRUE, radius = distances2[1, i])
+            
+        }
+        decorate3d(xlab = "x", ylab = "y", zlab = "z", box = TRUE, axes = TRUE, main = NULL, sub = NULL, top = TRUE, aspect = TRUE)
+        # add legend
+        #legend3d("topright", legend = names[1:2], pch = 16, col = color)
+    }
+}
+
 sourceDir = getSrcDirectory(functionsPlots)
 paste(sourceDir)
 
@@ -217,10 +271,11 @@ paste(sourceDir)
 ### Plot a Function
 
 # settings for plotting similar functions
-filePath = paste(sourceDir,"/TestFiles/Functions/TestFile01/NRP10/TestFile01 SimilarFunctions Normalized NRP10.csv",sep = "")
-functionDimensions = 2
+functionName = "COS_COS X"
+filePath = paste(sourceDir, "/TestFiles/Functions/", functionName, "/NRP5-10/", functionName, " SimilarFunctions NRP5-10.csv", sep = "")
+functionDimensions = 3
 startFunction = 1
-endFunction = 9
+endFunction = 1
 
 # plot the function
 functionsPlots(filepath, functionDimensions, startFunction, endFunction)
@@ -229,7 +284,7 @@ functionsPlots(filepath, functionDimensions, startFunction, endFunction)
 
 # settings for plotting centroids of similar functions
 numClusters = 2
-filePath = paste(sourceDir,"/TestFiles/Functions/TestFile01/NRP10/TestFile01 SimilarFunctions Normalized Centroids NRP10 KA2 C2 I500 R1.csv",sep = "")
+filePath = paste(sourceDir, "/TestFiles/Functions/", functionName, "/NRP5-10/", functionName, " SimilarFunctions Centroids NRP5-10 KA2 C", numClusters, " I500 R1.csv", sep = "")
 # plot the centroids
 centroidsPlots(filePath, numClusters)
 
@@ -238,5 +293,8 @@ centroidsPlots(filePath, numClusters)
 # settings
 fileDir = paste(sourceDir, "/TestFiles/Function Recognition/",sep = "")
 numTestFun = 200
-clustersAndCentroidsPlots(fileDir, numTestFun)
-FunctionDetectionResultsPlots(fileDir, numTestFun)
+# clustersAndCentroidsPlots(fileDir, numTestFun)
+#FunctionDetectionResultsPlots(fileDir, numTestFun)
+
+TwoFunctionsClustersPlot(fileDir, "SIN X", "Triangular", 3)
+#TwoFunctionsClustersPlot(fileDir, "SIN_SIN X", "SIN_COS X", 3)

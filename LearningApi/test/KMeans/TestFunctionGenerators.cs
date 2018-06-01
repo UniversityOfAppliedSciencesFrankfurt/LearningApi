@@ -40,10 +40,11 @@ namespace Test
             // number of similar functions
             int NumSimFunc = 999;
             // percentage of added noise level (distortion) 
-            int noise = 10;
+            int MinNoise = 5;
+            int MaxNoise = 10;
 
             // generate the similar functions
-            generateSimilarFunctions("TestFile01", NumSimFunc, noise - 3, noise);
+            generateSimilarFunctions("COS_SIN X", NumSimFunc, MinNoise, MaxNoise);
         }
 
         #endregion
@@ -73,10 +74,10 @@ namespace Test
             double[][] referenceFunction = Helpers.LoadFunctionData(Path.Combine(path, functionFileName));
             
             // complete file path and name
-            string fName = path + "\\" + cPathPrefix + MaxNoiseRangePercentage + "\\" + Path.GetFileNameWithoutExtension(functionName) + " SimilarFunctions NRP" + MaxNoiseRangePercentage + ".csv";
-           
+            string fName = path + "\\" + cPathPrefix + MinNoiseRangePercentage + "-" + MaxNoiseRangePercentage + "\\" + functionName + " SimilarFunctions NRP" + MinNoiseRangePercentage + "-" + MaxNoiseRangePercentage + ".csv";
+            // Path.GetFileNameWithoutExtension(functionName)
             // complete file path and name for the normalized version
-            string fNameNormalized = path + "\\" +cPathPrefix + MaxNoiseRangePercentage + "\\" + Path.GetFileNameWithoutExtension(functionName) + " SimilarFunctions Normalized NRP" + MaxNoiseRangePercentage + ".csv";
+            string fNameNormalized = path + "\\" + cPathPrefix + MinNoiseRangePercentage + "-" + MaxNoiseRangePercentage + "\\" + functionName + " SimilarFunctions Normalized NRP" + MinNoiseRangePercentage + "-" + MaxNoiseRangePercentage + ".csv";
           
             // save original function in both new file
             Helpers.Write2CSVFile(referenceFunction, fName);
@@ -114,7 +115,7 @@ namespace Test
         /// </summary>
         /// <param name="Data">the data to be normalized</param>
         /// <returns></returns>
-        private static double[][] normalizeData(double[][] Data)
+        internal static double[][] normalizeData(double[][] Data)
         {
             int RowsNumber = Data.Length;
             int ColumnsNumber = Data[0].Length;

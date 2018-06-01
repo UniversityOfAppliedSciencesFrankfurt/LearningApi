@@ -34,13 +34,15 @@ namespace Test
         public void Test_TrainingSimilarFunctions()
         {
             // Settings to import the functions (NRP should match the desired loading file)
-            string FunctionName = "TestFile01"; //without extension
+            string FunctionName = "SIN 2X"; //without extension
             string directory = rootFolder + FunctionName + "\\";
-            int NRP = 10;
+            int NRPmin = 5;
+            int NRPmax = 10;
+            string NRP = NRPmin + "-" + NRPmax;
             
             // Settings for the K-Means Alg
             int maxCount = 500;
-            int numClusters = 6;
+            int numClusters = 10;
             int numAttributes = 2;
             int KAlg = 2;
             int Runs = 1;
@@ -48,7 +50,8 @@ namespace Test
             // prepare the functions for clustering
             // Holds the data of all function. Attribute of every function contains data in a row.
             // N dimensions of fnctionmeans N rows per function.
-            double[][] allFunctionsData = Helpers.LoadFunctionData(directory + "\\NRP" + NRP + "\\" + FunctionName + " SimilarFunctions Normalized NRP" + NRP + ".csv");
+            //double[][] allFunctionsData = Helpers.LoadFunctionData(directory + "\\NRP" + NRP + "\\" + FunctionName + " SimilarFunctions Normalized NRP" + NRP + ".csv");
+            double[][] allFunctionsData = Helpers.LoadFunctionData(directory + "\\NRP" + NRP + "\\" + FunctionName + " SimilarFunctions NRP" + NRP + ".csv");
 
             int numFunc = allFunctionsData.Length/numAttributes;
 
@@ -72,7 +75,8 @@ namespace Test
                 for (int j = 0; j < Runs; j++)
                 {
                     // save directory
-                    string savePath = directory + "NRP" + NRP + "\\" + FunctionName + " SimilarFunctions Normalized Centroids NRP" + NRP + " KA" + KAlg + " C" + k + " I" + maxCount + " R" + (j + 1) + ".csv";
+                    //string savePath = directory + "NRP" + NRP + "\\" + FunctionName + " SimilarFunctions Normalized Centroids NRP" + NRP + " KA" + KAlg + " C" + k + " I" + maxCount + " R" + (j + 1) + ".csv";
+                    string savePath = directory + "NRP" + NRP + "\\" + FunctionName + " SimilarFunctions Centroids NRP" + NRP + " KA" + KAlg + " C" + k + " I" + maxCount + " R" + (j + 1) + ".csv";
                     lastCalculatedCentroids = null;
                     for (int funcIndx = 0; funcIndx < numFunc; funcIndx++)
                     {

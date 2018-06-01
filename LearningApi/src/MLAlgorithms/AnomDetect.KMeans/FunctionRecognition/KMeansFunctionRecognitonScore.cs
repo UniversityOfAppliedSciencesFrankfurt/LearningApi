@@ -4,7 +4,8 @@ using System.Collections.Generic;
 using System.Runtime.Serialization;
 using System.Text;
 
-namespace AnomDetect.KMeans.FunctionRecognition
+//namespace AnomDetect.KMeans.FunctionRecognition
+namespace LearningFoundation.Clustering.KMeans.FunctionRecognition
 {
     /// <summary>
     /// KMeansScore is a class that contains the response object of the KMeansFunctionRecognitionModule' training function. 
