@@ -22,8 +22,8 @@ namespace NeuralNet.RestrictedBolzmannMachine2
         /// <summary>
         /// Number of visible nodes.
         /// </summary>
-        private int numVisible;    
-        
+        private int numVisible;
+
         /// <summary>
         /// Number of hidden nodes.
         /// </summary>
@@ -31,7 +31,7 @@ namespace NeuralNet.RestrictedBolzmannMachine2
 
         private Func<double, double> m_ActivationFunction = logSig;
 
-      
+
         /// <summary>
         /// Visible node values (0, 1)
         /// </summary>
@@ -55,6 +55,12 @@ namespace NeuralNet.RestrictedBolzmannMachine2
         /// <param name="numHidden">Number of hidden nodes.</param>
         public Rbm(int numVisible, int numHidden, int maxEpochs = 1000, double learnRate = 0.01)
         {
+            // TODO: Do we need activation function
+            //if (activationFnc == null)
+            //    this.m_ActivationFunction = logSig;
+            //else
+            //    this.m_ActivationFunction = activationFnc;
+
             this.learnRate = learnRate;
             this.maxEpochs = maxEpochs;
             this.numVisible = numVisible;
@@ -94,6 +100,10 @@ namespace NeuralNet.RestrictedBolzmannMachine2
 
         public override IScore Run(double[][] data, IContext ctx)
         {
+            double loss = 0;
+            RbmScore score = new RbmScore();
+
+            //if(m_WriteLossToFile)
             using (StreamWriter sw = new StreamWriter(File.Open("delta - gradient.csv", FileMode.Create)))
             {
                 int[] indices = new int[data.Length];
@@ -103,7 +113,7 @@ namespace NeuralNet.RestrictedBolzmannMachine2
                 int epoch = 0;
                 while (epoch < maxEpochs)
                 {
-                    double loss = 0;
+                    loss = 0;
                     MathFunctions.Shuffle(indices);
 
                     // 
@@ -138,6 +148,12 @@ namespace NeuralNet.RestrictedBolzmannMachine2
                                                           //    hidValues[hiddenIndx] = 0;
 
                             var sumPrime = m_ActivationFunction(sum);
+
+                            //if (sumPrime > 0.5)
+                            //    hidValues[hiddenIndx] = 1;
+                            //else
+                            //    hidValues[hiddenIndx] = 0;
+
                             double pr = m_Rnd.NextDouble();  // determine 0/1 h node value
                             if (sumPrime > pr)
                                 hidValues[hiddenIndx] = 1;
@@ -188,7 +204,7 @@ namespace NeuralNet.RestrictedBolzmannMachine2
                         double[][] negGrad = MathFunctions.OuterProd(vPrime, hPrime);
 
 #if DEBUG
-                        var val= calcDelta(posGrad, negGrad);
+                        var val = calcDelta(posGrad, negGrad);
                         loss += val / (numHidden * numVisible);
 #endif
                         // printVector("PosGrad", posGrad);
@@ -212,15 +228,18 @@ namespace NeuralNet.RestrictedBolzmannMachine2
                         //printVector("Weights", vhWeights);
                     }
 
-                    sw.WriteLine($"{loss/indices.Length};{epoch}");
+                    sw.WriteLine($"{loss / indices.Length};{epoch}");
                     // Loss of iteration is calculated as 
                     // SUM(posGrad-negGrad) / number of training vectors
                     Debug.WriteLine($"loss: {loss / indices.Length}");
+
+                    score.Loss = loss / indices.Length;
+
                     ++epoch;
                 }
             }
 
-            return null;
+            return score;
         }
 
 
@@ -239,7 +258,7 @@ namespace NeuralNet.RestrictedBolzmannMachine2
                     sum += Math.Abs(positiveGradient[i][j] - negGrad[i][j]);
                 }
             }
-            
+
             return sum;
         }
 
@@ -250,7 +269,7 @@ namespace NeuralNet.RestrictedBolzmannMachine2
             foreach (var item in v)
             {
                 Debug.Write($"{item}, ");
-            }   
+            }
         }
 
 
@@ -269,7 +288,7 @@ namespace NeuralNet.RestrictedBolzmannMachine2
                 VisibleNodesPredictions = new double[data.Length][],
                 Weights = vhWeights,
             };
-           
+
             for (int i = 0; i < data.Length; i++)
             {
                 res.HiddenNodesPredictions[i] = new double[numHidden];
@@ -306,7 +325,7 @@ namespace NeuralNet.RestrictedBolzmannMachine2
                 for (int h = 0; h < numHidden; ++h)
                     sum += hiddens[h] * vhWeights[v][h];
                 // sum up visible bias
-                sum += visBiases[v]; 
+                sum += visBiases[v];
                 double probActiv = m_ActivationFunction(sum);
                 double pr = m_Rnd.NextDouble();
                 if (probActiv > pr)
@@ -316,7 +335,7 @@ namespace NeuralNet.RestrictedBolzmannMachine2
             }
             return result;
         }
-        
+
 
         private void printVector(string name, double[][] vector)
         {
@@ -336,7 +355,7 @@ namespace NeuralNet.RestrictedBolzmannMachine2
         //private void printOut()
         //{
         //    Debug.WriteLine("");
-         
+
         //    for (int row = 0; row < numVisible; ++row)
         //    {
         //        Debug.WriteLine("");

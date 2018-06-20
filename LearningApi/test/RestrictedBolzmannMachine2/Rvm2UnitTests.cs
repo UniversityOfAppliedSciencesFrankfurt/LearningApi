@@ -98,7 +98,7 @@ namespace test.RestrictedBolzmannMachine
                 data[2] = new double[] { 0, 0, 0, 0, 1, 1 };  // C
                 
                 data[3] = new double[] { 1, 1, 0, 0, 0, 1 };  // noisy A
-                data[4] = new double[] { 0, 0, 1, 1, 0, 0 };  // B
+                data[4] = new double[] { 0, 0, 1, 1, 0, 0 };  // BRt
                 data[5] = new double[] { 0, 0, 0, 0, 1, 1 };  // C
                 
                 data[6] = new double[] { 1, 0, 0, 0, 0, 0 };  // weak A
@@ -114,9 +114,11 @@ namespace test.RestrictedBolzmannMachine
             
             api.UseRbm(0.01, 1000, 6,3);
 
-            IScore score = api.Run() as IScore;
+            RbmScore score = api.Run() as RbmScore;
 
             double[][] testData = new double[4][];
+
+            Assert.True(score.Loss < 1.0);
 
             testData[0] = new double[] { 1, 1, 0, 0, 0, 0 };
             testData[1] = new double[] { 0, 0, 0, 0, 1, 1 };
@@ -166,7 +168,9 @@ namespace test.RestrictedBolzmannMachine
             //Assert.True(result[5] == 0);
         }
 
-
+        /// <summary>
+        /// NOT USED.
+        /// </summary>
         [Fact]
         public void LinearEquationSolver()
         {
@@ -256,7 +260,7 @@ namespace test.RestrictedBolzmannMachine
              
             api.UseRbm(0.01, 1000, bits, 7);
 
-            IScore score = api.Run() as IScore;
+            RbmScore score = api.Run() as RbmScore;
 
             double[][] testData = new double[4][];
 
