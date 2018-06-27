@@ -63,7 +63,7 @@ namespace test
                 return data;
             });
 
-            lApi.AddModule(new MeanFilter());
+            lApi.AddModule(new GaussianFilter());
 
             double[,,] result = lApi.Run() as double[,,];
 

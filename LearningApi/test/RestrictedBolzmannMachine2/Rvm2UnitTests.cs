@@ -10,6 +10,8 @@ using System.IO;
 using LearningFoundation.DataProviders;
 using LearningFoundation.DataMappers;
 using System.Diagnostics;
+using System.Drawing;
+using System.Text;
 
 namespace test.RestrictedBolzmannMachine
 {
@@ -19,6 +21,19 @@ namespace test.RestrictedBolzmannMachine
 
         static RbmUnitTests()
         {
+
+        }
+
+
+        [Fact]
+        public void TestBinarization()
+        {
+            var images = Directory.GetFiles(Path.Combine(AppContext.BaseDirectory, "RestrictedBolzmannMachine2\\TrainingImages"));
+
+            foreach (var item in images)
+            {
+                appendImageBinary(item, "binarized.txt");
+            }
 
         }
 
@@ -349,6 +364,45 @@ namespace test.RestrictedBolzmannMachine
             }
 
             Debug.WriteLine("");
+        }
+
+        
+        private void appendImageBinary(string image, string binaryFilePath)
+        {
+            //saving images in Bitmap format
+            var names = image.Split('\\');
+            string filename = string.Empty;
+            foreach (var item in names)
+            {
+                // if (item.Contains("."))
+                filename = " " + item.Substring(0, 1);
+            }
+        
+            //Loading Bmp images        
+            Bitmap Imgbmp = new Bitmap(64, 64);
+        
+            using (StreamWriter writer = File.AppendText(binaryFilePath))
+            {
+                Bitmap img = new Bitmap(image);
+                StringBuilder t = new StringBuilder();
+                int hg = img.Height;
+                int wg = img.Width;
+                for (int i = 0; i < hg; i++)
+                {
+                    for (int j = 0; j < wg; j++)
+                    {
+                        // t = 0 .299R + 0 .587G + 0 .144B
+                        t.Append((img.GetPixel(j, i).R > 100 && img.GetPixel(j, i).G > 100 &&
+                           img.GetPixel(j, i).B > 100) ? 1 : 0);
+                        //  t.Append(img.GetPixel(i,j).R);
+                    }
+                    t.AppendLine();
+                }
+                string text = t.ToString();
+                writer.Write(text);
+                writer.WriteLine(filename);
+            }
+
         }
     }
 
