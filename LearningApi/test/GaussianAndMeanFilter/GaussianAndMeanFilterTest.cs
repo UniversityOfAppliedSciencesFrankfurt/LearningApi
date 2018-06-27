@@ -2,7 +2,8 @@
 using LearningFoundation;
 using System;
 using System.Collections.Generic;
-using System.DrawingCore;
+using System.Drawing;
+//using System.DrawingCore;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -44,7 +45,7 @@ namespace test
             LearningApi lApi = new LearningApi();
             lApi.UseActionModule<double[,,], double[,,]>((input, ctx) =>
             {
-                Bitmap myBitmap = new Bitmap($"{appPath}/TestPicture/test.gif");
+                Bitmap myBitmap = new Bitmap($"{appPath}/TestPicture/HandWritten1.jpg");
 
                 double[,,] data = new double[myBitmap.Width, myBitmap.Height, 3];
 
