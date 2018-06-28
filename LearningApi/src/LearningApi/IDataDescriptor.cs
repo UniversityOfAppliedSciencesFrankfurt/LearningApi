@@ -12,7 +12,7 @@ namespace LearningFoundation
     public interface IDataDescriptor
     {
         /// <summary>
-        /// Index of the label.
+        /// Index of the label. If there are more than one label (multiclass classifier), this is the index of the first one.
         /// </summary>
         int LabelIndex { get; set; }
 

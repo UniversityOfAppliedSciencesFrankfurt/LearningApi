@@ -104,6 +104,8 @@ namespace MLPerceptron
 
             var score = new MLPerceptronAlgorithmScore();
 
+            double lastLoss = 0;
+
             for (int i = 0; i < m_Iterations; i++)
             {
                 for (int inputVectIndx = 0; inputVectIndx < numOfInputVectors; inputVectIndx++)
@@ -118,7 +120,7 @@ namespace MLPerceptron
                     CalculateResultatOutputlayer(hidLyrOut[m_HiddenLayerNeurons.Length - 1], m_InpDims, out hidLyrOut[m_HiddenLayerNeurons.Length], out hidLyrNeuronSum[m_HiddenLayerNeurons.Length]);
 
                     BackPropagationNetwork backPropagation = new BackPropagationNetwork(m_HiddenLayerNeurons.Length);
-
+                    
                     backPropagation.CalcOutputError(hidLyrOut[m_HiddenLayerNeurons.Length], m_HiddenLayerNeurons, hidLyrNeuronSum[m_HiddenLayerNeurons.Length], data[inputVectIndx], ctx);
 
                     backPropagation.CalcHiddenLayersError(hidLyrOut, m_Weights, m_HiddenLayerNeurons, hidLyrNeuronSum, data[inputVectIndx]);
@@ -126,7 +128,24 @@ namespace MLPerceptron
                     backPropagation.CostFunctionChangeWithBiases(m_Biases, m_HiddenLayerNeurons, m_LearningRate, out m_Biases);
 
                     backPropagation.CostFunctionChangeWithWeights(m_Weights, hidLyrOut, m_HiddenLayerNeurons, m_LearningRate, data[inputVectIndx], out m_Weights);
+
+                    score.Errors = backPropagation.Errors[m_HiddenLayerNeurons.Length];
+
+                    double sum = 0;
+                    foreach (var outLyrErr in score.Errors)
+                    {
+                        sum += outLyrErr;
+                    }
+
+                    // 1 - mean of errors
+                    score.Loss = 1-(Math.Abs(sum)/score.Errors.Length);
                 }
+
+                double deltaLoss = score.Loss - lastLoss;
+
+                Debug.WriteLine($"Loss: {score.Loss}, Lastloss: {lastLoss}, Delta: {deltaLoss}");
+
+                lastLoss = deltaLoss;
             }
 
             ctx.Score = score;

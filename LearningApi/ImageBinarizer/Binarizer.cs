@@ -32,6 +32,16 @@ namespace ImageBinarizer
                 this.m_TargetSize = new Size(targetWidth, targetHeight);
         }
 
+        /// <summary>
+        /// Gets string binary representation the image.I.E.: 010000111000
+        /// </summary>
+        /// <param name="image">The filename of the image.</param>
+        /// <returns></returns>
+        public string GetBinary(string image)
+        {
+            Bitmap img;
+            return GetBinary(image, out img);
+        }
 
         /// <summary>
         /// Gets string binary representation the image.I.E.: 010000111000
@@ -39,7 +49,7 @@ namespace ImageBinarizer
         /// <param name="image">The filename of the image.</param>
         /// <param name="img">Image instance. Typically bitmap.</param>
         /// <returns></returns>
-        public string GetBinary(string image, out Bitmap img)
+        public string GetBinary(string image, out Bitmap img )
         {
             img = (Bitmap)Image.FromFile(image);
 

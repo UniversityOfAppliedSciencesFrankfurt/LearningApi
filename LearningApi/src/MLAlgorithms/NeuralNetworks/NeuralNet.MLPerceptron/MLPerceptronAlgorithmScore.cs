@@ -17,6 +17,11 @@ namespace MLPerceptron
         public double[] Errors { get; set; }
 
         /// <summary>
+        /// Calculated as Log(sum(Errors of each neuron at output layer))
+        /// </summary>
+        public double Loss{ get; set; }
+
+        /// <summary>
         /// Get/Set the property Iterations
         /// </summary>
         public int Iterations { get; internal set; }
