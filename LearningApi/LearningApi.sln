@@ -54,6 +54,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DeltaRuleLearning", "src\ML
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NeuralNet.MLPerceptron", "src\MLAlgorithms\NeuralNetworks\NeuralNet.MLPerceptron\NeuralNet.MLPerceptron.csproj", "{32DA33B2-5C56-4F50-860C-269E61CA3DA5}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ImageBinarizer", "ImageBinarizer\ImageBinarizer.csproj", "{74EC6681-115E-45E0-8813-E63283279092}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -124,6 +126,10 @@ Global
 		{32DA33B2-5C56-4F50-860C-269E61CA3DA5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{32DA33B2-5C56-4F50-860C-269E61CA3DA5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{32DA33B2-5C56-4F50-860C-269E61CA3DA5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{74EC6681-115E-45E0-8813-E63283279092}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{74EC6681-115E-45E0-8813-E63283279092}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{74EC6681-115E-45E0-8813-E63283279092}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{74EC6681-115E-45E0-8813-E63283279092}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -150,6 +156,7 @@ Global
 		{9B908482-01AB-4579-A196-2DA93E396CE5} = {99343BF5-0AC3-451A-A249-343C47AEDEE9}
 		{30A99494-1A83-41E3-9422-A185AE38E042} = {99343BF5-0AC3-451A-A249-343C47AEDEE9}
 		{32DA33B2-5C56-4F50-860C-269E61CA3DA5} = {461E3D43-4B87-4CC0-9762-88ACFDBAFBCA}
+		{74EC6681-115E-45E0-8813-E63283279092} = {4366E8AF-8F45-46BB-9FF7-6D67AA4171FA}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {DD0FDFB7-25B1-4E83-9B3D-B71D6DB943F9}

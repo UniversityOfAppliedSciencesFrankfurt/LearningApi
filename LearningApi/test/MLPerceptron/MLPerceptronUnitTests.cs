@@ -10,6 +10,7 @@ using Xunit;
 using System.Diagnostics;
 using System.Globalization;
 using NeuralNet.MLPerceptron;
+using ImageBinarizer;
 
 namespace test.MLPerceptron
 {
@@ -168,7 +169,7 @@ namespace test.MLPerceptron
                         {
                             //Assert.True(testData[i][(testData[i].Length - numberOfOutputs) + j] == (result[i * numberOfOutputs + j] >= 0.5 ? 1 : 0));
                             if (testData[i][(testData[i].Length - numberOfOutputs) + j] == (result[i * numberOfOutputs + j] >= 0.5 ? 1 : 0))
-                                expectedResults++;                           
+                                expectedResults++;
                         }
                     }
 
@@ -180,7 +181,7 @@ namespace test.MLPerceptron
         /// <summary>
         /// UnitTestIris - The second unit test consists of the “Iris” dataset which classifies iris plants into three species. It includes 100 samples distributed between three species, with some properties about each flower
         /// </summary>
-        [Theory]  
+        [Theory]
         //[InlineData(new int[] { 5, 2 })]
         [InlineData(new int[] { 6, 3 })]
         //[InlineData(new int[] { 7, 2 })]
@@ -659,8 +660,26 @@ namespace test.MLPerceptron
                     }
                 }
             }
+
+
+        }
+
+
+        /// <summary>
+        /// Loads a single JPG and create a binarized version with zeros and ones.
+        /// Look after executing of test for file binary.txt.
+        /// </summary>
+        [Fact]
+        public void BinarizerTest()
+        {
+            
+            string trainingImagesPath = Path.Combine(Path.Combine(AppContext.BaseDirectory, "MLPerceptron"), "TrainingImages");            
+            Binarizer bizer = new Binarizer();
+            bizer.CreateBinary(Path.Combine(trainingImagesPath, "1 (168).jpeg"), "binary.txt");
+
         }
     }
+
 }
 
 
