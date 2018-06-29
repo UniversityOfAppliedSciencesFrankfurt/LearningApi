@@ -27,11 +27,12 @@ namespace test.MLPerceptron
 
         }
 
+        /*
         /// <summary>
         /// UnitTestOne - The first unit test consists of non linear set of data pairs between 0 and 1, that are classified into two groups, 0 and 1
         /// </summary>
         [Fact]
-        public void UnitTestOne()
+        public void UnitTestOneOld()
         {
             // Read the csv file which contains the training data
             using (var readerTrainData = new StreamReader($"{Directory.GetCurrentDirectory()}\\MLPerceptron\\TestFiles\\TrainingData.csv"))
@@ -177,16 +178,65 @@ namespace test.MLPerceptron
                 }
             }
         }
+        */
+
+        /// <summary>
+        /// UnitTestOne - The first unit test consists of non linear set of data pairs between 0 and 1, that are classified into two groups, 0 and 1
+        /// </summary>
+        [Fact]
+        public void UnitTestOne()
+        {
+
+            LearningApi api = new LearningApi(getDescriptor(2));
+
+            api.UseActionModule<object, double[][]>((notUsed, ctx) =>
+            {
+                var data = loadData($"{Directory.GetCurrentDirectory()}\\MLPerceptron\\TestFiles\\TrainingData.csv");
+
+                return data;
+            });
+
+            int[] hiddenLayerNeurons = { 6 };
+
+            // Invoke the MLPerecptronAlgorithm with a specific learning rate, number of iterations, and number of hidden layer neurons
+            api.UseMLPerceptron(0.1, 1000, hiddenLayerNeurons);
+
+            IScore score = api.Run() as IScore;
+
+            var testData = loadData($"{Directory.GetCurrentDirectory()}\\MLPerceptron\\TestFiles\\TestData.csv");
+
+            // Invoke the Predict method to predict the results on the test data
+            var result = ((MLPerceptronResult)api.Algorithm.Predict(testData, api.Context)).results;
+
+            int numberOfOutputs = 1;
+
+            int expectedResults = 0;
+
+            // Check if the test data has been correctly classified by the neural network
+            for (int i = 0; i < testData.Length ; i++)
+            {
+                for (int j = 0; j < numberOfOutputs; j++)
+                {
+                    //Assert.True(testData[i][(testData[i].Length - numberOfOutputs) + j] == (result[i * numberOfOutputs + j] >= 0.5 ? 1 : 0));
+                    if (testData[i][(testData[i].Length - numberOfOutputs) + j] == (result[i * numberOfOutputs + j] >= 0.5 ? 1 : 0))
+                        expectedResults++;
+                }
+            }
+
+            float loss = (float)expectedResults / (float)numberOfOutputs / (float)testData.Length;
+
+            Assert.True(loss == 1);
+        }
 
         /// <summary>
         /// UnitTestIris - The second unit test consists of the “Iris” dataset which classifies iris plants into three species. It includes 100 samples distributed between three species, with some properties about each flower
         /// </summary>
         [Theory]
         //[InlineData(new int[] { 5, 2 })]
-        [InlineData(new int[] { 6, 3 })]
+        //[InlineData(new int[] { 6, 3 })]
         //[InlineData(new int[] { 7, 2 })]
         //[InlineData(new int[] { 8, 2 })]
-        //[InlineData(new int[] { 9, 2 })]
+        [InlineData(new int[] { 9, 2 })]
         //[InlineData(new int[] { 10, 2 })]
         //[InlineData(new int[] { 20, 2 })]
         //[InlineData(new int[] { 30, 2 })]
@@ -194,7 +244,7 @@ namespace test.MLPerceptron
         //[InlineData(new int[] { 15, 10, 5, 2 })]
         //[InlineData(new int[] { 50, 30, 20, 10 })]
         //[InlineData(new int[] { 10, 7, 5, 3 })]
-        //[InlineData(new int[] { 125, 77, 45, 34 , 19, 12, 9, 3})]
+        //[InlineData(new int[] { 125, 77, 45, 34, 19, 12, 9, 3 })]
         //[InlineData(new int[] { 50, 30, 20 })]
 
         public void UnitTestIris(int[] hiddenLayerNeurons)
@@ -677,6 +727,53 @@ namespace test.MLPerceptron
             Binarizer bizer = new Binarizer();
             bizer.CreateBinary(Path.Combine(trainingImagesPath, "1 (168).jpeg"), "binary.txt");
 
+        }
+
+        private double[][] loadData(string file)
+        {
+            using (var readerTrainData = new StreamReader(file))
+            {
+
+                List<double[]> listTrainData = new List<double[]>();
+
+                readerTrainData.ReadLine(); // read first header line.
+
+                while (!readerTrainData.EndOfStream)
+                {
+                    var singleRow = new List<double>();
+
+                    var line = readerTrainData.ReadLine();
+
+                    var values = line.Split(',');
+
+                    foreach (var value in values)
+                    {
+                        singleRow.Add(Convert.ToDouble(value, CultureInfo.InvariantCulture));
+                    }
+
+                    listTrainData.Add(singleRow.ToArray());
+                }
+
+                return listTrainData.ToArray();
+            }
+
+        }
+
+        private DataDescriptor getDescriptor(int numOfFeatures)
+        {
+            DataDescriptor desc = new DataDescriptor();
+            desc.Features = new LearningFoundation.DataMappers.Column[numOfFeatures];
+            desc.Features[0] = new LearningFoundation.DataMappers.Column()
+            {
+                Id = 0,
+                Name = "X",
+                Type = LearningFoundation.DataMappers.ColumnType.NUMERIC,
+                Index = 0,
+            };
+
+            desc.LabelIndex = 1;
+
+            return desc;
         }
 
     }
