@@ -208,25 +208,12 @@ namespace test.MLPerceptron
             // Invoke the Predict method to predict the results on the test data
             var result = ((MLPerceptronResult)api.Algorithm.Predict(testData, api.Context)).results;
 
-            int numberOfOutputs = 1;
+            float accuracy = MLPHelpers.GetAccuracy(testData, result, 1);
 
-            int expectedResults = 0;
-
-            // Check if the test data has been correctly classified by the neural network
-            for (int i = 0; i < testData.Length ; i++)
-            {
-                for (int j = 0; j < numberOfOutputs; j++)
-                {
-                    //Assert.True(testData[i][(testData[i].Length - numberOfOutputs) + j] == (result[i * numberOfOutputs + j] >= 0.5 ? 1 : 0));
-                    if (testData[i][(testData[i].Length - numberOfOutputs) + j] == (result[i * numberOfOutputs + j] >= 0.5 ? 1 : 0))
-                        expectedResults++;
-                }
-            }
-
-            float loss = (float)expectedResults / (float)numberOfOutputs / (float)testData.Length;
-
-            Assert.True(loss == 1);
+            Assert.True(accuracy == 1);
         }
+
+     
 
         /// <summary>
         /// UnitTestIris - The second unit test consists of the “Iris” dataset which classifies iris plants into three species. It includes 100 samples distributed between three species, with some properties about each flower

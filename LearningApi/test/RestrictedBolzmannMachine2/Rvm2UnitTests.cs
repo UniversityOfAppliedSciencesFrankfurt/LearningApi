@@ -233,7 +233,7 @@ namespace test.RestrictedBolzmannMachine
             {
                 var maxSamples = (int)Math.Pow(2, bits);
                 double[][] data = new double[maxSamples][];
-
+                 
                 for (int i = 0; i < maxSamples; i++)
                 {
                     data[i] = new double[bits];

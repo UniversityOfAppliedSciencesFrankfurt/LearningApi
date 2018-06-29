@@ -47,7 +47,6 @@ namespace test.MLPerceptron
 
         private string readImageData(string imageName, int width, int height)
         {
-            //string trainingImagesPath = Path.Combine(Path.Combine(AppContext.BaseDirectory, "MLPerceptron"), "TrainingImages");
             Binarizer bizer = new Binarizer(targetHeight: height, targetWidth: width);
             return bizer.GetBinary(imageName);
         }
@@ -57,23 +56,26 @@ namespace test.MLPerceptron
         public void ImageRecognitionTest()
         {
             int size = 64;
+            int numberOfOutputs = 1;
+            int numberOfInputs = size*size;
+        
 
-            var context = getImgRecognitionDescriptor(2);
+            var context = getImgRecognitionDescriptor(numberOfInputs);
 
             LearningApi api = new LearningApi(context);
 
             api.UseActionModule<object, double[][]>((notUsed, ctx) =>
             {
-                // return getImageData(size, $"{Directory.GetCurrentDirectory()}\\MLPerceptron\\TrainingImages");
-                return getSomOtherData($"{Directory.GetCurrentDirectory()}\\MLPerceptron\\TestFiles\\TrainingData.csv");
+                return getImageData(size, $"{Directory.GetCurrentDirectory()}\\MLPerceptron\\TrainingImages");
+                //return getSomOtherData($"{Directory.GetCurrentDirectory()}\\MLPerceptron\\TestFiles\\TrainingData.csv");
             });
 
             // High number of hidden neurons in first layer brings network to constant result for everything.
             // var hiddenLayerNeurons = new int[] { size*size, 3 };
 
-            var hiddenLayerNeurons = new int[] { 6 };
+            var hiddenLayerNeurons = new int[] {2048, 128, 9 };
 
-            api.UseMLPerceptron(0.5, 1000, hiddenLayerNeurons);
+            api.UseMLPerceptron(0.01, 300, hiddenLayerNeurons);
 
             Stopwatch sw = new Stopwatch();
 
@@ -82,11 +84,12 @@ namespace test.MLPerceptron
             sw.Stop();
             Trace.WriteLine($"Duration:{(double)(sw.ElapsedMilliseconds / 1000 /60)} min");
 
-            //var testImageData = getImageData(size, $"{Directory.GetCurrentDirectory()}\\MLPerceptron\\TestingImages");
-            var testImageData= getSomOtherData($"{Directory.GetCurrentDirectory()}\\MLPerceptron\\TestFiles\\TestData.csv");
+            var testImageData = getImageData(size, $"{Directory.GetCurrentDirectory()}\\MLPerceptron\\TestingImages");
+            //var testImageData= getSomOtherData($"{Directory.GetCurrentDirectory()}\\MLPerceptron\\TestFiles\\TestData.csv");
 
-            MLPerceptronResult res = api.Algorithm.Predict(testImageData, api.Context) as MLPerceptronResult;
+            MLPerceptronResult result = api.Algorithm.Predict(testImageData, api.Context) as MLPerceptronResult;
 
+            float accuracy = MLPHelpers.GetAccuracy(testImageData, result.results, numberOfOutputs);
         }
 
 
@@ -156,12 +159,12 @@ namespace test.MLPerceptron
                 if (file.Contains("positive"))
                 {
                     imgTrainingRow.Add(1);  //Label 1
-                    imgTrainingRow.Add(0);
+                    //imgTrainingRow.Add(0);
                 }
                 else
                 {
                     imgTrainingRow.Add(0); ; //Label 0
-                    imgTrainingRow.Add(1);
+                    //imgTrainingRow.Add(1);
                 }
 
                 data[indx] = imgTrainingRow.ToArray();
