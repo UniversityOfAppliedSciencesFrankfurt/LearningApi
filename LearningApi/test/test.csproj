@@ -440,130 +440,49 @@
     <None Update="MLPerceptron\TrainingImages\positive %289%29.jpeg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Update="RestrictedBolzmannMachine2\DigitDataset.csv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="RestrictedBolzmannMachine2\DigitTest.csv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Update="RestrictedBolzmannMachine2\rbm_twoclass_sample.csv">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Update="RestrictedBolzmannMachine2\rbm_sample1.csv">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="RestrictedBolzmannMachine2\TrainingImages\1 %28120%29.jpeg">
+    <None Update="RestrictedBolzmannMachine2\TrainingImages\image9001.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="RestrictedBolzmannMachine2\TrainingImages\1 %28121%29.jpeg">
+    <None Update="RestrictedBolzmannMachine2\TrainingImages\image9002.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="RestrictedBolzmannMachine2\TrainingImages\1 %28122%29.jpeg">
+    <None Update="RestrictedBolzmannMachine2\TrainingImages\image9003.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="RestrictedBolzmannMachine2\TrainingImages\1 %28126%29.jpeg">
+    <None Update="RestrictedBolzmannMachine2\TrainingImages\image9004.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="RestrictedBolzmannMachine2\TrainingImages\1 %28127%29.jpeg">
+    <None Update="RestrictedBolzmannMachine2\TrainingImages\image9005.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="RestrictedBolzmannMachine2\TrainingImages\1 %28132%29.jpeg">
+    <None Update="RestrictedBolzmannMachine2\TrainingImages\image9006.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="RestrictedBolzmannMachine2\TrainingImages\1 %28133%29.jpeg">
+    <None Update="RestrictedBolzmannMachine2\TrainingImages\image9007.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="RestrictedBolzmannMachine2\TrainingImages\1 %28134%29.jpeg">
+    <None Update="RestrictedBolzmannMachine2\TrainingImages\image9008.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="RestrictedBolzmannMachine2\TrainingImages\1 %28135%29.jpeg">
+    <None Update="RestrictedBolzmannMachine2\TrainingImages\image9009.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="RestrictedBolzmannMachine2\TrainingImages\1 %28136%29.jpeg">
+    <None Update="RestrictedBolzmannMachine2\TrainingImages\image9010.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="RestrictedBolzmannMachine2\TrainingImages\1 %28137%29.jpeg">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="RestrictedBolzmannMachine2\TrainingImages\1 %28138%29.jpeg">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="RestrictedBolzmannMachine2\TrainingImages\1 %28139%29.jpeg">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="RestrictedBolzmannMachine2\TrainingImages\1 %28142%29.jpeg">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="RestrictedBolzmannMachine2\TrainingImages\1 %28143%29.jpeg">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="RestrictedBolzmannMachine2\TrainingImages\1 %28146%29.jpeg">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="RestrictedBolzmannMachine2\TrainingImages\1 %28147%29 - Copy.jpeg">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="RestrictedBolzmannMachine2\TrainingImages\1 %28147%29.jpeg">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="RestrictedBolzmannMachine2\TrainingImages\1 %28148%29 - Copy.jpeg">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="RestrictedBolzmannMachine2\TrainingImages\1 %28148%29.jpeg">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="RestrictedBolzmannMachine2\TrainingImages\1 %28149%29 - Copy.jpeg">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="RestrictedBolzmannMachine2\TrainingImages\1 %28149%29.jpeg">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="RestrictedBolzmannMachine2\TrainingImages\1 %28150%29 - Copy.jpeg">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="RestrictedBolzmannMachine2\TrainingImages\1 %28151%29 - Copy.jpeg">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="RestrictedBolzmannMachine2\TrainingImages\1 %28152%29 - Copy.jpeg">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="RestrictedBolzmannMachine2\TrainingImages\1 %28152%29.jpeg">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="RestrictedBolzmannMachine2\TrainingImages\1 %28153%29 - Copy.jpeg">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="RestrictedBolzmannMachine2\TrainingImages\1 %28154%29 - Copy - Copy.jpeg">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="RestrictedBolzmannMachine2\TrainingImages\1 %28154%29 - Copy.jpeg">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="RestrictedBolzmannMachine2\TrainingImages\1 %28155%29 - Copy - Copy.jpeg">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="RestrictedBolzmannMachine2\TrainingImages\1 %28156%29 - Copy - Copy.jpeg">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="RestrictedBolzmannMachine2\TrainingImages\1 %28168%29 - Copy - Copy.jpeg">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="RestrictedBolzmannMachine2\TrainingImages\1 %28168%29 - Copy.jpeg">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="RestrictedBolzmannMachine2\TrainingImages\1 %28168%29.jpeg">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="RestrictedBolzmannMachine2\TrainingImages\1 %28169%29 - Copy - Copy.jpeg">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="RestrictedBolzmannMachine2\TrainingImages\1 %28169%29 - Copy.jpeg">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="RestrictedBolzmannMachine2\TrainingImages\1 %28170%29 - Copy - Copy.jpeg">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="RestrictedBolzmannMachine2\TrainingImages\1 %28170%29 - Copy.jpeg">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="RestrictedBolzmannMachine2\TrainingImages\1 %28171%29 - Copy - Copy.jpeg">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="RestrictedBolzmannMachine2\TrainingImages\1 %28171%29 - Copy.jpeg">
+    <None Update="RestrictedBolzmannMachine2\TrainingImages\image9011.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Update="SampleData\iris\iris.csv">
