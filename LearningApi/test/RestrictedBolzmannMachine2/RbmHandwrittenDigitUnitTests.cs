@@ -40,8 +40,11 @@ namespace test.RestrictedBolzmannMachine2
         /// <summary>
         /// TODO...
         /// </summary>
-        [Fact]
-        public void DigitRecognitionTest()
+        [Theory]
+        [InlineData(1, 4096, 10)]
+        [InlineData(2, 4096, 10)]
+        //[InlineData(20, 4096, 10)]
+        public void DigitRecognitionTest(int iterations,int visNodes, int hidNodes)
         {
             LearningApi api = new LearningApi(this.getDescriptorForDigits());
 
@@ -49,7 +52,8 @@ namespace test.RestrictedBolzmannMachine2
             api.UseCsvDataProvider(Path.Combine(Directory.GetCurrentDirectory(), @"RestrictedBolzmannMachine2\DigitDataset.csv"), ',', false, 0);
             api.UseDefaultDataMapper();
             //api1.UseRbm(0.2, 100, 784, 392);
-            api.UseRbm(0.2, 1, 4096, 10);
+            //api.UseRbm(0.2, 1, 4096, 10);
+            api.UseRbm(0.2, iterations, visNodes, hidNodes);
 
             RbmResult score = api.Run() as RbmResult;
 
@@ -59,12 +63,12 @@ namespace test.RestrictedBolzmannMachine2
 
             var predictedData = ((RbmResult)result).VisibleNodesPredictions;
 
-            writeOutputMatrix(predictedData, testData);
+            writeOutputMatrix(iterations, visNodes, hidNodes, predictedData, testData);
         }
 
-        private static void writeOutputMatrix(double[][] predictedData, double[][] testData, int lineLength = 65)
+        private static void writeOutputMatrix(int iterations, int visNodes, int hidNodes, double[][] predictedData, double[][] testData, int lineLength = 65)
         {
-            TextWriter tw = new StreamWriter("PredictedDigit1.txt");
+            TextWriter tw = new StreamWriter($"PredictedDigit_I{iterations}_V{visNodes}_H{hidNodes}.txt");
 
             //you need two loops - 1. To loop through alle out predicted nodes. 2. To loop through every single node
             int k = 1;
