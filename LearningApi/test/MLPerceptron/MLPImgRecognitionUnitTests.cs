@@ -47,7 +47,7 @@ namespace test.MLPerceptron
 
         private string readImageData(string imageName, int width, int height)
         {
-            Binarizer bizer = new Binarizer(targetHeight: height, targetWidth: width);
+            Binarizer bizer = new Binarizer(targetHeight: height, targetWidth: width, invert: true);
             return bizer.GetBinary(imageName);
         }
 
@@ -73,9 +73,9 @@ namespace test.MLPerceptron
             // High number of hidden neurons in first layer brings network to constant result for everything.
             // var hiddenLayerNeurons = new int[] { size*size, 3 };
 
-            var hiddenLayerNeurons = new int[] {2048, 128, 9 };
+            var hiddenLayerNeurons = new int[] {6000, 9 ,3 };
 
-            api.UseMLPerceptron(0.01, 300, hiddenLayerNeurons);
+            api.UseMLPerceptron(0.01, 6, hiddenLayerNeurons);
 
             Stopwatch sw = new Stopwatch();
 
@@ -158,19 +158,24 @@ namespace test.MLPerceptron
 
                 if (file.Contains("positive"))
                 {
+                    Debug.Write("POSITIVE");
                     imgTrainingRow.Add(1);  //Label 1
                     //imgTrainingRow.Add(0);
                 }
                 else
                 {
+                    Debug.Write("NEGATIVE");
                     imgTrainingRow.Add(0); ; //Label 0
                     //imgTrainingRow.Add(1);
                 }
 
                 data[indx] = imgTrainingRow.ToArray();
+                Debug.WriteLine($" Zeros: { data[indx].Count(k => k == 0.0)} - Onces: { data[indx].Count(k => k == 1.0)}");
 
                 indx++;
             }
+
+         
 
             return data;
         }

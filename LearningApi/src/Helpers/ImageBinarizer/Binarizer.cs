@@ -22,8 +22,15 @@ namespace ImageBinarizer
 
         private Size? m_TargetSize;
 
-        public Binarizer(int redThreshold = 100, int greenThreshold = 100, int blueThreshold = 100, int targetWidth = 0, int targetHeight = 0)
+        int m_MyTrue;
+        int m_False;
+
+
+        public Binarizer(int redThreshold = 100, int greenThreshold = 100, int blueThreshold = 100, int targetWidth = 0, int targetHeight = 0, bool invert = false)
         {
+            m_MyTrue = invert ? 0 : 1;
+            m_False = invert ? 1 : 0;
+
             this.m_BlueThreshold = blueThreshold;
             this.m_RedThreshold = redThreshold;
             this.m_GreenThreshold = greenThreshold;
@@ -49,8 +56,9 @@ namespace ImageBinarizer
         /// <param name="image">The filename of the image.</param>
         /// <param name="img">Image instance. Typically bitmap.</param>
         /// <returns></returns>
-        public string GetBinary(string image, out Bitmap img )
+        public string GetBinary(string image, out Bitmap img)
         {
+
             img = (Bitmap)Image.FromFile(image);
 
             if (this.m_TargetSize != null)
@@ -64,7 +72,7 @@ namespace ImageBinarizer
                 for (int j = 0; j < wg; j++)
                 {
                     t.Append((img.GetPixel(j, i).R > this.m_RedThreshold && img.GetPixel(j, i).G > this.m_GreenThreshold &&
-                       img.GetPixel(j, i).B > this.m_BlueThreshold) ? 1 : 0);
+                       img.GetPixel(j, i).B > this.m_BlueThreshold) ? m_MyTrue : m_False);
                 }
                 t.AppendLine();
             }

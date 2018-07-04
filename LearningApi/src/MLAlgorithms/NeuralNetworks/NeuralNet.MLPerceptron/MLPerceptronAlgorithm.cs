@@ -112,6 +112,7 @@ namespace MLPerceptron
                 {
                     // Z2 = actFnc(X * W1)
                     CalcFirstHiddenLayer(data[inputVectIndx], m_InpDims, out hidLyrOut[0], out hidLyrNeuronSum[0]);
+                    Debug.WriteLine($"less than 0.99: {hidLyrOut[0].Count(p => p < 0.99)} - Zeros: {data[inputVectIndx].Count(k=>k==0)} - Onces: {data[inputVectIndx].Count(k=>k==1)}");
 
                     // We use output of first layer as input of second layer.
                     CalcRemainingHiddenLayers(hidLyrOut[0], hidLyrNeuronSum[0], m_InpDims, out hidLyrOut, out hidLyrNeuronSum);
@@ -213,6 +214,8 @@ namespace MLPerceptron
                 {
                     layerNeuronSum[j] += m_Weights[0][j, i] * input[i];
                 }
+
+                //Debug.WriteLine(layerNeuronSum[j]);
 
                 layerNeuronSum[j] += m_Biases[0][j];
 
