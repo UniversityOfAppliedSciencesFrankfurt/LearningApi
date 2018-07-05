@@ -11,9 +11,9 @@ using Xunit;
 
 namespace test.RestrictedBolzmannMachine2
 {
-    public class RBM_001CreatingDataSet
+    public class RBMCreatingDataSet
     {
-        static RBM_001CreatingDataSet()
+        static RBMCreatingDataSet()
         {
 
         }

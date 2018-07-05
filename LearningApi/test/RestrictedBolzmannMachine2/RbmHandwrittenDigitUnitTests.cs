@@ -44,14 +44,13 @@ namespace test.RestrictedBolzmannMachine2
         [InlineData(1, 4096, 10)]
         [InlineData(2, 4096, 10)]
         //[InlineData(20, 4096, 10)]
-        public void DigitRecognitionTest(int iterations,int visNodes, int hidNodes)
+        public void DigitRecognitionTest(int iterations, int visNodes, int hidNodes)
         {
             LearningApi api = new LearningApi(this.getDescriptorForDigits());
 
             // Initialize data provider
             api.UseCsvDataProvider(Path.Combine(Directory.GetCurrentDirectory(), @"RestrictedBolzmannMachine2\DigitDataset.csv"), ',', false, 0);
             api.UseDefaultDataMapper();
-            //api1.UseRbm(0.2, 100, 784, 392);
             //api.UseRbm(0.2, 1, 4096, 10);
             api.UseRbm(0.2, iterations, visNodes, hidNodes);
 
@@ -66,68 +65,64 @@ namespace test.RestrictedBolzmannMachine2
             writeOutputMatrix(iterations, visNodes, hidNodes, predictedData, testData);
         }
 
-        private static void writeOutputMatrix(int iterations, int visNodes, int hidNodes, double[][] predictedData, double[][] testData, int lineLength = 65)
+        private static void writeOutputMatrix(int iterations, int visNodes, int hidNodes, double[][] predictedData, double[][] testData, int lineLength = 64)
         {
             TextWriter tw = new StreamWriter($"PredictedDigit_I{iterations}_V{visNodes}_H{hidNodes}.txt");
-
-            //you need two loops - 1. To loop through alle out predicted nodes. 2. To loop through every single node
-            int k = 1;
+            int initialRowLength = predictedData[0].Length;
+            int finalRowCount = predictedData.Length * (initialRowLength / lineLength);
+            double[,] predictedDataLines = new double[finalRowCount, lineLength];
+            double[,] testDataLines = new double[finalRowCount, lineLength];
             for (int i = 0; i < predictedData.Length; i++)
             {
-                tw.WriteLine();
-                tw.WriteLine($"Image {i} Prediction");
-
-                for (int j = 0; j < testData[i].Length; j++)
+                int col = 0;
+                for(int j = 0; j < lineLength; j++)
                 {
-                    if ((k % lineLength) == 0)
-                    { 
-                        k = 1;
-
-                        tw.Write("\t\t\t");
-
-                        for (int n = 0; n < predictedData[i].Length; j++)
-                        {
-                            if ((k % lineLength) == 0)
-                            {
-                                tw.WriteLine();
-                                k = 1;
-                            }
-
-                            tw.Write($"{predictedData[i][n]}");
-                            k++;
-                        }
+                    int row = i * lineLength + j;
+                
+                    for (int z = 0; z < lineLength; z++) 
+                    {
+                        //int col = row * lineLength + z;
+                        
+                        predictedDataLines[row, z] = predictedData[i][col];
+                        testDataLines[row, z] = testData[i][col];
+                        col = col + 1;
                     }
 
-                    tw.Write($"{testData[i][j]}");
-                    k++;
                 }
+            }
 
+            tw.WriteLine();
+            tw.Write("\t\t\t\t\t\t Predicted Image \t\t\t\t\t\t\t\t\t\t\t\t\t\t\t Original Image");
+            tw.WriteLine();
+            int k = 1;
 
-
-                if ((k % lineLength) == 0)
+            for(var i = 0; i < finalRowCount; i++)
+            {
+                if(k == 65)
                 {
+                    tw.WriteLine();
+                    tw.Write("New Image");
                     tw.WriteLine();
                     k = 1;
                 }
-
-
-                /*
-                foreach (var item in predictedData[i])
+                for(int j = 0; j <64; j++)
                 {
-                    if ((k % lineLength) == 0)
-                    {
-                        tw.WriteLine();
-                        k = 1;
-                    }
-                    tw.Write(item);
-                    k++;
-                }*/
-
+                    tw.Write(testDataLines[i, j]);
+                }
+                tw.Write("\t\t\t\t");
+                for (int j = 0; j < 64; j++)
+                {
+                    tw.Write(predictedDataLines[i, j]);
+                }
                 tw.WriteLine();
+                k++;
             }
+
+            tw.WriteLine();
             tw.Close();
         }
-
+        
+        
         private static double[][] readData(string path)
         {
             List<double[]> data = new List<double[]>();
