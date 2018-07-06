@@ -41,8 +41,8 @@ namespace test.RestrictedBolzmannMachine2
         /// TODO...
         /// </summary>
         [Theory]
-        [InlineData(1, 4096, 10)]
-        [InlineData(2, 4096, 10)]
+        //[InlineData(100, 4096, 60)]
+        [InlineData(100, 4096, 40)]
         //[InlineData(20, 4096, 10)]
         public void DigitRecognitionTest(int iterations, int visNodes, int hidNodes)
         {
@@ -81,8 +81,7 @@ namespace test.RestrictedBolzmannMachine2
                 
                     for (int z = 0; z < lineLength; z++) 
                     {
-                        //int col = row * lineLength + z;
-                        
+                        //int col = row * lineLength + z;                    
                         predictedDataLines[row, z] = predictedData[i][col];
                         testDataLines[row, z] = testData[i][col];
                         col = col + 1;
@@ -105,12 +104,12 @@ namespace test.RestrictedBolzmannMachine2
                     tw.WriteLine();
                     k = 1;
                 }
-                for(int j = 0; j <64; j++)
+                for(int j = 0; j <lineLength; j++)
                 {
                     tw.Write(testDataLines[i, j]);
                 }
                 tw.Write("\t\t\t\t");
-                for (int j = 0; j < 64; j++)
+                for (int j = 0; j < lineLength; j++)
                 {
                     tw.Write(predictedDataLines[i, j]);
                 }
