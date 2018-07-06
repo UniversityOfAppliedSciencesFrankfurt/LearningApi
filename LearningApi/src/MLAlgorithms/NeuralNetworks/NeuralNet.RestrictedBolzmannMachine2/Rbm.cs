@@ -3,6 +3,7 @@ using System;
 using LearningFoundation;
 using System.Diagnostics;
 using System.IO;
+using System.Collections.Generic;
 
 //Recommendation: https://github.com/echen/restricted-boltzmann-machines
 //DATASET: https://grouplens.org/datasets/movielens/
@@ -238,6 +239,10 @@ namespace NeuralNet.RestrictedBolzmannMachine2
                     ++epoch;
                 }
             }
+
+            score.HiddenValues = new List<double>(this.hidValues).ToArray();
+            score.HiddenBisases = new List<double>(this.hidBiases).ToArray();
+            score.Weights = new List<double[]>(this.vhWeights).ToArray();
 
             return score;
         }
