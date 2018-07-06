@@ -42,17 +42,17 @@ namespace test.RestrictedBolzmannMachine2
         /// </summary>
         [Theory]
         [InlineData(1, 4096, 10)]
-        [InlineData(2, 4096, 10)]
-        [InlineData(1, 4096, 20)]
-        [InlineData(2, 4096, 20)]
-        [InlineData(10, 4096, 10)]
-        [InlineData(20, 4096, 10)]
-        [InlineData(30, 4096, 10)]
-        [InlineData(50, 4096, 10)]
-        [InlineData(10, 4096, 20)]
-        [InlineData(20, 4096, 20)]
-        [InlineData(30, 4096, 20)]
-        [InlineData(50, 4096, 20)]
+        //[InlineData(2, 4096, 10)]
+        //[InlineData(1, 4096, 20)]
+        //[InlineData(2, 4096, 20)]
+        //[InlineData(10, 4096, 10)]
+        //[InlineData(20, 4096, 10)]
+        //[InlineData(30, 4096, 10)]
+        //[InlineData(50, 4096, 10)]
+        //[InlineData(10, 4096, 20)]
+        //[InlineData(20, 4096, 20)]
+        //[InlineData(30, 4096, 20)]
+        //[InlineData(50, 4096, 20)]
         //[InlineData(20, 4096, 10)]
         public void DigitRecognitionTest(int iterations, int visNodes, int hidNodes)
         {
@@ -64,7 +64,7 @@ namespace test.RestrictedBolzmannMachine2
             //api.UseRbm(0.2, 1, 4096, 10);
             api.UseRbm(0.2, iterations, visNodes, hidNodes);
 
-            RbmResult score = api.Run() as RbmResult;
+            RbmScore score = api.Run() as RbmScore;
 
             var testData = readData(Path.Combine(Directory.GetCurrentDirectory(), @"RestrictedBolzmannMachine2\DigitTest.csv"));
 
