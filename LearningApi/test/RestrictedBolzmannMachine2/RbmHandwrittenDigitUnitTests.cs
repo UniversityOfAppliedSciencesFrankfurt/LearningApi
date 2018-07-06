@@ -41,8 +41,18 @@ namespace test.RestrictedBolzmannMachine2
         /// TODO...
         /// </summary>
         [Theory]
-        //[InlineData(100, 4096, 60)]
-        [InlineData(100, 4096, 40)]
+        [InlineData(1, 4096, 10)]
+        [InlineData(2, 4096, 10)]
+        [InlineData(1, 4096, 20)]
+        [InlineData(2, 4096, 20)]
+        [InlineData(10, 4096, 10)]
+        [InlineData(20, 4096, 10)]
+        [InlineData(30, 4096, 10)]
+        [InlineData(50, 4096, 10)]
+        [InlineData(10, 4096, 20)]
+        [InlineData(20, 4096, 20)]
+        [InlineData(30, 4096, 20)]
+        [InlineData(50, 4096, 20)]
         //[InlineData(20, 4096, 10)]
         public void DigitRecognitionTest(int iterations, int visNodes, int hidNodes)
         {
