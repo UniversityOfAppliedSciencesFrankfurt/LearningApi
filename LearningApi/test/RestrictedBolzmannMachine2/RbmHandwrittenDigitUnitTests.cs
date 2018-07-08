@@ -75,6 +75,33 @@ namespace test.RestrictedBolzmannMachine2
             writeOutputMatrix(iterations, visNodes, hidNodes, predictedData, testData);
         }
 
+
+
+        /// <summary>
+        /// TODO...
+        /// </summary>
+        [Theory]
+        [InlineData(400, 4096, 1)]       
+        public void DigitEncodingTest(int iterations, int visNodes, int hidNodes)
+        {
+            LearningApi api = new LearningApi(this.getDescriptorForDigits());
+
+            // Initialize data provider
+            api.UseCsvDataProvider(Path.Combine(Directory.GetCurrentDirectory(), @"RestrictedBolzmannMachine2\DigitDataset.csv"), ',', false, 0);
+            api.UseDefaultDataMapper();
+            api.UseRbm(0.2, iterations, visNodes, hidNodes);
+
+            RbmScore score = api.Run() as RbmScore;
+
+            var testData = readData(Path.Combine(Directory.GetCurrentDirectory(), @"RestrictedBolzmannMachine2\DigitTest.csv"));
+
+            var result = api.Algorithm.Predict(testData, api.Context);
+
+            var predictedData = ((RbmResult)result).VisibleNodesPredictions;
+
+            writeOutputMatrix(iterations, visNodes, hidNodes, predictedData, testData);
+        }
+
         private static void writeOutputMatrix(int iterations, int visNodes, int hidNodes, double[][] predictedData, double[][] testData, int lineLength = 64)
         {
             TextWriter tw = new StreamWriter($"PredictedDigit_I{iterations}_V{visNodes}_H{hidNodes}.txt");

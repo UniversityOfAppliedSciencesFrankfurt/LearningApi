@@ -28,7 +28,8 @@ namespace test.MLPerceptron
         }
 
         /// <summary>
-        /// UnitTestOne - The first unit test consists of non linear set of data pairs between 0 and 1, that are classified into two groups, 0 and 1
+        /// UnitTestOne - The first unit test consists of non linear set of data pairs between 0 and 1,
+        /// that are classified into two groups, 0 and 1.s
         /// </summary>
         [Fact]
         public void UnitTestOne()
@@ -162,18 +163,37 @@ namespace test.MLPerceptron
 
                     int expectedResults = 0;
 
+                    Debug.WriteLine("\r\nTraining completed.");
+                    Debug.WriteLine("-------------------------------------------");
+                    Debug.WriteLine($"Testing {lineCountTestData-1} samples.");
+
                     // Check if the test data has been correctly classified by the neural network
                     for (int i = 0; i < lineCountTestData - 1; i++)
-                    {
+                    {                       
+                        Debug.WriteLine("");
+
                         for (int j = 0; j < numberOfOutputs; j++)
                         {
                             //Assert.True(testData[i][(testData[i].Length - numberOfOutputs) + j] == (result[i * numberOfOutputs + j] >= 0.5 ? 1 : 0));
                             if (testData[i][(testData[i].Length - numberOfOutputs) + j] == (result[i * numberOfOutputs + j] >= 0.5 ? 1 : 0))
                                 expectedResults++;
-                        }
+
+                            Debug.Write($"{i.ToString("D2")} - ");
+
+                            for (int k = 0; k < api.Context.DataDescriptor.Features.Length; k++)
+                            {
+                                Debug.Write($"[{testData[i][k]}] ");
+                            }
+
+                            Debug.Write("\t\t");
+                            Debug.Write($"Expected: {testData[i][(testData[i].Length - numberOfOutputs) + j]} - Predicted: {testData[i][(testData[i].Length - numberOfOutputs) + j]} - Result: {testData[i][(testData[i].Length - numberOfOutputs) + j] == (result[i * numberOfOutputs + j] >= 0.5 ? 1 : 0)} --\t\t");
+                        }                        
                     }
 
-                    float loss = (float)expectedResults / (float)numberOfOutputs / (float)testData.Length;
+                    float accuracy = (float)expectedResults / (float)numberOfOutputs / (float)testData.Length;
+
+                    Debug.WriteLine("-------------------------------------------");
+                    Debug.WriteLine($"Accuracy: {accuracy*100}%");
                 }
             }
         }
@@ -441,7 +461,8 @@ namespace test.MLPerceptron
         }
 
         /// <summary>
-        /// This test case uses the German Dataset as the training dataset. This dataset classifies people described by a set of attributes as good or bad credit risks
+        /// This test case uses the German Dataset as the training dataset for credit prediction.
+        /// It classifies people described by a set of attributes as good or bad for bank regarding the credit risk.
         /// </summary>
         [Fact]
         public void UnitTestCreditApproval()
