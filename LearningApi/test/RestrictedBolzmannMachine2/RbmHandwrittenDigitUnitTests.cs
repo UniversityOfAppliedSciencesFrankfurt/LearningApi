@@ -41,7 +41,7 @@ namespace test.RestrictedBolzmannMachine2
         /// TODO...
         /// </summary>
         [Theory]
-        [InlineData(400, 4096, 10)]
+        [InlineData(1, 4096, 10)]
         //[InlineData(150, 4096, 10)]
         //[InlineData(1, 4096, 20)]
         //[InlineData(2, 4096, 20)]
@@ -59,14 +59,33 @@ namespace test.RestrictedBolzmannMachine2
             LearningApi api = new LearningApi(this.getDescriptorForDigits());
 
             // Initialize data provider
-            api.UseCsvDataProvider(Path.Combine(Directory.GetCurrentDirectory(), @"RestrictedBolzmannMachine2\DigitDataset.csv"), ',', false, 0);
+            api.UseCsvDataProvider(Path.Combine(Directory.GetCurrentDirectory(), @"RestrictedBolzmannMachine2\Data\DigitDataset.csv"), ',', false, 0);
             api.UseDefaultDataMapper();
             //api.UseRbm(0.2, 1, 4096, 10);
             api.UseRbm(0.2, iterations, visNodes, hidNodes);
 
             RbmScore score = api.Run() as RbmScore;
 
-            var testData = readData(Path.Combine(Directory.GetCurrentDirectory(), @"RestrictedBolzmannMachine2\DigitTest.csv"));
+            var hiddenNodes = score.HiddenValues;
+            var hiddenWeight = score.HiddenBisases;
+
+
+            double[] learnedFeatures = new double[hidNodes];
+            double[] hiddenWeights = new double[hidNodes];
+            for(int i= 0; i<hidNodes; i++)
+            {
+                learnedFeatures[i] = hiddenNodes[i];
+                hiddenWeights[i] = hiddenWeight[i];
+            }
+
+            StreamWriter tw = new StreamWriter($"PredictedDigit_I{iterations}_V{visNodes}_H{hidNodes}_learnedbias.txt");
+            foreach (var item in score.HiddenBisases)
+            {
+                tw.WriteLine(item);
+            }
+            tw.Close();
+
+            var testData = readData(Path.Combine(Directory.GetCurrentDirectory(), @"RestrictedBolzmannMachine2\Data\DigitTest.csv"));
 
             var result = api.Algorithm.Predict(testData, api.Context);
 
@@ -118,8 +137,7 @@ namespace test.RestrictedBolzmannMachine2
                 
                     for (int z = 0; z < lineLength; z++) 
                     {
-                        //int col = row * lineLength + z;
-                        
+                        //int col = row * lineLength + z;                    
                         predictedDataLines[row, z] = predictedData[i][col];
                         testDataLines[row, z] = testData[i][col];
                         col = col + 1;
@@ -142,12 +160,12 @@ namespace test.RestrictedBolzmannMachine2
                     tw.WriteLine();
                     k = 1;
                 }
-                for(int j = 0; j <64; j++)
+                for(int j = 0; j <lineLength; j++)
                 {
                     tw.Write(testDataLines[i, j]);
                 }
                 tw.Write("\t\t\t\t");
-                for (int j = 0; j < 64; j++)
+                for (int j = 0; j < lineLength; j++)
                 {
                     tw.Write(predictedDataLines[i, j]);
                 }
