@@ -41,8 +41,8 @@ namespace test.RestrictedBolzmannMachine2
         /// TODO...
         /// </summary>
         [Theory]
-        [InlineData(1, 4096, 10)]
-        //[InlineData(2, 4096, 10)]
+        [InlineData(400, 4096, 10)]
+        //[InlineData(150, 4096, 10)]
         //[InlineData(1, 4096, 20)]
         //[InlineData(2, 4096, 20)]
         //[InlineData(10, 4096, 10)]
@@ -99,7 +99,7 @@ namespace test.RestrictedBolzmannMachine2
 
                 }
             }
-
+        
             tw.WriteLine();
             tw.Write("\t\t\t\t\t\t Predicted Image \t\t\t\t\t\t\t\t\t\t\t\t\t\t\t Original Image");
             tw.WriteLine();
