@@ -224,3 +224,4 @@ LearningApi/test/obj/*
 /LearningApi/src/MLAlgorithms/LogisticRegression/bin/Debug/netstandard1.2
 /LearningApi/packages/ZedGraph.5.1.7
 /LearningApi/MouseGestureRecognition/.vs/MouseGestureRecognition/v15/Server/sqlite3
+/.vs

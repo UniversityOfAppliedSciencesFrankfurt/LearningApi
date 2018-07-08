@@ -1,6 +1,7 @@
-﻿using AnomDetect.KMeans.FunctionRecognition;
+﻿
 using LearningFoundation;
 using LearningFoundation.Clustering.KMeans;
+using LearningFoundation.Clustering.KMeans.FunctionRecognition;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -64,7 +65,7 @@ namespace MouseGestureRecognition
         {
             double[][] data = getDataFromPoints(points);
 
-            var predictionResult = m_LearningApi.Algorithm.Predict(data, null) as KMeansFuncionRecognitionResult;
+            var predictionResult = m_LearningApi.Algorithm.Predict(data, null) as KMeansFunctionRecognitionResult;
 
             return predictionResult.Result;
         }
