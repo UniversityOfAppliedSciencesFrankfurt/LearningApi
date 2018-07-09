@@ -42,7 +42,7 @@ namespace test.RestrictedBolzmannMachine2
         /// TODO...
         /// </summary>
         [Theory]
-        [InlineData(1, 4096, 50)]
+        [InlineData(1, 4096, 10)]
         //[InlineData(150, 4096, 10)]
         //[InlineData(1, 4096, 20)]
         //[InlineData(2, 4096, 20)]
