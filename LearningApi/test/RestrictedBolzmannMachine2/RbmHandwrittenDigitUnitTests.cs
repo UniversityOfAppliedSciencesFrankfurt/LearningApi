@@ -66,27 +66,6 @@ namespace test.RestrictedBolzmannMachine2
 
             RbmScore score = api.Run() as RbmScore;
 
-            //var hiddenNodes = score.HiddenValues;
-            //var hiddenWeight = score.HiddenBisases;
-
-
-            //double[] learnedFeatures = new double[hidNodes];
-            //double[] hiddenWeights = new double[hidNodes];
-            //for(int i= 0; i<hidNodes; i++)
-            //{
-            //    learnedFeatures[i] = hiddenNodes[i];
-            //    hiddenWeights[i] = hiddenWeight[i];
-            //}
-
-            //StreamWriter tw = new StreamWriter($"PredictedDigit_I{iterations}_V{visNodes}_H{hidNodes}_learnedbias.txt");
-            //foreach (var item in score.HiddenBisases)
-            //{
-            //    tw.WriteLine(item);
-            //}
-            //tw.Close();
-
-            var testData = readData(Path.Combine(Directory.GetCurrentDirectory(), @"RestrictedBolzmannMachine2\Data\DigitTest.csv"));
-
             var hiddenNodes = score.HiddenValues;
             var hiddenWeight = score.HiddenBisases;
 
@@ -105,6 +84,8 @@ namespace test.RestrictedBolzmannMachine2
                 tw.WriteLine(item);
             }
             tw.Close();
+
+            var testData = readData(Path.Combine(Directory.GetCurrentDirectory(), @"RestrictedBolzmannMachine2\Data\DigitTest.csv"));            
 
             var result = api.Algorithm.Predict(testData, api.Context);
 
