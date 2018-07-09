@@ -15,7 +15,9 @@ using ImageBinarizer;
 namespace test.MLPerceptron
 {
     /// <summary>
-    /// Class MLPerceptronUnitTests contains the unit test cases to test the ML Perceptron algorithm
+    /// Class MLPerceptronUnitTests contains the unit test cases to test the ML Perceptron algorithm.
+    /// NOTE:
+    /// Tests provided here do not generate good prediction.
     /// </summary>
     public class MLPImgRecognitionUnitTests
     {
