@@ -21,7 +21,7 @@ SOM includes neurons in grid, which gradually adapt to the intrinsic shape of th
 **Step 5**: Update the learning rate and BMU radius, before repeating Steps 1 to 4. Iterate these steps until positions of neurons have been stabi-lized.
 
 A list of food items are taken in a .csv file and it is name as Food.csv. this file is sent to the algorithm to create pattern, The code snippet is given below: 
-
+~~~ csharp
 	```//code vomited for simplicity 
 	StreamReader reader = File.OpenText(path + "\\SelfOrganizingMap\\Food.csv");
                 //<Summary	>Ignore first line.
@@ -43,5 +43,6 @@ A list of food items are taken in a .csv file and it is name as Food.csv. this f
  	 });
             api.AddModule(new Map(3, 10, 0.000001));
             var r = api.Run() as Neuron[];```
+~~~
 
-Link to the TestCase :https://github.com/UniversityOfAppliedSciencesFrankfurt/LearningApi/tree/master/LearningApi/test/SelfOrganizingMap
+##Link to the TestCase :https://github.com/UniversityOfAppliedSciencesFrankfurt/LearningApi/tree/master/LearningApi/test/SelfOrganizingMap
