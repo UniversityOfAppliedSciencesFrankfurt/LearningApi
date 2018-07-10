@@ -2,7 +2,7 @@
 
 A self- organizing map is a clustering technique to help to uncover catego-ries in large datasets. It is a special type of unsupervised neural net-works, where neurons are arranged in a single and 2-dimentional grid, which are arranged in the shape of rectangles or hexagons. 
 Through multiple iterations, neurons in the grid will gradually join to-gether around the areas with high density of data points. So, the areas with many neurons will form a cluster in the data. As the neurons move, they inadequately bend and twist the grid to more closely influence the overall shape of the data. 
-![alt text](https://raw.githubusercontent.com/username/projectname/branch/path/to/img.png)
+
 ## How does it work :
 SOM includes neurons in grid, which gradually adapt to the intrinsic shape of the data. The result allows visualizing data points and identifying clusters in a lower dimension. 
 ### SOM follows the below steps in iterative process:
@@ -20,8 +20,9 @@ SOM includes neurons in grid, which gradually adapt to the intrinsic shape of th
 
 A list of food items are taken in a .csv file and it is name as Food.csv. this file is sent to the algorithm to create pattern, The code snippet is given below: 
 
+	```//code vomited for simplicity 
 StreamReader reader = File.OpenText(path + "\\SelfOrganizingMap\\Food.csv");
-                ///<Summary>Ignore first line.
+                //<Summary	>Ignore first line.
                 reader.ReadLine();
                 while (!reader.EndOfStream)
                 {
@@ -39,6 +40,6 @@ StreamReader reader = File.OpenText(path + "\\SelfOrganizingMap\\Food.csv");
                 return patterns;
   });
             api.AddModule(new Map(3, 10, 0.000001));
-            var r = api.Run() as Neuron[];
+            var r = api.Run() as Neuron[];```
 
             
