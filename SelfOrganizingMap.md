@@ -44,4 +44,4 @@ A list of food items are taken in a .csv file and it is name as Food.csv. this f
             api.AddModule(new Map(3, 10, 0.000001));
             var r = api.Run() as Neuron[];```
 
-            
+Link to the TestCase :https://github.com/UniversityOfAppliedSciencesFrankfurt/LearningApi/tree/master/LearningApi/test/SelfOrganizingMap
