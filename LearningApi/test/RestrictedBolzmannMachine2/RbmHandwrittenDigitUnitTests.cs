@@ -11,6 +11,7 @@ using Xunit;
 using LearningFoundation.DataMappers;
 using System.Globalization;
 using test.RestrictedBolzmannMachine2;
+using LearningFoundation.Arrays;
 
 namespace test.RestrictedBolzmannMachine2
 {
@@ -86,15 +87,15 @@ namespace test.RestrictedBolzmannMachine2
             }
             tw.Close();
 
-            var testData = readData(Path.Combine(Directory.GetCurrentDirectory(), @"RestrictedBolzmannMachine2\Data\DigitTest.csv"));            
-            
+            var testData = readData(Path.Combine(Directory.GetCurrentDirectory(), @"RestrictedBolzmannMachine2\Data\DigitTest.csv"));
+
             var result = api.Algorithm.Predict(testData, api.Context);
 
             var predictedData = ((RbmResult)result).VisibleNodesPredictions;
 
-            RBMHammingDistance r = new RBMHammingDistance();
+            var acc = testData.GetHammingDistance(predictedData);
 
-            r.hammingDistance(testData, predictedData);
+            writeResult(iterations, visNodes, hidNodes, acc);
 
             writeOutputMatrix(iterations, visNodes, hidNodes, predictedData, testData);
         }
@@ -105,7 +106,7 @@ namespace test.RestrictedBolzmannMachine2
         /// TODO...
         /// </summary>
         [Theory]
-        [InlineData(400, 4096, 1)]       
+        [InlineData(400, 4096, 1)]
         public void DigitEncodingTest(int iterations, int visNodes, int hidNodes)
         {
             LearningApi api = new LearningApi(this.getDescriptorForDigits());
@@ -123,9 +124,26 @@ namespace test.RestrictedBolzmannMachine2
 
             var predictedData = ((RbmResult)result).VisibleNodesPredictions;
 
-
-
             writeOutputMatrix(iterations, visNodes, hidNodes, predictedData, testData);
+        }
+
+
+        private static void writeResult(int iterations, int visNodes, int hidNodes, double[] accuracy)
+        {
+            double sum = 0;
+
+            StreamWriter tw = new StreamWriter($"Result_I{iterations}_V{visNodes}_H{hidNodes}_ACC.txt");
+            {
+                tw.WriteLine($"Digit;Iterations;VisibleNodes,HiddenNodes;Accuracy");
+                for (int i = 0; i < accuracy.Length; i++)
+                {
+                    tw.WriteLine($"{i};{iterations};{visNodes};{hidNodes};{accuracy}");
+                    sum += accuracy[i];
+                }
+
+                // Here we write out average accuracy.
+                tw.WriteLine($"{accuracy.Length};{iterations};{visNodes};{hidNodes};{sum/accuracy.Length}");
+            }
         }
 
         private static void writeOutputMatrix(int iterations, int visNodes, int hidNodes, double[][] predictedData, double[][] testData, int lineLength = 64)
@@ -138,11 +156,11 @@ namespace test.RestrictedBolzmannMachine2
             for (int i = 0; i < predictedData.Length; i++)
             {
                 int col = 0;
-                for(int j = 0; j < lineLength; j++)
+                for (int j = 0; j < lineLength; j++)
                 {
                     int row = i * lineLength + j;
-                
-                    for (int z = 0; z < lineLength; z++) 
+
+                    for (int z = 0; z < lineLength; z++)
                     {
                         //int col = row * lineLength + z;                    
                         predictedDataLines[row, z] = predictedData[i][col];
@@ -152,22 +170,22 @@ namespace test.RestrictedBolzmannMachine2
 
                 }
             }
-        
+
             tw.WriteLine();
             tw.Write("\t\t\t\t\t\t Predicted Image \t\t\t\t\t\t\t\t\t\t\t\t\t\t\t Original Image");
             tw.WriteLine();
             int k = 1;
 
-            for(var i = 0; i < finalRowCount; i++)
+            for (var i = 0; i < finalRowCount; i++)
             {
-                if(k == 65)
+                if (k == 65)
                 {
                     tw.WriteLine();
                     tw.Write("New Image");
                     tw.WriteLine();
                     k = 1;
                 }
-                for(int j = 0; j <lineLength; j++)
+                for (int j = 0; j < lineLength; j++)
                 {
                     tw.Write(testDataLines[i, j]);
                 }
@@ -183,8 +201,8 @@ namespace test.RestrictedBolzmannMachine2
             tw.WriteLine();
             tw.Close();
         }
-        
-        
+
+
         private static double[][] readData(string path)
         {
             List<double[]> data = new List<double[]>();
