@@ -10,6 +10,7 @@ using LearningFoundation;
 using Xunit;
 using LearningFoundation.DataMappers;
 using System.Globalization;
+using test.RestrictedBolzmannMachine2;
 
 namespace test.RestrictedBolzmannMachine2
 {
@@ -72,7 +73,7 @@ namespace test.RestrictedBolzmannMachine2
 
             double[] learnedFeatures = new double[hidNodes];
             double[] hiddenWeights = new double[hidNodes];
-            for(int i= 0; i<hidNodes; i++)
+            for (int i = 0; i < hidNodes; i++)
             {
                 learnedFeatures[i] = hiddenNodes[i];
                 hiddenWeights[i] = hiddenWeight[i];
@@ -85,11 +86,15 @@ namespace test.RestrictedBolzmannMachine2
             }
             tw.Close();
 
-            var testData = readData(Path.Combine(Directory.GetCurrentDirectory(), @"RestrictedBolzmannMachine2\Data\DigitTest.csv"));
-
+            var testData = readData(Path.Combine(Directory.GetCurrentDirectory(), @"RestrictedBolzmannMachine2\Data\DigitTest.csv"));            
+            
             var result = api.Algorithm.Predict(testData, api.Context);
 
             var predictedData = ((RbmResult)result).VisibleNodesPredictions;
+
+            RBMHammingDistance r = new RBMHammingDistance();
+
+            r.hammingDistance(testData, predictedData);
 
             writeOutputMatrix(iterations, visNodes, hidNodes, predictedData, testData);
         }
@@ -117,6 +122,8 @@ namespace test.RestrictedBolzmannMachine2
             var result = api.Algorithm.Predict(testData, api.Context);
 
             var predictedData = ((RbmResult)result).VisibleNodesPredictions;
+
+
 
             writeOutputMatrix(iterations, visNodes, hidNodes, predictedData, testData);
         }
