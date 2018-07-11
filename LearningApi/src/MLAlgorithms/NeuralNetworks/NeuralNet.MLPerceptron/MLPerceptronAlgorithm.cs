@@ -145,7 +145,7 @@ namespace MLPerceptron
 
                 Debug.WriteLine($"Loss: {score.Loss}, Lastloss: {lastLoss}, Delta: {deltaLoss}");
 
-                lastLoss = deltaLoss;
+                lastLoss = score.Loss;
             }
 
             ctx.Score = score;
