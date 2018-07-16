@@ -23,7 +23,17 @@ namespace NeuralNet.RestrictedBolzmannMachine2
 
         {
             var alg = new Rbm(numVisible, numHidden, iterations, learningRate/*, bool writeLossToFile = false*/);
-            api.AddModule(alg, "Rbm");
+            api.AddModule(alg, $"Rbm_{Guid.NewGuid()}");
+            return api;
+        }
+
+       public static LearningApi UseDeepRbm(this LearningApi api,
+       double learningRate, int iterations, int[] layers,
+            IActivationFunction activationFnc = null)
+
+        {
+            var alg = new DeepRbm(layers, iterations, learningRate/*, bool writeLossToFile = false*/);
+            api.AddModule(alg, $"Rbm_{Guid.NewGuid()}");
             return api;
         }
     }

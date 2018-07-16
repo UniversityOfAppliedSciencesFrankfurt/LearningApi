@@ -17,26 +17,15 @@ using ImageBinarizer;
 namespace test.RestrictedBolzmannMachine
 {
 
-    public class RbmUnitTests
+    public class DeepRbmUnitTests
     {
 
-        static RbmUnitTests()
+        static DeepRbmUnitTests()
         {
             
         }
 
-        [Fact]
-        public void TestBinarization()
-        {
-            var images = Directory.GetFiles(Path.Combine(AppContext.BaseDirectory, "RestrictedBolzmannMachine2\\TrainingImages"));
-
-            foreach (var item in images)
-            {
-                appendImageBinary(item, "binarized.txt");
-            }
-
-        }
-
+       
         /// <summary>
         /// RBM is not supervised algorithm. This is why we do not have a label.
         /// </summary>
@@ -127,13 +116,11 @@ namespace test.RestrictedBolzmannMachine
             });
 
             
-            api.UseRbm(0.01, 1000, 6,3);
+            api.UseDeepRbm(0.01, 1000, new[] { 6, 3 });
 
-            RbmScore score = api.Run() as RbmScore;
+            RbmDeepScore score = api.Run() as RbmDeepScore;
 
             double[][] testData = new double[4][];
-
-            Assert.True(score.Loss < 1.0);
 
             testData[0] = new double[] { 1, 1, 0, 0, 0, 0 };
             testData[1] = new double[] { 0, 0, 0, 0, 1, 1 };
@@ -181,7 +168,8 @@ namespace test.RestrictedBolzmannMachine
 
 
             api.UseRbm(0.01, 1000, 6, 4);
-           
+            api.UseRbm(0.01, 1000, 4, 3);
+
             RbmScore score = api.Run() as RbmScore;
 
             double[][] testData = new double[4][];

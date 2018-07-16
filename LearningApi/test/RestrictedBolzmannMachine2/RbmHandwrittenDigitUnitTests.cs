@@ -12,6 +12,7 @@ using LearningFoundation.DataMappers;
 using System.Globalization;
 using test.RestrictedBolzmannMachine2;
 using LearningFoundation.Arrays;
+using System.Diagnostics;
 
 namespace test.RestrictedBolzmannMachine2
 {
@@ -44,6 +45,8 @@ namespace test.RestrictedBolzmannMachine2
         /// </summary>
         [Theory]
         [InlineData(1, 4096, 10)]
+        [InlineData(10, 4096, 10)]
+        //[InlineData(1, 4096, 200)]
         //[InlineData(150, 4096, 10)]
         //[InlineData(1, 4096, 20)]
         //[InlineData(2, 4096, 20)]
@@ -58,6 +61,8 @@ namespace test.RestrictedBolzmannMachine2
         //[InlineData(20, 4096, 10)]
         public void DigitRecognitionTest(int iterations, int visNodes, int hidNodes)
         {
+            Debug.WriteLine($"{iterations}-{visNodes}-{hidNodes}");
+
             LearningApi api = new LearningApi(this.getDescriptorForDigits());
 
             // Initialize data provider
@@ -106,7 +111,7 @@ namespace test.RestrictedBolzmannMachine2
         /// TODO...
         /// </summary>
         [Theory]
-        [InlineData(400, 4096, 1)]
+        [InlineData(1, 4096, 1)]
         public void DigitEncodingTest(int iterations, int visNodes, int hidNodes)
         {
             LearningApi api = new LearningApi(this.getDescriptorForDigits());

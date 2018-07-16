@@ -54,7 +54,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DeltaRuleLearning", "src\ML
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NeuralNet.MLPerceptron", "src\MLAlgorithms\NeuralNetworks\NeuralNet.MLPerceptron\NeuralNet.MLPerceptron.csproj", "{32DA33B2-5C56-4F50-860C-269E61CA3DA5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ImageBinarizer", "ImageBinarizer\ImageBinarizer.csproj", "{74EC6681-115E-45E0-8813-E63283279092}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ImageBinarizer", "ImageBinarizer\ImageBinarizer.csproj", "{74EC6681-115E-45E0-8813-E63283279092}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
