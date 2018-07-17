@@ -110,7 +110,6 @@ namespace test.RestrictedBolzmannMachine2
 
 
 
-
         internal static void WriteDeepResult(int iterations, int[] layers, double[] accuracy, long executionTime)
         {
             double sum = 0;
@@ -120,70 +119,70 @@ namespace test.RestrictedBolzmannMachine2
                 tw.WriteLine($"Sample;Iterations;Accuracy; ExecutionTime={executionTime}");
                 for (int i = 0; i < accuracy.Length; i++)
                 {
-                    tw.WriteLine($"{i};{iterations};{visNodes};{hidNodes};{accuracy}");
+                    tw.WriteLine($"{i};{iterations};{accuracy[i]}");
                     sum += accuracy[i];
                 }
 
                 // Here we write out average accuracy.
                 tw.WriteLine($"{accuracy.Length};{iterations};{sum / accuracy.Length}");
             }
-            tw.Close();
         }
 
         internal static void WriteOutputMatrix(int iterations, int[] layers, double[][] predictedData, double[][] testData, int lineLength = 64)
         {
-            TextWriter tw = new StreamWriter($"PredictedDigit_I{iterations}_V{String.Join("_", layers)}.txt");
-            int initialRowLength = predictedData[0].Length;
-            int finalRowCount = predictedData.Length * (initialRowLength / lineLength);
-            double[,] predictedDataLines = new double[finalRowCount, lineLength];
-            double[,] testDataLines = new double[finalRowCount, lineLength];
-            for (int i = 0; i < predictedData.Length; i++)
+            using (TextWriter tw = new StreamWriter($"PredictedDigit_I{iterations}_V{String.Join("_", layers)}.txt"))
             {
-                int col = 0;
-                for (int j = 0; j < lineLength; j++)
+                int initialRowLength = predictedData[0].Length;
+                int finalRowCount = predictedData.Length * (initialRowLength / lineLength);
+                double[,] predictedDataLines = new double[finalRowCount, lineLength];
+                double[,] testDataLines = new double[finalRowCount, lineLength];
+                for (int i = 0; i < predictedData.Length; i++)
                 {
-                    int row = i * lineLength + j;
-
-                    for (int z = 0; z < lineLength; z++)
+                    int col = 0;
+                    for (int j = 0; j < lineLength; j++)
                     {
-                        //int col = row * lineLength + z;                    
-                        predictedDataLines[row, z] = predictedData[i][col];
-                        testDataLines[row, z] = testData[i][col];
-                        col = col + 1;
+                        int row = i * lineLength + j;
+
+                        for (int z = 0; z < lineLength; z++)
+                        {
+                            //int col = row * lineLength + z;                    
+                            predictedDataLines[row, z] = predictedData[i][col];
+                            testDataLines[row, z] = testData[i][col];
+                            col = col + 1;
+                        }
+
                     }
+                }
 
-                }
-            }
-
-            tw.WriteLine();
-            tw.Write("\t\t\t\t\t\t Predicted Image \t\t\t\t\t\t\t\t\t\t\t\t\t\t\t Original Image");
-            tw.WriteLine();
-            int k = 1;
-
-            for (var i = 0; i < finalRowCount; i++)
-            {
-                if (k == 65)
-                {
-                    tw.WriteLine();
-                    tw.Write("New Image");
-                    tw.WriteLine();
-                    k = 1;
-                }
-                for (int j = 0; j < lineLength; j++)
-                {
-                    tw.Write(testDataLines[i, j]);
-                }
-                tw.Write("\t\t\t\t");
-                for (int j = 0; j < lineLength; j++)
-                {
-                    tw.Write(predictedDataLines[i, j]);
-                }
                 tw.WriteLine();
-                k++;
-            }
+                tw.Write("\t\t\t\t\t\t Predicted Image \t\t\t\t\t\t\t\t\t\t\t\t\t\t\t Original Image");
+                tw.WriteLine();
+                int k = 1;
 
-            tw.WriteLine();
-            tw.Close();
+                for (var i = 0; i < finalRowCount; i++)
+                {
+                    if (k == 65)
+                    {
+                        tw.WriteLine();
+                        tw.Write("New Image");
+                        tw.WriteLine();
+                        k = 1;
+                    }
+                    for (int j = 0; j < lineLength; j++)
+                    {
+                        tw.Write(testDataLines[i, j]);
+                    }
+                    tw.Write("\t\t\t\t");
+                    for (int j = 0; j < lineLength; j++)
+                    {
+                        tw.Write(predictedDataLines[i, j]);
+                    }
+                    tw.WriteLine();
+                    k++;
+                }
+
+                tw.WriteLine();
+            }
         }
 
 
