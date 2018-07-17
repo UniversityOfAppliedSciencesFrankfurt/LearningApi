@@ -1,10 +1,7 @@
 ﻿using LearningFoundation;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using Xunit;
-using NeuralNet.Perceptron;
 using NeuralNet.RestrictedBolzmannMachine2;
 using System.IO;
 using LearningFoundation.DataProviders;
@@ -12,19 +9,16 @@ using LearningFoundation.DataMappers;
 using System.Diagnostics;
 using System.Drawing;
 using System.Text;
-using ImageBinarizer;
+using LearningFoundation.Arrays;
+using System.Threading;
 
-namespace test.RestrictedBolzmannMachine
+namespace test.RestrictedBolzmannMachine2
 {
-
+    /// <summary>
+    /// Tests for DeepRbm Algorithm.
+    /// </summary>
     public class DeepRbmUnitTests
     {
-
-        static DeepRbmUnitTests()
-        {
-            
-        }
-
        
         /// <summary>
         /// RBM is not supervised algorithm. This is why we do not have a label.
@@ -49,6 +43,7 @@ namespace test.RestrictedBolzmannMachine
             return des;
         }
  
+
         /// <summary>
         /// RBM is not supervised algorithm. This is why we do not have a label.
         /// </summary>
@@ -87,144 +82,48 @@ namespace test.RestrictedBolzmannMachine
         }
 
 
-        [Fact]
-        public void SimpleRBMTest()
+        /// <summary>
+        /// TODO...
+        /// </summary>
+        [Theory]
+        //[InlineData(1, 4096, new int[] { 4096, 250, 10 })]       
+        [InlineData(1, 0.2, new int[] { 4096, 10 })]
+        public void DigitRecognitionDeepTest(int iterations, double learningRate, int[] layers)
         {
-            LearningApi api = new LearningApi();
-            api.UseActionModule<object, double[][]>((notUsed, ctx) =>
-            {
-                const int maxSamples = 12;
-                ctx.DataDescriptor = getDescriptorForRbm_sample1();
-                double[][] data = new double[maxSamples][];
+            Debug.WriteLine($"{iterations}-{String.Join("", layers)}");
 
-                data[0] = new double[] { 1, 1, 0, 0, 0, 0 };  // A
-                data[1] = new double[] { 0, 0, 1, 1, 0, 0 };  // B
-                data[2] = new double[] { 0, 0, 0, 0, 1, 1 };  // C
-                
-                data[3] = new double[] { 1, 1, 0, 0, 0, 1 };  // noisy A
-                data[4] = new double[] { 0, 0, 1, 1, 0, 0 };  // BRt
-                data[5] = new double[] { 0, 0, 0, 0, 1, 1 };  // C
-                
-                data[6] = new double[] { 1, 0, 0, 0, 0, 0 };  // weak A
-                data[7] = new double[] { 0, 0, 1, 0, 0, 0 };  // weak B
-                data[8] = new double[] { 0, 0, 0, 0, 1, 0 };  // weak C
-                
-                data[9] = new double[] { 1, 1, 0, 1, 0, 0 };  // noisy A
-                data[10] = new double[] { 1, 0, 1, 1, 0, 0 };  // noisy B
-                data[11] = new double[] { 0, 0, 1, 0, 1, 1 };  // noisy C
-                return data;
-            });
+            LearningApi api = new LearningApi(RbmHandwrittenDigitUnitTests.GetDescriptorForDigits());
 
-            
-            api.UseDeepRbm(0.01, 1000, new[] { 6, 3 });
-
-            RbmDeepScore score = api.Run() as RbmDeepScore;
-
-            double[][] testData = new double[4][];
-
-            testData[0] = new double[] { 1, 1, 0, 0, 0, 0 };
-            testData[1] = new double[] { 0, 0, 0, 0, 1, 1 };
-            testData[2] = new double[] { 0, 1, 0, 0, 0, 0 };
-            testData[3] = new double[] { 0, 0, 0, 0, 1, 0 };
-
-            var result = api.Algorithm.Predict(testData, api.Context);
-
-            // NOT FINISHED.
-            //Assert.True(result[0] == 1);
-            //Assert.True(result[1] == 0);
-            //Assert.True(result[2] == 0);
-            //Assert.True(result[3] == 0);
-            //Assert.True(result[4] == 1);
-            //Assert.True(result[5] == 0);
-        }
-
-        [Fact]
-        public void SimpleRBMDeepTest()
-        {
-            LearningApi api = new LearningApi();
-            api.UseActionModule<object, double[][]>((notUsed, ctx) =>
-            {
-                const int maxSamples = 12;
-                ctx.DataDescriptor = getDescriptorForRbm_sample1();
-                double[][] data = new double[maxSamples][];
-
-                data[0] = new double[] { 1, 1, 0, 0, 0, 0 };  // A
-                data[1] = new double[] { 0, 0, 1, 1, 0, 0 };  // B
-                data[2] = new double[] { 0, 0, 0, 0, 1, 1 };  // C
-
-                data[3] = new double[] { 1, 1, 0, 0, 0, 1 };  // noisy A
-                data[4] = new double[] { 0, 0, 1, 1, 0, 0 };  // BRt
-                data[5] = new double[] { 0, 0, 0, 0, 1, 1 };  // C
-
-                data[6] = new double[] { 1, 0, 0, 0, 0, 0 };  // weak A
-                data[7] = new double[] { 0, 0, 1, 0, 0, 0 };  // weak B
-                data[8] = new double[] { 0, 0, 0, 0, 1, 0 };  // weak C
-
-                data[9] = new double[] { 1, 1, 0, 1, 0, 0 };  // noisy A
-                data[10] = new double[] { 1, 0, 1, 1, 0, 0 };  // noisy B
-                data[11] = new double[] { 0, 0, 1, 0, 1, 1 };  // noisy C
-                return data;
-            });
-
-
-            api.UseRbm(0.01, 1000, 6, 4);
-            api.UseRbm(0.01, 1000, 4, 3);
-
-            RbmScore score = api.Run() as RbmScore;
-
-            double[][] testData = new double[4][];
-
-            Assert.True(score.Loss < 1.0);
-
-            testData[0] = new double[] { 1, 1, 0, 0, 0, 0 };
-            testData[1] = new double[] { 0, 0, 0, 0, 1, 1 };
-            testData[2] = new double[] { 0, 1, 0, 0, 0, 0 };
-            testData[3] = new double[] { 0, 0, 0, 0, 1, 0 };
-
-            var result = api.Algorithm.Predict(testData, api.Context);
-
-            // NOT FINISHED.
-            //Assert.True(result[0] == 1);
-            //Assert.True(result[1] == 0);
-            //Assert.True(result[2] == 0);
-            //Assert.True(result[3] == 0);
-            //Assert.True(result[4] == 1);
-            //Assert.True(result[5] == 0);
-        }
-
-        [Fact]
-        public void RBMDataSample1Test()
-        {
-            var dataPath = System.IO.Path.Combine(Directory.GetCurrentDirectory(), @"RestrictedBolzmannMachine2\data\rbm_sample1.csv");
-
-            LearningApi api = new LearningApi(this.getDescriptorForRbm_sample1());
-           
             // Initialize data provider
-            api.UseCsvDataProvider(dataPath, ',', false, 1);
+            // TODO: Describe Digit Dataset.
+            api.UseCsvDataProvider(Path.Combine(Directory.GetCurrentDirectory(), @"RestrictedBolzmannMachine2\Data\DigitDataset.csv"), ',', false, 0);
             api.UseDefaultDataMapper();
-            api.UseRbm(0.2, 1000, 6, 3);
 
-            RbmResult score = api.Run() as RbmResult;
-           
-            double[][] testData = new double[4][];
+            api.UseDeepRbm(learningRate, iterations, layers);
 
-            testData[0] = new double[] { 1, 1, 0, 0, 0, 0 };
-            testData[1] = new double[] { 0, 0, 0, 0, 1, 1 };
-            testData[2] = new double[] { 0, 1, 0, 0, 0, 0 };
-            testData[3] = new double[] { 0, 0, 0, 0, 1, 1 };
+            Stopwatch watch = new Stopwatch();
+            watch.Start();
+            RbmDeepScore score = api.Run() as RbmDeepScore;
+            watch.Stop();
 
-            var result = api.Algorithm.Predict(testData, api.Context);
+            var testData = RbmHandwrittenDigitUnitTests.ReadData(Path.Combine(Directory.GetCurrentDirectory(), @"RestrictedBolzmannMachine2\Data\DigitTest.csv"));
 
-            // NOT FINISHED.
-            //Assert.True(result[0] == 1);
-            //Assert.True(result[1] == 0);
-            //Assert.True(result[2] == 0);
-            //Assert.True(result[3] == 0);
-            //Assert.True(result[4] == 1);
-            //Assert.True(result[5] == 0);
+            var result = api.Algorithm.Predict(testData, api.Context) as RbmDeepResult;
+            var accList = new double[result.LayerResults.Count];
+            var predictions = new double[result.LayerResults.Count][];
+
+            int i = 0;
+            foreach (var item in result.LayerResults)
+            {
+                predictions[i] = item.First().VisibleNodesPredictions;
+                accList[i] = testData[i].GetHammingDistance(predictions[i]);
+
+                i++;
+            }
+
+            RbmHandwrittenDigitUnitTests.WriteDeepResult(iterations, layers, accList, watch.ElapsedMilliseconds*1000);
+            RbmHandwrittenDigitUnitTests.WriteOutputMatrix(iterations, layers, predictions, testData);
         }
-
-      
 
 
 
@@ -280,47 +179,6 @@ namespace test.RestrictedBolzmannMachine
             Assert.True(2 * result.HiddenNodesPredictions[2][0] + result.HiddenNodesPredictions[2][1] ==
                 2 * result.HiddenNodesPredictions[3][0] + result.HiddenNodesPredictions[3][1]);
         }
-
-        
-        private void appendImageBinary(string image, string binaryFilePath)
-        {
-            //saving images in Bitmap format
-            var names = image.Split('\\');
-            string filename = string.Empty;
-            foreach (var item in names)
-            {
-                // if (item.Contains("."))
-                filename = " " + item.Substring(0, 1);
-            }
-        
-            //Loading Bmp images        
-            Bitmap Imgbmp = new Bitmap(64, 64);
-        
-            using (StreamWriter writer = File.AppendText(binaryFilePath))
-            {
-                Bitmap img = new Bitmap(image);
-                StringBuilder t = new StringBuilder();
-                int hg = img.Height;
-                int wg = img.Width;
-                for (int i = 0; i < hg; i++)
-                {
-                    for (int j = 0; j < wg; j++)
-                    {
-                        // t = 0 .299R + 0 .587G + 0 .144B
-                        t.Append((img.GetPixel(j, i).R > 100 && img.GetPixel(j, i).G > 100 &&
-                           img.GetPixel(j, i).B > 100) ? 1 : 0);
-                        //  t.Append(img.GetPixel(i,j).R);
-                    }
-                    t.AppendLine();
-                }
-                string text = t.ToString();
-                writer.Write(text);
-                writer.WriteLine(filename);
-            }
-
-        }
-
-
     }
 
 
