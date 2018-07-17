@@ -1,28 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 using System.IO;
 using NeuralNet.RestrictedBolzmannMachine2;
-using ImageBinarizer;
-using NeuralNet.Perceptron;
 using LearningFoundation.DataProviders;
 using LearningFoundation;
 using Xunit;
 using LearningFoundation.DataMappers;
 using System.Globalization;
-using test.RestrictedBolzmannMachine2;
 using LearningFoundation.Arrays;
+using System.Diagnostics;
 
 namespace test.RestrictedBolzmannMachine2
 {
     public class RbmHandwrittenDigitUnitTests
     {
-        static RbmHandwrittenDigitUnitTests()
-        {
-
-        }
-
-        private DataDescriptor getDescriptorForDigits()
+       
+        internal static DataDescriptor GetDescriptorForDigits()
         {
             DataDescriptor des = new DataDescriptor();
             des.Features = new LearningFoundation.DataMappers.Column[4096];
@@ -39,34 +32,48 @@ namespace test.RestrictedBolzmannMachine2
             return des;
         }
 
+
+        /// <summary>
+        /// Ensures that all RBM layers are correctly allocated.
+        /// </summary>
+        /// <param name="iterations"></param>
+        /// <param name="layers"></param>
+        [Theory]
+        [InlineData(1, new int[] { 9, 5 })]
+        [InlineData(1, new int[] { 19, 15, 14, 7 })]
+        [InlineData(1, new int[] { 250, 150, 10 })]
+        public void DeepRbmConstructorTest(int iterations, int[] layers)
+        {
+            DeepRbm rbm = new DeepRbm(layers, iterations, 0.01);
+            Assert.True(rbm.Layers.Length == layers.Length - 1);
+            foreach (var layer in rbm.Layers)
+            {
+                Assert.True(layer != null);
+            }
+        }
+
         /// <summary>
         /// TODO...
         /// </summary>
         [Theory]
         [InlineData(1, 4096, 10)]
-        //[InlineData(150, 4096, 10)]
-        //[InlineData(1, 4096, 20)]
-        //[InlineData(2, 4096, 20)]
-        //[InlineData(10, 4096, 10)]
-        //[InlineData(20, 4096, 10)]
-        //[InlineData(30, 4096, 10)]
-        //[InlineData(50, 4096, 10)]
-        //[InlineData(10, 4096, 20)]
-        //[InlineData(20, 4096, 20)]
-        //[InlineData(30, 4096, 20)]
-        //[InlineData(50, 4096, 20)]
-        //[InlineData(20, 4096, 10)]
+        [InlineData(10, 4096, 10)]
+       
         public void DigitRecognitionTest(int iterations, int visNodes, int hidNodes)
         {
-            LearningApi api = new LearningApi(this.getDescriptorForDigits());
+            Debug.WriteLine($"{iterations}-{visNodes}-{hidNodes}");
+
+            LearningApi api = new LearningApi(GetDescriptorForDigits());
 
             // Initialize data provider
             api.UseCsvDataProvider(Path.Combine(Directory.GetCurrentDirectory(), @"RestrictedBolzmannMachine2\Data\DigitDataset.csv"), ',', false, 0);
             api.UseDefaultDataMapper();
-            //api.UseRbm(0.2, 1, 4096, 10);
             api.UseRbm(0.2, iterations, visNodes, hidNodes);
 
+            Stopwatch watch = new Stopwatch();
+            watch.Start();
             RbmScore score = api.Run() as RbmScore;
+            watch.Stop();
 
             var hiddenNodes = score.HiddenValues;
             var hiddenWeight = score.HiddenBisases;
@@ -87,7 +94,7 @@ namespace test.RestrictedBolzmannMachine2
             }
             tw.Close();
 
-            var testData = readData(Path.Combine(Directory.GetCurrentDirectory(), @"RestrictedBolzmannMachine2\Data\DigitTest.csv"));
+            var testData = ReadData(Path.Combine(Directory.GetCurrentDirectory(), @"RestrictedBolzmannMachine2\Data\DigitTest.csv"));
 
             var result = api.Algorithm.Predict(testData, api.Context);
 
@@ -95,61 +102,36 @@ namespace test.RestrictedBolzmannMachine2
 
             var acc = testData.GetHammingDistance(predictedData);
 
-            writeResult(iterations, visNodes, hidNodes, acc);
+            WriteDeepResult(iterations, new int[] { visNodes, hidNodes }, acc, watch.ElapsedMilliseconds*1000);
 
-            writeOutputMatrix(iterations, visNodes, hidNodes, predictedData, testData);
+            WriteOutputMatrix(iterations, new int[] { visNodes, hidNodes }, predictedData, testData);
         }
 
 
 
-        /// <summary>
-        /// TODO...
-        /// </summary>
-        [Theory]
-        [InlineData(400, 4096, 1)]
-        public void DigitEncodingTest(int iterations, int visNodes, int hidNodes)
-        {
-            LearningApi api = new LearningApi(this.getDescriptorForDigits());
-
-            // Initialize data provider
-            api.UseCsvDataProvider(Path.Combine(Directory.GetCurrentDirectory(), @"RestrictedBolzmannMachine2\DigitDataset.csv"), ',', false, 0);
-            api.UseDefaultDataMapper();
-            api.UseRbm(0.2, iterations, visNodes, hidNodes);
-
-            RbmScore score = api.Run() as RbmScore;
-
-            var testData = readData(Path.Combine(Directory.GetCurrentDirectory(), @"RestrictedBolzmannMachine2\DigitTest.csv"));
-
-            var result = api.Algorithm.Predict(testData, api.Context);
-
-            var predictedData = ((RbmResult)result).VisibleNodesPredictions;
-
-            writeOutputMatrix(iterations, visNodes, hidNodes, predictedData, testData);
-        }
 
 
-        private static void writeResult(int iterations, int visNodes, int hidNodes, double[] accuracy)
+        internal static void WriteDeepResult(int iterations, int[] layers, double[] accuracy, long executionTime)
         {
             double sum = 0;
 
-            StreamWriter tw = new StreamWriter($"Result_I{iterations}_V{visNodes}_H{hidNodes}_ACC.txt");
+            using (StreamWriter tw = new StreamWriter($"Result_I{iterations}_V{String.Join("-", layers)}_ACC.txt"))
             {
-                tw.WriteLine($"Digit;Iterations;VisibleNodes,HiddenNodes;Accuracy");
+                tw.WriteLine($"Sample;Iterations;Accuracy; ExecutionTime={executionTime}");
                 for (int i = 0; i < accuracy.Length; i++)
                 {
-                    tw.WriteLine($"{i};{iterations};{visNodes};{hidNodes};{accuracy[i]}");
+                    tw.WriteLine($"{i};{iterations};{accuracy[i]}");
                     sum += accuracy[i];
                 }
 
                 // Here we write out average accuracy.
-                tw.WriteLine($"{accuracy.Length};{iterations};{visNodes};{hidNodes};{sum/accuracy.Length}");
+                tw.WriteLine($"{accuracy.Length};{iterations};{sum / accuracy.Length}");
             }
-            tw.Close();
         }
 
-        private static void writeOutputMatrix(int iterations, int visNodes, int hidNodes, double[][] predictedData, double[][] testData, int lineLength = 64)
+        internal static void WriteOutputMatrix(int iterations, int[] layers, double[][] predictedData, double[][] testData, int lineLength = 64)
         {
-            TextWriter tw = new StreamWriter($"PredictedDigit_I{iterations}_V{visNodes}_H{hidNodes}.txt");
+            TextWriter tw = new StreamWriter($"PredictedDigit_I{iterations}_V{String.Join("_", layers)}.txt");
             int initialRowLength = predictedData[0].Length;
             int finalRowCount = predictedData.Length * (initialRowLength / lineLength);
             double[,] predictedDataLines = new double[finalRowCount, lineLength];
@@ -204,7 +186,7 @@ namespace test.RestrictedBolzmannMachine2
         }
 
 
-        private static double[][] readData(string path)
+        internal static double[][] ReadData(string path)
         {
             List<double[]> data = new List<double[]>();
 

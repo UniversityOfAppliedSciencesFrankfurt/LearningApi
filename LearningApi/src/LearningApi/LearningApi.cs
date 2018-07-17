@@ -138,7 +138,6 @@ namespace LearningFoundation
             return data;
         }
 
-
         public async Task TrainAsync()
         {
             if (this.Modules.Count <= 1)

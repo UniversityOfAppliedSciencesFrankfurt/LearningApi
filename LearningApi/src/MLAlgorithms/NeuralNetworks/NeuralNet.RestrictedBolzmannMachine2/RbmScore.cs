@@ -11,5 +11,8 @@ namespace NeuralNet.RestrictedBolzmannMachine2
         public double[] HiddenValues { get; internal set; }
         public double[] HiddenBisases { get; internal set; }
         public double[][] Weights { get; internal set; }
+
+    
+
     }
 }

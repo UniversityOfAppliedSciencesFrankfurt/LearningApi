@@ -152,6 +152,59 @@ namespace test.RestrictedBolzmannMachine
         }
 
         [Fact]
+        public void SimpleRBMDeepTest()
+        {
+            LearningApi api = new LearningApi();
+            api.UseActionModule<object, double[][]>((notUsed, ctx) =>
+            {
+                const int maxSamples = 12;
+                ctx.DataDescriptor = getDescriptorForRbm_sample1();
+                double[][] data = new double[maxSamples][];
+
+                data[0] = new double[] { 1, 1, 0, 0, 0, 0 };  // A
+                data[1] = new double[] { 0, 0, 1, 1, 0, 0 };  // B
+                data[2] = new double[] { 0, 0, 0, 0, 1, 1 };  // C
+
+                data[3] = new double[] { 1, 1, 0, 0, 0, 1 };  // noisy A
+                data[4] = new double[] { 0, 0, 1, 1, 0, 0 };  // BRt
+                data[5] = new double[] { 0, 0, 0, 0, 1, 1 };  // C
+
+                data[6] = new double[] { 1, 0, 0, 0, 0, 0 };  // weak A
+                data[7] = new double[] { 0, 0, 1, 0, 0, 0 };  // weak B
+                data[8] = new double[] { 0, 0, 0, 0, 1, 0 };  // weak C
+
+                data[9] = new double[] { 1, 1, 0, 1, 0, 0 };  // noisy A
+                data[10] = new double[] { 1, 0, 1, 1, 0, 0 };  // noisy B
+                data[11] = new double[] { 0, 0, 1, 0, 1, 1 };  // noisy C
+                return data;
+            });
+
+
+            api.UseRbm(0.01, 1000, 6, 4);
+           
+            RbmScore score = api.Run() as RbmScore;
+
+            double[][] testData = new double[4][];
+
+            Assert.True(score.Loss < 1.0);
+
+            testData[0] = new double[] { 1, 1, 0, 0, 0, 0 };
+            testData[1] = new double[] { 0, 0, 0, 0, 1, 1 };
+            testData[2] = new double[] { 0, 1, 0, 0, 0, 0 };
+            testData[3] = new double[] { 0, 0, 0, 0, 1, 0 };
+
+            var result = api.Algorithm.Predict(testData, api.Context);
+
+            // NOT FINISHED.
+            //Assert.True(result[0] == 1);
+            //Assert.True(result[1] == 0);
+            //Assert.True(result[2] == 0);
+            //Assert.True(result[3] == 0);
+            //Assert.True(result[4] == 1);
+            //Assert.True(result[5] == 0);
+        }
+
+        [Fact]
         public void RBMDataSample1Test()
         {
             var dataPath = System.IO.Path.Combine(Directory.GetCurrentDirectory(), @"RestrictedBolzmannMachine2\rbm_sample1.csv");
