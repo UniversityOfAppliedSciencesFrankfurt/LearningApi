@@ -120,13 +120,14 @@ namespace test.RestrictedBolzmannMachine2
                 tw.WriteLine($"Sample;Iterations;Accuracy; ExecutionTime={executionTime}");
                 for (int i = 0; i < accuracy.Length; i++)
                 {
-                    tw.WriteLine($"{i};{iterations};{accuracy[i]}");
+                    tw.WriteLine($"{i};{iterations};{visNodes};{hidNodes};{accuracy}");
                     sum += accuracy[i];
                 }
 
                 // Here we write out average accuracy.
                 tw.WriteLine($"{accuracy.Length};{iterations};{sum / accuracy.Length}");
             }
+            tw.Close();
         }
 
         internal static void WriteOutputMatrix(int iterations, int[] layers, double[][] predictedData, double[][] testData, int lineLength = 64)
