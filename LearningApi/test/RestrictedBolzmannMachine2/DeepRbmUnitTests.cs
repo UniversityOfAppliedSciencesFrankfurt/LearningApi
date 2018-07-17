@@ -195,7 +195,7 @@ namespace test.RestrictedBolzmannMachine
         [Fact]
         public void RBMDataSample1Test()
         {
-            var dataPath = System.IO.Path.Combine(Directory.GetCurrentDirectory(), @"RestrictedBolzmannMachine2\rbm_sample1.csv");
+            var dataPath = System.IO.Path.Combine(Directory.GetCurrentDirectory(), @"RestrictedBolzmannMachine2\data\rbm_sample1.csv");
 
             LearningApi api = new LearningApi(this.getDescriptorForRbm_sample1());
            
@@ -224,117 +224,8 @@ namespace test.RestrictedBolzmannMachine
             //Assert.True(result[5] == 0);
         }
 
-        /// <summary>
-        /// NOT USED.
-        /// </summary>
-        [Fact]
-        public void LinearEquationSolver()
-        {
-            LearningApi api = new LearningApi();
-            api.UseActionModule<object, double[][]>((notUsed, ctx) =>
-            {
-                const int maxSamples = 12;
-                ctx.DataDescriptor = getDescriptorForRbm_sample1();
-                double[][] data = new double[maxSamples][];
+      
 
-                data[0] = new double[] { 1, 1, 0, 0, 0, 0 };  // A
-                data[1] = new double[] { 0, 0, 1, 1, 0, 0 };  // B
-                data[2] = new double[] { 0, 0, 0, 0, 1, 1 };  // C
-
-                data[3] = new double[] { 1, 1, 0, 0, 0, 1 };  // noisy A
-                data[4] = new double[] { 0, 0, 1, 1, 0, 0 };  // B
-                data[5] = new double[] { 0, 0, 0, 0, 1, 1 };  // C
-
-                data[6] = new double[] { 1, 0, 0, 0, 0, 0 };  // weak A
-                data[7] = new double[] { 0, 0, 1, 0, 0, 0 };  // weak B
-                data[8] = new double[] { 0, 0, 0, 0, 1, 0 };  // weak C
-
-                data[9] = new double[] { 1, 1, 0, 1, 0, 0 };  // noisy A
-                data[10] = new double[] { 1, 0, 1, 1, 0, 0 };  // noisy B
-                data[11] = new double[] { 0, 0, 1, 0, 1, 1 };  // noisy C
-                return data;
-            });
-
-
-            api.UseRbm(0.2, 1000, 6, 3);
-
-            IScore score = api.Run() as IScore;
-
-            double[][] testData = new double[4][];
-
-            testData[0] = new double[] { 1, 1, 0, 0, 0, 0 };
-            testData[1] = new double[] { 0, 0, 0, 0, 1, 1 };
-            testData[2] = new double[] { 0, 1, 0, 0, 0, 0 };
-            testData[3] = new double[] { 0, 0, 0, 0, 1, 0 };
-
-            var result = api.Algorithm.Predict(testData, api.Context);
-
-            // NOT FINISHED.
-            //Assert.True(result[0] == 1);
-            //Assert.True(result[1] == 0);
-            //Assert.True(result[2] == 0);
-            //Assert.True(result[3] == 0);
-            //Assert.True(result[4] == 1);
-            //Assert.True(result[5] == 0);
-        }
-
-
-        /// <summary>
-        /// Gives full dataset.
-        /// </summary>
-        [Fact]
-        public void FullDataSetRBMTest()
-        {
-            const int bits = 10; 
-
-            LearningApi api = new LearningApi();
-
-            api.UseActionModule<object, double[][]>((notUsed, ctx) =>
-            {
-                var maxSamples = (int)Math.Pow(2, bits);
-                double[][] data = new double[maxSamples][];
-
-                for (int i = 0; i < maxSamples; i++)
-                {
-                    data[i] = new double[bits];
-                    
-                    var val = 1;
-                    for (int j = 0; j < bits; j++)
-                    {
-                        if ((val & i) >= 1)
-                        {
-                            data[i][j] = 1;
-                        }
-                        val = val << 1;                       
-                    }
-                }
-                                
-                ctx.DataDescriptor = getDescriptorForRbm_sample1();
-              
-                return data;
-            });
-             
-            api.UseRbm(0.01, 1000, bits, 7);
-
-            RbmScore score = api.Run() as RbmScore;
-
-            double[][] testData = new double[4][];
-
-            testData[0] = new double[] { 1, 1, 0, 0, 0, 0, 0, 0, 0, 0 };
-            testData[1] = new double[] { 0, 0, 0, 0, 1, 1, 0, 0, 0, 0 };
-            testData[2] = new double[] { 0, 1, 0, 0, 0, 0, 0, 0, 0, 0 };
-            testData[3] = new double[] { 0, 0, 0, 0, 1, 0, 0, 0, 0, 1 };
-
-            var result = api.Algorithm.Predict(testData, api.Context);
-
-            // NOT FINISHED.
-            //Assert.True(result[0] == 1);
-            //Assert.True(result[1] == 0);
-            //Assert.True(result[2] == 0);
-            //Assert.True(result[3] == 0);
-            //Assert.True(result[4] == 1);
-            //Assert.True(result[5] == 0);
-        }
 
 
         /// <summary>
@@ -349,14 +240,14 @@ namespace test.RestrictedBolzmannMachine
         [Fact]
         public void Rbm_ClassifierTest()
         {
-            var dataPath = System.IO.Path.Combine(Directory.GetCurrentDirectory(), @"RestrictedBolzmannMachine2\rbm_twoclass_sample.csv");
+            var dataPath = System.IO.Path.Combine(Directory.GetCurrentDirectory(), @"RestrictedBolzmannMachine2\Data\rbm_twoclass_sample.csv");
 
             LearningApi api = new LearningApi(this.getDescriptorForRbmTwoClassesClassifier());
 
             // Initialize data provider
             api.UseCsvDataProvider(dataPath, ';', false, 1);
             api.UseDefaultDataMapper();
-            api.UseRbm(0.2, 1000, 10, 2);
+            api.UseDeepRbm(0.2, 1000, new int[] { 10, 2 });
              
             RbmResult score = api.Run() as RbmResult;
 
@@ -388,23 +279,6 @@ namespace test.RestrictedBolzmannMachine
             // Here is test for second class.
             Assert.True(2 * result.HiddenNodesPredictions[2][0] + result.HiddenNodesPredictions[2][1] ==
                 2 * result.HiddenNodesPredictions[3][0] + result.HiddenNodesPredictions[3][1]);
-
-            printVector("Weights", result.Weights);
-        }
-
-
-        private void printVector(string name, double[][] vector)
-        {
-            Debug.WriteLine("");
-            Debug.WriteLine(name);
-            for (int row = 0; row < vector.Length; ++row)
-            {
-                Debug.WriteLine("");
-                for (int col = 0; col < vector[row].Length; ++col)
-                    Debug.Write($"{vector[row][col]:F3}\t");
-            }
-
-            Debug.WriteLine("");
         }
 
         

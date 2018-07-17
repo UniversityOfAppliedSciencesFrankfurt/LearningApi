@@ -79,5 +79,35 @@ namespace LearningFoundation.Arrays
 
             return accuracy;
         }
+
+        public static double GetHammingDistance(this double[] originArray, double[] comparingArray)
+        {
+            double h;
+            double accuracy;
+
+            if (originArray.Length != comparingArray.Length)
+            {
+                throw new Exception("Data must be equal length");
+            }
+
+            int sum = 0;
+            for (int j = 0; j < originArray.Length; j++)
+            {
+                if (originArray[j] == comparingArray[j])
+                {
+                    sum = sum + 0;
+                }
+                else
+                {
+                    sum = sum + 1;
+                }
+            }
+
+            h = sum;
+
+            accuracy = ((originArray.Length - sum) * 100 / originArray.Length);
+
+            return accuracy;
+        }
     }
 }

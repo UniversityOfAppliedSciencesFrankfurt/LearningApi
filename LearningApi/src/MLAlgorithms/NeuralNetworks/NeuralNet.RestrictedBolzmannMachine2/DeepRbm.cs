@@ -33,27 +33,37 @@ namespace NeuralNet.RestrictedBolzmannMachine2
         /// </summary>
         /// <param name="numVisible">Number of visible nodes.</param>
         /// <param name="numHidden">Number of hidden nodes.</param>
-        public DeepRbm(int[] layers, int maxEpochs = 1000, double learnRate = 0.01)
+        public DeepRbm(int[] layerDims, int maxEpochs = 1000, double learnRate = 0.01)
         {
             this.learnRate = learnRate;
             this.maxEpochs = maxEpochs;
 
-            this.Layers = new RbmLayer[layers.Length-1];
-            for (int i = 0; i < this.Layers.Length; i += 2)
+            this.Layers = new RbmLayer[layerDims.Length - 1];
+            for (int i = 0; i <= this.Layers.Length - 1; i++)
             {
                 this.Layers[i] = new RbmLayer()
                 {
-                    NumVisible = layers[i],
-                    VisibleValues = new double[layers[i]],
-                    VisProbs = new double[layers[i]],
-                    VisBiases = new double[layers[i]],
+                    NumVisible = layerDims[i],
+                    //VisProbs = new double[layerDims[i]],
 
-                    NumHidden = layers[i + 1],
-                    HidValues = new double[layers[i + 1]],
-                    HidBiases = new double[layers[i + 1]],
+                    NumHidden = layerDims[i + 1],
+                    HidValues = new double[layerDims[i + 1]],
+                    HidBiases = new double[layerDims[i + 1]],
 
-                    VHWeights = new double[layers[i]][],  // visible-to-hidden
+                    VHWeights = new double[layerDims[i]][],  // visible-to-hidden
                 };
+
+                if (i == 0)
+                {
+                    this.Layers[i].VisibleValues = new double[layerDims[i]];
+                    //this.Layers[i].VisProbs = new double[layerDims[i]];
+                    this.Layers[i].VisBiases = new double[layerDims[i]];
+                }
+                else
+                {
+                    this.Layers[i].VisibleValues = this.Layers[i - 1].HidValues;
+                    this.Layers[i].VisBiases = this.Layers[i - 1].HidBiases;
+                }
 
                 for (int k = 0; k < this.Layers[i].NumVisible; ++k)
                     this.Layers[i].VHWeights[k] = new double[this.Layers[i].NumHidden];
@@ -74,7 +84,6 @@ namespace NeuralNet.RestrictedBolzmannMachine2
                     this.Layers[i].HidBiases[k] = (high - low) * m_Rnd.NextDouble() + low;
             }
         }
-
 
 
         public override IScore Run(double[][] data, IContext ctx)
@@ -157,6 +166,61 @@ namespace NeuralNet.RestrictedBolzmannMachine2
 
             return score;
         }
+
+        public override IResult Predict(double[][] data, IContext ctx)
+        {
+            RbmDeepResult res = new RbmDeepResult()
+            {
+                LayerResults = new List<List<RbmLayerResult>>(),
+            };
+
+            for (int i = 0; i < data.Length; i++)
+            {
+                List<RbmLayerResult> results = new List<RbmLayerResult>();
+
+                int lyrIndx = 0;
+                foreach (var layer in this.Layers)
+                {
+                    RbmLayerResult lyrRes = new RbmLayerResult();
+                   
+                    if (lyrIndx == 0)
+                    {
+                        lyrRes.HiddenNodesPredictions = new double[layer.NumHidden];                       
+                    }
+                    else
+                    {
+                        lyrRes.HiddenNodesPredictions = this.Layers[lyrIndx-1].VisibleValues;                     
+                    }
+
+                    for (int h = 0; h < layer.NumHidden; ++h)
+                    {
+                        double sum = 0.0;
+                        for (int v = 0; v < layer.NumVisible; ++v)
+                            sum += data[i][v] * layer.VHWeights[v][h];
+
+                        sum += layer.HidBiases[h]; // add the hidden bias
+                        double probActiv = m_ActivationFunction(sum); // compute prob of h activation
+
+                        double pr = m_Rnd.NextDouble();  // determine 0/1 h node value
+                        if (probActiv > pr)
+                            lyrRes.HiddenNodesPredictions[h] = 1;
+                        else
+                            lyrRes.HiddenNodesPredictions[h] = 0;
+                    }
+
+                    lyrRes.VisibleNodesPredictions = calcVisibleFromHidden(lyrRes.HiddenNodesPredictions, layer);
+
+                    results.Add(lyrRes);
+
+                    lyrIndx++;
+                }
+
+                res.LayerResults.Add(results);
+            }
+
+            return res;
+        }
+
 
         private double[] computeHPrimeFromVPrime(double[] vPrime, RbmLayer layer)
         {
@@ -276,46 +340,6 @@ namespace NeuralNet.RestrictedBolzmannMachine2
             if (x < -20.0) return 0.0000000001;
             else if (x > 20.0) return 0.9999999999;
             else return 1.0 / (1.0 + Math.Exp(-x));
-        }
-
-        public override IResult Predict(double[][] data, IContext ctx)
-        {
-            RbmResult res = new RbmResult()
-            {
-                HiddenNodesPredictions = new double[data.Length][],
-                VisibleNodesPredictions = new double[data.Length][],
-                Weights = null,
-            };
-
-            for (int i = 0; i < data.Length; i++)
-            {
-                foreach (var layer in this.Layers)
-                {
-
-
-                    res.HiddenNodesPredictions[i] = new double[layer.NumHidden];
-
-                    for (int h = 0; h < layer.NumHidden; ++h)
-                    {
-                        double sum = 0.0;
-                        for (int v = 0; v < layer.NumVisible; ++v)
-                            sum += data[i][v] * layer.VHWeights[v][h];
-
-                        sum += layer.HidBiases[h]; // add the hidden bias
-                        double probActiv = m_ActivationFunction(sum); // compute prob of h activation
-                                                                      // Console.WriteLine("Hidden [" + h + "] activation probability = " + probActiv.ToString("F4"));
-                        double pr = m_Rnd.NextDouble();  // determine 0/1 h node value
-                        if (probActiv > pr)
-                            res.HiddenNodesPredictions[i][h] = 1;
-                        else
-                            res.HiddenNodesPredictions[i][h] = 0;
-                    }
-
-                    res.VisibleNodesPredictions[i] = calcVisibleFromHidden(res.HiddenNodesPredictions[i], layer);
-                }
-            }
-
-            return res;
         }
 
         private double[] calcVisibleFromHidden(double[] hiddens, RbmLayer layer)

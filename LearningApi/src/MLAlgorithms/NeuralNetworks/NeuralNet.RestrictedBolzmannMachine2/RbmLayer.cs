@@ -21,7 +21,7 @@ namespace NeuralNet.RestrictedBolzmannMachine2
         /// Visible node values (0, 1)
         /// </summary>
         public double[] VisibleValues;
-        public double[] VisProbs;
+        //public double[] VisProbs;
         public double[] VisBiases;
 
         public double[] HidValues;
