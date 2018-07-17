@@ -137,13 +137,14 @@ namespace test.RestrictedBolzmannMachine2
                 tw.WriteLine($"Digit;Iterations;VisibleNodes,HiddenNodes;Accuracy");
                 for (int i = 0; i < accuracy.Length; i++)
                 {
-                    tw.WriteLine($"{i};{iterations};{visNodes};{hidNodes};{accuracy}");
+                    tw.WriteLine($"{i};{iterations};{visNodes};{hidNodes};{accuracy[i]}");
                     sum += accuracy[i];
                 }
 
                 // Here we write out average accuracy.
                 tw.WriteLine($"{accuracy.Length};{iterations};{visNodes};{hidNodes};{sum/accuracy.Length}");
             }
+            tw.Close();
         }
 
         private static void writeOutputMatrix(int iterations, int visNodes, int hidNodes, double[][] predictedData, double[][] testData, int lineLength = 64)
