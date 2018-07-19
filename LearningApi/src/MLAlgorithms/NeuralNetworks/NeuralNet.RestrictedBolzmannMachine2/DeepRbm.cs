@@ -171,7 +171,7 @@ namespace NeuralNet.RestrictedBolzmannMachine2
         {
             RbmDeepResult res = new RbmDeepResult()
             {
-                LayerResults = new List<List<RbmLayerResult>>(),
+                Results = new List<List<RbmLayerResult>>(),
             };
 
             for (int i = 0; i < data.Length; i++)
@@ -215,7 +215,7 @@ namespace NeuralNet.RestrictedBolzmannMachine2
                     lyrIndx++;
                 }
 
-                res.LayerResults.Add(results);
+                res.Results.Add(results);
             }
 
             return res;

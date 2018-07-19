@@ -71,16 +71,7 @@ namespace test.RestrictedBolzmannMachine2
             return des;
         }
 
-        /// <summary>
-        /// Movies:
-        /// 
-        /// </summary>
-        [Fact]
-        public void RBMRecoomendationTest()
-        {
-
-        }
-
+      
 
         /// <summary>
         /// TODO...
@@ -109,19 +100,18 @@ namespace test.RestrictedBolzmannMachine2
             var testData = RbmHandwrittenDigitUnitTests.ReadData(Path.Combine(Directory.GetCurrentDirectory(), @"RestrictedBolzmannMachine2\Data\DigitTest.csv"));
 
             var result = api.Algorithm.Predict(testData, api.Context) as RbmDeepResult;
-            var accList = new double[result.LayerResults.Count];
-            var predictions = new double[result.LayerResults.Count][];
+            var accList = new double[result.Results.Count];
+            var predictions = new double[result.Results.Count][];
 
             int i = 0;
-            foreach (var item in result.LayerResults)
+            foreach (var item in result.Results)
             {
                 predictions[i] = item.First().VisibleNodesPredictions;
                 accList[i] = testData[i].GetHammingDistance(predictions[i]);
-
                 i++;
             }
 
-            RbmHandwrittenDigitUnitTests.WriteDeepResult(iterations, layers, accList, watch.ElapsedMilliseconds*1000);
+            RbmHandwrittenDigitUnitTests.WriteDeepResult(iterations, layers, accList, watch.ElapsedMilliseconds/1000);
             RbmHandwrittenDigitUnitTests.WriteOutputMatrix(iterations, layers, predictions, testData);
         }
 
@@ -162,22 +152,71 @@ namespace test.RestrictedBolzmannMachine2
             // This will be classified as third class.
             testData[4] = new double[] { 1, 1, 1, 0, 0, 1, 1, 1, 0, 0 };
 
-            var result = api.Algorithm.Predict(testData, api.Context) as RbmResult;
+            RbmDeepResult result = api.Algorithm.Predict(testData, api.Context) as RbmDeepResult;
 
             //
             // 2 * BIT1 + BIT2 of [0] and [1] should be same.
             // We don't know how RBM will classiffy data. We only expect that
             // same or similar pattern of data will be assigned to the same class.
             // Note, we have here two classes (two hiddne nodes).
-            // First and second data sample are of same class. Third and fourth are also of same class.
+            // First and second data sample are of the same class. 
+            // Third and fourth are also of same class. See data.
 
             // Here we check first classs.
-            Assert.True(2 * result.HiddenNodesPredictions[0][0] + result.HiddenNodesPredictions[0][1] ==
-                2 * result.HiddenNodesPredictions[1][0] + result.HiddenNodesPredictions[1][1]);
+            Assert.True(result.Results[0].ToArray()[0].HiddenNodesPredictions[0] == result.Results[1].ToArray()[0].HiddenNodesPredictions[0] &&
+                result.Results[0].ToArray()[0].HiddenNodesPredictions[1] == result.Results[1].ToArray()[0].HiddenNodesPredictions[1]);
 
             // Here is test for second class.
-            Assert.True(2 * result.HiddenNodesPredictions[2][0] + result.HiddenNodesPredictions[2][1] ==
-                2 * result.HiddenNodesPredictions[3][0] + result.HiddenNodesPredictions[3][1]);
+            Assert.True(result.Results[2].ToArray()[0].HiddenNodesPredictions[0] == result.Results[3].ToArray()[0].HiddenNodesPredictions[0] &&
+                result.Results[2].ToArray()[0].HiddenNodesPredictions[1] == result.Results[3].ToArray()[0].HiddenNodesPredictions[1]);
+
+        }
+
+
+        [Fact]
+        public void Rbm_ClassifierDeepTest()
+        {
+            var dataPath = System.IO.Path.Combine(Directory.GetCurrentDirectory(), @"RestrictedBolzmannMachine2\Data\rbm_twoclass_sample.csv");
+
+            LearningApi api = new LearningApi(this.getDescriptorForRbmTwoClassesClassifier());
+
+            // Initialize data provider
+            api.UseCsvDataProvider(dataPath, ';', false, 1);
+            api.UseDefaultDataMapper();
+            api.UseDeepRbm(0.2, 1000, new int[] { 10, 8, 5, 2 });
+
+            RbmResult score = api.Run() as RbmResult;
+
+            double[][] testData = new double[5][];
+
+            //
+            // This test data contains two patterns. One is grouped at left and one at almost right.
+            testData[0] = new double[] { 1, 1, 1, 0, 0, 0, 0, 0, 0, 0 };
+            testData[1] = new double[] { 1, 0, 1, 0, 0, 0, 0, 0, 0, 0 };
+            testData[2] = new double[] { 0, 0, 0, 0, 0, 1, 1, 1, 0, 0 };
+            testData[3] = new double[] { 0, 0, 0, 0, 0, 1, 0, 1, 0, 0 };
+
+            // This will be classified as third class.
+            testData[4] = new double[] { 1, 1, 1, 0, 0, 1, 1, 1, 0, 0 };
+
+            RbmDeepResult result = api.Algorithm.Predict(testData, api.Context) as RbmDeepResult;
+
+            //
+            // 2 * BIT1 + BIT2 of [0] and [1] should be same.
+            // We don't know how RBM will classiffy data. We only expect that
+            // same or similar pattern of data will be assigned to the same class.
+            // Note, we have here two classes (two hiddne nodes).
+            // First and second data sample are of the same class. 
+            // Third and fourth are also of same class. See data.
+
+            // Here we check first classs.
+            Assert.True(result.Results[0].ToArray()[2].HiddenNodesPredictions[0] == result.Results[1].ToArray()[2].HiddenNodesPredictions[0] &&
+                result.Results[0].ToArray()[2].HiddenNodesPredictions[1] == result.Results[1].ToArray()[2].HiddenNodesPredictions[1]);
+
+            // Here is test for second class.
+            Assert.True(result.Results[2].ToArray()[2].HiddenNodesPredictions[0] == result.Results[3].ToArray()[2].HiddenNodesPredictions[0] &&
+                result.Results[2].ToArray()[2].HiddenNodesPredictions[1] == result.Results[3].ToArray()[2].HiddenNodesPredictions[1]);
+
         }
     }
 

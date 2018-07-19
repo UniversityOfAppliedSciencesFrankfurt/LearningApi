@@ -11,6 +11,6 @@ namespace NeuralNet.RestrictedBolzmannMachine2
     /// </summary>
     public class RbmDeepResult : IResult
     {
-        public List<List<RbmLayerResult>> LayerResults { get; set; }
+        public List<List<RbmLayerResult>> Results { get; set; }
     }
 }
