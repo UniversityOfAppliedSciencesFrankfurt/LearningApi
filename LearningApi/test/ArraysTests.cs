@@ -51,7 +51,13 @@ namespace test.statistics
             Assert.True(acc == 20);
         }
 
-
+        [Fact]
+        public void TestBinaryConversion()
+        {
+            Assert.True(new double[] { 1, 1, 1 }.ToBinary() == 7);
+            Assert.True(new double[] { 0, 1, 0 }.ToBinary() == 2);
+            Assert.True(new double[] { 0, 0, 1 }.ToBinary() == 4); 
+        }
 
     }
 }

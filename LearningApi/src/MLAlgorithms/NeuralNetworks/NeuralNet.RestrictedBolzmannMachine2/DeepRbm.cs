@@ -182,15 +182,8 @@ namespace NeuralNet.RestrictedBolzmannMachine2
                 foreach (var layer in this.Layers)
                 {
                     RbmLayerResult lyrRes = new RbmLayerResult();
-                   
-                    if (lyrIndx == 0)
-                    {
-                        lyrRes.HiddenNodesPredictions = new double[layer.NumHidden];                       
-                    }
-                    else
-                    {
-                        lyrRes.HiddenNodesPredictions = this.Layers[lyrIndx-1].VisibleValues;                     
-                    }
+
+                    lyrRes.HiddenNodesPredictions = new double[layer.NumHidden];
 
                     for (int h = 0; h < layer.NumHidden; ++h)
                     {

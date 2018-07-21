@@ -11,6 +11,7 @@ using System.Drawing;
 using System.Text;
 using LearningFoundation.Arrays;
 using System.Threading;
+using System.Collections.Generic;
 
 namespace test.RestrictedBolzmannMachine2
 {
@@ -48,26 +49,19 @@ namespace test.RestrictedBolzmannMachine2
         /// RBM is not supervised algorithm. This is why we do not have a label.
         /// </summary>
         /// <returns></returns>
-        private DataDescriptor getDescriptorForRbmTwoClassesClassifier()
+        private DataDescriptor getDescriptorForRbmTwoClassesClassifier(int dims)
         {
             DataDescriptor des = new DataDescriptor();
-            des.Features = new LearningFoundation.DataMappers.Column[10];
+            des.Features = new LearningFoundation.DataMappers.Column[dims];
 
             // Label not used.
             des.LabelIndex = -1;
+            des.Features = new Column[dims];
+            for (int i = 0; i < dims; i++)
+            {
+                des.Features[i] = new Column { Id = i, Name = $"col{i}", Index = 0, Type = ColumnType.NUMERIC, Values = null, DefaultMissingValue = 0 };
+            }
 
-            des.Features = new Column[10];
-            des.Features[0] = new Column { Id = 1, Name = "col1", Index = 0, Type = ColumnType.NUMERIC, Values = null, DefaultMissingValue = 0 };
-            des.Features[1] = new Column { Id = 2, Name = "col2", Index = 1, Type = ColumnType.NUMERIC, Values = null, DefaultMissingValue = 0 };
-            des.Features[2] = new Column { Id = 3, Name = "col3", Index = 2, Type = ColumnType.NUMERIC, Values = null, DefaultMissingValue = 0 };
-            des.Features[3] = new Column { Id = 4, Name = "col4", Index = 3, Type = ColumnType.NUMERIC, Values = null, DefaultMissingValue = 0 };
-            des.Features[4] = new Column { Id = 5, Name = "col5", Index = 4, Type = ColumnType.NUMERIC, Values = null, DefaultMissingValue = 0 };
-            des.Features[5] = new Column { Id = 6, Name = "col6", Index = 5, Type = ColumnType.NUMERIC, Values = null, DefaultMissingValue = 0 };
-            des.Features[6] = new Column { Id = 7, Name = "col7", Index = 6, Type = ColumnType.NUMERIC, Values = null, DefaultMissingValue = 0 };
-            des.Features[7] = new Column { Id = 8, Name = "col8", Index = 7, Type = ColumnType.NUMERIC, Values = null, DefaultMissingValue = 0 };
-            des.Features[8] = new Column { Id = 9, Name = "col9", Index = 8, Type = ColumnType.NUMERIC, Values = null, DefaultMissingValue = 0 };
-            des.Features[9] = new Column { Id = 10, Name = "col10", Index = 9, Type = ColumnType.NUMERIC, Values = null, DefaultMissingValue = 0 };
-           
             return des;
         }
 
@@ -131,7 +125,7 @@ namespace test.RestrictedBolzmannMachine2
         {
             var dataPath = System.IO.Path.Combine(Directory.GetCurrentDirectory(), @"RestrictedBolzmannMachine2\Data\rbm_twoclass_sample.csv");
 
-            LearningApi api = new LearningApi(this.getDescriptorForRbmTwoClassesClassifier());
+            LearningApi api = new LearningApi(this.getDescriptorForRbmTwoClassesClassifier(10));
 
             // Initialize data provider
             api.UseCsvDataProvider(dataPath, ';', false, 1);
@@ -178,7 +172,7 @@ namespace test.RestrictedBolzmannMachine2
         {
             var dataPath = System.IO.Path.Combine(Directory.GetCurrentDirectory(), @"RestrictedBolzmannMachine2\Data\rbm_twoclass_sample.csv");
 
-            LearningApi api = new LearningApi(this.getDescriptorForRbmTwoClassesClassifier());
+            LearningApi api = new LearningApi(this.getDescriptorForRbmTwoClassesClassifier(10));
 
             // Initialize data provider
             api.UseCsvDataProvider(dataPath, ';', false, 1);
@@ -217,6 +211,54 @@ namespace test.RestrictedBolzmannMachine2
             Assert.True(result.Results[2].ToArray()[2].HiddenNodesPredictions[0] == result.Results[3].ToArray()[2].HiddenNodesPredictions[0] &&
                 result.Results[2].ToArray()[2].HiddenNodesPredictions[1] == result.Results[3].ToArray()[2].HiddenNodesPredictions[1]);
 
+        }
+
+
+        /// <summary>
+      
+        /// </summary>
+        [Fact]
+        public void Rbm_ClassifierTest2()
+        {
+            var dataPath = System.IO.Path.Combine(Directory.GetCurrentDirectory(), @"RestrictedBolzmannMachine2\Data\rbm_sample2.csv");
+
+            LearningApi api = new LearningApi(this.getDescriptorForRbmTwoClassesClassifier(21));
+
+            // Initialize data provider
+            api.UseCsvDataProvider(dataPath, ',', false, 1);
+            api.UseDefaultDataMapper();
+            api.UseDeepRbm(0.2, 10000, new int[] { 21, 9, 2 });
+
+            RbmResult score = api.Run() as RbmResult;
+
+            var expectedResults = new Dictionary<int, List<double[]>>();
+
+            // All test data, which belong to the sam class.
+            List<double[]> testListClass1 = new List<double[]>();
+            List<double[]> testListClass2 = new List<double[]>();
+
+            //
+            // This test data contains two patterns. One is grouped at left and one at almost right.
+            // testListClass1 contains class 1
+            // testListClass2 contains class 2
+            testListClass1.Add(new double[] { 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 });
+            testListClass1.Add(new double[] { 1, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 });
+            testListClass1.Add(new double[] { 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 });
+
+            testListClass2.Add(new double[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0 });
+
+            expectedResults.Add(1, testListClass1);
+            expectedResults.Add(2, testListClass2);
+
+            foreach (var keyPair in expectedResults)
+            {
+                RbmDeepResult result = api.Algorithm.Predict(keyPair.Value.ToArray(), api.Context) as RbmDeepResult;
+                var firstRes = result.Results[0].Last().HiddenNodesPredictions.ToBinary();
+                for (var i = 0; i < result.Results.Count; i++)
+                {
+                   Assert.True( result.Results[i].Last().HiddenNodesPredictions.ToBinary() == firstRes);
+                }
+            }
         }
     }
 
