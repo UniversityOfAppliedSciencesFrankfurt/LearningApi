@@ -215,7 +215,7 @@ namespace test.RestrictedBolzmannMachine2
 
 
         /// <summary>
-      
+        ///
         /// </summary>
         [Fact]
         public void Rbm_ClassifierTest2()
@@ -246,17 +246,57 @@ namespace test.RestrictedBolzmannMachine2
             testListClass1.Add(new double[] { 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 });
 
             testListClass2.Add(new double[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0 });
+            testListClass2.Add(new double[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 1, 0, 0, 0, 0, 0, 0 });
+            testListClass2.Add(new double[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0 });
 
             expectedResults.Add(1, testListClass1);
             expectedResults.Add(2, testListClass2);
 
+            validateClassificationResult(api, expectedResults);
+        }
+
+
+        /// <summary>
+        /// Validates prediction result of Deep RBM network.
+        /// </summary>
+        /// <param name="api"></param>
+        /// <param name="expectedResults"></param>
+        private static void validateClassificationResult(LearningApi api, Dictionary<int, List<double[]>> expectedResults)
+        {
+            // Every class has a result.
+            List<double> distinctResults = new List<double>();
+
+            //
+            // Traverse all test sample vectors, which are expected to be classified as
+            // of same class.
             foreach (var keyPair in expectedResults)
             {
+
                 RbmDeepResult result = api.Algorithm.Predict(keyPair.Value.ToArray(), api.Context) as RbmDeepResult;
-                var firstRes = result.Results[0].Last().HiddenNodesPredictions.ToBinary();
+
+                // We take encoding of first predicted vector of the current class
+                // and calculate binary result from it. We don't know encoding
+                // if this class, because on every run of unit test encding might be different.
+                // Whatever encoding is for this class we take it as reference value.
+                var classResult = result.Results[0].Last().HiddenNodesPredictions.ToBinary();
+
+                // Here we make sure that all prediction of the same class are same as refernece value,
+                // means same.
                 for (var i = 0; i < result.Results.Count; i++)
                 {
-                   Assert.True( result.Results[i].Last().HiddenNodesPredictions.ToBinary() == firstRes);
+                    Assert.True(result.Results[i].Last().HiddenNodesPredictions.ToBinary() == classResult);
+                }
+
+                distinctResults.Add(classResult);
+            }
+
+            //
+            // All classes must have difference result.(encoding)
+            for (int i = 0; i < distinctResults.Count -1; i++)
+            {
+                for (int j = i+1; j < distinctResults.Count; j++)
+                {
+                    Assert.True(distinctResults[i] != distinctResults[j]);
                 }
             }
         }
