@@ -100,9 +100,11 @@ namespace test.RestrictedBolzmannMachine2
 
             var predictedData = ((RbmResult)result).VisibleNodesPredictions;
 
+            var predictedHiddenNodes = ((RbmResult)result).HiddenNodesPredictions;
+
             var acc = testData.GetHammingDistance(predictedData);
 
-            WriteDeepResult(iterations, new int[] { visNodes, hidNodes }, acc, watch.ElapsedMilliseconds*1000);
+            WriteDeepResult(iterations, new int[] { visNodes, hidNodes }, acc, watch.ElapsedMilliseconds*1000, predictedHiddenNodes);
 
             WriteOutputMatrix(iterations, new int[] { visNodes, hidNodes }, predictedData, testData);
         }
@@ -110,21 +112,23 @@ namespace test.RestrictedBolzmannMachine2
 
 
 
-        internal static void WriteDeepResult(int iterations, int[] layers, double[] accuracy, long executionTime)
+        internal static void WriteDeepResult(int iterations, int[] layers, double[] accuracy, long executionTime, double[][] predictedNodes)
         {
             double sum = 0;
 
             using (StreamWriter tw = new StreamWriter($"Result_I{iterations}_V{String.Join("-", layers)}_ACC.txt"))
             {
-                tw.WriteLine($"Sample;Iterations;Accuracy; ExecutionTime={executionTime}");
+                tw.WriteLine($"Sample;Iterations;Accuracy");
                 for (int i = 0; i < accuracy.Length; i++)
                 {
-                    tw.WriteLine($"{i};{iterations};{accuracy[i]}");
+                    tw.WriteLine($"{i};{iterations};{accuracy[i]};{executionTime}");
                     sum += accuracy[i];
                 }
 
                 // Here we write out average accuracy.
                 tw.WriteLine($"{accuracy.Length};{iterations};{sum / accuracy.Length}");
+                tw.WriteLine();
+                tw.Write(predictedNodes);
                 tw.Close();
             }
             
