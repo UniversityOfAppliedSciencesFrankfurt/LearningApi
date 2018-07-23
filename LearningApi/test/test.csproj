@@ -446,6 +446,9 @@
     <None Update="RestrictedBolzmannMachine2\Data\DigitTest.csv">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Update="RestrictedBolzmannMachine2\Data\rbm_sample2.csv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Update="RestrictedBolzmannMachine2\Data\rbm_twoclass_sample.csv">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
