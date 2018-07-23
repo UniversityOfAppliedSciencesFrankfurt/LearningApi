@@ -57,7 +57,7 @@ namespace test.RestrictedBolzmannMachine2
         /// </summary>
         [Theory]
         [InlineData(1, 4096, 10)]
-        [InlineData(10, 4096, 10)]
+        //[InlineData(10, 4096, 10)]
        
         public void DigitRecognitionTest(int iterations, int visNodes, int hidNodes)
         {
@@ -118,17 +118,22 @@ namespace test.RestrictedBolzmannMachine2
 
             using (StreamWriter tw = new StreamWriter($"Result_I{iterations}_V{String.Join("-", layers)}_ACC.txt"))
             {
-                tw.WriteLine($"Sample;Iterations;Accuracy");
+                tw.WriteLine($"HiddenNodes;\t\tSample;Iterations;Accuracy;ExecutionTime");
                 for (int i = 0; i < accuracy.Length; i++)
-                {
+                {    
+                    for (int j = 0; j<predictedNodes[i].Length; j++)
+                    {
+                        tw.Write(predictedNodes[i][j]);
+                        tw.Write(",");
+                    }
+                    tw.Write("\t");
                     tw.WriteLine($"{i};{iterations};{accuracy[i]};{executionTime}");
+                    tw.WriteLine();
                     sum += accuracy[i];
                 }
 
                 // Here we write out average accuracy.
                 tw.WriteLine($"{accuracy.Length};{iterations};{sum / accuracy.Length}");
-                tw.WriteLine();
-                tw.Write(predictedNodes);
                 tw.Close();
             }
             

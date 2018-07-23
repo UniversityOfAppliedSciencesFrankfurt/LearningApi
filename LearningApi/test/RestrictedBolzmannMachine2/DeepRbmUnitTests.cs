@@ -96,16 +96,18 @@ namespace test.RestrictedBolzmannMachine2
             var result = api.Algorithm.Predict(testData, api.Context) as RbmDeepResult;
             var accList = new double[result.Results.Count];
             var predictions = new double[result.Results.Count][];
+            var predictedHiddenNodes = new double[result.Results.Count][];
 
             int i = 0;
             foreach (var item in result.Results)
             {
                 predictions[i] = item.First().VisibleNodesPredictions;
+                predictedHiddenNodes[i] = item.First().HiddenNodesPredictions;
                 accList[i] = testData[i].GetHammingDistance(predictions[i]);
                 i++;
             }
 
-            RbmHandwrittenDigitUnitTests.WriteDeepResult(iterations, layers, accList, watch.ElapsedMilliseconds/1000);
+            RbmHandwrittenDigitUnitTests.WriteDeepResult(iterations, layers, accList, watch.ElapsedMilliseconds/1000,predictedHiddenNodes );
             /// write predicted hidden nodes.......
             RbmHandwrittenDigitUnitTests.WriteOutputMatrix(iterations, layers, predictions, testData);
         }
