@@ -108,7 +108,7 @@ namespace test.RestrictedBolzmannMachine2
                 i++;
             }
 
-            RbmHandwrittenDigitUnitTests.WriteDeepResult(iterations, layers, accList, Time/60 ,predictedHiddenNodes );
+            RbmHandwrittenDigitUnitTests.WriteDeepResult(iterations, layers, accList, Time/60.0 ,predictedHiddenNodes );
             /// write predicted hidden nodes.......
             RbmHandwrittenDigitUnitTests.WriteOutputMatrix(iterations, layers, predictions, testData);
         }

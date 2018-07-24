@@ -112,7 +112,7 @@ namespace test.RestrictedBolzmannMachine2
 
 
 
-        internal static void WriteDeepResult(int iterations, int[] layers, double[] accuracy, long executionTime, double[][] predictedNodes)
+        internal static void WriteDeepResult(int iterations, int[] layers, double[] accuracy, double executionTime, double[][] predictedNodes)
         {
             double sum = 0;
 
