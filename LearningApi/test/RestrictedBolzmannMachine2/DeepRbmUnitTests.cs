@@ -97,6 +97,7 @@ namespace test.RestrictedBolzmannMachine2
             var accList = new double[result.Results.Count];
             var predictions = new double[result.Results.Count][];
             var predictedHiddenNodes = new double[result.Results.Count][];
+            var Time = watch.ElapsedMilliseconds / 1000;
 
             int i = 0;
             foreach (var item in result.Results)
@@ -107,7 +108,7 @@ namespace test.RestrictedBolzmannMachine2
                 i++;
             }
 
-            RbmHandwrittenDigitUnitTests.WriteDeepResult(iterations, layers, accList, watch.ElapsedMilliseconds/60000,predictedHiddenNodes );
+            RbmHandwrittenDigitUnitTests.WriteDeepResult(iterations, layers, accList, Time/60 ,predictedHiddenNodes );
             /// write predicted hidden nodes.......
             RbmHandwrittenDigitUnitTests.WriteOutputMatrix(iterations, layers, predictions, testData);
         }
