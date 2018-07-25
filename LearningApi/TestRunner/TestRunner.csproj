@@ -61,10 +61,13 @@
     <None Update="Test-0.1-4096-050.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Update="Test-0.2-4096-x-100-10.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Update="Test-4096-100-50-10.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="Test-4096-100-10.txt">
+    <None Update="Test-0.1-4096-x-100-010.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Update="Test-4096-200-10.txt">
