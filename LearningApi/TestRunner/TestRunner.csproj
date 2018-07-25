@@ -25,6 +25,9 @@
     <None Update="RestrictedBolzmannMachine2\Data\rbm_twoclass_sample.csv">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Update="Test-0.1-4096-2000.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Update="Test-0.2-4096-250-x-10.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
