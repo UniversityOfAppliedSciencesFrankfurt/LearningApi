@@ -72,7 +72,7 @@ namespace test.RestrictedBolzmannMachine2
         /// </summary>
         [Theory]
         //[InlineData(1, 4096, new int[] { 4096, 250, 10 })]       
-        [InlineData(1, 0.2, new int[] { 4096, 10 })]
+        [InlineData(1, 0.2, new int[] { 4096, 20, 10 })]
         public void DigitRecognitionDeepTest(int iterations, double learningRate, int[] layers)
         {
             Debug.WriteLine($"{iterations}-{String.Join("", layers)}");
@@ -103,7 +103,7 @@ namespace test.RestrictedBolzmannMachine2
             foreach (var item in result.Results)
             {
                 predictions[i] = item.First().VisibleNodesPredictions;
-                predictedHiddenNodes[i] = item.First().HiddenNodesPredictions;
+                predictedHiddenNodes[i] = item.Last().HiddenNodesPredictions;
                 accList[i] = testData[i].GetHammingDistance(predictions[i]);
                 i++;
             }
