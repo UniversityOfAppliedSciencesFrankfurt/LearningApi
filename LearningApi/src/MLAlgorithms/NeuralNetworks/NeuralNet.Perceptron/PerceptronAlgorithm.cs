@@ -77,23 +77,7 @@ namespace NeuralNet.Perceptron
                 }
 
                 if (totalError == 0) break;
-
-                //if (totalError == 0)
-                //{
-                //    bool isAny = false;
-
-                //    foreach (var err in m_Errors)
-                //    {
-                //        if (err != 0)
-                //        {
-                //            isAny = true;
-                //            break;
-                //        }
-                //    }
-
-                //    if (!isAny)
-                //        break;
-                //}
+                
             }
 
             score.Weights = this.m_Weights;
@@ -105,25 +89,30 @@ namespace NeuralNet.Perceptron
         public override double[] Predict(double[][] data, IContext ctx)
         {
             double[] results = new double[data.Length];
+
             for (int i = 0; i < data.Length; i++)
             {
                 results[i] = calculateResult(data[i], ctx.DataDescriptor.Features.Length);
             }
+
             return results;
         }
         private double calculateResult(double[] input, int numOfFeatures)
         {
             double result = 0.0;
+
             for (int i = 0; i < numOfFeatures; i++)
             {
                 result += m_Weights[i] * input[i];
             }
             result += this.m_Threshold;
+
             return m_ActivationFunction(result);
         }
         private void initializeWeights()
         {
             Random rnd = new Random();
+
             for (int i = 0; i < m_Dimensions; i++)
             {
                 m_Weights[i] = rnd.Next();
