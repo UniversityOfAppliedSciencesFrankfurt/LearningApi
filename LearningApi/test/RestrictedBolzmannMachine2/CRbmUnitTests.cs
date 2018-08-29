@@ -14,7 +14,7 @@ using System.Drawing;
 using System.Text;
 using ImageBinarizer;
 
-namespace test.RestrictedBolzmannMachine
+namespace test.RestrictedBolzmannMachine2
 {
 
     public class CRbmUnitTests
