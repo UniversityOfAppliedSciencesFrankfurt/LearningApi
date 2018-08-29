@@ -6,7 +6,7 @@ using System.IO;
 using System.Threading.Tasks;
 using test.RestrictedBolzmannMachine2;
 
-namespace TestRunner
+namespace TestRunnerRbm
 {
     class Program
     {
