@@ -209,7 +209,7 @@ namespace test.RestrictedBolzmannMachine2
             // Initialize data provider
             api.UseCsvDataProvider(dataPath, ';', false, 1);
             api.UseDefaultDataMapper();
-            api.UseDeepRbm(0.2, 1000, new int[] { 10, 8, 6, 4, 2 });
+            api.UseDeepRbm(0.2, 1000, new int[] { 10, 5, 2 });
 
             RbmResult score = api.Run() as RbmResult;
 
@@ -223,7 +223,7 @@ namespace test.RestrictedBolzmannMachine2
             testData[3] = new double[] { 0, 0, 0, 0, 0, 1, 0, 1, 0, 0 };
 
             // This will be classified as third class.
-            testData[4] = new double[] { 1, 1, 1, 0, 0, 1, 1, 1, 0, 0 };
+         testData[4] = new double[] { 1, 1, 1, 0, 0, 1, 1, 1, 0, 0 };
 
             RbmDeepResult result = api.Algorithm.Predict(testData, api.Context) as RbmDeepResult;
 
@@ -236,12 +236,12 @@ namespace test.RestrictedBolzmannMachine2
             // Third and fourth are also of same class. See data.
 
             // Here we check first classs.
-            Assert.True(result.Results[0].ToArray()[3].HiddenNodesPredictions[0] == result.Results[1].ToArray()[3].HiddenNodesPredictions[0] &&
-                result.Results[0].ToArray()[3].HiddenNodesPredictions[1] == result.Results[1].ToArray()[3].HiddenNodesPredictions[1]);
+            Assert.True(result.Results[0].ToArray()[1].HiddenNodesPredictions[0] == result.Results[1].ToArray()[1].HiddenNodesPredictions[0] &&
+                result.Results[0].ToArray()[1].HiddenNodesPredictions[1] == result.Results[1].ToArray()[1].HiddenNodesPredictions[1]);
 
             // Here is test for second class.
-            Assert.True(result.Results[2].ToArray()[3].HiddenNodesPredictions[0] == result.Results[3].ToArray()[3].HiddenNodesPredictions[0] &&
-                result.Results[2].ToArray()[3].HiddenNodesPredictions[1] == result.Results[3].ToArray()[3].HiddenNodesPredictions[1]);
+            Assert.True(result.Results[2].ToArray()[1].HiddenNodesPredictions[0] == result.Results[3].ToArray()[1].HiddenNodesPredictions[0] &&
+                result.Results[2].ToArray()[1].HiddenNodesPredictions[1] == result.Results[3].ToArray()[1].HiddenNodesPredictions[1]);
 
         }
 

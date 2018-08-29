@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.27004.2009
+VisualStudioVersion = 15.0.27130.2036
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{4366E8AF-8F45-46BB-9FF7-6D67AA4171FA}"
 EndProject
@@ -56,7 +56,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NeuralNet.MLPerceptron", "s
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ImageBinarizer", "ImageBinarizer\ImageBinarizer.csproj", "{74EC6681-115E-45E0-8813-E63283279092}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestRunner", "TestRunner\TestRunner.csproj", "{B298B24F-8C29-45DB-AAB1-8AB143EB9EF1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestRunner", "TestRunner\TestRunner.csproj", "{B298B24F-8C29-45DB-AAB1-8AB143EB9EF1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestRunnerRbm", "ConsoleApp1\TestRunnerRbm.csproj", "{9D230096-614F-4C2C-8B5A-E15C6445D634}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -136,6 +138,10 @@ Global
 		{B298B24F-8C29-45DB-AAB1-8AB143EB9EF1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B298B24F-8C29-45DB-AAB1-8AB143EB9EF1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B298B24F-8C29-45DB-AAB1-8AB143EB9EF1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9D230096-614F-4C2C-8B5A-E15C6445D634}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9D230096-614F-4C2C-8B5A-E15C6445D634}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9D230096-614F-4C2C-8B5A-E15C6445D634}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9D230096-614F-4C2C-8B5A-E15C6445D634}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -164,6 +170,7 @@ Global
 		{32DA33B2-5C56-4F50-860C-269E61CA3DA5} = {461E3D43-4B87-4CC0-9762-88ACFDBAFBCA}
 		{74EC6681-115E-45E0-8813-E63283279092} = {4366E8AF-8F45-46BB-9FF7-6D67AA4171FA}
 		{B298B24F-8C29-45DB-AAB1-8AB143EB9EF1} = {9C130877-8AE6-46F0-83EE-813C2E8144A2}
+		{9D230096-614F-4C2C-8B5A-E15C6445D634} = {9C130877-8AE6-46F0-83EE-813C2E8144A2}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {DD0FDFB7-25B1-4E83-9B3D-B71D6DB943F9}

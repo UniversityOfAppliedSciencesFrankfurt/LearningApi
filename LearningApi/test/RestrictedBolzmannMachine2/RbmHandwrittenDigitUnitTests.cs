@@ -56,10 +56,10 @@ namespace test.RestrictedBolzmannMachine2
         /// TODO...
         /// </summary>
         [Theory]
-        [InlineData(10, 4096, 900)]
+        [InlineData(10,0.2, 4096, 900)]
         //[InlineData(10, 4096, 10)]
        
-        public void DigitRecognitionTest(int iterations, int visNodes, int hidNodes)
+        public void DigitRecognitionTest(int iterations,double learningRate, int visNodes, int hidNodes)
         {
             Debug.WriteLine($"{iterations}-{visNodes}-{hidNodes}");
 
@@ -68,7 +68,7 @@ namespace test.RestrictedBolzmannMachine2
             // Initialize data provider
             api.UseCsvDataProvider(Path.Combine(Directory.GetCurrentDirectory(), @"RestrictedBolzmannMachine2\Data\DigitDataset.csv"), ',', false, 0);
             api.UseDefaultDataMapper();
-            api.UseRbm(0.2, iterations, visNodes, hidNodes);
+            api.UseRbm(learningRate, iterations, visNodes, hidNodes);
 
             Stopwatch watch = new Stopwatch();
             watch.Start();
