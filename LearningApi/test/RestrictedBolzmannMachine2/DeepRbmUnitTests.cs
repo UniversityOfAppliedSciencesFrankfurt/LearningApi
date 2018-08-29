@@ -134,19 +134,44 @@ namespace test.RestrictedBolzmannMachine2
              
             RbmResult score = api.Run() as RbmResult;
 
-            double[][] testData = new double[5][];
+            double[][] trainData = new double[6][];
+
+            // All test data, which belong to the sam class.
+            List<double[]> testListClass1 = new List<double[]>();
+            List<double[]> testListClass2 = new List<double[]>();
 
             //
             // This test data contains two patterns. One is grouped at left and one at almost right.
-            testData[0] = new double[] { 1, 1, 1, 0, 0, 0, 0, 0, 0, 0 };
-            testData[1] = new double[] { 1, 0, 1, 0, 0, 0, 0, 0, 0, 0 };
-            testData[2] = new double[] { 0, 0, 0, 0, 0, 1, 1, 1, 0, 0 };
-            testData[3] = new double[] { 0, 0, 0, 0, 0, 1, 0, 1, 0, 0 };
+            trainData[0] = new double[] { 1, 1, 1, 0, 0, 0, 0, 0, 0, 0 };
+            testListClass1.Add(trainData[0]);
+
+            trainData[1] = new double[] { 1, 0, 1, 0, 0, 0, 0, 0, 0, 0 };
+            testListClass1.Add(trainData[1]);
+
+            trainData[2] = new double[] { 0, 1, 1, 0, 0, 0, 0, 0, 0, 0 };
+            testListClass1.Add(trainData[2]);
+
+
+            trainData[3] = new double[] { 0, 0, 0, 0, 0, 1, 1, 1, 0, 0 };
+            testListClass2.Add(trainData[3]);
+
+            trainData[4] = new double[] { 0, 0, 0, 0, 0, 1, 0, 1, 0, 0 };
+            testListClass2.Add(trainData[4]);
+
+            trainData[5] = new double[] { 0, 0, 0, 0, 0, 1, 1, 0, 0, 0 };
+            testListClass2.Add(trainData[5]);
+
 
             // This will be classified as third class.
-            testData[4] = new double[] { 1, 1, 1, 0, 0, 1, 1, 1, 0, 0 };
+            //testData[4] = new double[] { 1, 1, 1, 0, 0, 1, 1, 1, 0, 0 };
 
-            RbmDeepResult result = api.Algorithm.Predict(testData, api.Context) as RbmDeepResult;
+            RbmDeepResult result = api.Algorithm.Predict(trainData, api.Context) as RbmDeepResult;
+
+            var expectedResults = new Dictionary<int, List<double[]>>();
+            expectedResults.Add(1, testListClass1);
+            expectedResults.Add(2, testListClass2);
+
+            validateClassificationResult(api, expectedResults);
 
             //
             // 2 * BIT1 + BIT2 of [0] and [1] should be same.
@@ -156,13 +181,13 @@ namespace test.RestrictedBolzmannMachine2
             // First and second data sample are of the same class. 
             // Third and fourth are also of same class. See data.
 
-            // Here we check first classs.
-            Assert.True(result.Results[0].ToArray()[0].HiddenNodesPredictions[0] == result.Results[1].ToArray()[0].HiddenNodesPredictions[0] &&
-                result.Results[0].ToArray()[0].HiddenNodesPredictions[1] == result.Results[1].ToArray()[0].HiddenNodesPredictions[1]);
+            //// Here we check first classs.
+            //Assert.True(result.Results[0].ToArray()[0].HiddenNodesPredictions[0] == result.Results[1].ToArray()[0].HiddenNodesPredictions[0] &&
+            //    result.Results[0].ToArray()[0].HiddenNodesPredictions[1] == result.Results[1].ToArray()[0].HiddenNodesPredictions[1]);
 
-            // Here is test for second class.
-            Assert.True(result.Results[2].ToArray()[0].HiddenNodesPredictions[0] == result.Results[3].ToArray()[0].HiddenNodesPredictions[0] &&
-                result.Results[2].ToArray()[0].HiddenNodesPredictions[1] == result.Results[3].ToArray()[0].HiddenNodesPredictions[1]);
+            //// Here is test for second class.
+            //Assert.True(result.Results[2].ToArray()[0].HiddenNodesPredictions[0] == result.Results[3].ToArray()[0].HiddenNodesPredictions[0] &&
+            //    result.Results[2].ToArray()[0].HiddenNodesPredictions[1] == result.Results[3].ToArray()[0].HiddenNodesPredictions[1]);
 
         }
 
@@ -227,7 +252,7 @@ namespace test.RestrictedBolzmannMachine2
             // Initialize data provider
             api.UseCsvDataProvider(dataPath, ',', false, 1);
             api.UseDefaultDataMapper();
-            api.UseDeepRbm(0.2, 10000, new int[] { 21, 9, 2 });
+            api.UseDeepRbm(0.2, 10000, new int[] { 21, 9, 6, 2 });
 
             RbmResult score = api.Run() as RbmResult;
 
