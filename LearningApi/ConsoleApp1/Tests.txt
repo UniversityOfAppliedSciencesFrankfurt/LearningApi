@@ -1,0 +1,2 @@
+﻿Iterations;LearningRate;vNodes;hNodes
+1;0.1;4096;10
