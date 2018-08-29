@@ -207,7 +207,7 @@ namespace test.RestrictedBolzmannMachine
         [Fact]
         public void RBMDataSample1Test()
         {
-            var dataPath = System.IO.Path.Combine(Directory.GetCurrentDirectory(), @"RestrictedBolzmannMachine2\rbm_sample1.csv");
+            var dataPath = System.IO.Path.Combine(Directory.GetCurrentDirectory(), @"RestrictedBolzmannMachine2\Data\rbm_sample1.csv");
 
             LearningApi api = new LearningApi(this.getDescriptorForRbm_sample1());
            
@@ -361,7 +361,7 @@ namespace test.RestrictedBolzmannMachine
         [Fact]
         public void Rbm_ClassifierTest()
         {
-            var dataPath = System.IO.Path.Combine(Directory.GetCurrentDirectory(), @"RestrictedBolzmannMachine2\rbm_twoclass_sample.csv");
+            var dataPath = System.IO.Path.Combine(Directory.GetCurrentDirectory(), @"RestrictedBolzmannMachine2\Data\rbm_twoclass_sample.csv");
 
             LearningApi api = new LearningApi(this.getDescriptorForRbmTwoClassesClassifier());
 

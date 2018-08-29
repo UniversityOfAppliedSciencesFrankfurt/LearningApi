@@ -49,6 +49,7 @@ namespace test.RestrictedBolzmannMachine2
         /// RBM is not supervised algorithm. This is why we do not have a label.
         /// </summary>
         /// <returns></returns>
+ 
         private DataDescriptor getDescriptorForRbmTwoClassesClassifier(int dims)
         {
             DataDescriptor des = new DataDescriptor();
@@ -57,9 +58,11 @@ namespace test.RestrictedBolzmannMachine2
             // Label not used.
             des.LabelIndex = -1;
             des.Features = new Column[dims];
+            int k = 1;
             for (int i = 0; i < dims; i++)
             {
-                des.Features[i] = new Column { Id = i, Name = $"col{i}", Index = 0, Type = ColumnType.NUMERIC, Values = null, DefaultMissingValue = 0 };
+                des.Features[i] = new Column { Id = k, Name = $"col{k}", Index = i, Type = ColumnType.NUMERIC, Values = null, DefaultMissingValue = 0 };
+                k = k + 1;
             }
 
             return des;
@@ -72,7 +75,7 @@ namespace test.RestrictedBolzmannMachine2
         /// </summary>
         [Theory]
         //[InlineData(1, 4096, new int[] { 4096, 250, 10 })]       
-        [InlineData(1, 0.2, new int[] { 4096, 10 })]
+        [InlineData(1, 0.2, new int[] { 4096, 900, 80 })]
         public void DigitRecognitionDeepTest(int iterations, double learningRate, int[] layers)
         {
             Debug.WriteLine($"{iterations}-{String.Join("", layers)}");
@@ -96,16 +99,20 @@ namespace test.RestrictedBolzmannMachine2
             var result = api.Algorithm.Predict(testData, api.Context) as RbmDeepResult;
             var accList = new double[result.Results.Count];
             var predictions = new double[result.Results.Count][];
+            var predictedHiddenNodes = new double[result.Results.Count][];
+            var Time = watch.ElapsedMilliseconds / 1000;
 
             int i = 0;
             foreach (var item in result.Results)
             {
                 predictions[i] = item.First().VisibleNodesPredictions;
+                predictedHiddenNodes[i] = item.Last().HiddenNodesPredictions;
                 accList[i] = testData[i].GetHammingDistance(predictions[i]);
                 i++;
             }
 
-            RbmHandwrittenDigitUnitTests.WriteDeepResult(iterations, layers, accList, watch.ElapsedMilliseconds/1000);
+            RbmHandwrittenDigitUnitTests.WriteDeepResult(iterations, layers, accList, Time/60.0 ,predictedHiddenNodes );
+            /// write predicted hidden nodes.......
             RbmHandwrittenDigitUnitTests.WriteOutputMatrix(iterations, layers, predictions, testData);
         }
 
@@ -202,7 +209,7 @@ namespace test.RestrictedBolzmannMachine2
             // Initialize data provider
             api.UseCsvDataProvider(dataPath, ';', false, 1);
             api.UseDefaultDataMapper();
-            api.UseDeepRbm(0.2, 1000, new int[] { 10, 8, 5, 2 });
+            api.UseDeepRbm(0.2, 1000, new int[] { 10, 8, 6, 4, 2 });
 
             RbmResult score = api.Run() as RbmResult;
 
@@ -229,12 +236,12 @@ namespace test.RestrictedBolzmannMachine2
             // Third and fourth are also of same class. See data.
 
             // Here we check first classs.
-            Assert.True(result.Results[0].ToArray()[2].HiddenNodesPredictions[0] == result.Results[1].ToArray()[2].HiddenNodesPredictions[0] &&
-                result.Results[0].ToArray()[2].HiddenNodesPredictions[1] == result.Results[1].ToArray()[2].HiddenNodesPredictions[1]);
+            Assert.True(result.Results[0].ToArray()[3].HiddenNodesPredictions[0] == result.Results[1].ToArray()[3].HiddenNodesPredictions[0] &&
+                result.Results[0].ToArray()[3].HiddenNodesPredictions[1] == result.Results[1].ToArray()[3].HiddenNodesPredictions[1]);
 
             // Here is test for second class.
-            Assert.True(result.Results[2].ToArray()[2].HiddenNodesPredictions[0] == result.Results[3].ToArray()[2].HiddenNodesPredictions[0] &&
-                result.Results[2].ToArray()[2].HiddenNodesPredictions[1] == result.Results[3].ToArray()[2].HiddenNodesPredictions[1]);
+            Assert.True(result.Results[2].ToArray()[3].HiddenNodesPredictions[0] == result.Results[3].ToArray()[3].HiddenNodesPredictions[0] &&
+                result.Results[2].ToArray()[3].HiddenNodesPredictions[1] == result.Results[3].ToArray()[3].HiddenNodesPredictions[1]);
 
         }
 

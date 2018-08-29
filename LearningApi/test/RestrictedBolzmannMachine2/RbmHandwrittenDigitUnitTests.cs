@@ -56,8 +56,8 @@ namespace test.RestrictedBolzmannMachine2
         /// TODO...
         /// </summary>
         [Theory]
-        [InlineData(1, 4096, 10)]
-        [InlineData(10, 4096, 10)]
+        [InlineData(10, 4096, 900)]
+        //[InlineData(10, 4096, 10)]
        
         public void DigitRecognitionTest(int iterations, int visNodes, int hidNodes)
         {
@@ -100,9 +100,11 @@ namespace test.RestrictedBolzmannMachine2
 
             var predictedData = ((RbmResult)result).VisibleNodesPredictions;
 
+            var predictedHiddenNodes = ((RbmResult)result).HiddenNodesPredictions;
+
             var acc = testData.GetHammingDistance(predictedData);
 
-            WriteDeepResult(iterations, new int[] { visNodes, hidNodes }, acc, watch.ElapsedMilliseconds*1000);
+            WriteDeepResult(iterations, new int[] { visNodes, hidNodes }, acc, watch.ElapsedMilliseconds*1000, predictedHiddenNodes);
 
             WriteOutputMatrix(iterations, new int[] { visNodes, hidNodes }, predictedData, testData);
         }
@@ -110,16 +112,23 @@ namespace test.RestrictedBolzmannMachine2
 
 
 
-        internal static void WriteDeepResult(int iterations, int[] layers, double[] accuracy, long executionTime)
+        internal static void WriteDeepResult(int iterations, int[] layers, double[] accuracy, double executionTime, double[][] predictedNodes)
         {
             double sum = 0;
 
             using (StreamWriter tw = new StreamWriter($"Result_I{iterations}_V{String.Join("-", layers)}_ACC.txt"))
             {
-                tw.WriteLine($"Sample;Iterations;Accuracy; ExecutionTime={executionTime}");
+                tw.WriteLine($"HiddenNodes;\t\tSample;Iterations;Accuracy;ExecutionTime");
                 for (int i = 0; i < accuracy.Length; i++)
-                {
-                    tw.WriteLine($"{i};{iterations};{accuracy[i]}");
+                {    
+                    for (int j = 0; j<predictedNodes[i].Length; j++)
+                    {
+                        tw.Write(predictedNodes[i][j]);
+                        tw.Write(",");
+                    }
+                    tw.Write("\t");
+                    tw.WriteLine($"{i};{iterations};{accuracy[i]};{executionTime}");
+                    tw.WriteLine();
                     sum += accuracy[i];
                 }
 

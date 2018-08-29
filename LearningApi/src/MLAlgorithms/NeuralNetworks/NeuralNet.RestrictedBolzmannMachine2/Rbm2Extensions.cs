@@ -27,7 +27,18 @@ namespace NeuralNet.RestrictedBolzmannMachine2
             return api;
         }
 
-       public static LearningApi UseDeepRbm(this LearningApi api,
+
+        public static LearningApi UseCRbm(this LearningApi api, double[] featureVector,
+        double learningRate, int iterations, int numVisible, int numHidden,
+             IActivationFunction activationFnc = null)
+
+        {
+            var alg = new CRbm(featureVector, numVisible, numHidden, iterations, learningRate/*, bool writeLossToFile = false*/);
+            api.AddModule(alg, $"Rbm_{Guid.NewGuid()}");
+            return api;
+        }
+
+        public static LearningApi UseDeepRbm(this LearningApi api,
        double learningRate, int iterations, int[] layers,
             IActivationFunction activationFnc = null)
 
