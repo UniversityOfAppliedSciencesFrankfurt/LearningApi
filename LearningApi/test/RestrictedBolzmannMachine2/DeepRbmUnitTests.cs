@@ -80,7 +80,7 @@ namespace test.RestrictedBolzmannMachine2
         {
             Debug.WriteLine($"{iterations}-{String.Join("", layers)}");
 
-            LearningApi api = new LearningApi(RbmHandwrittenDigitUnitTests.GetDescriptorForDigits());
+            LearningApi api = new LearningApi(getDescriptorForRbmTwoClassesClassifier(4096));
 
             // Initialize data provider
             // TODO: Describe Digit Dataset.

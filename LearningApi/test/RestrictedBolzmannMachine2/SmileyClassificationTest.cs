@@ -12,7 +12,7 @@ using System.Diagnostics;
 
 namespace test.RestrictedBolzmannMachine2
 {
-    public class RbmHandwrittenDigitUnitTests
+    public class SmileyClassificationTest
     {
 
         private DataDescriptor getDescriptorForRbm(int dims)
@@ -33,114 +33,22 @@ namespace test.RestrictedBolzmannMachine2
             return des;
         }
 
-        /***
-        internal static DataDescriptor GetDescriptorForDigits()
-        {
-            DataDescriptor des = new DataDescriptor();
-            des.Features = new LearningFoundation.DataMappers.Column[4096];
-            des.LabelIndex = -1;
-
-            des.Features = new Column[4096];
-            int k = 1;
-            for (int i = 0; i < 4096; i++)
-            {
-
-                des.Features[i] = new Column { Id = k, Name = "col" + k, Index = i, Type = ColumnType.NUMERIC, Values = null, DefaultMissingValue = 0 };
-                k = k + 1;
-            }
-            return des;
-        }
-        ***/
-
-        /// <summary>
-        /// Ensures that all RBM layers are correctly allocated.
-        /// </summary>
-        /// <param name="iterations"></param>
-        /// <param name="layers"></param>
-        [Theory]
-        [InlineData(1, new int[] { 9, 5 })]
-        [InlineData(1, new int[] { 19, 15, 14, 7 })]
-        [InlineData(1, new int[] { 250, 150, 10 })]
-        public void DeepRbmConstructorTest(int iterations, int[] layers)
-        {
-            DeepRbm rbm = new DeepRbm(layers, iterations, 0.01);
-            Assert.True(rbm.Layers.Length == layers.Length - 1);
-            foreach (var layer in rbm.Layers)
-            {
-                Assert.True(layer != null);
-            }
-        }
-
         /// <summary>
         /// TODO...
         /// </summary>
         [Theory]
-        [InlineData(1000, 0.1, 4096, 10)]
-        //[InlineData(10, 4096, 10)]
+        [InlineData( 500, 0.02, 1600, 400)]
        
-        public void DigitRecognitionTest(int iterations,double learningRate, int visNodes, int hidNodes)
+        public void SmileyTest(int iterations,double learningRate, int visNodes, int hidNodes)
         {
-            Debug.WriteLine($"{iterations}-{visNodes}-{hidNodes}");
 
-            LearningApi api = new LearningApi(getDescriptorForRbm(4096));
-
-            // Initialize data provider
-            api.UseCsvDataProvider(Path.Combine(Directory.GetCurrentDirectory(), @"RestrictedBolzmannMachine2\Data\DigitDataset.csv"), ',', false, 0);
-            api.UseDefaultDataMapper();
-            api.UseRbm(learningRate, iterations, visNodes, hidNodes);
-
-            Stopwatch watch = new Stopwatch();
-            watch.Start();
-            RbmScore score = api.Run() as RbmScore;
-            watch.Stop();
-
-            var hiddenNodes = score.HiddenValues;
-            var hiddenWeight = score.HiddenBisases;
-
-
-            double[] learnedFeatures = new double[hidNodes];
-            double[] hiddenWeights = new double[hidNodes];
-            for (int i = 0; i < hidNodes; i++)
-            {
-                learnedFeatures[i] = hiddenNodes[i];
-                hiddenWeights[i] = hiddenWeight[i];
-            }
-
-            StreamWriter tw = new StreamWriter($"PredictedDigit_I{iterations}_V{visNodes}_H{hidNodes}_learnedbias.txt");
-            foreach (var item in score.HiddenBisases)
-            {
-                tw.WriteLine(item);
-            }
-            tw.Close();
-
-            var testData = ReadData(Path.Combine(Directory.GetCurrentDirectory(), @"RestrictedBolzmannMachine2\Data\DigitTest.csv"));
-
-            var result = api.Algorithm.Predict(testData, api.Context);
-
-            var predictedData = ((RbmResult)result).VisibleNodesPredictions;
-
-            var predictedHiddenNodes = ((RbmResult)result).HiddenNodesPredictions;
-
-            var acc = testData.GetHammingDistance(predictedData);
-
-            WriteDeepResult(iterations, new int[] { visNodes, hidNodes }, acc, watch.ElapsedMilliseconds*1000, predictedHiddenNodes);
-
-            WriteOutputMatrix(iterations, new int[] { visNodes, hidNodes }, predictedData, testData);
-        }
-
-        [Theory]
-        [InlineData(1000, 0.1, 4096, 2)]
-        // Smiley test
-        public void SmileyClassificationTest(int iterations, double learningRate, int visNodes, int hidNodes)
-        {
-            Debug.WriteLine($"{iterations}-{visNodes}-{hidNodes}");
-
-            LearningApi api = new LearningApi(getDescriptorForRbm(4096));
+            LearningApi api = new LearningApi(getDescriptorForRbm(1600));
 
             // Initialize data provider
             api.UseCsvDataProvider(Path.Combine(Directory.GetCurrentDirectory(), @"RestrictedBolzmannMachine2\Data\Smiley.csv"), ',', false, 0);
             api.UseDefaultDataMapper();
-            api.UseRbm(learningRate, iterations, visNodes, hidNodes);
+            double[] featureVector = new double[] { -1, 1 };
+            api.UseCRbm(featureVector, learningRate, iterations, visNodes, hidNodes);
 
             Stopwatch watch = new Stopwatch();
             watch.Start();
@@ -159,7 +67,7 @@ namespace test.RestrictedBolzmannMachine2
                 hiddenWeights[i] = hiddenWeight[i];
             }
 
-            StreamWriter tw = new StreamWriter($"Smiley_PredictedDigit_I{iterations}_V{visNodes}_H{hidNodes}_learnedbias.txt");
+            StreamWriter tw = new StreamWriter($"SmileyData_PredictedDigit_I{iterations}_V{visNodes}_H{hidNodes}_learnedbias.txt");
             foreach (var item in score.HiddenBisases)
             {
                 tw.WriteLine(item);
@@ -176,7 +84,7 @@ namespace test.RestrictedBolzmannMachine2
 
             var acc = testData.GetHammingDistance(predictedData);
 
-            WriteDeepResult(iterations, new int[] { visNodes, hidNodes }, acc, watch.ElapsedMilliseconds * 1000, predictedHiddenNodes);
+            WriteDeepResult(iterations, new int[] { visNodes, hidNodes }, acc, watch.ElapsedMilliseconds*1000, predictedHiddenNodes);
 
             WriteOutputMatrix(iterations, new int[] { visNodes, hidNodes }, predictedData, testData);
         }
@@ -185,7 +93,7 @@ namespace test.RestrictedBolzmannMachine2
         {
             double sum = 0;
 
-            using (StreamWriter tw = new StreamWriter($"Smiley_Result_I{iterations}_V{String.Join("-", layers)}_ACC.txt"))
+            using (StreamWriter tw = new StreamWriter($"SmileyData_Result_I{iterations}_V{String.Join("-", layers)}_ACC.txt"))
             {
                 tw.WriteLine($"HiddenNodes;\t\tSample;Iterations;Accuracy;ExecutionTime");
                 for (int i = 0; i < accuracy.Length; i++)
@@ -207,8 +115,7 @@ namespace test.RestrictedBolzmannMachine2
             }
             
         }
-
-        internal static void WriteOutputMatrix(int iterations, int[] layers, double[][] predictedData, double[][] testData, int lineLength = 64)
+        internal static void WriteOutputMatrix(int iterations, int[] layers, double[][] predictedData, double[][] testData, int lineLength = 40)
         {
             using (TextWriter tw = new StreamWriter($"PredictedDigit_I{iterations}_V{String.Join("_", layers)}.txt"))
             {
@@ -235,13 +142,13 @@ namespace test.RestrictedBolzmannMachine2
                 }
 
                 tw.WriteLine();
-                tw.Write("\t\t\t\t\t\t Original Image \t\t\t\t\t\t\t\t\t\t\t\t\t Predicted Image");
+                tw.Write("\t\t\t\t Predicted Image \t\t\t\t\t\t\t\t\t\t\t\t\t\t\t Original Image");
                 tw.WriteLine();
                 int k = 1;
 
                 for (var i = 0; i < finalRowCount; i++)
                 {
-                    if (k == 65)
+                    if (k == 41)
                     {
                         tw.WriteLine();
                         tw.Write("New Image");
@@ -260,7 +167,6 @@ namespace test.RestrictedBolzmannMachine2
                     tw.WriteLine();
                     k++;
                 }
-
                 tw.WriteLine();
                 tw.Close();
             }

@@ -246,11 +246,15 @@ namespace NeuralNet.RestrictedBolzmannMachine2
                 double sum = calculateSumForHPrimeFromVPrime(vPrime, hiddenValIndx);
                 sum += hidBiases[hiddenValIndx]; // add the hidden bias
                 double probActiv = m_ActivationFunction(sum); // apply activation
+              
                 double pr = m_Rnd.NextDouble();  // determine 0/1 node value
                 if (probActiv > pr)
                     hPrime[hiddenValIndx] = 1;
                 else
                     hPrime[hiddenValIndx] = 0;
+
+                
+                //hPrime[hiddenValIndx] = probActiv;
             }
 
             return hPrime;
@@ -282,11 +286,16 @@ namespace NeuralNet.RestrictedBolzmannMachine2
                 sum += visBiases[v]; // add visible bias
 
                 double probActiv = m_ActivationFunction(sum);
+
+               
                 double pr = m_Rnd.NextDouble();
                 if (probActiv > pr)
                     vPrime[v] = 1;
                 else
                     vPrime[v] = 0;
+
+            
+                //vPrime[v] = probActiv;
             }
 
             return vPrime;
@@ -334,12 +343,15 @@ namespace NeuralNet.RestrictedBolzmannMachine2
                 //    hidValues[hiddenIndx] = 1;
                 //else
                 //    hidValues[hiddenIndx] = 0;
-
+               
                 double pr = m_Rnd.NextDouble();  // determine 0/1 h node value
                 if (sumPrime > pr)
                     m_HidValues[hiddenIndx] = 1;
                 else
                     m_HidValues[hiddenIndx] = 0;
+
+                //m_HidValues[hiddenIndx] = sumPrime;
+
             }
         }
 
@@ -423,6 +435,8 @@ namespace NeuralNet.RestrictedBolzmannMachine2
                                 m_HidValues[hiddenIndx] = 1;
                             else
                                 m_HidValues[hiddenIndx] = 0;
+
+                            //m_HidValues[hiddenIndx] = sumPrime;
                         }
 
                         // compute positive gradient =  outer product of v & h
@@ -437,11 +451,14 @@ namespace NeuralNet.RestrictedBolzmannMachine2
                                 sum += m_HidValues[h] * vhWeights[v][h];
                             sum += visBiases[v]; // add visible bias
                             double probActiv = m_ActivationFunction(sum);
+
                             double pr = m_Rnd.NextDouble();
                             if (probActiv > pr)
                                 vPrime[v] = 1;
                             else
                                 vPrime[v] = 0;
+
+                            //vPrime[v] = probActiv;
                         }
 
                         //
@@ -454,11 +471,14 @@ namespace NeuralNet.RestrictedBolzmannMachine2
                                 sum += vPrime[v] * vhWeights[v][hiddenValIndx];
                             sum += hidBiases[hiddenValIndx]; // add the hidden bias
                             double probActiv = m_ActivationFunction(sum); // apply activation
+
                             double pr = m_Rnd.NextDouble();  // determine 0/1 node value
                             if (probActiv > pr)
                                 hPrime[hiddenValIndx] = 1;
                             else
                                 hPrime[hiddenValIndx] = 0;
+                            
+                            //hPrime[hiddenValIndx] = probActiv;
                         }
 
                         //printVector("Weights -1", vhWeights);
@@ -570,11 +590,14 @@ namespace NeuralNet.RestrictedBolzmannMachine2
                     sum += hidBiases[h]; // add the hidden bias
                     double probActiv = m_ActivationFunction(sum); // compute prob of h activation
                                                                   // Console.WriteLine("Hidden [" + h + "] activation probability = " + probActiv.ToString("F4"));
+
                     double pr = m_Rnd.NextDouble();  // determine 0/1 h node value
                     if (probActiv > pr)
                         res.HiddenNodesPredictions[i][h] = 1;
                     else
                         res.HiddenNodesPredictions[i][h] = 0;
+
+                    //res.HiddenNodesPredictions[i][h] = probActiv;
                 }
 
                 res.VisibleNodesPredictions[i] = calcVisibleFromHidden(res.HiddenNodesPredictions[i]);
@@ -600,6 +623,8 @@ namespace NeuralNet.RestrictedBolzmannMachine2
                     result[v] = 1;
                 else
                     result[v] = 0;
+                
+                //result[v] = probActiv;
             }
             return result;
         }

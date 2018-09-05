@@ -20,13 +20,15 @@ namespace test.RestrictedBolzmannMachine2
 
         //saving initializing Path to store binary data in CSV File
         //public static string DigitDatasetCSVPath = @"D:\thesis\DigitDataset.csv";
-        public static string DigitDatasetCSVPath = System.IO.Path.Combine(Directory.GetCurrentDirectory(), @"RestrictedBolzmannMachine2\DigitDataset.csv");
-        public StreamWriter DigitDatasetCSVFile = File.CreateText(DigitDatasetCSVPath);
+        //public static string DigitDatasetCSVPath = System.IO.Path.Combine(Directory.GetCurrentDirectory(), @"RestrictedBolzmannMachine2\DigitDataset.csv");
+        public static string DigitDatasetCSVPath = System.IO.Path.Combine(Directory.GetCurrentDirectory(), @"RestrictedBolzmannMachine2\Data\NewData.csv");
+        //public StreamWriter DigitDatasetCSVFile = File.CreateText(DigitDatasetCSVPath);
+        public StreamWriter SmileyCSVFile = File.CreateText(DigitDatasetCSVPath);
 
         //path for images on local machine, should be changed for new data
-        private static string imagePath = @"C:\Program Files\MATLAB\R2017b\toolbox\nnet\nndemos\nndatasets\DigitDataset\";
+        //private static string imagePath = @"C:\Program Files\MATLAB\R2017b\toolbox\nnet\nndemos\nndatasets\DigitDataset\";
+        private static string imagePath = @"C:\Users\Jyoti\Desktop\RBM\Smiley\";
 
- 
         private DataDescriptor getImgRecognitionDescriptor(int numOfFeatures)
         {
             DataDescriptor desc = new DataDescriptor();
@@ -60,7 +62,7 @@ namespace test.RestrictedBolzmannMachine2
         public void RBMBinaryDataCreation()
         {
             //size of image
-            int size = 64;
+            int size = 40;
 
             var context = getImgRecognitionDescriptor(size * size);
 
@@ -68,8 +70,8 @@ namespace test.RestrictedBolzmannMachine2
 
             api.UseActionModule<object, double[][]>((notUsed, ctx) =>
             {
-                double[][] trainData = new double[10000][];
-                for (int j = 0; j < 10; j++)
+                double[][] trainData = new double[22][];
+                for (int j = 0; j < 1; j++)
                 {
                     //Path of training images.
                     //return getImageData(size, $"{Directory.GetCurrentDirectory()}\\RestrictedBolzmannMachine2\\TrainingImages");
@@ -80,7 +82,8 @@ namespace test.RestrictedBolzmannMachine2
 
             IScore score = api.Run() as IScore;
 
-            DigitDatasetCSVFile.Close();
+            //DigitDatasetCSVFile.Close();
+            SmileyCSVFile.Close();
         }
 
         private double[][] getImageData(int size, string imageFolder)
@@ -112,7 +115,8 @@ namespace test.RestrictedBolzmannMachine2
                     }
                 }
 
-                WriteImageDataToCSVFile(DigitDatasetCSVFile, imgTrainingRow);
+                //WriteImageDataToCSVFile(DigitDatasetCSVFile, imgTrainingRow);
+                WriteImageDataToCSVFile(SmileyCSVFile, imgTrainingRow);
 
                 data[indx] = imgTrainingRow.ToArray();
                 indx++;
@@ -124,16 +128,21 @@ namespace test.RestrictedBolzmannMachine2
         }
 
 
-        private void WriteImageDataToCSVFile(StreamWriter DigitDatasetCSVFile, List<double> imageData)
+        //private void WriteImageDataToCSVFile(StreamWriter DigitDatasetCSVFile, List<double> imageData)
+        private void WriteImageDataToCSVFile(StreamWriter SmileyCSVFile, List<double> imageData)
         {
             //Writing data in a csv file
             for (int i = 0; i < imageData.Count; i++)
             {
-                DigitDatasetCSVFile.Write(imageData[i]);
-                DigitDatasetCSVFile.Write(',');
+                //DigitDatasetCSVFile.Write(imageData[i]);
+                //DigitDatasetCSVFile.Write(',');
+                SmileyCSVFile.Write(imageData[i]);
+                SmileyCSVFile.Write(',');
             }
-            DigitDatasetCSVFile.WriteLine();
-            DigitDatasetCSVFile.AutoFlush = true;
+            //DigitDatasetCSVFile.WriteLine();
+            //DigitDatasetCSVFile.AutoFlush = true;
+            SmileyCSVFile.WriteLine();
+            SmileyCSVFile.AutoFlush = true;
         }
 
     }

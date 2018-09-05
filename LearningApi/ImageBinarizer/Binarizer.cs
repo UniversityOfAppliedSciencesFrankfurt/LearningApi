@@ -14,15 +14,15 @@ namespace ImageBinarizer
     public class Binarizer
     {
 
-        private int m_RedThreshold = 100;
+        private int m_RedThreshold = 200;
 
-        private int m_GreenThreshold = 100;
+        private int m_GreenThreshold = 200;
 
-        private int m_BlueThreshold = 100;
+        private int m_BlueThreshold = 200;
 
         private Size? m_TargetSize;
 
-        public Binarizer(int redThreshold = 100, int greenThreshold = 100, int blueThreshold = 100, int targetWidth = 0, int targetHeight = 0)
+        public Binarizer(int redThreshold = 200, int greenThreshold = 200, int blueThreshold = 200, int targetWidth = 0, int targetHeight = 0)
         {
             this.m_BlueThreshold = blueThreshold;
             this.m_RedThreshold = redThreshold;
@@ -93,8 +93,8 @@ namespace ImageBinarizer
                     for (int j = 0; j < wg; j++)
                     {
                         // t = 0 .299R + 0 .587G + 0 .144B
-                        t.Append((img.GetPixel(j, i).R > 100 && img.GetPixel(j, i).G > 100 &&
-                           img.GetPixel(j, i).B > 100) ? 1 : 0);
+                        t.Append((img.GetPixel(j, i).R > 200 && img.GetPixel(j, i).G > 200 &&
+                           img.GetPixel(j, i).B > 200) ? 1 : 0);
                     }
                     t.AppendLine();
                 }

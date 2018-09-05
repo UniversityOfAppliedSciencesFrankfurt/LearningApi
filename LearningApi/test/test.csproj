@@ -443,7 +443,7 @@
     <None Update="RestrictedBolzmannMachine2\Data\DigitDataset.csv">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="RestrictedBolzmannMachine2\Data\DigitTest.csv">
+    <None Update="RestrictedBolzmannMachine2\Data\SmileyData.csv">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Update="RestrictedBolzmannMachine2\Data\rbm_sample2.csv">
