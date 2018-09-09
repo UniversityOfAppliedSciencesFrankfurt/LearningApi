@@ -211,8 +211,20 @@ namespace NeuralNet.RestrictedBolzmannMachine2
 
                 score.Loss = loss / indices.Length;
 
+                double rec = 0;
+                for (int k = 0; k < numVisible; ++k)
+                {
+                    if (m_VisibleValues[k] == vPrime[k])
+                    {
+                        rec = rec + 1;
+                    }
+                }
+                double Acc = rec / numVisible;
+
+                Debug.WriteLine($"Acc: {Acc}");
+
                 ++epoch;
-                
+
             }
 
             score.HiddenValues = new List<double>(this.m_HidValues).ToArray();
@@ -490,6 +502,7 @@ namespace NeuralNet.RestrictedBolzmannMachine2
 #if DEBUG
                         var val = calcDelta(posGrad, negGrad);
                         loss += val / (m_NumHidden * numVisible);
+                        
 #endif
                         // printVector("PosGrad", posGrad);
                         // printVector("NegGrad", negGrad);

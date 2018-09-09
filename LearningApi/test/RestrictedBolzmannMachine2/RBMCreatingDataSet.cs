@@ -21,7 +21,7 @@ namespace test.RestrictedBolzmannMachine2
         //saving initializing Path to store binary data in CSV File
         //public static string DigitDatasetCSVPath = @"D:\thesis\DigitDataset.csv";
         //public static string DigitDatasetCSVPath = System.IO.Path.Combine(Directory.GetCurrentDirectory(), @"RestrictedBolzmannMachine2\DigitDataset.csv");
-        public static string DigitDatasetCSVPath = System.IO.Path.Combine(Directory.GetCurrentDirectory(), @"RestrictedBolzmannMachine2\Data\NewData.csv");
+        public static string DigitDatasetCSVPath = System.IO.Path.Combine(Directory.GetCurrentDirectory(), @"RestrictedBolzmannMachine2\Data\Smiley.csv");
         //public StreamWriter DigitDatasetCSVFile = File.CreateText(DigitDatasetCSVPath);
         public StreamWriter SmileyCSVFile = File.CreateText(DigitDatasetCSVPath);
 

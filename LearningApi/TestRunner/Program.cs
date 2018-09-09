@@ -109,11 +109,27 @@ namespace TestRunner
         /// <param name="learningRate"></param>
         /// <param name="layers"></param>
         /// <returns></returns>
-        private static Task runTest(int iterations, double learningRate, int[] layers)
+        private static Task runTestOld1(int iterations, double learningRate, int[] layers)
         {
             return Task.Run(() =>
             {
                 RbmHandwrittenDigitUnitTests test = new RbmHandwrittenDigitUnitTests();
+
+                Stopwatch watch = new Stopwatch();
+                Console.WriteLine($"{DateTime.Now} - Started test I:{iterations} learning rate:{learningRate} Nodes:{String.Join("-", layers)}");
+                watch.Start();
+                test.DigitRecognitionTest(iterations, learningRate, layers[0] /*V*/, layers[1] /*H*/);
+                watch.Stop();
+                Console.WriteLine($"{DateTime.Now} - End test test I:{iterations} learning rate:{learningRate} Nodes:{String.Join("-", layers)} in {watch.ElapsedMilliseconds * 1000} sec.");
+            }
+            );
+        }
+
+        private static Task runTest(int iterations, double learningRate, int[] layers)
+        {
+            return Task.Run(() =>
+            {
+                CRbmHandwrittenDigitUnitTests test = new CRbmHandwrittenDigitUnitTests();
 
                 Stopwatch watch = new Stopwatch();
                 Console.WriteLine($"{DateTime.Now} - Started test I:{iterations} learning rate:{learningRate} Nodes:{String.Join("-", layers)}");
