@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.IO;
 using NeuralNet.RestrictedBolzmannMachine2;
 using LearningFoundation.DataProviders;
@@ -51,7 +52,7 @@ namespace test.RestrictedBolzmannMachine2
         /// TODO...
         /// </summary>
         [Theory]
-        [InlineData(1000, 0.01, 1600, 600)]
+        [InlineData(1000, 0.01, 1600, 500)]
 
         public void SmileyTest(int iterations,double learningRate, int visNodes, int hidNodes)
         {
@@ -62,7 +63,7 @@ namespace test.RestrictedBolzmannMachine2
             api.UseCsvDataProvider(Path.Combine(Directory.GetCurrentDirectory(), @"RestrictedBolzmannMachine2\Data\Smiley.csv"), ',', false, 0);
             api.UseDefaultDataMapper();
             double[] featureVector = new double[] { 0.1,0.2 };
-            api.UseCRbm(featureVector,learningRate, iterations, visNodes, hidNodes);
+            api.UseCRbm(featureVector, learningRate, iterations, visNodes, hidNodes);
 
             Stopwatch watch = new Stopwatch();
             watch.Start();
@@ -99,6 +100,50 @@ namespace test.RestrictedBolzmannMachine2
             WriteDeepResult(iterations, new int[] { visNodes, hidNodes }, acc, watch.ElapsedMilliseconds*1000, predictedHiddenNodes);
 
             WriteOutputMatrix(iterations, new int[] { visNodes, hidNodes }, predictedData, testData);
+        }
+
+        [Theory]
+        [InlineData(1000, 0.01, new int[] {1600, 500, 300 })]
+
+        public void SmileyTestDeepRbm(int iterations, double learningRate, int[] layers)
+        {
+
+            LearningApi api = new LearningApi(getDescriptorForRbm(1600));
+
+            // Initialize data provider
+            api.UseCsvDataProvider(Path.Combine(Directory.GetCurrentDirectory(), @"RestrictedBolzmannMachine2\Data\Smiley.csv"), ',', false, 0);
+            api.UseDefaultDataMapper();
+            api.UseDeepRbm(learningRate, iterations, layers);
+
+            Stopwatch watch = new Stopwatch();
+            watch.Start();
+            RbmDeepScore score = api.Run() as RbmDeepScore;
+            watch.Stop();
+
+            var testData = ReadData(Path.Combine(Directory.GetCurrentDirectory(), @"RestrictedBolzmannMachine2\Data\SmileyTest.csv"));
+
+            var result = api.Algorithm.Predict(testData, api.Context) as RbmDeepResult;
+            var accList = new double[result.Results.Count];
+            var predictions = new double[result.Results.Count][];
+            var predictedHiddenNodes = new double[result.Results.Count][];
+            var Time = watch.ElapsedMilliseconds / 1000;
+
+            int i = 0;
+            foreach (var item in result.Results)
+            {
+                predictions[i] = item.First().VisibleNodesPredictions;
+                predictedHiddenNodes[i] = item.Last().HiddenNodesPredictions;
+                accList[i] = testData[i].GetHammingDistance(predictions[i]);
+                i++;
+            }
+            var ValTest = calcDelta(predictions, testData);
+            var lossTest = ValTest / (layers.First());
+            Debug.WriteLine($"lossTest: {lossTest}");
+
+            WriteDeepResult(iterations, layers, accList, Time/60.0 , predictedHiddenNodes);
+            /// write predicted hidden nodes.......
+            WriteOutputMatrix(iterations, layers, predictions, testData);
+
         }
 
         internal static void WriteDeepResult(int iterations, int[] layers, double[] accuracy, double executionTime, double[][] predictedNodes)

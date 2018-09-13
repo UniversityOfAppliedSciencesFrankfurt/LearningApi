@@ -149,6 +149,17 @@ namespace NeuralNet.RestrictedBolzmannMachine2
 
                         layer.Loss = loss / indices.Length;
 
+                        double rec = 0;
+                        for (int k = 0; k < layer.NumVisible; ++k)
+                        {
+                            if (layer.VisibleValues[k] == vPrime[k])
+                            {
+                                rec = rec + 1;
+                            }
+                        }
+                        double Acc = rec / layer.NumVisible;
+                        Debug.WriteLine($"Acc: {Acc}");
+
                         score.Layers.Add(layer);
 
                         layerIndx++;
