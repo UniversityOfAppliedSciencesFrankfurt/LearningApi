@@ -369,8 +369,8 @@ namespace test.RestrictedBolzmannMachine
             api.UseCsvDataProvider(dataPath, ';', false, 1);
             api.UseDefaultDataMapper();
             api.UseRbm(0.01, 1000, 10, 2);
-             
-            RbmResult score = api.Run() as RbmResult;
+
+            RbmScore score = api.Run() as RbmScore;
 
             double[][] testData = new double[5][];
 

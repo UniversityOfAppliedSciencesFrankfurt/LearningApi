@@ -89,7 +89,7 @@ namespace NeuralNet.RestrictedBolzmannMachine2
         public override IScore Run(double[][] data, IContext ctx)
         {
             double loss = 0;
-            RbmDeepScore score = new RbmDeepScore() { Layers = new List<RbmLayer>() };
+            RbmDeepScore score = new RbmDeepScore() { Layers = new List<RbmLayer>(this.Layers) };
 
             int[] indices = new int[data.Length];
             for (int i = 0; i < indices.Length; ++i)
@@ -148,15 +148,15 @@ namespace NeuralNet.RestrictedBolzmannMachine2
                             layer.HidBiases[h] += learnRate * (layer.HidValues[h] - hPrime[h]);
 
                         layer.Loss = loss / indices.Length;
-
-                        score.Layers.Add(layer);
+                        score.Layers[layerIndx] = layer;
+                       // score.Layers.Add(layer);
 
                         layerIndx++;
                     }
 
                     // Loss of iteration is calculated as 
                     // SUM(posGrad-negGrad) / number of training vectors
-                    Debug.WriteLine($"loss: {loss / indices.Length}");
+                    Debug.WriteLine($"loss: {loss / indices.Length / this.Layers.Length}");
 
                     ++epoch;
                 }

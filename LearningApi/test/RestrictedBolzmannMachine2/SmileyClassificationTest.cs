@@ -54,7 +54,7 @@ namespace test.RestrictedBolzmannMachine2
         [Theory]
         [InlineData(1000, 0.01, 1600, 500)]
 
-        public void SmileyTest(int iterations,double learningRate, int visNodes, int hidNodes)
+        public void smileyTestRbm(int iterations,double learningRate, int visNodes, int hidNodes)
         {
 
             LearningApi api = new LearningApi(getDescriptorForRbm(1600));
@@ -62,8 +62,7 @@ namespace test.RestrictedBolzmannMachine2
             // Initialize data provider
             api.UseCsvDataProvider(Path.Combine(Directory.GetCurrentDirectory(), @"RestrictedBolzmannMachine2\Data\Smiley.csv"), ',', false, 0);
             api.UseDefaultDataMapper();
-            double[] featureVector = new double[] { 0.1,0.2 };
-            api.UseCRbm(featureVector, learningRate, iterations, visNodes, hidNodes);
+            api.UseRbm(learningRate, iterations, visNodes, hidNodes);
 
             Stopwatch watch = new Stopwatch();
             watch.Start();
@@ -103,9 +102,60 @@ namespace test.RestrictedBolzmannMachine2
         }
 
         [Theory]
+        [InlineData(1000, 0.01, 1600, 500)]
+
+        public void smileyTestCRbm(int iterations, double learningRate, int visNodes, int hidNodes)
+        {
+
+            LearningApi api = new LearningApi(getDescriptorForRbm(1600));
+
+            // Initialize data provider
+            api.UseCsvDataProvider(Path.Combine(Directory.GetCurrentDirectory(), @"RestrictedBolzmannMachine2\Data\Smiley.csv"), ',', false, 0);
+            api.UseDefaultDataMapper();
+            double[] featureVector = new double[] { 0.1, 0.2 };
+            api.UseCRbm(featureVector, learningRate, iterations, visNodes, hidNodes);
+
+            Stopwatch watch = new Stopwatch();
+            watch.Start();
+            RbmScore score = api.Run() as RbmScore;
+            watch.Stop();
+
+            var hiddenNodes = score.HiddenValues;
+            var hiddenWeight = score.HiddenBisases;
+
+
+            double[] learnedFeatures = new double[hidNodes];
+            double[] hiddenWeights = new double[hidNodes];
+            for (int i = 0; i < hidNodes; i++)
+            {
+                learnedFeatures[i] = hiddenNodes[i];
+                hiddenWeights[i] = hiddenWeight[i];
+            }
+
+            var testData = ReadData(Path.Combine(Directory.GetCurrentDirectory(), @"RestrictedBolzmannMachine2\Data\SmileyTest.csv"));
+
+            var result = api.Algorithm.Predict(testData, api.Context);
+
+            var predictedData = ((RbmResult)result).VisibleNodesPredictions;
+
+            var predictedHiddenNodes = ((RbmResult)result).HiddenNodesPredictions;
+
+            var acc = testData.GetHammingDistance(predictedData);
+
+            var ValTest = calcDelta(predictedData, testData);
+            var lossTest = ValTest / (visNodes);
+
+            Debug.WriteLine($"lossTest: {lossTest}");
+
+            WriteDeepResult(iterations, new int[] { visNodes, hidNodes }, acc, watch.ElapsedMilliseconds * 1000, predictedHiddenNodes);
+
+            WriteOutputMatrix(iterations, new int[] { visNodes, hidNodes }, predictedData, testData);
+        }
+
+        [Theory]
         [InlineData(1000, 0.01, new int[] {1600, 500, 300 })]
 
-        public void SmileyTestDeepRbm(int iterations, double learningRate, int[] layers)
+        public void smileyTestDeepRbm(int iterations, double learningRate, int[] layers)
         {
 
             LearningApi api = new LearningApi(getDescriptorForRbm(1600));

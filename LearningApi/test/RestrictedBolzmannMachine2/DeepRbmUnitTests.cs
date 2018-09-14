@@ -75,7 +75,7 @@ namespace test.RestrictedBolzmannMachine2
         /// </summary>
         [Theory]
         //[InlineData(1, 4096, new int[] { 4096, 250, 10 })]       
-        [InlineData(10, 0.01, new int[] { 4096, 1500, 1600 })]
+        [InlineData(20, 0.01, new int[] { 4096, 1500, 20, 10 })]
         public void DigitRecognitionDeepTest(int iterations, double learningRate, int[] layers)
         {
             Debug.WriteLine($"{iterations}-{String.Join("", layers)}");
@@ -209,7 +209,7 @@ namespace test.RestrictedBolzmannMachine2
             // Initialize data provider
             api.UseCsvDataProvider(dataPath, ';', false, 1);
             api.UseDefaultDataMapper();
-            api.UseDeepRbm(0.01, 1000, new int[] { 10, 2 });
+            api.UseDeepRbm(0.01, 1000, new int[] { 10, 5, 2 });
 
             RbmDeepScore score = api.Run() as RbmDeepScore;
 
