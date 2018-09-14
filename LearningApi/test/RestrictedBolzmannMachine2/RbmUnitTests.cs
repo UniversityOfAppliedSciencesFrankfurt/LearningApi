@@ -368,7 +368,7 @@ namespace test.RestrictedBolzmannMachine
             // Initialize data provider
             api.UseCsvDataProvider(dataPath, ';', false, 1);
             api.UseDefaultDataMapper();
-            api.UseRbm(0.2, 1000, 10, 2);
+            api.UseRbm(0.01, 1000, 10, 2);
              
             RbmResult score = api.Run() as RbmResult;
 

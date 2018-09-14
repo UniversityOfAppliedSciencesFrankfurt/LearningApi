@@ -211,18 +211,6 @@ namespace NeuralNet.RestrictedBolzmannMachine2
 
                 score.Loss = loss / indices.Length;
 
-                double rec = 0;
-                for (int k = 0; k < numVisible; ++k)
-                {
-                    if (m_VisibleValues[k] == vPrime[k])
-                    {
-                        rec = rec + 1;
-                    }
-                }
-                double Acc = rec / numVisible;
-
-                Debug.WriteLine($"Acc: {Acc}");
-
                 ++epoch;
 
             }

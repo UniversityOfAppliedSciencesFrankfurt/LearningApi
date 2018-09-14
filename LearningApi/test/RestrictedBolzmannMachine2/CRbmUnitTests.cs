@@ -25,19 +25,7 @@ namespace test.RestrictedBolzmannMachine2
             
         }
 
-        [Fact]
-        public void TestBinarization()
-        {
-            var images = Directory.GetFiles(Path.Combine(AppContext.BaseDirectory, "RestrictedBolzmannMachine2\\TrainingImages"));
-
-            foreach (var item in images)
-            {
-                appendImageBinary(item, "binarized.txt");
-            }
-
-        }
-
-        /// <summary>
+                /// <summary>
         /// RBM is not supervised algorithm. This is why we do not have a label.
         /// </summary>
         /// <returns></returns>
@@ -85,16 +73,6 @@ namespace test.RestrictedBolzmannMachine2
             des.Features[9] = new Column { Id = 10, Name = "col10", Index = 9, Type = ColumnType.NUMERIC, Values = null, DefaultMissingValue = 0 };
            
             return des;
-        }
-
-        /// <summary>
-        /// Movies:
-        /// 
-        /// </summary>
-        [Fact]
-        public void RBMRecoomendationTest()
-        {
-
         }
 
 
@@ -207,7 +185,7 @@ namespace test.RestrictedBolzmannMachine2
         [Fact]
         public void RBMDataSample1Test()
         {
-            var dataPath = System.IO.Path.Combine(Directory.GetCurrentDirectory(), @"RestrictedBolzmannMachine2\rbm_sample1.csv");
+            var dataPath = System.IO.Path.Combine(Directory.GetCurrentDirectory(), @"RestrictedBolzmannMachine2\Data\rbm_sample1.csv");
 
             LearningApi api = new LearningApi(this.getDescriptorForRbm_sample1());
            
@@ -359,17 +337,17 @@ namespace test.RestrictedBolzmannMachine2
         /// It is concentrated on left or on right.
         /// </summary>
         [Fact]
-        public void Rbm_ClassifierTest()
+        public void CRbm_ClassifierTest()
         {
-            var dataPath = System.IO.Path.Combine(Directory.GetCurrentDirectory(), @"RestrictedBolzmannMachine2\rbm_twoclass_sample.csv");
+            var dataPath = System.IO.Path.Combine(Directory.GetCurrentDirectory(), @"RestrictedBolzmannMachine2\Data\rbm_twoclass_sample.csv");
 
             LearningApi api = new LearningApi(this.getDescriptorForRbmTwoClassesClassifier());
 
             // Initialize data provider
             api.UseCsvDataProvider(dataPath, ';', false, 1);
             api.UseDefaultDataMapper();
-            api.UseRbm(0.2, 1000, 10, 2);
-             
+            double[] featureVector = new double[] {0.1,0.2,0.3};
+            api.UseCRbm(featureVector , 0.01, 1000, 10, 2); 
             RbmResult score = api.Run() as RbmResult;
 
             double[][] testData = new double[5][];
@@ -418,50 +396,5 @@ namespace test.RestrictedBolzmannMachine2
 
             Debug.WriteLine("");
         }
-
-        
-        private void appendImageBinary(string image, string binaryFilePath)
-        {
-            //saving images in Bitmap format
-            var names = image.Split('\\');
-            string filename = string.Empty;
-            foreach (var item in names)
-            {
-                // if (item.Contains("."))
-                filename = " " + item.Substring(0, 1);
-            }
-        
-            //Loading Bmp images        
-            Bitmap Imgbmp = new Bitmap(64, 64);
-        
-            using (StreamWriter writer = File.AppendText(binaryFilePath))
-            {
-                Bitmap img = new Bitmap(image);
-                StringBuilder t = new StringBuilder();
-                int hg = img.Height;
-                int wg = img.Width;
-                for (int i = 0; i < hg; i++)
-                {
-                    for (int j = 0; j < wg; j++)
-                    {
-                        // t = 0 .299R + 0 .587G + 0 .144B
-                        t.Append((img.GetPixel(j, i).R > 100 && img.GetPixel(j, i).G > 100 &&
-                           img.GetPixel(j, i).B > 100) ? 1 : 0);
-                        //  t.Append(img.GetPixel(i,j).R);
-                    }
-                    t.AppendLine();
-                }
-                string text = t.ToString();
-                writer.Write(text);
-                writer.WriteLine(filename);
-            }
-
-        }
-
-
     }
-
-
-
-
 }

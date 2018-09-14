@@ -185,7 +185,7 @@ namespace test.RestrictedBolzmannMachine2
         {
             double sum = 0;
 
-            using (StreamWriter tw = new StreamWriter($"Smiley_Result_I{iterations}_V{String.Join("-", layers)}_ACC.txt"))
+            using (StreamWriter tw = new StreamWriter($"I{iterations}_V{String.Join("-", layers)}_ACC.txt"))
             {
                 tw.WriteLine($"HiddenNodes;\t\tSample;Iterations;Accuracy;ExecutionTime");
                 for (int i = 0; i < accuracy.Length; i++)

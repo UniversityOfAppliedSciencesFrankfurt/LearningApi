@@ -75,7 +75,7 @@ namespace test.RestrictedBolzmannMachine2
         /// </summary>
         [Theory]
         //[InlineData(1, 4096, new int[] { 4096, 250, 10 })]       
-        [InlineData(1, 0.2, new int[] { 4096, 900, 80 })]
+        [InlineData(10, 0.01, new int[] { 4096, 1500, 1600 })]
         public void DigitRecognitionDeepTest(int iterations, double learningRate, int[] layers)
         {
             Debug.WriteLine($"{iterations}-{String.Join("", layers)}");
@@ -209,9 +209,9 @@ namespace test.RestrictedBolzmannMachine2
             // Initialize data provider
             api.UseCsvDataProvider(dataPath, ';', false, 1);
             api.UseDefaultDataMapper();
-            api.UseDeepRbm(0.2, 1000, new int[] { 10, 5, 2 });
+            api.UseDeepRbm(0.01, 1000, new int[] { 10, 2 });
 
-            RbmResult score = api.Run() as RbmResult;
+            RbmDeepScore score = api.Run() as RbmDeepScore;
 
             double[][] testData = new double[5][];
 
@@ -223,7 +223,7 @@ namespace test.RestrictedBolzmannMachine2
             testData[3] = new double[] { 0, 0, 0, 0, 0, 1, 0, 1, 0, 0 };
 
             // This will be classified as third class.
-         testData[4] = new double[] { 1, 1, 1, 0, 0, 1, 1, 1, 0, 0 };
+            testData[4] = new double[] { 1, 1, 1, 0, 0, 1, 1, 1, 0, 0 };
 
             RbmDeepResult result = api.Algorithm.Predict(testData, api.Context) as RbmDeepResult;
 
