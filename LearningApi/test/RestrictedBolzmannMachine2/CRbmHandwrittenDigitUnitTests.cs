@@ -68,7 +68,7 @@ namespace test.RestrictedBolzmannMachine2
             // Initialize data provider
             api.UseCsvDataProvider(Path.Combine(Directory.GetCurrentDirectory(), @"RestrictedBolzmannMachine2\Data\DigitDataset.csv"), ',', false, 0);
             api.UseDefaultDataMapper();
-            double[] featureVector = new double[] { 0,0,0,0,0,0,0,1,0,0,1,0,0,0,1,1,0,1,0,0,0,1,0,1,0,1,1,0,0,1,1,1,1,0,0,0,1,0,0,1 };
+            double[] featureVector = new double[] { 0,0.1,0.2,0.3,0.4,0.4,0.5,0.6,0.7,0.8,0.9 };
             api.UseCRbm(featureVector, learningRate, iterations, visNodes, hidNodes);
 
             Stopwatch watch = new Stopwatch();

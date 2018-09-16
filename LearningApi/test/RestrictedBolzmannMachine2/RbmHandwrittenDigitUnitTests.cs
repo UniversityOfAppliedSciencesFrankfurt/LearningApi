@@ -75,7 +75,7 @@ namespace test.RestrictedBolzmannMachine2
         /// TODO...
         /// </summary>
         [Theory]
-        [InlineData(1000, 0.1, 4096, 10)]
+        [InlineData(10, 0.01, 4096, 1500)]
         //[InlineData(10, 4096, 10)]
        
         public void DigitRecognitionTest(int iterations,double learningRate, int visNodes, int hidNodes)
@@ -85,7 +85,7 @@ namespace test.RestrictedBolzmannMachine2
             LearningApi api = new LearningApi(getDescriptorForRbm(4096));
 
             // Initialize data provider
-            api.UseCsvDataProvider(Path.Combine(Directory.GetCurrentDirectory(), @"RestrictedBolzmannMachine2\Data\DigitDataset.csv"), ',', false, 0);
+            api.UseCsvDataProvider(Path.Combine(Directory.GetCurrentDirectory(), @"RestrictedBolzmannMachine2\Data\subDigitDataset.csv"), ',', false, 0);
             api.UseDefaultDataMapper();
             api.UseRbm(learningRate, iterations, visNodes, hidNodes);
 
@@ -113,7 +113,7 @@ namespace test.RestrictedBolzmannMachine2
             }
             tw.Close();
 
-            var testData = ReadData(Path.Combine(Directory.GetCurrentDirectory(), @"RestrictedBolzmannMachine2\Data\DigitTest.csv"));
+            var testData = ReadData(Path.Combine(Directory.GetCurrentDirectory(), @"RestrictedBolzmannMachine2\Data\subDigitTest.csv"));
 
             var result = api.Algorithm.Predict(testData, api.Context);
 

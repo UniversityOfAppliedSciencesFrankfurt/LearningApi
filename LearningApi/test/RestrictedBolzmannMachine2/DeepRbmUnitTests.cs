@@ -75,7 +75,7 @@ namespace test.RestrictedBolzmannMachine2
         /// </summary>
         [Theory]
         //[InlineData(1, 4096, new int[] { 4096, 250, 10 })]       
-        [InlineData(20, 0.01, new int[] { 4096, 1500, 20, 10 })]
+        [InlineData(10, 0.01, new int[] { 4096, 1500, 30 })]
         public void DigitRecognitionDeepTest(int iterations, double learningRate, int[] layers)
         {
             Debug.WriteLine($"{iterations}-{String.Join("", layers)}");
