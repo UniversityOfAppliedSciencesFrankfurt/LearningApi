@@ -84,7 +84,7 @@ namespace test.RestrictedBolzmannMachine2
 
             // Initialize data provider
             // TODO: Describe Digit Dataset.
-            api.UseCsvDataProvider(Path.Combine(Directory.GetCurrentDirectory(), @"RestrictedBolzmannMachine2\Data\subDigitDataset.csv"), ',', false, 0);
+            api.UseCsvDataProvider(Path.Combine(Directory.GetCurrentDirectory(), @"RestrictedBolzmannMachine2\Data\DigitDataset.csv"), ',', false, 0);
             api.UseDefaultDataMapper();
 
             api.UseDeepRbm(learningRate, iterations, layers);
@@ -94,7 +94,7 @@ namespace test.RestrictedBolzmannMachine2
             RbmDeepScore score = api.Run() as RbmDeepScore;
             watch.Stop();
 
-            var testData = RbmHandwrittenDigitUnitTests.ReadData(Path.Combine(Directory.GetCurrentDirectory(), @"RestrictedBolzmannMachine2\Data\subDigitTest.csv"));
+            var testData = RbmHandwrittenDigitUnitTests.ReadData(Path.Combine(Directory.GetCurrentDirectory(), @"RestrictedBolzmannMachine2\Data\predictiondigitdata.csv"));
 
             var result = api.Algorithm.Predict(testData, api.Context) as RbmDeepResult;
             var accList = new double[result.Results.Count];
