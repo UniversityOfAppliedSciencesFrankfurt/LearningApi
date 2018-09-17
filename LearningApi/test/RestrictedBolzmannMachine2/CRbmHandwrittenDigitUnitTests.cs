@@ -66,7 +66,7 @@ namespace test.RestrictedBolzmannMachine2
             LearningApi api = new LearningApi(GetDescriptorForDigits());
 
             // Initialize data provider
-            api.UseCsvDataProvider(Path.Combine(Directory.GetCurrentDirectory(), @"RestrictedBolzmannMachine2\Data\DigitDataset.csv"), ',', false, 0);
+            api.UseCsvDataProvider(Path.Combine(Directory.GetCurrentDirectory(), @"RestrictedBolzmannMachine2\Data\subDigitDataset.csv"), ',', false, 0);
             api.UseDefaultDataMapper();
             double[] featureVector = new double[] { 0,0.1,0.2,0.3,0.4,0.4,0.5,0.6,0.7,0.8,0.9 };
             api.UseCRbm(featureVector, learningRate, iterations, visNodes, hidNodes);
@@ -88,14 +88,7 @@ namespace test.RestrictedBolzmannMachine2
                 hiddenWeights[i] = hiddenWeight[i];
             }
 
-            StreamWriter tw = new StreamWriter($"PredictedDigit_I{iterations}_V{visNodes}_H{hidNodes}_learnedbias.txt");
-            foreach (var item in score.HiddenBisases)
-            {
-                tw.WriteLine(item);
-            }
-            tw.Close();
-
-            var testData = ReadData(Path.Combine(Directory.GetCurrentDirectory(), @"RestrictedBolzmannMachine2\Data\DigitTest.csv"));
+            var testData = ReadData(Path.Combine(Directory.GetCurrentDirectory(), @"RestrictedBolzmannMachine2\Data\subDigitTest.csv"));
 
             var result = api.Algorithm.Predict(testData, api.Context);
 
