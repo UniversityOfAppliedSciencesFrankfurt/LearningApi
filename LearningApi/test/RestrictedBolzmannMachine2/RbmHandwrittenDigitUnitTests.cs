@@ -85,7 +85,7 @@ namespace test.RestrictedBolzmannMachine2
             LearningApi api = new LearningApi(getDescriptorForRbm(4096));
 
             // Initialize data provider
-            api.UseCsvDataProvider(Path.Combine(Directory.GetCurrentDirectory(), @"RestrictedBolzmannMachine2\Data\subDigitDataset.csv"), ',', false, 0);
+            api.UseCsvDataProvider(Path.Combine(Directory.GetCurrentDirectory(), @"RestrictedBolzmannMachine2\Data\DigitDataset.csv"), ',', false, 0);
             api.UseDefaultDataMapper();
             api.UseRbm(learningRate, iterations, visNodes, hidNodes);
 
@@ -113,7 +113,7 @@ namespace test.RestrictedBolzmannMachine2
             }
             tw.Close();
 
-            var testData = ReadData(Path.Combine(Directory.GetCurrentDirectory(), @"RestrictedBolzmannMachine2\Data\subDigitTest.csv"));
+            var testData = ReadData(Path.Combine(Directory.GetCurrentDirectory(), @"RestrictedBolzmannMachine2\Data\predictiondigitdata.csv"));
 
             var result = api.Algorithm.Predict(testData, api.Context);
 
