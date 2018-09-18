@@ -75,17 +75,17 @@ namespace test.RestrictedBolzmannMachine2
         /// TODO...
         /// </summary>
         [Theory]
-        [InlineData(10, 0.01, 4096, 1500)]
+        [InlineData(10, 0.01, 3898, 1500)]
         //[InlineData(10, 4096, 10)]
        
         public void DigitRecognitionTest(int iterations,double learningRate, int visNodes, int hidNodes)
         {
             Debug.WriteLine($"{iterations}-{visNodes}-{hidNodes}");
 
-            LearningApi api = new LearningApi(getDescriptorForRbm(4096));
+            LearningApi api = new LearningApi(getDescriptorForRbm(3898));
 
             // Initialize data provider
-            api.UseCsvDataProvider(Path.Combine(Directory.GetCurrentDirectory(), @"RestrictedBolzmannMachine2\Data\DigitDataset.csv"), ',', false, 0);
+            api.UseCsvDataProvider(Path.Combine(Directory.GetCurrentDirectory(), @"RestrictedBolzmannMachine2\Data\movieDatasetTrain.csv"), ',', false, 0);
             api.UseDefaultDataMapper();
             api.UseRbm(learningRate, iterations, visNodes, hidNodes);
 
@@ -113,7 +113,7 @@ namespace test.RestrictedBolzmannMachine2
             }
             tw.Close();
 
-            var testData = ReadData(Path.Combine(Directory.GetCurrentDirectory(), @"RestrictedBolzmannMachine2\Data\predictiondigitdata.csv"));
+            var testData = ReadData(Path.Combine(Directory.GetCurrentDirectory(), @"RestrictedBolzmannMachine2\Data\movieDatasetTest.csv"));
 
             var result = api.Algorithm.Predict(testData, api.Context);
 
@@ -208,7 +208,7 @@ namespace test.RestrictedBolzmannMachine2
             
         }
 
-        internal static void WriteOutputMatrix(int iterations, int[] layers, double[][] predictedData, double[][] testData, int lineLength = 64)
+        internal static void WriteOutputMatrix(int iterations, int[] layers, double[][] predictedData, double[][] testData, int lineLength = 1)
         {
             using (TextWriter tw = new StreamWriter($"PredictedDigit_I{iterations}_V{String.Join("_", layers)}.txt"))
             {
