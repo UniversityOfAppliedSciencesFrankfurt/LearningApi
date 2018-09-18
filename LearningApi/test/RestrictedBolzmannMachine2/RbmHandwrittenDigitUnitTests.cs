@@ -241,7 +241,7 @@ namespace test.RestrictedBolzmannMachine2
 
                 for (var i = 0; i < finalRowCount; i++)
                 {
-                    if (k == 65)
+                    if (k == 2)
                     {
                         tw.WriteLine();
                         tw.Write("New Image");
