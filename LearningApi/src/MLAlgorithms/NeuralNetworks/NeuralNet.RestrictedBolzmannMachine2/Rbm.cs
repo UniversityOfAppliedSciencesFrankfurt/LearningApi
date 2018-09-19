@@ -631,28 +631,28 @@ namespace NeuralNet.RestrictedBolzmannMachine2
                 sum += visBiases[v];
                 double probActiv = m_ActivationFunction(sum);
                 double pr = m_Rnd.NextDouble();
-                //if (probActiv > pr)
-                  //  result[v] = 1;
-                //else
-                  //  result[v] = 0;
+                if (probActiv > 0.5)
+                   result[v] = 1;
+                else
+                    result[v] = 0;
 
                 //result[v] = probActiv;
-                if (probActiv < 0.21)
-                    result[v] = 1;
-                else if (probActiv > 0.20 && probActiv < 0.41)
-                {
-                    result[v] = 2;
-                }
-                else if (probActiv > 0.40 && probActiv < 0.61)
-                {
-                    result[v] = 3;
-                }
-                else if (probActiv > 0.60 && probActiv < 0.81)
-                {
-                    result[v] = 4;
-                }
-                else
-                    result[v] = 5;
+                //if (probActiv < 0.21)
+                  //  result[v] = 1;
+                //else if (probActiv > 0.20 && probActiv < 0.41)
+                //{
+                  //  result[v] = 2;
+                //}
+                //else if (probActiv > 0.40 && probActiv < 0.61)
+                //{
+                  //  result[v] = 3;
+                //}
+                //else if (probActiv > 0.60 && probActiv < 0.81)
+                //{
+                  //  result[v] = 4;
+                //}
+                //else
+                  //  result[v] = 5;
             }
             return result;
         }
