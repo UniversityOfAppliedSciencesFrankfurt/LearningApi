@@ -13,7 +13,7 @@ using System.Diagnostics;
 
 namespace test.RestrictedBolzmannMachine2
 {
-    public class RbmMovieRecommendation
+    public class movieRecommendation
     {
 
         private DataDescriptor getDescriptorForRbm(int dims)
@@ -61,7 +61,7 @@ namespace test.RestrictedBolzmannMachine2
         [InlineData(2, 0.01, 3898, 500)]
         //[InlineData(10, 4096, 10)]
        
-        public void movieRecommendationTest(int iterations,double learningRate, int visNodes, int hidNodes)
+        public void movieRecommendationTestRbm(int iterations,double learningRate, int visNodes, int hidNodes)
         {
             Debug.WriteLine($"{iterations}-{visNodes}-{hidNodes}");
 

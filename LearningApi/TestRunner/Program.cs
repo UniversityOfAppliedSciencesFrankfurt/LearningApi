@@ -89,7 +89,7 @@ namespace TestRunner
         {
             return Task.Run(() =>
             {
-                RbmMovieRecommendation test = new RbmMovieRecommendation();
+                movieRecommendation test = new movieRecommendation();
                 
                 Stopwatch watch = new Stopwatch();
                 Console.WriteLine($"{DateTime.Now} - Started test I:{iterations} learning rate:{learningRate} Nodes:{String.Join("-", layers)}");
@@ -109,27 +109,27 @@ namespace TestRunner
         /// <param name="learningRate"></param>
         /// <param name="layers"></param>
         /// <returns></returns>
-        private static Task runTestold(int iterations, double learningRate, int[] layers)
+        private static Task runTest(int iterations, double learningRate, int[] layers)
         {
             return Task.Run(() =>
             {
                 //RbmHandwrittenDigitUnitTests test = new RbmHandwrittenDigitUnitTests();
-                RbmMovieRecommendation test = new RbmMovieRecommendation();
+                movieRecommendation test = new movieRecommendation();
                 Stopwatch watch = new Stopwatch();
                 Console.WriteLine($"{DateTime.Now} - Started test I:{iterations} learning rate:{learningRate} Nodes:{String.Join("-", layers)}");
                 watch.Start();
-                test.movieRecommendationTest(iterations, learningRate, layers[0] /*V*/, layers[1] /*H*/);
+                test.movieRecommendationTestRbm(iterations, learningRate, layers[0] /*V*/, layers[1] /*H*/);
                 watch.Stop();
                 Console.WriteLine($"{DateTime.Now} - End test test I:{iterations} learning rate:{learningRate} Nodes:{String.Join("-", layers)} in {watch.ElapsedMilliseconds * 1000} sec.");
             }
             );
         }
 
-        private static Task runTest(int iterations, double learningRate, int[] layers)
+        private static Task runTestold(int iterations, double learningRate, int[] layers)
         {
             return Task.Run(() =>
             {
-                RbmMovieRecommendation test = new RbmMovieRecommendation();
+                movieRecommendation test = new movieRecommendation();
 
                 Stopwatch watch = new Stopwatch();
                 Console.WriteLine($"{DateTime.Now} - Started test I:{iterations} learning rate:{learningRate} Nodes:{String.Join("-", layers)}");
