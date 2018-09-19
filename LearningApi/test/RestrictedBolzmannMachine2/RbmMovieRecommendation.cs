@@ -110,6 +110,59 @@ namespace test.RestrictedBolzmannMachine2
             WriteOutputMatrix(iterations, new int[] { visNodes, hidNodes }, predictedData, testData);
         }
 
+        [Theory]
+        [InlineData(10, 0.01, 3898, 1500)]
+        public void movieRecommendationTestCRbm(int iterations, double learningRate, int visNodes, int hidNodes)
+        {
+            Debug.WriteLine($"{iterations}-{visNodes}-{hidNodes}");
+
+            LearningApi api = new LearningApi(getDescriptorForRbm(3898));
+
+            // Initialize data provider
+            api.UseCsvDataProvider(Path.Combine(Directory.GetCurrentDirectory(), @"RestrictedBolzmannMachine2\Data\movieDatasetTrain.csv"), ',', false, 0);
+            api.UseDefaultDataMapper();
+            double[] featureVector = new double[] { 0, 0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4, 0.45, 0.5, 0.55, 0.6, 0.65, 0.7, 0.75, 0.8, 0.85};
+            api.UseCRbm(featureVector, learningRate, iterations, visNodes, hidNodes);
+
+            Stopwatch watch = new Stopwatch();
+            watch.Start();
+            RbmScore score = api.Run() as RbmScore;
+            watch.Stop();
+
+            var hiddenNodes = score.HiddenValues;
+            var hiddenWeight = score.HiddenBisases;
+
+
+            double[] learnedFeatures = new double[hidNodes];
+            double[] hiddenWeights = new double[hidNodes];
+            for (int i = 0; i < hidNodes; i++)
+            {
+                learnedFeatures[i] = hiddenNodes[i];
+                hiddenWeights[i] = hiddenWeight[i];
+            }
+
+            StreamWriter tw = new StreamWriter($"PredictedDigit_I{iterations}_V{visNodes}_H{hidNodes}_learnedbias.txt");
+            foreach (var item in score.HiddenBisases)
+            {
+                tw.WriteLine(item);
+            }
+            tw.Close();
+
+            var testData = ReadData(Path.Combine(Directory.GetCurrentDirectory(), @"RestrictedBolzmannMachine2\Data\movieDatasetTest.csv"));
+
+            var result = api.Algorithm.Predict(testData, api.Context);
+
+            var predictedData = ((RbmResult)result).VisibleNodesPredictions;
+
+            var predictedHiddenNodes = ((RbmResult)result).HiddenNodesPredictions;
+
+            var acc = testData.GetHammingDistance(predictedData);
+
+            WriteDeepResult(iterations, new int[] { visNodes, hidNodes }, acc, watch.ElapsedMilliseconds * 1000, predictedHiddenNodes);
+
+            WriteOutputMatrix(iterations, new int[] { visNodes, hidNodes }, predictedData, testData);
+        }
+
         internal static void WriteDeepResult(int iterations, int[] layers, double[] accuracy, double executionTime, double[][] predictedNodes)
         {
             double sum = 0;
