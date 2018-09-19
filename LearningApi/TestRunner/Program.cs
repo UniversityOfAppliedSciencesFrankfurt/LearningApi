@@ -113,12 +113,12 @@ namespace TestRunner
         {
             return Task.Run(() =>
             {
-                RbmHandwrittenDigitUnitTests test = new RbmHandwrittenDigitUnitTests();
-
+                //RbmHandwrittenDigitUnitTests test = new RbmHandwrittenDigitUnitTests();
+                RbmMovieRecommendation test = new RbmMovieRecommendation();
                 Stopwatch watch = new Stopwatch();
                 Console.WriteLine($"{DateTime.Now} - Started test I:{iterations} learning rate:{learningRate} Nodes:{String.Join("-", layers)}");
                 watch.Start();
-                test.DigitRecognitionTest(iterations, learningRate, layers[0] /*V*/, layers[1] /*H*/);
+                test.movieRecommendationTest(iterations, learningRate, layers[0] /*V*/, layers[1] /*H*/);
                 watch.Stop();
                 Console.WriteLine($"{DateTime.Now} - End test test I:{iterations} learning rate:{learningRate} Nodes:{String.Join("-", layers)} in {watch.ElapsedMilliseconds * 1000} sec.");
             }
