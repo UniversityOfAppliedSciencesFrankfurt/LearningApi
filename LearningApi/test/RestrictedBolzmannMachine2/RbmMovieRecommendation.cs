@@ -58,7 +58,7 @@ namespace test.RestrictedBolzmannMachine2
         /// TODO...
         /// </summary>
         [Theory]
-        [InlineData(2, 0.01, 3898, 50)]
+        [InlineData(2, 0.01, 3898, 500)]
         //[InlineData(10, 4096, 10)]
        
         public void movieRecommendationTest(int iterations,double learningRate, int visNodes, int hidNodes)
@@ -68,7 +68,7 @@ namespace test.RestrictedBolzmannMachine2
             LearningApi api = new LearningApi(getDescriptorForRbm(3898));
 
             // Initialize data provider
-            api.UseCsvDataProvider(Path.Combine(Directory.GetCurrentDirectory(), @"RestrictedBolzmannMachine2\Data\movieDatasetTrain.csv"), ',', false, 0);
+            api.UseCsvDataProvider(Path.Combine(Directory.GetCurrentDirectory(), @"RestrictedBolzmannMachine2\Data\movieDatasetTrain1.csv"), ',', false, 0);
             api.UseDefaultDataMapper();
             api.UseRbm(learningRate, iterations, visNodes, hidNodes);
 
@@ -96,7 +96,7 @@ namespace test.RestrictedBolzmannMachine2
             }
             tw.Close();
 
-            var testData = ReadData(Path.Combine(Directory.GetCurrentDirectory(), @"RestrictedBolzmannMachine2\Data\movieDatasetTest.csv"));
+            var testData = ReadData(Path.Combine(Directory.GetCurrentDirectory(), @"RestrictedBolzmannMachine2\Data\movieDatasetTest1.csv"));
 
             var result = api.Algorithm.Predict(testData, api.Context);
 
