@@ -57,7 +57,7 @@ namespace test.RestrictedBolzmannMachine2
         /// TODO...
         /// </summary>
         [Theory]
-        [InlineData(10, 0.01, 3898, 1500)]
+        [InlineData(5, 0.01, 3898, 500)]
         //[InlineData(10, 4096, 10)]
        
         public void movieRecommendationTest(int iterations,double learningRate, int visNodes, int hidNodes)

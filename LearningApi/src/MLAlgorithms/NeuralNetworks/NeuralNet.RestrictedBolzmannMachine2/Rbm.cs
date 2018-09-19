@@ -292,7 +292,7 @@ namespace NeuralNet.RestrictedBolzmannMachine2
 
                
                 double pr = m_Rnd.NextDouble();
-                if (probActiv > pr)
+                if (probActiv > 0.5)
                     vPrime[v] = 1;
                 else
                     vPrime[v] = 0;
@@ -606,22 +606,10 @@ namespace NeuralNet.RestrictedBolzmannMachine2
                                                      //  res.HiddenNodesPredictions[i][h] = 0;
 
                     //res.HiddenNodesPredictions[i][h] = probActiv;
-                    if (probActiv < 0.21)
-                    { res.HiddenNodesPredictions[i][h] = 1; }
-                    else if (probActiv > 0.20 && probActiv < 0.41)
-                    {
-                        res.HiddenNodesPredictions[i][h] = 2;
-                    }
-                    else if (probActiv > 0.40 && probActiv < 0.61)
-                    {
-                        res.HiddenNodesPredictions[i][h] = 3;
-                    }
-                    else if (probActiv > 0.60 && probActiv < 0.81)
-                    {
-                        res.HiddenNodesPredictions[i][h] = 4;
-                    }
+                    if (probActiv > 0.5)
+                        res.HiddenNodesPredictions[i][h] = 1;                 
                     else
-                    { res.HiddenNodesPredictions[i][h] = 5; }
+                        res.HiddenNodesPredictions[i][h] = 0; 
                 }
 
                 res.VisibleNodesPredictions[i] = calcVisibleFromHidden(res.HiddenNodesPredictions[i]);
@@ -649,10 +637,22 @@ namespace NeuralNet.RestrictedBolzmannMachine2
                   //  result[v] = 0;
 
                 //result[v] = probActiv;
-                if (probActiv > 0.5)
+                if (probActiv < 0.21)
                     result[v] = 1;
+                else if (probActiv > 0.20 && probActiv < 0.41)
+                {
+                    result[v] = 2;
+                }
+                else if (probActiv > 0.40 && probActiv < 0.61)
+                {
+                    result[v] = 3;
+                }
+                else if (probActiv > 0.60 && probActiv < 0.81)
+                {
+                    result[v] = 4;
+                }
                 else
-                    result[v] = 0;
+                    result[v] = 5;
             }
             return result;
         }
