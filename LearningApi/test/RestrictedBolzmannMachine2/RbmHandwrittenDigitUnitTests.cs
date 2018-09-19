@@ -75,14 +75,14 @@ namespace test.RestrictedBolzmannMachine2
         /// TODO...
         /// </summary>
         [Theory]
-        [InlineData(10, 0.01, 3898, 1500)]
+        [InlineData(1, 0.01, 4096, 50)]
         //[InlineData(10, 4096, 10)]
        
         public void DigitRecognitionTest(int iterations,double learningRate, int visNodes, int hidNodes)
         {
             Debug.WriteLine($"{iterations}-{visNodes}-{hidNodes}");
 
-            LearningApi api = new LearningApi(getDescriptorForRbm(3898));
+            LearningApi api = new LearningApi(getDescriptorForRbm(4096));
 
             // Initialize data provider
             api.UseCsvDataProvider(Path.Combine(Directory.GetCurrentDirectory(), @"RestrictedBolzmannMachine2\Data\movieDatasetTrain.csv"), ',', false, 0);
@@ -129,13 +129,13 @@ namespace test.RestrictedBolzmannMachine2
         }
 
         [Theory]
-        [InlineData(1000, 0.1, 4096, 2)]
+        [InlineData(1000, 0.01, 1600, 500)]
         // Smiley test
         public void SmileyClassificationTest(int iterations, double learningRate, int visNodes, int hidNodes)
         {
             Debug.WriteLine($"{iterations}-{visNodes}-{hidNodes}");
 
-            LearningApi api = new LearningApi(getDescriptorForRbm(4096));
+            LearningApi api = new LearningApi(getDescriptorForRbm(1600));
 
             // Initialize data provider
             api.UseCsvDataProvider(Path.Combine(Directory.GetCurrentDirectory(), @"RestrictedBolzmannMachine2\Data\Smiley.csv"), ',', false, 0);
@@ -208,7 +208,7 @@ namespace test.RestrictedBolzmannMachine2
             
         }
 
-        internal static void WriteOutputMatrix(int iterations, int[] layers, double[][] predictedData, double[][] testData, int lineLength = 1)
+        internal static void WriteOutputMatrix(int iterations, int[] layers, double[][] predictedData, double[][] testData, int lineLength = 40)
         {
             using (TextWriter tw = new StreamWriter($"PredictedDigit_I{iterations}_V{String.Join("_", layers)}.txt"))
             {
@@ -241,7 +241,7 @@ namespace test.RestrictedBolzmannMachine2
 
                 for (var i = 0; i < finalRowCount; i++)
                 {
-                    if (k == 2)
+                    if (k == 41)
                     {
                         tw.WriteLine();
                         tw.Write("New Image");

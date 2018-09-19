@@ -248,13 +248,16 @@ namespace NeuralNet.RestrictedBolzmannMachine2
                 double probActiv = m_ActivationFunction(sum); // apply activation
               
                 double pr = m_Rnd.NextDouble();  // determine 0/1 node value
-                if (probActiv > pr)
+                //if (probActiv > pr)
+                //    hPrime[hiddenValIndx] = 1;
+                //else
+                //  hPrime[hiddenValIndx] = 0;
+    
+                //new tria by providing value instead of random
+                if (probActiv > 0.5)
                     hPrime[hiddenValIndx] = 1;
                 else
-                    hPrime[hiddenValIndx] = 0;
-
-                
-                //hPrime[hiddenValIndx] = probActiv;
+                  hPrime[hiddenValIndx] = 0;
             }
 
             return hPrime;
@@ -345,12 +348,16 @@ namespace NeuralNet.RestrictedBolzmannMachine2
                 //    hidValues[hiddenIndx] = 0;
                
                 double pr = m_Rnd.NextDouble();  // determine 0/1 h node value
-                if (sumPrime > pr)
+                //if (sumPrime > pr)
+                  //  m_HidValues[hiddenIndx] = 1;
+                //else
+                  //  m_HidValues[hiddenIndx] = 0;
+
+                //m_HidValues[hiddenIndx] = sumPrime;
+                if (sumPrime > 0.5)
                     m_HidValues[hiddenIndx] = 1;
                 else
                     m_HidValues[hiddenIndx] = 0;
-
-                //m_HidValues[hiddenIndx] = sumPrime;
 
             }
         }
@@ -593,12 +600,28 @@ namespace NeuralNet.RestrictedBolzmannMachine2
                                                                   // Console.WriteLine("Hidden [" + h + "] activation probability = " + probActiv.ToString("F4"));
 
                     double pr = m_Rnd.NextDouble();  // determine 0/1 h node value
-                    if (probActiv > pr)
-                        res.HiddenNodesPredictions[i][h] = 1;
-                    else
-                        res.HiddenNodesPredictions[i][h] = 0;
+                                                     //if (probActiv > pr)
+                                                     //  res.HiddenNodesPredictions[i][h] = 1;
+                                                     //else
+                                                     //  res.HiddenNodesPredictions[i][h] = 0;
 
                     //res.HiddenNodesPredictions[i][h] = probActiv;
+                    if (probActiv < 0.21)
+                    { res.HiddenNodesPredictions[i][h] = 1; }
+                    else if (probActiv > 0.20 && probActiv < 0.41)
+                    {
+                        res.HiddenNodesPredictions[i][h] = 2;
+                    }
+                    else if (probActiv > 0.40 && probActiv < 0.61)
+                    {
+                        res.HiddenNodesPredictions[i][h] = 3;
+                    }
+                    else if (probActiv > 0.60 && probActiv < 0.81)
+                    {
+                        res.HiddenNodesPredictions[i][h] = 4;
+                    }
+                    else
+                    { res.HiddenNodesPredictions[i][h] = 5; }
                 }
 
                 res.VisibleNodesPredictions[i] = calcVisibleFromHidden(res.HiddenNodesPredictions[i]);
@@ -620,12 +643,16 @@ namespace NeuralNet.RestrictedBolzmannMachine2
                 sum += visBiases[v];
                 double probActiv = m_ActivationFunction(sum);
                 double pr = m_Rnd.NextDouble();
-                if (probActiv > pr)
+                //if (probActiv > pr)
+                  //  result[v] = 1;
+                //else
+                  //  result[v] = 0;
+
+                //result[v] = probActiv;
+                if (probActiv > 0.5)
                     result[v] = 1;
                 else
                     result[v] = 0;
-                
-                //result[v] = probActiv;
             }
             return result;
         }
