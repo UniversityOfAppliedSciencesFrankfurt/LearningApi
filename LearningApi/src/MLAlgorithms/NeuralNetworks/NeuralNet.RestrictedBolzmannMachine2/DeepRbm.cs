@@ -195,7 +195,7 @@ namespace NeuralNet.RestrictedBolzmannMachine2
                         double probActiv = m_ActivationFunction(sum); // compute prob of h activation
 
                         double pr = m_Rnd.NextDouble();  // determine 0/1 h node value
-                        if (probActiv > pr)
+                        if (probActiv > 0.5)
                             lyrRes.HiddenNodesPredictions[h] = 1;
                         else
                             lyrRes.HiddenNodesPredictions[h] = 0;
@@ -228,7 +228,7 @@ namespace NeuralNet.RestrictedBolzmannMachine2
                 sum += layer.HidBiases[hiddenValIndx]; // add the hidden bias
                 double probActiv = m_ActivationFunction(sum); // apply activation
                 double pr = m_Rnd.NextDouble();  // determine 0/1 node value
-                if (probActiv > pr)
+                if (probActiv > 0.5)
                     hPrime[hiddenValIndx] = 1;
                 else
                     hPrime[hiddenValIndx] = 0;
@@ -249,7 +249,7 @@ namespace NeuralNet.RestrictedBolzmannMachine2
                 sum += layer.VisBiases[v]; // add visible bias
                 double probActiv = m_ActivationFunction(sum);
                 double pr = m_Rnd.NextDouble();
-                if (probActiv > pr)
+                if (probActiv > 0.5)
                     vPrime[v] = 1;
                 else
                     vPrime[v] = 0;
@@ -289,7 +289,7 @@ namespace NeuralNet.RestrictedBolzmannMachine2
                 //    hidValues[hiddenIndx] = 0;
 
                 double pr = m_Rnd.NextDouble();  // determine 0/1 h node value
-                if (sumPrime > pr)
+                if (sumPrime > 0.5)
                     layer.HidValues[hiddenIndx] = 1;
                 else
                     layer.HidValues[hiddenIndx] = 0;
@@ -348,7 +348,7 @@ namespace NeuralNet.RestrictedBolzmannMachine2
                 sum += layer.VisBiases[v];
                 double probActiv = m_ActivationFunction(sum);
                 double pr = m_Rnd.NextDouble();
-                if (probActiv > pr)
+                if (probActiv > 0.5)
                     result[v] = 1;
                 else
                     result[v] = 0;

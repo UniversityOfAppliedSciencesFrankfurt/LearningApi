@@ -85,16 +85,16 @@ namespace TestRunner
         }
 
 
-        private static Task runTestold(int iterations, double learningRate, int[] layers)
+        private static Task runTest(int iterations, double learningRate, int[] layers)
         {
             return Task.Run(() =>
             {
-                DeepRbmUnitTests test = new DeepRbmUnitTests();
+                RbmMovieRecommendation test = new RbmMovieRecommendation();
                 
                 Stopwatch watch = new Stopwatch();
                 Console.WriteLine($"{DateTime.Now} - Started test I:{iterations} learning rate:{learningRate} Nodes:{String.Join("-", layers)}");
                 watch.Start();
-                test.DigitRecognitionDeepTest(iterations, learningRate, layers);
+                test.movieRecommendationTestDeepRbm(iterations, learningRate, layers);
                 watch.Stop();
                 Console.WriteLine($"{DateTime.Now} - End test test I:{iterations} learning rate:{learningRate} Nodes:{String.Join("-", layers)} in {watch.ElapsedMilliseconds * 1000} sec.");
             }
@@ -109,7 +109,7 @@ namespace TestRunner
         /// <param name="learningRate"></param>
         /// <param name="layers"></param>
         /// <returns></returns>
-        private static Task runTest(int iterations, double learningRate, int[] layers)
+        private static Task runTestold(int iterations, double learningRate, int[] layers)
         {
             return Task.Run(() =>
             {

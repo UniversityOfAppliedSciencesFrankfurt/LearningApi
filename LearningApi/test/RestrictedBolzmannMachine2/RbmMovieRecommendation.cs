@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.IO;
 using NeuralNet.RestrictedBolzmannMachine2;
 using LearningFoundation.DataProviders;
@@ -163,6 +164,48 @@ namespace test.RestrictedBolzmannMachine2
             WriteOutputMatrix(iterations, new int[] { visNodes, hidNodes }, predictedData, testData);
         }
 
+        [Theory]
+        //[InlineData(1, 4096, new int[] { 4096, 250, 10 })]       
+        [InlineData(10, 0.01, new int[] { 3898, 1500, 30 })]
+        public void movieRecommendationTestDeepRbm(int iterations, double learningRate, int[] layers)
+        {
+            Debug.WriteLine($"{iterations}-{String.Join("", layers)}");
+
+            LearningApi api = new LearningApi(getDescriptorForRbm(3898));
+
+            // Initialize data provider
+            // TODO: Describe Digit Dataset.
+            api.UseCsvDataProvider(Path.Combine(Directory.GetCurrentDirectory(), @"RestrictedBolzmannMachine2\Data\movieDatasetTrain.csv"), ',', false, 0);
+            api.UseDefaultDataMapper();
+
+            api.UseDeepRbm(learningRate, iterations, layers);
+
+            Stopwatch watch = new Stopwatch();
+            watch.Start();
+            RbmDeepScore score = api.Run() as RbmDeepScore;
+            watch.Stop();
+
+            var testData = RbmHandwrittenDigitUnitTests.ReadData(Path.Combine(Directory.GetCurrentDirectory(), @"RestrictedBolzmannMachine2\Data\movieDatasetTest.csv"));
+
+            var result = api.Algorithm.Predict(testData, api.Context) as RbmDeepResult;
+            var accList = new double[result.Results.Count];
+            var predictions = new double[result.Results.Count][];
+            var predictedHiddenNodes = new double[result.Results.Count][];
+            var Time = watch.ElapsedMilliseconds / 1000;
+
+            int i = 0;
+            foreach (var item in result.Results)
+            {
+                predictions[i] = item.First().VisibleNodesPredictions;
+                predictedHiddenNodes[i] = item.Last().HiddenNodesPredictions;
+                accList[i] = testData[i].GetHammingDistance(predictions[i]);
+                i++;
+            }
+
+            WriteDeepResult(iterations, layers, accList, Time * 1000, predictedHiddenNodes);
+            /// write predicted hidden nodes.......
+            WriteOutputMatrix(iterations, layers, predictions, testData);
+        }
         internal static void WriteDeepResult(int iterations, int[] layers, double[] accuracy, double executionTime, double[][] predictedNodes)
         {
             double sum = 0;
