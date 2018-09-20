@@ -85,7 +85,7 @@ namespace TestRunner
         }
 
 
-        private static Task runTest(int iterations, double learningRate, int[] layers)
+        private static Task runTestold1(int iterations, double learningRate, int[] layers)
         {
             return Task.Run(() =>
             {
@@ -125,7 +125,7 @@ namespace TestRunner
             );
         }
 
-        private static Task runTestold1(int iterations, double learningRate, int[] layers)
+        private static Task runTest(int iterations, double learningRate, int[] layers)
         {
             return Task.Run(() =>
             {
