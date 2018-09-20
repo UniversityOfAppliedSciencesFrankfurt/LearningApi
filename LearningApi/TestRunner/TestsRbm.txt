@@ -1,2 +1,2 @@
 ﻿Iterations;LearningRate;{Nodes}; # f(iteration)|nodes=const
-10;0.01;3898-2000
+10;0.01;3898-1500
