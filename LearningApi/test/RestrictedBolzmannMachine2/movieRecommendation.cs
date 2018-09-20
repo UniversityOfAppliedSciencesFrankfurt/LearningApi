@@ -120,7 +120,7 @@ namespace test.RestrictedBolzmannMachine2
             LearningApi api = new LearningApi(getDescriptorForRbm(3898));
 
             // Initialize data provider
-            api.UseCsvDataProvider(Path.Combine(Directory.GetCurrentDirectory(), @"RestrictedBolzmannMachine2\Data\movieDatasetTrain1.csv"), ',', false, 0);
+            api.UseCsvDataProvider(Path.Combine(Directory.GetCurrentDirectory(), @"RestrictedBolzmannMachine2\Data\movieDatasetTrain.csv"), ',', false, 0);
             api.UseDefaultDataMapper();
             double[] featureVector = new double[] { 0, 0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4, 0.45, 0.5, 0.55, 0.6, 0.65, 0.7, 0.75, 0.8, 0.85};
             api.UseCRbm(featureVector, learningRate, iterations, visNodes, hidNodes);
@@ -149,7 +149,7 @@ namespace test.RestrictedBolzmannMachine2
             }
             tw.Close();
 
-            var testData = ReadData(Path.Combine(Directory.GetCurrentDirectory(), @"RestrictedBolzmannMachine2\Data\movieDatasetTest1.csv"));
+            var testData = ReadData(Path.Combine(Directory.GetCurrentDirectory(), @"RestrictedBolzmannMachine2\Data\movieDatasetTest.csv"));
 
             var result = api.Algorithm.Predict(testData, api.Context);
 
