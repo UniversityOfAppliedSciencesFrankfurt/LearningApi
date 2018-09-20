@@ -57,7 +57,7 @@ consider the below test example for the better understanding.
             Assert.True(result[2] == 1);
             Assert.True(result[3] == 1);
 
-        } ```
+        } 
 ~~~~
 ## Simple sequence 2D test        
 ~~~csharp
@@ -111,7 +111,7 @@ consider the below test example for the better understanding.
                 Assert.True(result[4] == 1);
                 Assert.True(result[5] == 0);
 
-            } ```
+            } 
  ~~~       
 ## OR-gate test
 
@@ -150,7 +150,7 @@ consider the below test example for the better understanding.
 
         }
     }
-    }```
+    }
  ~~~
  ##Link to the TestCase : https://github.com/UniversityOfAppliedSciencesFrankfurt/LearningApi/tree/master/LearningApi/test/DeltaRuleLearning
 
