@@ -58,6 +58,7 @@ consider the below test example for the better understanding.
             Assert.True(result[3] == 1);
 
         } ```
+~~~~
 ## Simple sequence 2D test        
 ~~~csharp
 ``` /// <summary>
@@ -111,7 +112,7 @@ consider the below test example for the better understanding.
                 Assert.True(result[5] == 0);
 
             } ```
-            
+ ~~~       
 ## OR-gate test
 
 ~~~csharp
