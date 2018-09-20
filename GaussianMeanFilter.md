@@ -52,4 +52,4 @@ Often a 3×3 square kernel is used, larger kernels can be used for severe smooth
                 }
             }
 ~~~
-## Link to test case: https://github.com/UniversityOfAppliedSciencesFrankfurt/LearningApi/tree/master/LearningApi/test/GaussianAndMeanFilter
+ ### Link to test case: https://github.com/UniversityOfAppliedSciencesFrankfurt/LearningApi/tree/master/LearningApi/test/GaussianAndMeanFilter
