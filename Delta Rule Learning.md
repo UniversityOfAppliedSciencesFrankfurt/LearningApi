@@ -61,7 +61,7 @@ consider the below test example for the better understanding.
 ~~~~
 ## Simple sequence 2D test        
 ~~~csharp
-``` /// <summary>
+```/// <summary>
         /// for Even number of samples we should get 5.0 1.0
         /// for odd number of samples we should get -5.0 0.0
         /// </summary>
