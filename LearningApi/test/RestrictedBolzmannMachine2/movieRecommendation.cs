@@ -166,7 +166,7 @@ namespace test.RestrictedBolzmannMachine2
 
         [Theory]
         //[InlineData(1, 4096, new int[] { 4096, 250, 10 })]       
-        [InlineData(10, 0.01, new int[] { 3898, 1500, 30 })]
+        [InlineData(100, 0.0001, new int[] { 3898, 1500 })]
         public void movieRecommendationTestDeepRbm(int iterations, double learningRate, int[] layers)
         {
             Debug.WriteLine($"{iterations}-{String.Join("", layers)}");
