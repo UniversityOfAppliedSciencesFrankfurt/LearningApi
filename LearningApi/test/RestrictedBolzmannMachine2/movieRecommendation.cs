@@ -106,9 +106,9 @@ namespace test.RestrictedBolzmannMachine2
 
             var acc = testData.GetHammingDistance(predictedData);
 
-            WriteDeepResult(iterations, new int[] { visNodes, hidNodes }, acc, watch.ElapsedMilliseconds*1000, predictedHiddenNodes);
+            WriteDeepResult(iterations, new int[] { visNodes, hidNodes }, learningRate, acc, watch.ElapsedMilliseconds*1000, predictedHiddenNodes);
 
-            WriteOutputMatrix(iterations, new int[] { visNodes, hidNodes }, predictedData, testData);
+            WriteOutputMatrix(iterations, new int[] { visNodes, hidNodes }, learningRate, predictedData, testData);
         }
 
         [Theory]
@@ -159,9 +159,9 @@ namespace test.RestrictedBolzmannMachine2
 
             var acc = testData.GetHammingDistance(predictedData);
 
-            WriteDeepResult(iterations, new int[] { visNodes, hidNodes }, acc, watch.ElapsedMilliseconds * 1000, predictedHiddenNodes);
+            WriteDeepResult(iterations, new int[] { visNodes, hidNodes }, learningRate, acc, watch.ElapsedMilliseconds * 1000, predictedHiddenNodes);
 
-            WriteOutputMatrix(iterations, new int[] { visNodes, hidNodes }, predictedData, testData);
+            WriteOutputMatrix(iterations, new int[] { visNodes, hidNodes }, learningRate, predictedData, testData);
         }
 
         [Theory]
@@ -202,15 +202,15 @@ namespace test.RestrictedBolzmannMachine2
                 i++;
             }
 
-            WriteDeepResult(iterations, layers, accList, Time * 1000, predictedHiddenNodes);
+            WriteDeepResult(iterations, layers, learningRate, accList, Time * 1000, predictedHiddenNodes);
             /// write predicted hidden nodes.......
-            WriteOutputMatrix(iterations, layers, predictions, testData);
+            WriteOutputMatrix(iterations, layers, learningRate, predictions, testData);
         }
-        internal static void WriteDeepResult(int iterations, int[] layers, double learningrate, double[] accuracy, double executionTime, double[][] predictedNodes)
+        internal static void WriteDeepResult(int iterations, int[] layers, double learningRate, double[] accuracy, double executionTime, double[][] predictedNodes)
         {
             double sum = 0;
 
-            using (StreamWriter tw = new StreamWriter($"LR{learningrate}_I{iterations}_V{String.Join("-", layers)}_ACC.txt"))
+            using (StreamWriter tw = new StreamWriter($"LR{learningRate}_I{iterations}_V{String.Join("-", layers)}_ACC.txt"))
             {
                 tw.WriteLine($"HiddenNodes;\t\tSample;Iterations;Accuracy;ExecutionTime");
                 for (int i = 0; i < accuracy.Length; i++)
