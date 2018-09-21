@@ -85,7 +85,7 @@ namespace TestRunner
         }
 
 
-        private static Task runTestold(int iterations, double learningRate, int[] layers)
+        private static Task runTest(int iterations, double learningRate, int[] layers)
         {
             return Task.Run(() =>
             {
@@ -109,7 +109,7 @@ namespace TestRunner
         /// <param name="learningRate"></param>
         /// <param name="layers"></param>
         /// <returns></returns>
-        private static Task runTest(int iterations, double learningRate, int[] layers)
+        private static Task runTestold(int iterations, double learningRate, int[] layers)
         {
             return Task.Run(() =>
             {
