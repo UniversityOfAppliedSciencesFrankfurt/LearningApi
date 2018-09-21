@@ -166,7 +166,7 @@ namespace test.RestrictedBolzmannMachine2
 
         [Theory]
         //[InlineData(1, 4096, new int[] { 4096, 250, 10 })]       
-        [InlineData(100, 0.00006, new int[] { 3898, 1600 })]
+        [InlineData(100, 0.00008, new int[] { 3898, 1600 })]
         public void movieRecommendationTestDeepRbm(int iterations, double learningRate, int[] layers)
         {
             Debug.WriteLine($"{iterations}-{String.Join("", layers)}");
@@ -206,11 +206,11 @@ namespace test.RestrictedBolzmannMachine2
             /// write predicted hidden nodes.......
             WriteOutputMatrix(iterations, layers, predictions, testData);
         }
-        internal static void WriteDeepResult(int iterations, int[] layers, double[] accuracy, double executionTime, double[][] predictedNodes)
+        internal static void WriteDeepResult(int iterations, int[] layers, double learningrate, double[] accuracy, double executionTime, double[][] predictedNodes)
         {
             double sum = 0;
 
-            using (StreamWriter tw = new StreamWriter($"I{iterations}_V{String.Join("-", layers)}_ACC.txt"))
+            using (StreamWriter tw = new StreamWriter($"LR{learningrate}_I{iterations}_V{String.Join("-", layers)}_ACC.txt"))
             {
                 tw.WriteLine($"HiddenNodes;\t\tSample;Iterations;Accuracy;ExecutionTime");
                 for (int i = 0; i < accuracy.Length; i++)
@@ -233,9 +233,9 @@ namespace test.RestrictedBolzmannMachine2
             
         }
 
-        internal static void WriteOutputMatrix(int iterations, int[] layers, double[][] predictedData, double[][] testData, int lineLength = 1)
+        internal static void WriteOutputMatrix(int iterations, int[] layers, double learningRate, double[][] predictedData, double[][] testData, int lineLength = 1)
         {
-            using (TextWriter tw = new StreamWriter($"PredictedDigit_I{iterations}_V{String.Join("_", layers)}.txt"))
+            using (TextWriter tw = new StreamWriter($"PredictedDigit_LR{learningRate}_I{iterations}_V{String.Join("_", layers)}.txt"))
             {
 
                 int initialRowLength = predictedData.Length;
