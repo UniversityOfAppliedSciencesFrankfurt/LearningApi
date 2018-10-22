@@ -202,16 +202,15 @@ namespace NeuralNet.RestrictedBolzmannMachine2
                     //printVector("Visible", m_VisibleValues);
                     //printVector("Hidden", hidValues);
                     //printVector("Weights", vhWeights);
+
+                    // Loss of iteration is calculated as 
+                    // SUM(posGrad-negGrad) / number of training vectors
+                    Debug.WriteLine($"loss: {loss / indices.Length}");
+
+                    score.Loss = loss / indices.Length;
+
+                    ++epoch;
                 }
-
-
-                // Loss of iteration is calculated as 
-                // SUM(posGrad-negGrad) / number of training vectors
-                Debug.WriteLine($"loss: {loss / indices.Length}");
-
-                score.Loss = loss / indices.Length;
-
-                ++epoch;
 
             }
 
@@ -254,7 +253,7 @@ namespace NeuralNet.RestrictedBolzmannMachine2
                 //  hPrime[hiddenValIndx] = 0;
     
                 //new tria by providing value instead of random
-                if (probActiv > pr)
+                if (probActiv > 0.5)
                     hPrime[hiddenValIndx] = 1;
                 else
                   hPrime[hiddenValIndx] = 0;
@@ -292,7 +291,7 @@ namespace NeuralNet.RestrictedBolzmannMachine2
 
                
                 double pr = m_Rnd.NextDouble();
-                if (probActiv > pr)
+                if (probActiv > 0.5)
                     vPrime[v] = 1;
                 else
                     vPrime[v] = 0;
@@ -354,7 +353,7 @@ namespace NeuralNet.RestrictedBolzmannMachine2
                   //  m_HidValues[hiddenIndx] = 0;
 
                 //m_HidValues[hiddenIndx] = sumPrime;
-                if (sumPrime > pr)
+                if (sumPrime > 0.5)
                     m_HidValues[hiddenIndx] = 1;
                 else
                     m_HidValues[hiddenIndx] = 0;
@@ -606,7 +605,7 @@ namespace NeuralNet.RestrictedBolzmannMachine2
                                                      //  res.HiddenNodesPredictions[i][h] = 0;
 
                     //res.HiddenNodesPredictions[i][h] = probActiv;
-                    if (probActiv > pr)
+                    if (probActiv > 0.5)
                         res.HiddenNodesPredictions[i][h] = 1;                 
                     else
                         res.HiddenNodesPredictions[i][h] = 0; 
@@ -631,7 +630,7 @@ namespace NeuralNet.RestrictedBolzmannMachine2
                 sum += visBiases[v];
                 double probActiv = m_ActivationFunction(sum);
                 double pr = m_Rnd.NextDouble();
-                if (probActiv > pr)
+                if (probActiv > 0.5)
                    result[v] = 1;
                 else
                     result[v] = 0;
