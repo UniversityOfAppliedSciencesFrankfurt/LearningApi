@@ -245,23 +245,13 @@ namespace NeuralNet.RestrictedBolzmannMachine2
             double[] vPrime = new double[numVisible];  // v' in Wikipedia
             for (int v = 0; v < numVisible; ++v)
             {
-                /*
-                double sum = 0.0;
-                for (int h = 0; h < m_NumHidden; ++h)
-                    sum += m_HidValues[h] * vhWeights[v][h];
-                */
                 double sum = calculateSumForVPrimeFromH(v);
 
                 sum += m_VisBiases[v]; // add visible bias
 
                 double probActiv = m_ActivationFunction(sum);
 
-                vPrime[v] = createBinaryValueFromRandom(probActiv);
-                //double pr = m_Rnd.NextDouble();
-                //if (probActiv > pr)
-                //    vPrime[v] = 1;
-                //else
-                //    vPrime[v] = 0;
+                vPrime[v] = createBinaryValueFromRandom(probActiv);              
             }
 
             return vPrime;
