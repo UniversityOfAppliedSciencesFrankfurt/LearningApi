@@ -481,4 +481,8 @@
     </None>
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="RestrictedBolzmannMachine2\TestResults\movieFinalResults\RBM\movierecommendation\Testdata1\0.5\" />
+  </ItemGroup>
+
 </Project>
