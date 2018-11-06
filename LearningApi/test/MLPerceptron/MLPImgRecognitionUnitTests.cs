@@ -47,7 +47,7 @@ namespace test.MLPerceptron
 
         private string readImageData(string imageName, int width, int height)
         {
-            Binarizer bizer = new Binarizer(targetHeight: height, targetWidth: width, invert: true);
+            Binarizer bizer = new Binarizer(targetHeight: height, targetWidth: width);
             return bizer.GetBinary(imageName);
         }
 
@@ -75,7 +75,7 @@ namespace test.MLPerceptron
 
             var hiddenLayerNeurons = new int[] {6000, 9 ,3 };
 
-            api.UseMLPerceptron(0.01, 6, hiddenLayerNeurons);
+            api.UseMLPerceptron(0.01, 6, 1, 1, hiddenLayerNeurons);
 
             Stopwatch sw = new Stopwatch();
 
@@ -89,7 +89,7 @@ namespace test.MLPerceptron
 
             MLPerceptronResult result = api.Algorithm.Predict(testImageData, api.Context) as MLPerceptronResult;
 
-            float accuracy = MLPHelpers.GetAccuracy(testImageData, result.results, numberOfOutputs);
+           // float accuracy = MLPHelpers.GetAccuracy(testImageData, result.results, numberOfOutputs);
         }
 
 

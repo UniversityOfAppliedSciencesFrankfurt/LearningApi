@@ -21,11 +21,11 @@ namespace MLPerceptron
         /// <param name="activationFnc">activation function</param>
         /// <returns>LearningApi</returns>
         public static LearningApi UseMLPerceptron(this LearningApi api,
-          double learningRate, int iterations, int[] hiddenlayerneurons = null, 
+          double learningRate, int iterations, int batchSize, int testCaseNumber, int[] hiddenlayerneurons = null, 
                IActivationFunction activationFnc = null)
 
         {
-            var alg = new MLPerceptronAlgorithm(learningRate, iterations, hiddenlayerneurons);
+            var alg = new MLPerceptronAlgorithm(learningRate, iterations, batchSize, testCaseNumber, hiddenlayerneurons);
             api.AddModule(alg, "MLPerceptronAlgorithm");
             return api;
         }

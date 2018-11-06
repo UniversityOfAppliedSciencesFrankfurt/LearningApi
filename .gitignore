@@ -225,3 +225,5 @@ LearningApi/test/obj/*
 /LearningApi/packages/ZedGraph.5.1.7
 /LearningApi/MouseGestureRecognition/.vs/MouseGestureRecognition/v15/Server/sqlite3
 /.vs
+/LearningApi/test/MLPerceptron/TestFiles/MNISTFiles/mnist_test.csv
+/LearningApi/test/MLPerceptron/TestFiles/MNISTFiles/mnist_train.csv

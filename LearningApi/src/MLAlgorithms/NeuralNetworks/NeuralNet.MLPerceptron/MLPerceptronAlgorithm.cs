@@ -8,6 +8,7 @@ using System.Diagnostics;
 using MLPerceptron.BackPropagation;
 using NeuralNet.MLPerceptron;
 using NeuralNetworks.Core;
+using System.IO;
 
 namespace MLPerceptron
 {
@@ -26,6 +27,8 @@ namespace MLPerceptron
 
         private int m_Iterations = 10000;
 
+        private int m_batchSize = 1;
+
         private Func<double, double> m_ActivationFunction = MLPerceptron.NeuralNetworkCore.ActivationFunctions.HyperbolicTan;//TODO Patrick
 
         private int m_InpDims;
@@ -33,6 +36,10 @@ namespace MLPerceptron
         private double[][,] m_Weights;
 
         private double[][] m_Biases;
+
+        private Boolean m_SoftMax = true;
+
+        private int TestCaseNumber = 0;
 
         #endregion
 
@@ -44,11 +51,15 @@ namespace MLPerceptron
         /// <param name="iterations">number of epochs</param>
         /// <param name="hiddenLayerNeurons">number of hidden layer neurons</param>
         /// <param name="activationfunction">activation function to be used by the netwokr</param>
-        public MLPerceptronAlgorithm(double learningRate, int iterations, int[] hiddenLayerNeurons, Func<double,double> activationfunction = null)
+        public MLPerceptronAlgorithm(double learningRate, int iterations, int batchSize, int testCaseNumber, int[] hiddenLayerNeurons, Func<double,double> activationfunction = null, bool SoftMax = false)
         {
             this.m_LearningRate = learningRate;
 
             this.m_Iterations = iterations;
+
+            this.m_batchSize = batchSize;
+
+            this.TestCaseNumber = testCaseNumber;
 
             if (hiddenLayerNeurons != null)
             {
@@ -58,6 +69,11 @@ namespace MLPerceptron
             if (activationfunction != null)
             {
                 this.m_ActivationFunction = activationfunction;
+            }
+
+            if (SoftMax != false)
+            {
+                this.m_SoftMax = SoftMax;
             }
         }
 
@@ -80,13 +96,22 @@ namespace MLPerceptron
         /// <returns>IScore</returns>
         public override IScore Run(double[][] data, IContext ctx)
         {
+
             // Sum for every layer. hidLyrNeuronSum1 = x11*w11+x12*w21+..+x1N*wN1
             double[][] hidLyrNeuronSum = new double[m_HiddenLayerNeurons.Length + 1][];
 
             // outputs = ActFnx(hidLyrNeuronSum+Bias)
             double[][] hidLyrOut = new double[m_HiddenLayerNeurons.Length + 1][];
 
-            int numOfInputVectors = data.Length;
+            double[][] trainingData = new double[(int)(data.Length * 0.8)][];
+
+            double[][] validationData = new double[(int)(data.Length * 0.2)][];
+
+            trainingData = data.Take((int)(data.Length * 0.8)).ToArray();
+
+            validationData = data.Skip((int)(data.Length * 0.8)).ToArray();
+
+            int numOfInputVectors = trainingData.Length;
 
             m_InpDims = ctx.DataDescriptor.Features.Count(); 
 
@@ -106,51 +131,125 @@ namespace MLPerceptron
 
             double lastLoss = 0;
 
+            double lastValidationLoss = 0;
+
+            Stopwatch watch = new Stopwatch();
+
+            double timeElapsed = 0;
+			
             for (int i = 0; i < m_Iterations; i++)
             {
-                for (int inputVectIndx = 0; inputVectIndx < numOfInputVectors; inputVectIndx++)
+                watch.Restart();
+                score.Loss = 0;
+
+                double batchAccuracy = 0;
+
+                int miniBatchStartIndex = 0;
+
+                while (miniBatchStartIndex < numOfInputVectors)
                 {
-                    // Z2 = actFnc(X * W1)
-                    CalcFirstHiddenLayer(data[inputVectIndx], m_InpDims, out hidLyrOut[0], out hidLyrNeuronSum[0]);
-                    Debug.WriteLine($"less than 0.99: {hidLyrOut[0].Count(p => p < 0.99)} - Zeros: {data[inputVectIndx].Count(k=>k==0)} - Onces: {data[inputVectIndx].Count(k=>k==1)}");
+                    BackPropagationNetwork backPropagation = new BackPropagationNetwork(m_Biases, m_HiddenLayerNeurons, m_OutputLayerNeurons, m_InpDims);
 
-                    // We use output of first layer as input of second layer.
-                    CalcRemainingHiddenLayers(hidLyrOut[0], hidLyrNeuronSum[0], m_InpDims, out hidLyrOut, out hidLyrNeuronSum);
+                    for (int inputVectIndx = miniBatchStartIndex; inputVectIndx < m_batchSize + miniBatchStartIndex; inputVectIndx++)
+                    {
+                        // Z2 = actFnc(X * W1)
+                        CalcFirstHiddenLayer(trainingData[inputVectIndx], m_InpDims, out hidLyrOut[0], out hidLyrNeuronSum[0]);
 
-                    // Zk = ak-1 * Wk-1
-                    CalculateResultatOutputlayer(hidLyrOut[m_HiddenLayerNeurons.Length - 1], m_InpDims, out hidLyrOut[m_HiddenLayerNeurons.Length], out hidLyrNeuronSum[m_HiddenLayerNeurons.Length]);
+                        // We use output of first layer as input of second layer.
+                        CalcRemainingHiddenLayers(hidLyrOut[0], hidLyrNeuronSum[0], m_InpDims, out hidLyrOut, out hidLyrNeuronSum);
 
-                    BackPropagationNetwork backPropagation = new BackPropagationNetwork(m_HiddenLayerNeurons.Length);
-                    
-                    backPropagation.CalcOutputError(hidLyrOut[m_HiddenLayerNeurons.Length], m_HiddenLayerNeurons, hidLyrNeuronSum[m_HiddenLayerNeurons.Length], data[inputVectIndx], ctx);
+                        // Zk = ak-1 * Wk-1
+                        CalculateResultatOutputlayer(hidLyrOut[m_HiddenLayerNeurons.Length - 1], m_InpDims, m_SoftMax, out hidLyrOut[m_HiddenLayerNeurons.Length], out hidLyrNeuronSum[m_HiddenLayerNeurons.Length]);
 
-                    backPropagation.CalcHiddenLayersError(hidLyrOut, m_Weights, m_HiddenLayerNeurons, hidLyrNeuronSum, data[inputVectIndx]);
+                        if (m_SoftMax == true)
+                        {
+                            backPropagation.CalcOutputErrorSoftMax(hidLyrOut[m_HiddenLayerNeurons.Length], m_HiddenLayerNeurons, trainingData[inputVectIndx], ctx);
 
-                    backPropagation.CostFunctionChangeWithBiases(m_Biases, m_HiddenLayerNeurons, m_LearningRate, out m_Biases);
+                        }
+                        else
+                        {
+                            //  BackPropagationNetwork backPropagation = new BackPropagationNetwork(m_HiddenLayerNeurons.Length);
+                            backPropagation.CalcOutputError(hidLyrOut[m_HiddenLayerNeurons.Length], m_HiddenLayerNeurons, hidLyrNeuronSum[m_HiddenLayerNeurons.Length], trainingData[inputVectIndx], ctx);
+                        }
+                        backPropagation.CalcHiddenLayersError(hidLyrOut, m_Weights, m_HiddenLayerNeurons, hidLyrNeuronSum, trainingData[inputVectIndx]);
 
-                    backPropagation.CostFunctionChangeWithWeights(m_Weights, hidLyrOut, m_HiddenLayerNeurons, m_LearningRate, data[inputVectIndx], out m_Weights);
+                        backPropagation.CostFunctionChangeWithBiases(m_Biases, m_HiddenLayerNeurons, m_LearningRate);
 
-                    score.Errors = backPropagation.Errors[m_HiddenLayerNeurons.Length];
+                        backPropagation.CostFunctionChangeWithWeights(m_Weights, hidLyrOut, m_HiddenLayerNeurons, m_LearningRate, trainingData[inputVectIndx]);
+
+                    }
+
+                    backPropagation.UpdateBiases(m_Biases, m_HiddenLayerNeurons, m_LearningRate, out m_Biases);
+
+                    backPropagation.UpdateWeights(m_Weights, hidLyrOut, m_HiddenLayerNeurons, m_LearningRate, m_InpDims, out m_Weights);
+
+                    score.Errors = backPropagation.MiniBatchError[m_HiddenLayerNeurons.Length];
+
+                    batchAccuracy += ((double)backPropagation.TrainingSetAccuracy / m_batchSize);
 
                     double sum = 0;
+
                     foreach (var outLyrErr in score.Errors)
                     {
                         sum += outLyrErr;
                     }
 
-                    // 1 - mean of errors
-                    score.Loss = 1-(Math.Abs(sum)/score.Errors.Length);
+                    /*
+                    1 - mean of errors
+                    score.Loss = 1 - (Math.Abs(sum) / score.Errors.Length);
+                    */
+
+                    score.Loss += Math.Abs(sum);
+
+                    miniBatchStartIndex = miniBatchStartIndex + m_batchSize;
                 }
 
-                double deltaLoss = score.Loss - lastLoss;
+                double deltaLoss = lastLoss - score.Loss;
 
-                Debug.WriteLine($"Loss: {score.Loss}, Lastloss: {lastLoss}, Delta: {deltaLoss}");
+                double accuracy = ((double)batchAccuracy * m_batchSize) / numOfInputVectors;
+
+                var result = ((MLPerceptronResult)Predict(validationData, ctx)).results;
+
+                int accurateResults = 0;
+
+                double validationSetLoss = 0.0;
+
+                // Check if the test data has been correctly classified by the neural network
+                for (int j = 0; j < validationData.Length; j++)
+                {
+                    accurateResults++;
+
+                    for (int k = 0; k < m_OutputLayerNeurons; k++)
+                    {
+                        validationSetLoss += Math.Abs(validationData[j][(validationData[j].Length - m_OutputLayerNeurons) + k] - result[j * m_OutputLayerNeurons + k]);
+
+                        //Assert.True(testData[i][(testData[i].Length - numberOfOutputs) + j] == (result[i * numberOfOutputs + j] >= 0.5 ? 1 : 0));
+                        if (validationData[j][(validationData[j].Length - m_OutputLayerNeurons) + k] != (result[j * m_OutputLayerNeurons + k] >= 0.5 ? 1 : 0))
+                        {
+                            accurateResults--;
+                            break;
+                        }
+                    }
+                }
+
+                double deltaValidationLoss = lastValidationLoss - validationSetLoss;
+
+                double validationAccuracy = (double)accurateResults / validationData.Length;
+
+                watch.Stop();
+
+                timeElapsed += ((double)watch.ElapsedMilliseconds / 1000);
+
+                Debug.WriteLine($"Loss: {score.Loss}, Last loss: {lastLoss}, Delta: {deltaLoss}, Accuracy: {accuracy}, ValidationLoss: {validationSetLoss}, Last Validationloss: {lastValidationLoss}, Delta: {deltaValidationLoss}, ValidationAccuracy: {validationAccuracy}, TimeElapsed: {timeElapsed}");
 
                 lastLoss = score.Loss;
+
+                lastValidationLoss = validationSetLoss;
             }
 
             ctx.Score = score;
             return ctx.Score;
+
         }
 
         #endregion
@@ -179,7 +278,7 @@ namespace MLPerceptron
 
                 CalcRemainingHiddenLayers(calcuLatedOutput[0], weightedInputs[0], m_InpDims, out calcuLatedOutput, out weightedInputs);
 
-                CalculateResultatOutputlayer(calcuLatedOutput[m_HiddenLayerNeurons.Length - 1], m_InpDims, out calcuLatedOutput[m_HiddenLayerNeurons.Length], out weightedInputs[m_HiddenLayerNeurons.Length]);
+                CalculateResultatOutputlayer(calcuLatedOutput[m_HiddenLayerNeurons.Length - 1], m_InpDims, m_SoftMax, out calcuLatedOutput[m_HiddenLayerNeurons.Length], out weightedInputs[m_HiddenLayerNeurons.Length]);
 
                 for (int j = 0; j < m_OutputLayerNeurons; j++)
                 {
@@ -199,7 +298,7 @@ namespace MLPerceptron
         /// <param name="input">input layer data</param>
         /// <param name="numOfFeatures">number of input neurons</param>
         /// <param name="layerOutput">None linear output of the 1st hidden layer outputs</param>
-        /// <param name="layerNeuronSum">Output sum of of the 1st hidden layer for each layer neuron.</param>
+        /// <param name="layerNeuronSum">Output sum of the 1st hidden layer for each layer neuron.</param>
         private void CalcFirstHiddenLayer(double[] input, int numOfFeatures, out double[] layerOutput, out double[] layerNeuronSum)
         {
             layerOutput = new double[m_HiddenLayerNeurons[0]];
@@ -214,8 +313,6 @@ namespace MLPerceptron
                 {
                     layerNeuronSum[j] += m_Weights[0][j, i] * input[i];
                 }
-
-                //Debug.WriteLine(layerNeuronSum[j]);
 
                 layerNeuronSum[j] += m_Biases[0][j];
 
@@ -291,7 +388,7 @@ namespace MLPerceptron
         /// <param name="numOfFeatures">number of input neurons</param>
         /// <param name="output">output parameter to store outputs at the output layer</param>
         /// <param name="outputSum">output sum of the last layer.</param>
-        private void CalculateResultatOutputlayer(double[] input, int numOfFeatures, out double[] output, out double[] outputSum)
+        private void CalculateResultatOutputlayer(double[] input, int numOfFeatures, bool softmax, out double[] output, out double[] outputSum)
         {
             output = new double[m_OutputLayerNeurons];
 
@@ -310,9 +407,20 @@ namespace MLPerceptron
 
                 outputSum[j] += m_Biases[m_HiddenLayerNeurons.Length][j];
 
-                output[j] = MLPerceptron.NeuralNetworkCore.ActivationFunctions.Sigmoid(outputSum[j]);
+                if (softmax == false)
+                {
+                    output[j] = MLPerceptron.NeuralNetworkCore.ActivationFunctions.Sigmoid(outputSum[j]);
+                }
+                else
+                {
+                    // Do nothing
+                }
             }
-            
+
+            if (softmax == true)
+            {
+                output = MLPerceptron.NeuralNetworkCore.ActivationFunctions.SoftMaxClassifier(outputSum);
+            }
         }
         #endregion
 

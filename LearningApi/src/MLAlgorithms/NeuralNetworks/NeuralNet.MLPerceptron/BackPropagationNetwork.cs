@@ -27,6 +27,10 @@ namespace MLPerceptron.BackPropagation
         /// </summary>
         public double[][] Errors { get; }
 
+        public double[][] MiniBatchError { get; }
+
+        public int TrainingSetAccuracy { get; set; }
+
         /// <summary>
         /// Get the property CostChangeDueToBiases
         /// </summary>
@@ -55,26 +59,63 @@ namespace MLPerceptron.BackPropagation
         /// BackPropagationNetwork Constructor
         /// </summary>
         /// <param name="numberofhiddenlayers">number of hidden layer neurons</param>
-        public BackPropagationNetwork(int numberofhiddenlayers)
+        public BackPropagationNetwork(double[][] biases, int[] hiddenlayerneurons, int outputlayerneurons, int numOfInputNeurons)
         {
-            Errors = new double[numberofhiddenlayers + 1][];
+            Errors = new double[hiddenlayerneurons.Length + 1][];
 
-            m_CostChangeDueToBiases = new double[numberofhiddenlayers + 1][];
+            MiniBatchError = new double[hiddenlayerneurons.Length + 1][];
 
-            m_CostChangeDueToWeights = new double[numberofhiddenlayers + 1][,];
+            MiniBatchError[hiddenlayerneurons.Length] = new double[outputlayerneurons];
 
-            // to do: activation function check
+            int hidLayerIndx = hiddenlayerneurons.Length;
+
+            while (hidLayerIndx != 0)
+            {
+                MiniBatchError[hidLayerIndx - 1] = new double[hiddenlayerneurons[hidLayerIndx - 1]];
+
+                hidLayerIndx--;
+            }
+
+            m_CostChangeDueToBiases = new double[hiddenlayerneurons.Length + 1][];
+
+            for (int i = 0; i <= hiddenlayerneurons.Length; i++)
+            {
+                m_CostChangeDueToBiases[i] = new double[biases[i].Length];
+            }
+
+            m_CostChangeDueToWeights = new double[hiddenlayerneurons.Length + 1][,];
+
+            hidLayerIndx = 0;
+
+            while (hidLayerIndx <= hiddenlayerneurons.Length)
+            {
+                if (hidLayerIndx == 0)
+                {
+                    m_CostChangeDueToWeights[hidLayerIndx] = new double[hiddenlayerneurons[hidLayerIndx], numOfInputNeurons];
+                }
+                else if (hidLayerIndx == hiddenlayerneurons.Length)
+                {
+                    m_CostChangeDueToWeights[hidLayerIndx] = new double[outputlayerneurons, hiddenlayerneurons[hidLayerIndx - 1]];
+                }
+                else 
+                {
+                    m_CostChangeDueToWeights[hidLayerIndx] = new double[hiddenlayerneurons[hidLayerIndx], hiddenlayerneurons[hidLayerIndx - 1]];
+                }
+
+                hidLayerIndx++;
+            }
         }
-        #endregion
 
-        #region OutputLayerErrorCalculation
-        /// <summary>
-        /// This method calculates the error at the output layer
-        /// </summary>
-        /// <param name="output">output layer result</param>
-        /// <param name="hiddenlayerneurons">number of hidden layer neurons</param>
-        /// <param name="outputSum">array of weighted inputs</param>
-        /// <param name="inputVector">training data containing features (input) and labels (output).</param>
+                #endregion
+
+                #region OutputLayerErrorCalculation
+                /// <summary>
+                /// This method calculates the error at the output layer
+                /// </summary>
+                /// <param name="output">output layer result</param>
+                /// <param name="hiddenlayerneurons">number of hidden layer neurons</param>
+                /// <param name="outputSum">array of weighted inputs</param>
+                /// <param name="inputVector">training data containing features (input) and labels (output).</param>
         public void CalcOutputError(double[] output, int[] hiddenlayerneurons, double[] outputSum, double[] inputVector, IContext ctx)
         {
             Errors[hiddenlayerneurons.Length] = new double[output.Length];
@@ -84,18 +125,46 @@ namespace MLPerceptron.BackPropagation
             //int lastIndexOfActualOp = ctx.DataDescriptor.Features.Length;// featureValues.Length - 1;
             int lastIndexOfActualOp = inputVector.Length - 1;
 
-            // 
             // Calculating error as difference between input and calculated output.
             for (int i = (output.Length - 1); i >= 0; i--)
             {
                 grad[i] = output[i] - inputVector[lastIndexOfActualOp--];// TODO: Support for multiple output neurons required.
               //grad[i] = calculatedop[i] - featureValues[lastIndexOfActualOp--];
-
             }
 
             for (int i = 0; i < output.Length; i++)
             {
                 Errors[hiddenlayerneurons.Length][i] = grad[i] * ActivationFunctions.DerivativeSigmoid(outputSum[i]);
+
+                MiniBatchError[hiddenlayerneurons.Length][i] += Math.Abs(Errors[hiddenlayerneurons.Length][i]);
+            }
+        }
+
+        public void CalcOutputErrorSoftMax(double[] output, int[] hiddenlayerneurons, double[] inputVector, IContext ctx)
+        {
+            Errors[hiddenlayerneurons.Length] = new double[output.Length];
+
+            int lastIndexOfActualOp = inputVector.Length - 1;
+
+            bool result = true;
+
+            for (int i = (output.Length - 1); i >= 0; i--)
+            {
+                int inputVectorIndex = lastIndexOfActualOp--;
+
+                Errors[hiddenlayerneurons.Length][i] = output[i] - inputVector[inputVectorIndex];
+
+                MiniBatchError[hiddenlayerneurons.Length][i] += Math.Abs(Errors[hiddenlayerneurons.Length][i]);
+
+                if(inputVector[inputVectorIndex] != (output[i] >= 0.5 ? 1 : 0))
+                {
+                    result = false;
+                }
+            }
+
+            if(result == true)
+            {
+                TrainingSetAccuracy++;
             }
         }
         #endregion
@@ -127,6 +196,8 @@ namespace MLPerceptron.BackPropagation
                     }
 
                     Errors[hidLayerIndx - 1][hidLayerNeuronIndx] = layerError * m_DerivativeActivationFunction(hidLayersSums[hidLayerIndx - 1][hidLayerNeuronIndx]);
+
+                    MiniBatchError[hidLayerIndx - 1][hidLayerNeuronIndx] += Math.Abs(Errors[hidLayerIndx - 1][hidLayerNeuronIndx]);
                 }
 
                 hidLayerIndx--;
@@ -145,10 +216,8 @@ namespace MLPerceptron.BackPropagation
         /// <param name="learningrate">learning rate of the network</param>
         /// <param name="inputVector">training data feature inputs/outputs</param>
         /// <param name="newWeights">output parameter to store new weights</param>
-        public void CostFunctionChangeWithWeights(double[][,] currWeights, double[][] hidLayersOutputs, int[] hiddenlayerneurons, double learningrate, double[] inputVector,
-            out double[][,] newWeights)
+        public void CostFunctionChangeWithWeights(double[][,] currWeights, double[][] hidLayersOutputs, int[] hiddenlayerneurons, double learningrate, double[] inputVector)
         {
-            newWeights = new double[hiddenlayerneurons.Length + 1][,];
 
             int hidLayerIndx = 0;
        
@@ -158,32 +227,58 @@ namespace MLPerceptron.BackPropagation
             {
                 if (hidLayerIndx == 0)
                 {
-                    m_CostChangeDueToWeights[hidLayerIndx] = new double[hidLayersOutputs[hidLayerIndx].Length, numOfInputNeurons];
+                    for (int hidLayerNeuronIndx = 0; hidLayerNeuronIndx < hidLayersOutputs[hidLayerIndx].Length; hidLayerNeuronIndx++)
+                    {
+                        for (int inputNeuronIndx = 0; inputNeuronIndx < numOfInputNeurons; inputNeuronIndx++)
+                        {
+                            m_CostChangeDueToWeights[hidLayerIndx][hidLayerNeuronIndx, inputNeuronIndx] += inputVector[inputNeuronIndx] * Errors[hidLayerIndx][hidLayerNeuronIndx];
+                        }
+                    }
+                }
+                else
+                {
+                    for (int hidLayerNeuronIndx = 0; hidLayerNeuronIndx < hidLayersOutputs[hidLayerIndx].Length; hidLayerNeuronIndx++)
+                    {
+                        for (int prevHidLayerOutputIndx = 0; prevHidLayerOutputIndx < hidLayersOutputs[hidLayerIndx - 1].Length; prevHidLayerOutputIndx++)
+                        {
+                            m_CostChangeDueToWeights[hidLayerIndx][hidLayerNeuronIndx, prevHidLayerOutputIndx] += hidLayersOutputs[hidLayerIndx - 1][prevHidLayerOutputIndx] * Errors[hidLayerIndx][hidLayerNeuronIndx];
+                        }
+                    }
+                }
 
+                hidLayerIndx++;
+            }
+
+        }
+
+        public void UpdateWeights(double[][,] currWeights, double[][] hidLayersOutputs, int[] hiddenlayerneurons, double learningrate, int numOfInputNeurons, out double[][,] newWeights)
+        {
+            newWeights = new double[hiddenlayerneurons.Length + 1][,];
+
+            int hidLayerIndx = 0;
+
+            while (hidLayerIndx <= hiddenlayerneurons.Length)
+            {
+                if (hidLayerIndx == 0)
+                {
                     newWeights[hidLayerIndx] = new double[hidLayersOutputs[hidLayerIndx].Length, numOfInputNeurons];
 
                     for (int hidLayerNeuronIndx = 0; hidLayerNeuronIndx < hidLayersOutputs[hidLayerIndx].Length; hidLayerNeuronIndx++)
                     {
                         for (int inputNeuronIndx = 0; inputNeuronIndx < numOfInputNeurons; inputNeuronIndx++)
                         {
-                            m_CostChangeDueToWeights[hidLayerIndx][hidLayerNeuronIndx, inputNeuronIndx] = inputVector[inputNeuronIndx] * Errors[hidLayerIndx][hidLayerNeuronIndx];
-
                             newWeights[hidLayerIndx][hidLayerNeuronIndx, inputNeuronIndx] = currWeights[hidLayerIndx][hidLayerNeuronIndx, inputNeuronIndx] - learningrate * m_CostChangeDueToWeights[hidLayerIndx][hidLayerNeuronIndx, inputNeuronIndx];
                         }
                     }
                 }
                 else
                 {
-                    m_CostChangeDueToWeights[hidLayerIndx] = new double[hidLayersOutputs[hidLayerIndx].Length, hidLayersOutputs[hidLayerIndx - 1].Length];
-
                     newWeights[hidLayerIndx] = new double[hidLayersOutputs[hidLayerIndx].Length, hidLayersOutputs[hidLayerIndx - 1].Length];
 
                     for (int hidLayerNeuronIndx = 0; hidLayerNeuronIndx < hidLayersOutputs[hidLayerIndx].Length; hidLayerNeuronIndx++)
                     {
                         for (int prevHidLayerOutputIndx = 0; prevHidLayerOutputIndx < hidLayersOutputs[hidLayerIndx - 1].Length; prevHidLayerOutputIndx++)
                         {
-                            m_CostChangeDueToWeights[hidLayerIndx][hidLayerNeuronIndx, prevHidLayerOutputIndx] = hidLayersOutputs[hidLayerIndx - 1][prevHidLayerOutputIndx] * Errors[hidLayerIndx][hidLayerNeuronIndx];
-
                             newWeights[hidLayerIndx][hidLayerNeuronIndx, prevHidLayerOutputIndx] = currWeights[hidLayerIndx][hidLayerNeuronIndx, prevHidLayerOutputIndx] - learningrate * m_CostChangeDueToWeights[hidLayerIndx][hidLayerNeuronIndx, prevHidLayerOutputIndx];
                         }
                     }
@@ -203,20 +298,27 @@ namespace MLPerceptron.BackPropagation
         /// <param name="hiddenlayerneurons">number of hidden layer neurons</param>
         /// <param name="learningrate">learning rate of the network</param>
         /// <param name="newbiases">output parameter to store the updated biases</param>
-        public void CostFunctionChangeWithBiases(double[][] currentbiases, int[] hiddenlayerneurons, double learningrate, out double[][] newbiases)
+        public void CostFunctionChangeWithBiases(double[][] currentbiases, int[] hiddenlayerneurons, double learningrate)
+        {
+            for (int i = 0; i <= hiddenlayerneurons.Length; i++)
+            {
+                for (int j = 0; j < currentbiases[i].Length; j++)
+                {
+                    m_CostChangeDueToBiases[i][j] += Errors[i][j];
+                }
+            }
+        }
+
+        public void UpdateBiases(double[][] currentbiases, int[] hiddenlayerneurons, double learningrate, out double[][] newbiases)
         {
             newbiases = new double[hiddenlayerneurons.Length + 1][];
 
             for (int i = 0; i <= hiddenlayerneurons.Length; i++)
             {
-                m_CostChangeDueToBiases[i] = new double[currentbiases[i].Length];
-
                 newbiases[i] = new double[currentbiases[i].Length];
 
                 for (int j = 0; j < currentbiases[i].Length; j++)
                 {
-                    m_CostChangeDueToBiases[i][j] = Errors[i][j];
-
                     newbiases[i][j] = currentbiases[i][j] - learningrate * m_CostChangeDueToBiases[i][j];
                 }
             }
