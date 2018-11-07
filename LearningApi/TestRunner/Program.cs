@@ -132,8 +132,6 @@ namespace TestRunner
             }
 
             Console.WriteLine($"Test execution completed. Executed {testNum} tests.");
-
-            Console.ReadLine();
         }
 
         private static void startBatch(List<Task> tasks)

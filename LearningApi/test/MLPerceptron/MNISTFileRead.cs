@@ -377,6 +377,26 @@ namespace test.MLPerceptron
             // Invoke the Predict method to predict the results on the test data
             var result = ((MLPerceptronResult)api.Algorithm.Predict(testData, api.Context)).results;
 
+            StreamWriter resultfile = new StreamWriter($"{Directory.GetCurrentDirectory()}\\MLPerceptron\\TestFiles\\mnist_result_" + testCaseNumber.ToString() + ".csv");
+
+            double[] temparray = new double[numberOfOutputs];
+
+            int index = 0;
+
+            while (index < result.Length)
+            {
+                for (int i = index; i < index + numberOfOutputs; i++)
+                {
+                    temparray[i - index] = result[i];
+                }
+
+                double max = temparray.Max();
+
+                resultfile.WriteLine(Array.IndexOf(temparray, max));
+
+                index = index + numberOfOutputs;
+            }
+
             int accurateResults = 0;
 
             // Check if the test data has been correctly classified by the neural network
@@ -400,6 +420,10 @@ namespace test.MLPerceptron
             Debug.WriteLine($"{hiddleLayerToString(hiddenLayerNeurons)} - Loss: {loss}");
             */
             double accuracy = ((double)accurateResults * numberOfOutputs) / result.Length;
+
+            resultfile.WriteLine("Accuracy = {0}", accuracy.ToString());
+
+            resultfile.Close();
         }
     }
 }
