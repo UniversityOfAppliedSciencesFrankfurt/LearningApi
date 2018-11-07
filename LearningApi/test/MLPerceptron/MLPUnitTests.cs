@@ -8,9 +8,9 @@ using System.Threading.Tasks;
 using System;
 using Xunit;
 using System.Diagnostics;
-using System.Globalization;
 using NeuralNet.MLPerceptron;
 using ImageBinarizer;
+using System.Globalization;
 
 namespace test.MLPerceptron
 {
@@ -114,7 +114,7 @@ namespace test.MLPerceptron
                 int[] hiddenLayerNeurons = { 6 };
 
                 // Invoke the MLPerecptronAlgorithm with a specific learning rate, number of iterations, and number of hidden layer neurons
-                api.UseMLPerceptron(0.1, 10000, hiddenLayerNeurons);
+                api.UseMLPerceptron(0.1, 10000, 1, 1, hiddenLayerNeurons);
 
                 IScore score = api.Run() as IScore;
 
@@ -165,11 +165,11 @@ namespace test.MLPerceptron
 
                     Debug.WriteLine("\r\nTraining completed.");
                     Debug.WriteLine("-------------------------------------------");
-                    Debug.WriteLine($"Testing {lineCountTestData-1} samples.");
+                    Debug.WriteLine($"Testing {lineCountTestData - 1} samples.");
 
                     // Check if the test data has been correctly classified by the neural network
                     for (int i = 0; i < lineCountTestData - 1; i++)
-                    {                       
+                    {
                         Debug.WriteLine("");
 
                         for (int j = 0; j < numberOfOutputs; j++)
@@ -187,13 +187,13 @@ namespace test.MLPerceptron
 
                             Debug.Write("\t\t");
                             Debug.Write($"Expected: {testData[i][(testData[i].Length - numberOfOutputs) + j]} - Predicted: {testData[i][(testData[i].Length - numberOfOutputs) + j]} - Result: {testData[i][(testData[i].Length - numberOfOutputs) + j] == (result[i * numberOfOutputs + j] >= 0.5 ? 1 : 0)} --\t\t");
-                        }                        
+                        }
                     }
 
                     float accuracy = (float)expectedResults / (float)numberOfOutputs / (float)testData.Length;
 
                     Debug.WriteLine("-------------------------------------------");
-                    Debug.WriteLine($"Accuracy: {accuracy*100}%");
+                    Debug.WriteLine($"Accuracy: {accuracy * 100}%");
                 }
             }
         }
@@ -203,7 +203,7 @@ namespace test.MLPerceptron
         /// </summary>
         [Theory]
         //[InlineData(new int[] { 5, 2 })]
-        [InlineData(new int[] { 6, 3 })]
+        [InlineData(1000, 0.1, 25, new int[] { 6 }, 1)]
         //[InlineData(new int[] { 7, 2 })]
         //[InlineData(new int[] { 8, 2 })]
         //[InlineData(new int[] { 9, 2 })]
@@ -217,7 +217,7 @@ namespace test.MLPerceptron
         //[InlineData(new int[] { 125, 77, 45, 34 , 19, 12, 9, 3})]
         //[InlineData(new int[] { 50, 30, 20 })]
 
-        public void UnitTestIris(int[] hiddenLayerNeurons)
+        public void UnitTestIris(int iterations, double learningrate, int batchSize, int[] hiddenLayerNeurons, int iterationnumber)
         {
 
             // TODO
@@ -329,7 +329,7 @@ namespace test.MLPerceptron
 
                 //int[] hiddenLayerNeurons = { 6 };
                 // Invoke the MLPerecptronAlgorithm with a specific learning rate, number of iterations
-                api.UseMLPerceptron(0.5, 1000, hiddenLayerNeurons);
+                api.UseMLPerceptron(learningrate, iterations, batchSize, iterationnumber, hiddenLayerNeurons);
 
                 IScore score = api.Run() as IScore;
 
@@ -460,6 +460,97 @@ namespace test.MLPerceptron
             }
         }
 
+        [Theory]
+        //[InlineData(new int[] { 5, 2 })]
+        [InlineData(25, 0.01, 128, new int[] { 32, 32, 32, 32, 32, 32, 32, 32, 32, 32 }, 10)]
+        [InlineData(25, 0.01, 128, new int[] { 32, 32, 32, 32, 32, 32, 32, 32, 32 }, 9)]
+        [InlineData(25, 0.01, 128, new int[] { 32, 32, 32, 32, 32, 32, 32, 32 }, 8)]
+        [InlineData(25, 0.01, 128, new int[] { 32, 32, 32, 32, 32, 32, 32 }, 7)]
+        [InlineData(25, 0.01, 128, new int[] { 32, 32, 32, 32, 32, 32 }, 6)]
+        [InlineData(25, 0.01, 128, new int[] { 32, 32, 32, 32, 32 }, 5)]
+        [InlineData(25, 0.01, 128, new int[] { 32, 32, 32, 32 }, 4)]
+        [InlineData(25, 0.01, 128, new int[] { 32, 32, 32 }, 3)]
+        [InlineData(25, 0.01, 128, new int[] { 32, 32 }, 2)]
+        [InlineData(2, 0.01, 128, new int[] { 32 }, 1)]
+
+        public void UnitTestMNIST(int iterations, double learningrate, int batchSize, int[] hiddenLayerNeurons, int testCaseNumber)
+        {
+            MNISTFileRead mnistObj = new MNISTFileRead();
+
+            MNISTFileRead.ReadMNISTTrainingData();
+
+            MNISTFileRead.ReadMNISTTestData();
+
+            // TODO
+            // test by using same test cases in dependence on number of iterations.
+            // test by dependence on number of layers
+            // test by dependence on number of neurons in layers.
+            // [2 layers]: [x,x] [1,2] [1,3] [1,4]
+
+            // Read the csv file which contains the training data
+
+            int numberOfOutputs = 10;
+
+            LearningApi api = new LearningApi();
+
+            api.UseActionModule<object, double[][]>((notUsed, ctx) =>
+            {
+                ctx.DataDescriptor = new DataDescriptor();
+
+                ctx.DataDescriptor.Features = new LearningFoundation.DataMappers.Column[MNISTFileRead.firstLineValues.Length - 1];
+
+                for (int i = 0; i < (MNISTFileRead.firstLineValues.Length - 1); i++)
+                {
+                    ctx.DataDescriptor.Features[i] = new LearningFoundation.DataMappers.Column
+                    {
+                        Id = i,
+                        Name = MNISTFileRead.firstLineValues[i],
+                        Type = LearningFoundation.DataMappers.ColumnType.NUMERIC,
+                        Index = i,
+                    };
+                }
+
+                ctx.DataDescriptor.LabelIndex = MNISTFileRead.firstLineValues.Length - 1;
+
+                return MNISTFileRead.trainingData;
+            });
+
+            //int[] hiddenLayerNeurons = { 6 };
+            // Invoke the MLPerecptronAlgorithm with a specific learning rate, number of iterations
+            api.UseMLPerceptron(learningrate, iterations, batchSize, testCaseNumber, hiddenLayerNeurons);
+
+            IScore score = api.Run() as IScore;
+
+            // Invoke the Predict method to predict the results on the test data
+            var result = ((MLPerceptronResult)api.Algorithm.Predict(MNISTFileRead.testData, api.Context)).results;
+
+            int accurateResults = 0;
+
+            // Check if the test data has been correctly classified by the neural network
+            for (int i = 0; i < MNISTFileRead.testData.Length; i++)
+            {
+                accurateResults++;
+
+                for (int j = 0; j < numberOfOutputs; j++)
+                {
+                    //Assert.True(testData[i][(testData[i].Length - numberOfOutputs) + j] == (result[i * numberOfOutputs + j] >= 0.5 ? 1 : 0));
+                    if (MNISTFileRead.testData[i][(MNISTFileRead.testData[i].Length - numberOfOutputs) + j] != (result[i * numberOfOutputs + j] >= 0.5 ? 1 : 0))
+                    {
+                        accurateResults--;
+                        break;
+                    }
+                }
+            }
+
+            /*
+            float loss = expectedResults / (numberOfOutputs) / testData.Length;
+            Debug.WriteLine($"{hiddleLayerToString(hiddenLayerNeurons)} - Loss: {loss}");
+            */
+            double accuracy = ((double)accurateResults * numberOfOutputs) / result.Length;
+            Debug.WriteLine($"Accuracy: {accuracy}");
+
+        }
+
         /// <summary>
         /// This test case uses the German Dataset as the training dataset for credit prediction.
         /// It classifies people described by a set of attributes as good or bad for bank regarding the credit risk.
@@ -574,7 +665,7 @@ namespace test.MLPerceptron
                 int[] hiddenLayerNeurons = { 9 };
 
                 // Invoke the MLPerecptronAlgorithm with a specific learning rate, number of iterations, number of hidden layers
-                api.UseMLPerceptron(0.1, 20, hiddenLayerNeurons);
+                api.UseMLPerceptron(0.1, 20, 1, 1, hiddenLayerNeurons);
 
                 IScore score = api.Run() as IScore;
 
@@ -699,10 +790,11 @@ namespace test.MLPerceptron
             bizer.CreateBinary(Path.Combine(trainingImagesPath, "1 (168).jpeg"), "binary.txt");
 
         }
-
     }
 
 }
+
+
 
 
 

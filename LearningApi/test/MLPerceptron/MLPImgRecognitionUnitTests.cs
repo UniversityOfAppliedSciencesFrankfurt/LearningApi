@@ -15,9 +15,7 @@ using ImageBinarizer;
 namespace test.MLPerceptron
 {
     /// <summary>
-    /// Class MLPerceptronUnitTests contains the unit test cases to test the ML Perceptron algorithm.
-    /// NOTE:
-    /// Tests provided here do not generate good prediction.
+    /// Class MLPerceptronUnitTests contains the unit test cases to test the ML Perceptron algorithm
     /// </summary>
     public class MLPImgRecognitionUnitTests
     {
@@ -28,7 +26,7 @@ namespace test.MLPerceptron
         {
 
         }
-   
+
 
         private DataDescriptor getImgRecognitionDescriptor(int numOfFeatures)
         {
@@ -49,9 +47,8 @@ namespace test.MLPerceptron
 
         private string readImageData(string imageName, int width, int height)
         {
-            string trainingImagesPath = Path.Combine(Path.Combine(AppContext.BaseDirectory, "MLPerceptron"), "TrainingImages");
             Binarizer bizer = new Binarizer(targetHeight: height, targetWidth: width);
-            return bizer.GetBinary(Path.Combine(trainingImagesPath, imageName));
+            return bizer.GetBinary(imageName);
         }
 
         [Fact]
@@ -59,30 +56,70 @@ namespace test.MLPerceptron
         public void ImageRecognitionTest()
         {
             int size = 64;
+            int numberOfOutputs = 1;
+            int numberOfInputs = size * size;
 
-            var context = getImgRecognitionDescriptor(size * size);
+
+            var context = getImgRecognitionDescriptor(numberOfInputs);
 
             LearningApi api = new LearningApi(context);
 
             api.UseActionModule<object, double[][]>((notUsed, ctx) =>
             {
                 return getImageData(size, $"{Directory.GetCurrentDirectory()}\\MLPerceptron\\TrainingImages");
+                //return getSomOtherData($"{Directory.GetCurrentDirectory()}\\MLPerceptron\\TestFiles\\TrainingData.csv");
             });
 
-            var hiddenLayerNeurons = new int[] { size*size/2, size, size/2, 5 };
+            // High number of hidden neurons in first layer brings network to constant result for everything.
+            // var hiddenLayerNeurons = new int[] { size*size, 3 };
 
-            api.UseMLPerceptron(0.5, 10, hiddenLayerNeurons);
+            var hiddenLayerNeurons = new int[] { 6000, 9, 3 };
+
+            api.UseMLPerceptron(0.01, 6, 1, 1, hiddenLayerNeurons);
 
             Stopwatch sw = new Stopwatch();
 
             sw.Start();
             IScore score = api.Run() as IScore;
             sw.Stop();
-            Trace.WriteLine($"Duration:{(double)(sw.ElapsedMilliseconds / 1000 /60)} min");
+            Trace.WriteLine($"Duration:{(double)(sw.ElapsedMilliseconds / 1000 / 60)} min");
 
             var testImageData = getImageData(size, $"{Directory.GetCurrentDirectory()}\\MLPerceptron\\TestingImages");
+            //var testImageData= getSomOtherData($"{Directory.GetCurrentDirectory()}\\MLPerceptron\\TestFiles\\TestData.csv");
 
-            MLPerceptronResult res = api.Algorithm.Predict(testImageData, api.Context) as MLPerceptronResult;
+            MLPerceptronResult result = api.Algorithm.Predict(testImageData, api.Context) as MLPerceptronResult;
+
+            // float accuracy = MLPHelpers.GetAccuracy(testImageData, result.results, numberOfOutputs);
+        }
+
+
+        private double[][] getSomOtherData(string file)
+        {
+            using (var readerTrainData = new StreamReader(file))
+            {
+
+                List<double[]> listTrainData = new List<double[]>();
+
+                readerTrainData.ReadLine();
+
+                while (!readerTrainData.EndOfStream)
+                {
+                    var singleRow = new List<double>();
+
+                    var line = readerTrainData.ReadLine();
+
+                    var values = line.Split(',');
+
+                    foreach (var value in values)
+                    {
+                        singleRow.Add(Convert.ToDouble(value, CultureInfo.InvariantCulture));
+                    }
+
+                    listTrainData.Add(singleRow.ToArray());
+                }
+
+                return listTrainData.ToArray();
+            }
 
         }
 
@@ -105,9 +142,13 @@ namespace test.MLPerceptron
                     for (int k = 0; k < rowInImg.Length; k++)
                     {
                         if (rowInImg[k] == '1')
+                        {
                             imgTrainingRow.Add(1);
+                        }
                         else if (rowInImg[k] == '0')
+                        {
                             imgTrainingRow.Add(0);
+                        }
                         else if (rowInImg[k] == '\r' || rowInImg[k] == '\n')
                             continue;
                         else
@@ -115,15 +156,26 @@ namespace test.MLPerceptron
                     }
                 }
 
-                if(file.Contains("positive"))
+                if (file.Contains("positive"))
+                {
+                    Debug.Write("POSITIVE");
                     imgTrainingRow.Add(1);  //Label 1
+                    //imgTrainingRow.Add(0);
+                }
                 else
+                {
+                    Debug.Write("NEGATIVE");
                     imgTrainingRow.Add(0); ; //Label 0
+                    //imgTrainingRow.Add(1);
+                }
 
                 data[indx] = imgTrainingRow.ToArray();
+                Debug.WriteLine($" Zeros: { data[indx].Count(k => k == 0.0)} - Onces: { data[indx].Count(k => k == 1.0)}");
 
                 indx++;
             }
+
+
 
             return data;
         }

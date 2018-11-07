@@ -77,5 +77,24 @@ namespace MLPerceptron.NeuralNetworkCore
                 return 1;
             }
         }
+
+        public static double[] SoftMaxClassifier(double[] weightedip)
+        {
+            double sum = 0.0;
+
+            double[] outputvector = new double[weightedip.Length];
+
+            foreach (var item in weightedip)
+            {
+                sum += Math.Exp(item);
+            }
+
+            for(int i = 0; i < weightedip.Length; i++)
+            {
+                outputvector[i] = Math.Exp(weightedip[i]) / sum;
+            }
+
+            return outputvector;
+        }
     }
 }

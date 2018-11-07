@@ -5,11 +5,14 @@ using System.Globalization;
 using System.IO;
 using System.Threading.Tasks;
 using test.RestrictedBolzmannMachine2;
+using test.MLPerceptron;
 
 namespace TestRunner
 {
     class Program
     {
+        private static int iterationNum = 0;
+
         static void Main(string[] args)
         {
             int testNum = 0;
@@ -30,50 +33,107 @@ namespace TestRunner
             }
             else
                 throw new ArgumentException("Please provide the name of the test file as argument.");
-            
-            using (StreamReader sr = new StreamReader(file)) 
+
+            if (file.Contains("MNIST") == true)
             {
-                int threadCounter = 0;
-                List<Task> tasks = new List<Task>();
+                MNISTFileRead.ReadMNISTTrainingData();
+                MNISTFileRead.ReadMNISTTestData();
 
-                sr.ReadLine(); //read header line.
-                while (true)
+                using (StreamReader sr = new StreamReader(file))
                 {
-                    string line = sr.ReadLine();
-                    if (line == null && tasks.Count == 0)
-                        break;
-                    else if (line == null && tasks.Count > 0)
+                    int threadCounter = 0;
+                    List<Task> tasks = new List<Task>();
+
+                    sr.ReadLine(); //read header line.
+                    while (true)
                     {
-                        startBatch(tasks);                      
-                        break;
+                        string line = sr.ReadLine();
+                        if (line == null && tasks.Count == 0)
+                            break;
+                        else if (line == null && tasks.Count > 0)
+                        {
+                            startBatch(tasks);
+                            break;
+                        }
+
+                        var tokens = line.Split(";");
+
+                        int value, iterations = 0;
+                        if (int.TryParse(tokens[0], out value))
+                        {
+                            iterations = value;
+                        }
+                        double rate = double.Parse(tokens[1], NumberStyles.AllowDecimalPoint, CultureInfo.InvariantCulture);
+                        int batchsize = int.Parse(tokens[2]);
+                        var tokens3 = tokens[3].Split("-");
+                        List<int> nodes = new List<int>();
+                        foreach (var item in tokens3)
+                        {
+                            nodes.Add(int.Parse(item));
+                        }
+
+                        if (threadCounter < concurrentThreads)
+                        {
+                            testNum++;
+                            tasks.Add(runMLPTest(iterations, rate, batchsize, nodes.ToArray()));
+                        }
+
+                        if (++threadCounter == concurrentThreads)
+                        {
+                            startBatch(tasks);
+                            threadCounter = 0;
+                        }
                     }
+                }
+            }
+            else
+            {
+                using (StreamReader sr = new StreamReader(file))
+                {
+                    int threadCounter = 0;
+                    List<Task> tasks = new List<Task>();
 
-                    var tokens = line.Split(";");
-                    int iterations = int.Parse(tokens[0]);
-                    double rate = double.Parse(tokens[1], NumberStyles.AllowDecimalPoint ,CultureInfo.InvariantCulture);
-
-                    var tokens2 = tokens[2].Split("-");
-                    List<int> nodes = new List<int>();
-                    foreach (var item in tokens2)
+                    sr.ReadLine(); //read header line.
+                    while (true)
                     {
-                        nodes.Add(int.Parse(item));
-                    }
+                        string line = sr.ReadLine();
+                        if (line == null && tasks.Count == 0)
+                            break;
+                        else if (line == null && tasks.Count > 0)
+                        {
+                            startBatch(tasks);
+                            break;
+                        }
 
-                    if (threadCounter < concurrentThreads)
-                    {
-                        testNum++;
-                        tasks.Add(runTest(iterations, rate, nodes.ToArray()));
-                    }
+                        var tokens = line.Split(";");
+                        int iterations = int.Parse(tokens[0]);
+                        double rate = double.Parse(tokens[1], NumberStyles.AllowDecimalPoint, CultureInfo.InvariantCulture);
 
-                    if (++threadCounter == concurrentThreads)
-                    {
-                        startBatch(tasks);
-                        threadCounter = 0;
+                        var tokens2 = tokens[2].Split("-");
+                        List<int> nodes = new List<int>();
+                        foreach (var item in tokens2)
+                        {
+                            nodes.Add(int.Parse(item));
+                        }
+
+                        if (threadCounter < concurrentThreads)
+                        {
+                            testNum++;
+                            tasks.Add(runTest(iterations, rate, nodes.ToArray()));
+                        }
+
+                        if (++threadCounter == concurrentThreads)
+                        {
+                            startBatch(tasks);
+                            threadCounter = 0;
+                        }
                     }
                 }
             }
 
             Console.WriteLine($"Test execution completed. Executed {testNum} tests.");
+
+            Console.ReadLine();
         }
 
         private static void startBatch(List<Task> tasks)
@@ -90,7 +150,7 @@ namespace TestRunner
             return Task.Run(() =>
             {
                 movieRecommendation test = new movieRecommendation();
-                
+
                 Stopwatch watch = new Stopwatch();
                 Console.WriteLine($"{DateTime.Now} - Started test I:{iterations} learning rate:{learningRate} Nodes:{String.Join("-", layers)}");
                 watch.Start();
@@ -124,6 +184,23 @@ namespace TestRunner
             }
             );
         }
+
+        private static Task runMLPTest(int iterations, double learningRate, int batchSize, int[] layers)
+        {
+            return Task.Run(() =>
+            {
+                MNISTFileRead test = new MNISTFileRead();
+                //RbmHandwrittenDigitUnitTests test = new RbmHandwrittenDigitUnitTests();
+                Stopwatch watch = new Stopwatch();
+                Console.WriteLine($"{DateTime.Now} - Started test Epochs:{iterations} learning rate:{learningRate} BatchSize:{batchSize} HiddenLayerNeurons:{String.Join("-", layers)}");
+                watch.Start();
+                test.UnitTestMNISTTestRunner(iterations, learningRate, batchSize, layers, Program.iterationNum++);
+                watch.Stop();
+                Console.WriteLine($"{DateTime.Now} - End test test Epochs:{iterations} learning rate:{learningRate} BatchSize:{batchSize} HiddenLayerNeurons:{String.Join("-", layers)} in {watch.ElapsedMilliseconds / 1000} sec.");
+            }
+            );
+        }
+
 
         private static Task runTestold1(int iterations, double learningRate, int[] layers)
         {
