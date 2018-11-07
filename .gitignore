@@ -371,3 +371,4 @@ LearningApi/test/obj/*
 /LearningApi/packages/ZedGraph.5.1.7
 /LearningApi/MouseGestureRecognition/.vs/MouseGestureRecognition/v15/Server/sqlite3
 /.vs
+/LearningApi/TestRunner/Properties/launchSettings.json
