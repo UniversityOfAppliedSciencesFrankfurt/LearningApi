@@ -497,20 +497,20 @@ namespace test.MLPerceptron
             {
                 ctx.DataDescriptor = new DataDescriptor();
 
-                ctx.DataDescriptor.Features = new LearningFoundation.DataMappers.Column[MNISTFileRead.firstLineValues.Length - 1];
+                ctx.DataDescriptor.Features = new LearningFoundation.DataMappers.Column[MNISTFileRead.inputFeaturesAndLabelValues.Length - 1];
 
-                for (int i = 0; i < (MNISTFileRead.firstLineValues.Length - 1); i++)
+                for (int i = 0; i < (MNISTFileRead.inputFeaturesAndLabelValues.Length - 1); i++)
                 {
                     ctx.DataDescriptor.Features[i] = new LearningFoundation.DataMappers.Column
                     {
                         Id = i,
-                        Name = MNISTFileRead.firstLineValues[i],
+                        Name = MNISTFileRead.inputFeaturesAndLabelValues[i],
                         Type = LearningFoundation.DataMappers.ColumnType.NUMERIC,
                         Index = i,
                     };
                 }
 
-                ctx.DataDescriptor.LabelIndex = MNISTFileRead.firstLineValues.Length - 1;
+                ctx.DataDescriptor.LabelIndex = MNISTFileRead.inputFeaturesAndLabelValues.Length - 1;
 
                 return MNISTFileRead.trainingData;
             });

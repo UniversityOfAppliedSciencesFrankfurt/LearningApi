@@ -19,27 +19,27 @@ namespace MLPerceptron
     {
         #region Private Fields
 
-        private double m_LearningRate = 0.1;
+        public double m_LearningRate = 0.1;
 
-        private int[] m_HiddenLayerNeurons = { 4, 3, 5 };
+        public int[] m_HiddenLayerNeurons = {4,3,5};
 
-        private int m_OutputLayerNeurons;
+        public int m_OutputLayerNeurons;
 
-        private int m_Iterations = 10000;
+        public int m_Iterations = 10000;
 
-        private int m_batchSize = 1;
+        public int m_batchSize = 1;
 
         private Func<double, double> m_ActivationFunction = MLPerceptron.NeuralNetworkCore.ActivationFunctions.HyperbolicTan;//TODO Patrick
 
-        private int m_InpDims;
+        public int m_InpDims;
 
-        private double[][,] m_Weights;
+        public double[][,] m_Weights;
 
-        private double[][] m_Biases;
+        public double[][] m_Biases;
 
-        private Boolean m_SoftMax = true;
+        public Boolean m_SoftMax = true;
 
-        private int TestCaseNumber = 0;
+        public int TestCaseNumber = 0;
 
         #endregion
 
@@ -51,7 +51,7 @@ namespace MLPerceptron
         /// <param name="iterations">number of epochs</param>
         /// <param name="hiddenLayerNeurons">number of hidden layer neurons</param>
         /// <param name="activationfunction">activation function to be used by the netwokr</param>
-        public MLPerceptronAlgorithm(double learningRate, int iterations, int batchSize, int testCaseNumber, int[] hiddenLayerNeurons, Func<double, double> activationfunction = null, bool SoftMax = false)
+        public MLPerceptronAlgorithm(double learningRate, int iterations, int batchSize, int testCaseNumber, int[] hiddenLayerNeurons, Func<double,double> activationfunction = null, bool SoftMax = true)
         {
             this.m_LearningRate = learningRate;
 
@@ -71,7 +71,7 @@ namespace MLPerceptron
                 this.m_ActivationFunction = activationfunction;
             }
 
-            if (SoftMax != false)
+            if (SoftMax != true)
             {
                 this.m_SoftMax = SoftMax;
             }
@@ -96,12 +96,15 @@ namespace MLPerceptron
         /// <returns>IScore</returns>
         public override IScore Run(double[][] data, IContext ctx)
         {
+            int numberOfHiddenAndOutputLayers = m_HiddenLayerNeurons.Length + 1;
+
             // Sum for every layer. hidLyrNeuronSum1 = x11*w11+x12*w21+..+x1N*wN1
-            double[][] hidLyrNeuronSum = new double[m_HiddenLayerNeurons.Length + 1][];
+            double[][] hidLyrNeuronSum = new double[numberOfHiddenAndOutputLayers][];
 
             // outputs = ActFnx(hidLyrNeuronSum+Bias)
-            double[][] hidLyrOut = new double[m_HiddenLayerNeurons.Length + 1][];
+            double[][] hidLyrOut = new double[numberOfHiddenAndOutputLayers][];
 
+            // Utilize 80% of training data for training and 20% for validation for every epoch
             double[][] trainingData = new double[(int)(data.Length * 0.8)][];
 
             double[][] validationData = new double[(int)(data.Length * 0.2)][];
@@ -112,14 +115,15 @@ namespace MLPerceptron
 
             int numOfInputVectors = trainingData.Length;
 
-            m_InpDims = ctx.DataDescriptor.Features.Count();
+            m_InpDims = ctx.DataDescriptor.Features.Count(); 
 
             m_OutputLayerNeurons = data[0].Length - m_InpDims;
 
-            m_Weights = new double[m_HiddenLayerNeurons.Length + 1][,];
+            m_Weights = new double[numberOfHiddenAndOutputLayers][,];
 
-            m_Biases = new double[m_HiddenLayerNeurons.Length + 1][];
+            m_Biases = new double[numberOfHiddenAndOutputLayers][];
 
+            // Initialize the weights and biases at every layer of the neural network
             InitializeWeightsandBiasesinputlayer(m_InpDims);
 
             InitializeWeightsandBiaseshiddenlayers(m_HiddenLayerNeurons);
@@ -132,7 +136,7 @@ namespace MLPerceptron
 
             double lastValidationLoss = 0;
 
-            string path = Directory.GetCurrentDirectory() + "\\MLPerceptron\\TestFiles\\mnist_performance_params_" + this.TestCaseNumber.ToString() + ".csv";
+            string path = Directory.GetCurrentDirectory() + "\\mnist_performance_params_" + this.TestCaseNumber.ToString() + ".csv";
 
             if (!File.Exists(path))
             {
@@ -276,9 +280,11 @@ namespace MLPerceptron
         /// <returns>double[]</returns>
         public override IResult Predict(double[][] data, IContext ctx)
         {
-            double[][] calcuLatedOutput = new double[m_HiddenLayerNeurons.Length + 1][];
+            int numberOfHiddenAndOutputLayers = m_HiddenLayerNeurons.Length + 1;
 
-            double[][] weightedInputs = new double[m_HiddenLayerNeurons.Length + 1][];
+            double[][] calcuLatedOutput = new double[numberOfHiddenAndOutputLayers][];
+
+            double[][] weightedInputs = new double[numberOfHiddenAndOutputLayers][];
 
             MLPerceptronResult result = new MLPerceptronResult()
             {
@@ -345,9 +351,11 @@ namespace MLPerceptron
         /// <param name="layerNeuronSum">output parameter to store weighted inputs at the hidden layers that follow the first hidden layer</param>
         private void CalcRemainingHiddenLayers(double[] input, double[] firstlayerweightedip, int numOfFeatures, out double[][] layerOutput, out double[][] layerNeuronSum)
         {
-            layerOutput = new double[m_HiddenLayerNeurons.Length + 1][];
+            int numberOfHiddenAndOutputLayers = m_HiddenLayerNeurons.Length + 1;
 
-            layerNeuronSum = new double[m_HiddenLayerNeurons.Length + 1][];
+            layerOutput = new double[numberOfHiddenAndOutputLayers][];
+
+            layerNeuronSum = new double[numberOfHiddenAndOutputLayers][];
 
             double[] currentInput = input;
 
@@ -389,7 +397,6 @@ namespace MLPerceptron
 
                 index++;
             }
-
         }
         #endregion
 

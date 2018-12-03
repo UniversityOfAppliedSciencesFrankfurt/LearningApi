@@ -36,9 +36,11 @@ namespace TestRunner
 
             if (file.Contains("MNIST") == true)
             {
+			    //Load the MNIST training and test data from the csv files into jagged arrays
                 MNISTFileRead.ReadMNISTTrainingData();
                 MNISTFileRead.ReadMNISTTestData();
 
+                //Read the MNIST parameter test file content
                 using (StreamReader sr = new StreamReader(file))
                 {
                     int threadCounter = 0;
@@ -132,6 +134,14 @@ namespace TestRunner
             }
 
             Console.WriteLine($"Test execution completed. Executed {testNum} tests.");
+
+            Console.WriteLine("Enter the Saved Model to be loaded: ");
+
+            string jsonFile = Console.ReadLine();
+
+            MNISTLoadModel loadModel = new MNISTLoadModel();
+
+            loadModel.LoadMNISTModel(jsonFile);
         }
 
         private static void startBatch(List<Task> tasks)
