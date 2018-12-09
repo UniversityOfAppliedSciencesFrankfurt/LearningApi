@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "AkkaHost": {
+      "commandName": "Project",
+      "commandLineArgs": "--port  8081 --seedhosts \"localhost:8081\" --sysname MLP"
+    }
+  }
+}
