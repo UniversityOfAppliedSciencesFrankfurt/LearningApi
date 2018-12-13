@@ -4,7 +4,7 @@ using LearningFoundation;
 using NeuralNetworks.Core;
 using System;
 using System.Linq;
-
+using System.Threading;
 
 namespace AkkaMLPerceptron
 {
@@ -20,6 +20,11 @@ namespace AkkaMLPerceptron
         private string akkaSystemName;
 
         /// <summary>
+        /// URIs of akka nodes in cluster.
+        /// </summary>
+        private string[] akkaNodes;
+
+        /// <summary>
         /// Instance of the actor cluster system.
         /// </summary>
         private ActorSystem actorSystem;
@@ -28,6 +33,7 @@ namespace AkkaMLPerceptron
         /// Number of nodes in cluster.
         /// </summary>
         private int numOfNodes;
+
         #endregion
 
 
@@ -54,18 +60,17 @@ namespace AkkaMLPerceptron
         public int TestCaseNumber = 0;
 
         #endregion
-        public AkaMLPerceptronAlgorithm(string akkaSystemName, int nnumOfNode)
+        public AkaMLPerceptronAlgorithm(string akkaSystemName, string[] akkaNodes)
         {
+            if (akkaNodes == null || akkaNodes.Length == 0)
+                throw new ArgumentException("Cluster nodes must be specified.");
+
+
             // akka.tcp://DeployTarget@localhost:8090"
             string configString = @"
                 akka {  
                     actor{
-                        provider = ""Akka.Remote.RemoteActorRefProvider, Akka.Remote""
-                        deployment {
-                            /remoteecho {
-                                remote = ""@TARGET""
-                            }
-                        }
+                        provider = ""Akka.Remote.RemoteActorRefProvider, Akka.Remote""                        
                     }
                     remote {
                         helios.tcp {
@@ -75,30 +80,34 @@ namespace AkkaMLPerceptron
                     }
                 }";
 
-            configString = configString.Replace("@TARGET", akkaSystemName);
+            //configString = configString.Replace("@TARGET", $"akka.tcp://{akkaSystemName}@localhost:8090");
+            this.akkaSystemName = akkaSystemName;
+            this.akkaNodes = akkaNodes;
+            this.numOfNodes = akkaNodes.Length;
 
-            this.actorSystem = ActorSystem.Create("Deployer", ConfigurationFactory.ParseString(configString));
+            this.actorSystem = ActorSystem.Create(this.akkaSystemName, ConfigurationFactory.ParseString(configString));
         }
 
 
         public override IScore Run(double[][] data, IContext ctx)
         {
-            int miniBatchStartIndex = 0;
+           
             var trainingData = data.Take((int)(data.Length * 0.8)).ToArray();
-            var numOfInputVectors = 5;
-
-            while (miniBatchStartIndex < numOfInputVectors)
+            var numOfInputVectors = 1;
+            int i = 0;
+            while (i < numOfInputVectors)
             {
-                string targetUri = "akka.tcp://@TARGET@localhost:8090";
-                var remoteAddress = Address.Parse(targetUri.Replace("@TARGET", this.akkaSystemName));
+                string targetUri = this.akkaNodes[0];
+                var remoteAddress = Address.Parse(targetUri);
                 var remoteBackPropagationActor =
                      this.actorSystem.ActorOf(
                          Props.Create(() => new BackPropagationActor(m_Biases, m_HiddenLayerNeurons,
                          m_OutputLayerNeurons, m_InpDims, numOfInputVectors / this.numOfNodes))
-                             .WithDeploy(Deploy.None.WithScope(new RemoteScope(remoteAddress))), "remotebackpropagation");
-
-                this.actorSystem.ActorSelection("/user/remoteecho").Tell(new BackPropActorIn() { });
+                             .WithDeploy(Deploy.None.WithScope(new RemoteScope(remoteAddress))), $"bp{++i}");
+              
             }
+
+            BackPropActorOut res = this.actorSystem.ActorSelection("/user/bp1").Ask<BackPropActorOut>(new BackPropActorIn() { }).Result;
 
             return null;
         }

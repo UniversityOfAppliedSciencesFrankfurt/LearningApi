@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
@@ -8,6 +8,10 @@
   <ItemGroup>
     <PackageReference Include="Akka.Cluster" Version="1.3.10" />
     <PackageReference Include="Microsoft.Extensions.Configuration.CommandLine" Version="2.2.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\MLAlgorithms\NeuralNetworks\NeuralNet.AkkaMLPerceptron\AkkaMLPerceptron\AkkaMLPerceptron.csproj" />
   </ItemGroup>
 
   <ItemGroup>

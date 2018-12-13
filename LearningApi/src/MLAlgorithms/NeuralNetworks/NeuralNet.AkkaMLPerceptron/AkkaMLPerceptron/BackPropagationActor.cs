@@ -1,6 +1,7 @@
 ﻿using Akka.Actor;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Text;
 using System.Threading;
 
@@ -25,13 +26,20 @@ namespace AkkaMLPerceptron
             Receive<BackPropActorIn>(new Action<BackPropActorIn>(CalculateLayer));
         }
 
+        protected override void PreStart()
+        {
+            Console.WriteLine(Context.Self.Path);
+
+            base.PreStart();
+        }
+
         protected void CalculateLayer(BackPropActorIn msg)
         {
             Console.WriteLine("Entered calculation");
 
             Thread.Sleep(2000);
             
-            Sender.Tell(new BackPropActorOut());
+            Sender.Tell(new BackPropActorOut() { Status = "Success" });
         }
     }
 }

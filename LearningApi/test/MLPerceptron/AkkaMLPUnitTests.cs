@@ -12,6 +12,7 @@ using NeuralNet.MLPerceptron;
 using ImageBinarizer;
 using System.Globalization;
 using AkkaMLPerceptron;
+using System.Threading;
 
 namespace test.MLPerceptron
 {
@@ -47,8 +48,30 @@ namespace test.MLPerceptron
         [Fact]
         public void UnitTestZero()
         {
-            AkaMLPerceptronAlgorithm alg = new AkaMLPerceptronAlgorithm("AkkaLearningApi", 2);
-            
+            string clusterSystemName = "ClusterSystem";
+
+            AkaMLPerceptronAlgorithm alg = new AkaMLPerceptronAlgorithm(clusterSystemName, 
+                new string[] { $"akka.tcp://{clusterSystemName}@localhost:8081", $"akka.tcp://{clusterSystemName}@localhost:8082" });
+
+
+            List<double[]> data = new List<double[]>();
+
+            for (int i = 0; i < 10; i++)
+            {
+                int numFeatures = 1024;
+                double[] features = new double[numFeatures];
+
+                for (int j = 0; i < numFeatures; i++)
+                {
+                    features[j] = i;
+                }
+
+                data.Add(features);
+            }                       
+
+            alg.Run(data.ToArray(), null);
+
+            Thread.Sleep(int.MaxValue);
         }
 
         /// <summary>
