@@ -1,7 +1,19 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp2.1</TargetFramework>
+    <TargetFramework>netcoreapp2.0</TargetFramework>
   </PropertyGroup>
+
+
+  <ItemGroup>
+    <PackageReference Include="Akka" version="1.3.10" />
+    <PackageReference Include="Akka.Remote" version="1.3.10" />
+
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\NeuralNetworks.Core\NeuralNetworks.Core.csproj" />
+  </ItemGroup>
 
 </Project>

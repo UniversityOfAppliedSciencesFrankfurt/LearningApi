@@ -67,6 +67,7 @@
     <ProjectReference Include="..\src\LearningApi\LearningApi.csproj" />
     <ProjectReference Include="..\src\MLAlgorithms\DeltaRuleLearning\DeltaRuleLearning.csproj" />
     <ProjectReference Include="..\src\MLAlgorithms\GaussianAndMeanFilter\GaussianAndMeanFilter.csproj" />
+    <ProjectReference Include="..\src\MLAlgorithms\NeuralNetworks\NeuralNet.AkkaMLPerceptron\AkkaMLPerceptron\AkkaMLPerceptron.csproj" />
     <ProjectReference Include="..\src\MLAlgorithms\NeuralNetworks\NeuralNet.BackPropagation\NeuralNet.BackPropagation.csproj" />
     <ProjectReference Include="..\src\MLAlgorithms\NeuralNetworks\NeuralNet.MLPerceptron\NeuralNet.MLPerceptron.csproj" />
     <ProjectReference Include="..\src\MLAlgorithms\NeuralNetworks\NeuralNet.RestrictedBolzmannMachine2\NeuralNet.RestrictedBolzmannMachine2.csproj" />
