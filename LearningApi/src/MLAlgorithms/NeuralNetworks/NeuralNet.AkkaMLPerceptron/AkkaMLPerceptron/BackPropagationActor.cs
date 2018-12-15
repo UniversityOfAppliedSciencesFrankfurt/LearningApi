@@ -7,7 +7,9 @@ using System.Threading;
 
 namespace AkkaMLPerceptron
 {
-
+    /// <summary>
+    /// Implement partial backpropagation algorithm, which is executed on a single node in cluster.
+    /// </summary>
     public class BackPropagationActor : ReceiveActor
     {
         /// <summary>
@@ -39,7 +41,7 @@ namespace AkkaMLPerceptron
 
             Thread.Sleep(2000);
             
-            Sender.Tell(new BackPropActorOut() { Status = "Success" });
+            Sender.Tell(new BackPropActorOut() { Status = "Success", Test= DateTime.Now.Ticks });
         }
     }
 }

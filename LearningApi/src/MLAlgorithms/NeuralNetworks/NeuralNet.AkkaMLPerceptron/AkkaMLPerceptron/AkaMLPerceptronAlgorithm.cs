@@ -93,39 +93,62 @@ namespace AkkaMLPerceptron
 
         public override IScore Run(double[][] data, IContext ctx)
         {
-           
+            // Number of slots inside of weight matrix. It specifies in how many
+            // slots (parts) the matrix will be split to execute calculation.
+            int numOfSlots = 5;
+
             var trainingData = data.Take((int)(data.Length * 0.8)).ToArray();
-            var numOfInputVectors = 6;
+            var numOfInputVectors = data.Length;
             int i = 0;
+
             while (i < numOfInputVectors)
             {
-                // Here we make sure that all actor are shared accross all specified node.
-                string targetUri = this.akkaNodes[i % this.numOfNodes];
-                var remoteAddress = Address.Parse(targetUri);
+                List<Task> tasks = new List<Task>();
 
-                var remoteBackPropagationActor =
-                this.actorSystem.ActorOf(Props.Create(() => new BackPropagationActor(m_Biases, m_HiddenLayerNeurons, m_OutputLayerNeurons, m_InpDims, numOfInputVectors / this.numOfNodes))
-                .WithDeploy(Deploy.None.WithScope(new RemoteScope(remoteAddress))), $"bp{++i}");
-              
+                for (int slot = 0; slot < numOfSlots; slot++)
+                {
+                    // Here we make sure that all actor are shared accross all specified node.
+                    string targetUri = this.akkaNodes[i % this.numOfNodes];
+                    var remoteAddress = Address.Parse(targetUri);
+
+                    var remoteBackPropagationActor =
+                    this.actorSystem.ActorOf(Props.Create(() => new BackPropagationActor(m_Biases, m_HiddenLayerNeurons, m_OutputLayerNeurons, m_InpDims, numOfInputVectors / this.numOfNodes))
+                    .WithDeploy(Deploy.None.WithScope(new RemoteScope(remoteAddress))), $"bp{++i}");
+                }
+
+                for (int slot = 0; slot < numOfSlots; slot++)
+                {
+                    // In this loop, we have to setup BackPropActorIn with all required parameters.
+                    // This is the place to provide all input vector with all weights.
+                    tasks.Add(this.actorSystem.ActorSelection($"/user/bp{slot}").Ask<BackPropActorOut>(new BackPropActorIn() { }));
+                }
+                while (true)
+                {
+                    Thread.Sleep(500);
+                }
+                Task.WaitAll(tasks.ToArray());
+
+                //
+                // Here is the place to collect results from all actors,
+                // which have partially calculated results.
+                foreach (var task in tasks)
+                {
+
+                }
+
             }
 
-            List<Task> tasks = new List<Task>();
-            for (int k = 0; k < numOfInputVectors; k++)
-            {
-                // In this loop, we have to setup BackPropActorIn with all required parameters.
-                // This is the place to provide all input vector with all weights.
-                tasks.Add(this.actorSystem.ActorSelection($"/user/bp{k}").Ask<BackPropActorOut>(new BackPropActorIn() { }));
-            }
+            //List<Task> tasks = new List<Task>();
+            //for (int k = 0; k < numOfInputVectors; k++)
+            //{
+            //    // In this loop, we have to setup BackPropActorIn with all required parameters.
+            //    // This is the place to provide all input vector with all weights.
+            //    tasks.Add(this.actorSystem.ActorSelection($"/user/bp{k}").Ask<BackPropActorOut>(new BackPropActorIn() { }));
+            //}
 
-            Task.WaitAll(tasks.ToArray());
+            //Task.WaitAll(tasks.ToArray());
 
-            //
-            // Here is the place to collect results from all actors,
-            // which have partially calculated results.
-            foreach (var task in tasks)
-            {
 
-            }
 
             return null;
         }
