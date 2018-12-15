@@ -3,8 +3,10 @@ using Akka.Configuration;
 using LearningFoundation;
 using NeuralNetworks.Core;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
+using System.Threading.Tasks;
 
 namespace AkkaMLPerceptron
 {
@@ -93,21 +95,37 @@ namespace AkkaMLPerceptron
         {
            
             var trainingData = data.Take((int)(data.Length * 0.8)).ToArray();
-            var numOfInputVectors = 1;
+            var numOfInputVectors = 6;
             int i = 0;
             while (i < numOfInputVectors)
             {
-                string targetUri = this.akkaNodes[0];
+                // Here we make sure that all actor are shared accross all specified node.
+                string targetUri = this.akkaNodes[i % this.numOfNodes];
                 var remoteAddress = Address.Parse(targetUri);
+
                 var remoteBackPropagationActor =
-                     this.actorSystem.ActorOf(
-                         Props.Create(() => new BackPropagationActor(m_Biases, m_HiddenLayerNeurons,
-                         m_OutputLayerNeurons, m_InpDims, numOfInputVectors / this.numOfNodes))
-                             .WithDeploy(Deploy.None.WithScope(new RemoteScope(remoteAddress))), $"bp{++i}");
+                this.actorSystem.ActorOf(Props.Create(() => new BackPropagationActor(m_Biases, m_HiddenLayerNeurons, m_OutputLayerNeurons, m_InpDims, numOfInputVectors / this.numOfNodes))
+                .WithDeploy(Deploy.None.WithScope(new RemoteScope(remoteAddress))), $"bp{++i}");
               
             }
 
-            BackPropActorOut res = this.actorSystem.ActorSelection("/user/bp1").Ask<BackPropActorOut>(new BackPropActorIn() { }).Result;
+            List<Task> tasks = new List<Task>();
+            for (int k = 0; k < numOfInputVectors; k++)
+            {
+                // In this loop, we have to setup BackPropActorIn with all required parameters.
+                // This is the place to provide all input vector with all weights.
+                tasks.Add(this.actorSystem.ActorSelection($"/user/bp{k}").Ask<BackPropActorOut>(new BackPropActorIn() { }));
+            }
+
+            Task.WaitAll(tasks.ToArray());
+
+            //
+            // Here is the place to collect results from all actors,
+            // which have partially calculated results.
+            foreach (var task in tasks)
+            {
+
+            }
 
             return null;
         }

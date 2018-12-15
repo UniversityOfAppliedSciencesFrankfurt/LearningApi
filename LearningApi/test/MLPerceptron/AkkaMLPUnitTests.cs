@@ -71,7 +71,7 @@ namespace test.MLPerceptron
 
             alg.Run(data.ToArray(), null);
 
-            Thread.Sleep(int.MaxValue);
+           
         }
 
         /// <summary>

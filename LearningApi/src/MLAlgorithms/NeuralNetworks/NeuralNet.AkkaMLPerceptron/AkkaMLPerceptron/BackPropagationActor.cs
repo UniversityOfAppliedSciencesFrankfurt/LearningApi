@@ -28,14 +28,14 @@ namespace AkkaMLPerceptron
 
         protected override void PreStart()
         {
-            Console.WriteLine(Context.Self.Path);
+            Console.WriteLine($"Started Actor: {Context.Self.Path}");
 
             base.PreStart();
         }
 
         protected void CalculateLayer(BackPropActorIn msg)
         {
-            Console.WriteLine("Entered calculation");
+            Console.WriteLine($"Entered calculation: {Context.Self.Path}");
 
             Thread.Sleep(2000);
             
