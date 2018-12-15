@@ -95,25 +95,25 @@ namespace AkkaMLPerceptron
         {
             // Number of slots inside of weight matrix. It specifies in how many
             // slots (parts) the matrix will be split to execute calculation.
-            int numOfSlots = 5;
+            int numOfSlots = 10;
 
             var trainingData = data.Take((int)(data.Length * 0.8)).ToArray();
             var numOfInputVectors = data.Length;
             int i = 0;
 
-            while (i < numOfInputVectors)
+            while (i++ < numOfInputVectors)
             {
                 List<Task> tasks = new List<Task>();
 
                 for (int slot = 0; slot < numOfSlots; slot++)
                 {
                     // Here we make sure that all actor are shared accross all specified node.
-                    string targetUri = this.akkaNodes[i % this.numOfNodes];
+                    string targetUri = this.akkaNodes[slot % this.numOfNodes];
                     var remoteAddress = Address.Parse(targetUri);
 
                     var remoteBackPropagationActor =
                     this.actorSystem.ActorOf(Props.Create(() => new BackPropagationActor(m_Biases, m_HiddenLayerNeurons, m_OutputLayerNeurons, m_InpDims, numOfInputVectors / this.numOfNodes))
-                    .WithDeploy(Deploy.None.WithScope(new RemoteScope(remoteAddress))), $"bp{++i}");
+                    .WithDeploy(Deploy.None.WithScope(new RemoteScope(remoteAddress))), $"bp{slot}");
                 }
 
                 for (int slot = 0; slot < numOfSlots; slot++)
@@ -122,10 +122,8 @@ namespace AkkaMLPerceptron
                     // This is the place to provide all input vector with all weights.
                     tasks.Add(this.actorSystem.ActorSelection($"/user/bp{slot}").Ask<BackPropActorOut>(new BackPropActorIn() { }));
                 }
-                while (true)
-                {
-                    Thread.Sleep(500);
-                }
+
+               
                 Task.WaitAll(tasks.ToArray());
 
                 //

@@ -39,7 +39,7 @@ namespace AkkaMLPerceptron
         {
             Console.WriteLine($"Entered calculation: {Context.Self.Path}");
 
-            Thread.Sleep(2000);
+            Thread.Sleep(15000);
             
             Sender.Tell(new BackPropActorOut() { Status = "Success", Test= DateTime.Now.Ticks });
         }
