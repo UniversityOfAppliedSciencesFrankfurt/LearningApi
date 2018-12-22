@@ -1,0 +1,21 @@
+FROM microsoft/dotnet:2.0-runtime AS base
+WORKDIR /app
+
+FROM microsoft/dotnet:2.0-sdk AS build
+WORKDIR /src
+COPY akkacluster/AkkaHost/AkkaHost.csproj akkacluster/AkkaHost/
+COPY src/MLAlgorithms/NeuralNetworks/NeuralNet.AkkaMLPerceptron/AkkaMLPerceptron/AkkaMLPerceptron.csproj src/MLAlgorithms/NeuralNetworks/NeuralNet.AkkaMLPerceptron/AkkaMLPerceptron/
+COPY src/MLAlgorithms/NeuralNetworks/NeuralNetworks.Core/NeuralNetworks.Core.csproj src/MLAlgorithms/NeuralNetworks/NeuralNetworks.Core/
+COPY src/LearningApi/LearningApi.csproj src/LearningApi/
+RUN dotnet restore akkacluster/AkkaHost/AkkaHost.csproj
+COPY . .
+WORKDIR /src/akkacluster/AkkaHost
+RUN dotnet build AkkaHost.csproj -c Release -o /app
+
+FROM build AS publish
+RUN dotnet publish AkkaHost.csproj -c Release -o /app
+
+FROM base AS final
+WORKDIR /app
+COPY --from=publish /app .
+ENTRYPOINT ["dotnet", "AkkaHost.dll"]

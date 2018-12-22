@@ -64,7 +64,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "NeuralNet.AkkaMLPerceptron"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "akkacluster", "akkacluster", "{C866613F-9C4E-41AE-9CB9-BAA13B6A8169}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AkkaHost", "akkacluster\AkkaHost\AkkaHost.csproj", "{DACF660C-6B15-42E3-8CBE-E76310A5F15E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AkkaHost", "akkacluster\AkkaHost\AkkaHost.csproj", "{DACF660C-6B15-42E3-8CBE-E76310A5F15E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

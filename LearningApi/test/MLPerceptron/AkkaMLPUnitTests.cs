@@ -13,6 +13,8 @@ using ImageBinarizer;
 using System.Globalization;
 using AkkaMLPerceptron;
 using System.Threading;
+using Akka.Actor;
+using Akka.Configuration;
 
 namespace test.MLPerceptron
 {
@@ -21,25 +23,42 @@ namespace test.MLPerceptron
     /// </summary>
     public class AkkaMLPUnitTests
     {
+        private static string clusterSystemName = "ClusterSystem";
+
+        private static string[] akkaNodes;
+
         /// <summary>
         /// 
         /// </summary>
         static AkkaMLPUnitTests()
         {
+            //akkaNodes = new string[] { $"akka.tcp://{clusterSystemName}@dado-sr1:8081", $"akka.tcp://{clusterSystemName}@DADO-SR1:8082" };
+
+            //akkaNodes = new string[] { $"akka.tcp://{clusterSystemName}@localhost:8081", $"akka.tcp://{clusterSystemName}@localhost:8082" };
+
+            akkaNodes = new string[] { $"akka.tcp://{clusterSystemName}@akkahost1.westeurope.azurecontainer.io:8081", $"akka.tcp://{clusterSystemName}@akkahost2.westeurope.azurecontainer.io:8081" };
 
         }
 
-        private static void runNodes()
+        private static ActorSystem runAkkaSystem()
         {
-            /*
-            
-                Runs seed node on 8081.
-                dotnet akkahost.dll --port  8081 --seedhosts "localhost:8081, localhost:8082" --sysname ClusterSystem
- 
-                Runs another seed node on 8081
-                dotnet akkahost.dll --port  8082 --seedhosts "localhost:8081, localhost:8082" --sysname ClusterSystem 
 
-             */
+            // akka.tcp://DeployTarget@localhost:8090"
+            string configString = @"
+                akka {  
+                    actor{
+                        provider = ""Akka.Remote.RemoteActorRefProvider, Akka.Remote""                        
+                    }
+                    remote {
+                        helios.tcp {
+		                    port = 0
+		                    hostname = localhost
+                        }
+                    }
+                }";
+
+
+            return ActorSystem.Create(clusterSystemName, ConfigurationFactory.ParseString(configString));
         }
 
         /// <summary>
@@ -48,11 +67,8 @@ namespace test.MLPerceptron
         [Fact]
         public void UnitTestZero()
         {
-            string clusterSystemName = "ClusterSystem";
 
-            AkaMLPerceptronAlgorithm alg = new AkaMLPerceptronAlgorithm(clusterSystemName, 
-                new string[] { $"akka.tcp://{clusterSystemName}@localhost:8081", $"akka.tcp://{clusterSystemName}@localhost:8082" });
-
+            AkaMLPerceptronAlgorithm alg = new AkaMLPerceptronAlgorithm(clusterSystemName, akkaNodes);
 
             List<double[]> data = new List<double[]>();
 
@@ -67,185 +83,107 @@ namespace test.MLPerceptron
                 }
 
                 data.Add(features);
-            }                       
+            }
 
             alg.Run(data.ToArray(), null);
 
-           
+
         }
+
 
         /// <summary>
         /// 
         /// </summary>
         [Fact]
-        public void UnitTestOne()
+        public void DeployManyActorsTest()
         {
-            // Read the csv file which contains the training data
-            using (var readerTrainData = new StreamReader($"{Directory.GetCurrentDirectory()}\\MLPerceptron\\TestFiles\\TrainingData.csv"))
+            List<double[]> data = new List<double[]>();
+            List<Task> tasks = new List<Task>();
+            int numActors = 100;
+
+            var sys = runAkkaSystem();
+
+            for (int n = 0; n < 100; n++)
             {
-                int lineCountTrainData = 0;
-
-                int indexTrainData = 0;
-
-                int numberOfOutputs = 0;
-
-                while (readerTrainData.ReadLine() != null)
+                for (int actorId = 0; actorId < numActors; actorId++)
                 {
-                    lineCountTrainData++;
+                    string targetUri = akkaNodes[actorId % akkaNodes.Length];
+                    //string targetUri = akkaNodes[0];
+                    var remoteAddress = Address.Parse(targetUri);
+
+                    var remoteBackPropagationActor = sys.ActorOf(Props.Create(() => new UnitTestActor())
+                    .WithDeploy(Deploy.None.WithScope(new RemoteScope(remoteAddress))), $"ut{actorId}-{n}");
                 }
 
-                double[][] data = new double[lineCountTrainData - 1][];
-
-                List<double>[] listTrainData = new List<double>[lineCountTrainData - 1];
-
-                LearningApi api = new LearningApi();
-
-                api.UseActionModule<object, double[][]>((notUsed, ctx) =>
+                for (int actorId = 0; actorId < numActors; actorId++)
                 {
-                    ctx.DataDescriptor = new DataDescriptor();
-
-                    readerTrainData.DiscardBufferedData();
-
-                    readerTrainData.BaseStream.Seek(0, SeekOrigin.Begin);
-
-                    var firstLine = readerTrainData.ReadLine();
-
-                    var firstLineValues = firstLine.Split(',');
-
-                    foreach (var value in firstLineValues)
-                    {
-                        if (value.Contains("Output"))
-                        {
-                            numberOfOutputs++;
-                        }
-                    }
-
-                    ctx.DataDescriptor.Features = new LearningFoundation.DataMappers.Column[firstLineValues.Length - numberOfOutputs];
-
-                    for (int i = 0; i < (firstLineValues.Length - numberOfOutputs); i++)
-                    {
-                        ctx.DataDescriptor.Features[i] = new LearningFoundation.DataMappers.Column
-                        {
-                            Id = i,
-                            Name = firstLineValues[i],
-                            Type = LearningFoundation.DataMappers.ColumnType.NUMERIC,
-                            Index = i,
-                        };
-                    }
-
-                    ctx.DataDescriptor.LabelIndex = firstLineValues.Length - numberOfOutputs;
-
-
-                    while (!readerTrainData.EndOfStream)
-                    {
-                        var line = readerTrainData.ReadLine();
-
-                        var values = line.Split(',');
-
-                        listTrainData[indexTrainData] = new List<double>();
-
-                        foreach (var value in values)
-                        {
-                            listTrainData[indexTrainData].Add(Convert.ToDouble(value, CultureInfo.InvariantCulture));
-                        }
-
-                        data[indexTrainData] = listTrainData[indexTrainData].ToArray();
-
-                        indexTrainData++;
-                    }
-
-                    return data;
-                });
-
-                int[] hiddenLayerNeurons = { 6 };
-
-                // Invoke the MLPerecptronAlgorithm with a specific learning rate, number of iterations, and number of hidden layer neurons
-                api.UseMLPerceptron(0.1, 10000, 1, 1, hiddenLayerNeurons);
-
-                IScore score = api.Run() as IScore;
-
-                // Read the csv file which contains the test data
-                using (var readerTestData = new StreamReader($"{Directory.GetCurrentDirectory()}\\MLPerceptron\\TestFiles\\testData.csv"))
-                {
-                    int lineCountTestData = 0;
-
-                    int indexTestData = 0;
-
-                    while (readerTestData.ReadLine() != null)
-                    {
-                        lineCountTestData++;
-                    }
-
-                    double[][] testData = new double[lineCountTestData - 1][];
-
-                    List<double>[] listTestData = new List<double>[lineCountTestData - 1];
-
-                    readerTestData.DiscardBufferedData();
-
-                    readerTestData.BaseStream.Seek(0, SeekOrigin.Begin);
-
-                    readerTestData.ReadLine();
-
-                    while (!readerTestData.EndOfStream)
-                    {
-                        var line = readerTestData.ReadLine();
-
-                        var values = line.Split(',');
-
-                        listTestData[indexTestData] = new List<double>();
-
-                        foreach (var value in values)
-                        {
-                            listTestData[indexTestData].Add(Convert.ToDouble(value, CultureInfo.InvariantCulture));
-                        }
-
-                        testData[indexTestData] = listTestData[indexTestData].ToArray();
-
-                        indexTestData++;
-                    }
-
-                    // Invoke the Predict method to predict the results on the test data
-                    var result = ((MLPerceptronResult)api.Algorithm.Predict(testData, api.Context)).results;
-
-                    int expectedResults = 0;
-
-                    Debug.WriteLine("\r\nTraining completed.");
-                    Debug.WriteLine("-------------------------------------------");
-                    Debug.WriteLine($"Testing {lineCountTestData - 1} samples.");
-
-                    // Check if the test data has been correctly classified by the neural network
-                    for (int i = 0; i < lineCountTestData - 1; i++)
-                    {
-                        Debug.WriteLine("");
-
-                        for (int j = 0; j < numberOfOutputs; j++)
-                        {
-                            //Assert.True(testData[i][(testData[i].Length - numberOfOutputs) + j] == (result[i * numberOfOutputs + j] >= 0.5 ? 1 : 0));
-                            if (testData[i][(testData[i].Length - numberOfOutputs) + j] == (result[i * numberOfOutputs + j] >= 0.5 ? 1 : 0))
-                                expectedResults++;
-
-                            Debug.Write($"{i.ToString("D2")} - ");
-
-                            for (int k = 0; k < api.Context.DataDescriptor.Features.Length; k++)
-                            {
-                                Debug.Write($"[{testData[i][k]}] ");
-                            }
-
-                            Debug.Write("\t\t");
-                            Debug.Write($"Expected: {testData[i][(testData[i].Length - numberOfOutputs) + j]} - Predicted: {testData[i][(testData[i].Length - numberOfOutputs) + j]} - Result: {testData[i][(testData[i].Length - numberOfOutputs) + j] == (result[i * numberOfOutputs + j] >= 0.5 ? 1 : 0)} --\t\t");
-                        }
-                    }
-
-                    float accuracy = (float)expectedResults / (float)numberOfOutputs / (float)testData.Length;
-
-                    Debug.WriteLine("-------------------------------------------");
-                    Debug.WriteLine($"Accuracy: {accuracy * 100}%");
+                    tasks.Add(sys.ActorSelection($"/user/ut{actorId}-{n}").Ask<string>($"[{actorId}-{n}", TimeSpan.FromSeconds(60)));
                 }
+
+                Task.WaitAll(tasks.ToArray());
+
+                Debug.WriteLine(n);
             }
         }
 
+
+
+        /// <summary>
+        /// 
+        /// </summary>
+        [Fact]
+        public void PingAciTest()
+        {
+            List<double[]> data = new List<double[]>();
+            List<Task> tasks = new List<Task>();
+
+            var sys = runAkkaSystem();
+            
+            for (int actorId = 0; actorId < 5; actorId++)
+            {
+                string targetUri = akkaNodes[actorId % akkaNodes.Length];
+                //string targetUri = akkaNodes[0];
+
+                var remoteAddress = Address.Parse(targetUri);
+
+                var remoteBackPropagationActor = sys.ActorOf(Props.Create(() => new UnitTestActor())
+                .WithDeploy(Deploy.None.WithScope(new RemoteScope(remoteAddress))), $"ut{actorId}");
+            }
+
+            for (int actorId = 0; actorId < 5; actorId++)
+            {
+                tasks.Add(sys.ActorSelection($"/user/ut{actorId}").Ask<string>($"[{actorId}", TimeSpan.FromSeconds(30)));
+            }
+
+            Task.WaitAll(tasks.ToArray());
+
+        }
     }
 
+
+    public class UnitTestActor : ReceiveActor
+    {
+        public UnitTestActor()
+        {
+            Receive<string>(new Action<string>(Compute));
+        }
+
+        protected override void PreStart()
+        {
+            Console.WriteLine($"Started Actor: {Context.Self.Path}");
+
+            base.PreStart();
+        }
+
+        protected void Compute(string msg)
+        {
+            Console.WriteLine($"Entered calculation: {Context.Self.Path}");
+
+            Thread.Sleep(2500);
+
+            Sender.Tell($"{msg} ]");
+        }
+    }
 }
 
 

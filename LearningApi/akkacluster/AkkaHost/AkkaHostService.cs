@@ -22,7 +22,7 @@ namespace AkkaHost
 
         }
 
-        public void Start(string hoconConfig, string systemName, string[] seedHosts, int port)
+        public void Start(string hoconConfig, string pubHostName, string hostName, string systemName, string[] seedHosts, int port)
         {
             var strCfg = File.ReadAllText(hoconConfig);
 
@@ -45,10 +45,21 @@ namespace AkkaHost
 
             strCfg = strCfg.Replace("@SEEDHOSTS", sb.ToString());
 
+            if (String.IsNullOrEmpty(pubHostName))
+                pubHostName = "localhost";
+
+            strCfg = strCfg.Replace("@PUBHOSTNAME", pubHostName);
+
+            if (String.IsNullOrEmpty(hostName))
+                hostName = "localhost";
+
+            strCfg = strCfg.Replace("@HOSTNAME", hostName);
+
             var config = ConfigurationFactory.ParseString(strCfg);
 
-            AkkaClusterSystem = ActorSystem.Create(systemName, config);
+            Console.WriteLine(strCfg);
 
+            AkkaClusterSystem = ActorSystem.Create(systemName, config);
         }
 
         public Task Stop()

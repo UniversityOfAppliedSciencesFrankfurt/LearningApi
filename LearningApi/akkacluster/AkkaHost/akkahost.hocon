@@ -3,8 +3,9 @@
     remote {
         dot-netty.tcp {
             port = @PORT
-            hostname = localhost
-        }
+			public-hostname = @PUBHOSTNAME
+            hostname = @HOSTNAME
+		}
     }
     cluster {
         seed-nodes = [@SEEDHOSTS]

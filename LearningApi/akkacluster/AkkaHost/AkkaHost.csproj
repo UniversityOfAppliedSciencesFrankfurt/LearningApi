@@ -2,20 +2,22 @@
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>netcoreapp2.1</TargetFramework>
+    <TargetFramework>netcoreapp2.0</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="Akka.Cluster" Version="1.3.10" />
     <PackageReference Include="Microsoft.Extensions.Configuration.CommandLine" Version="2.2.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="2.2.0" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\MLAlgorithms\NeuralNetworks\NeuralNet.AkkaMLPerceptron\AkkaMLPerceptron\AkkaMLPerceptron.csproj" />
+    <ProjectReference Include="..\..\test\test.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="akkahost - template.hocon">
+    <None Update="akkahost - example.hocon">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Update="akkahost.hocon">

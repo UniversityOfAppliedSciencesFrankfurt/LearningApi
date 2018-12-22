@@ -1,11 +1,4 @@
 
- Work Package 3	Analysis of Actor Model in context of AI/ML algorithms
-Task	Exploration and analysis of several AI/ML algorithms from the point of view of horizontal scale (multiple nodes) and Actor Model. 
-Output	-First prototype and proposal for scale based on actor model on example of an algorithm.
-Time frame	Sept.-Dec. 2018
-
-The goal of this work is to propose how to design and implement a machine learning algorithm, which can horizontally scale by using of actor programming model. This programing model is based on mathematical theory of computation, which is already implemented as a framework in many programming languages and on many platforms. By following this approach scalability of ML algorithms can be implemented on commodity (lower price) hardware by using well established frameworks.
-
 #### What is AKKA.Host?
 *AkkaHost* is the AKKA.NET based Cluster Host, which is used to horizontally scale computation of actors based on Akka.Net framework. Once the cluster is running akka.net client components can remotely instantiate actors in the *AkkaHost* cluster.
 
@@ -27,5 +20,47 @@ Runs seed node on ports 8081 and 8082:
 dotnet akkahost.dll --port  8081 --seedhosts "localhost:8081, localhost:8082" --sysname ClusterSystem
 
 dotnet akkahost.dll --port  8082 --seedhosts "localhost:8081, localhost:8082" --sysname ClusterSystem
+~~~
+
+### Deployment to ACI?
+
+*Deployment single container instance:*
+az container create -g RG-AKKAHOST --name akkahost --image damir.azurecr.io/akkahost:v4 --ports 8081 --ip-address Public --cpu 2 --memory 1 --dns-name-label akkahost1 --environment-variables port=8081 seedhosts=akkahost1.westeurope.azurecontainer.io:8081 sysname=ClusterSystem hostname=0.0.0.0 publichostname=akkahost1.westeurope.azurecontainer.io --registry-username damir --registry-password I9FRge/uvCysqAKIF4WvyVh7XWCNww2P 
+
+
+*Deployment two continer instances*
+
+az container create -g RG-AKKAHOST --name akkahost1 --image damir.azurecr.io/akkahost:v4 --ports 8081 --ip-address Public --cpu 2 --memory 1 --dns-name-label akkahost1 --environment-variables port=8081 seedhosts="akkahost1.westeurope.azurecontainer.io:8081,akkahost2.westeurope.azurecontainer.io:8081" sysname=ClusterSystem hostname=0.0.0.0 publichostname=akkahost1.westeurope.azurecontainer.io --registry-username damir --registry-password kkjOvM=J/sEyYTBW6TFltwuV5qXkVH70
+
+az container create -g RG-AKKAHOST --name akkahost2 --image damir.azurecr.io/akkahost:v4 --ports 8081 --ip-address Public --cpu 2 --memory 1 --dns-name-label akkahost2 --environment-variables port=8081 seedhosts="akkahost1.westeurope.azurecontainer.io:8081,akkahost2.westeurope.azurecontainer.io:8081" sysname=ClusterSystem hostname=0.0.0.0 publichostname=akkahost2.westeurope.azurecontainer.io --registry-username damir --registry-password kkjOvM=J/sEyYTBW6TFltwuV5qXkVH70
+
+
+### How to build docker image?
+Open comman dprompt and navigate to folder C:\dev\git\LearningApi\LearningApi.
+Run following command:
+~~~
+ docker build --rm -f "akkacluster/AkkaHost/Dockerfile" -t akkahost:v1 .
+~~~
+
+To run the container execute one of following commands:
+
+~~~
+docker run -it --rm -p:8081:8081 akkahost:v1 --port 8081 --sysname ClusterSystem --seedhosts=localhost:8081 --hostname=0.0.0.0 --publichostname=DADO-SR1
+~~~
+
+~~~
+docker run -it --rm -p:8081:8081 akkahost:v1 --port 8081 --sysname ClusterSystem --seedhosts=DADO-SR1:8081 --hostname=0.0.0.0 --publichostname=DADO-SR1
+~~~
+
+### Debug Arguments
+
+Paste this in debug properties and hit F5 to run the host:
+
+~~~
+--port  8081  --sysname ClusterSystem --seedhosts=localhost:8081 --hostname=localhost --publichostname=localhost
+~~~
+
+~~~
+--port  8081  --sysname ClusterSystem --seedhosts=DADO-SR1:8081 --hostname=0.0.0.0 --publichostname=DADO-SR1
 ~~~
 

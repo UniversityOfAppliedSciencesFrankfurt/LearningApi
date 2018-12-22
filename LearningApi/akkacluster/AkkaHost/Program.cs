@@ -3,6 +3,7 @@ using System;
 using System.IO;
 using System.Linq;
 
+
 namespace AkkaHost
 {
     class Program
@@ -11,6 +12,7 @@ namespace AkkaHost
         {
             var builder = new ConfigurationBuilder();
             builder.AddCommandLine(args);
+            builder.AddEnvironmentVariables();
             IConfigurationRoot cfg = builder.Build();
 
             var strSeedHosts = cfg["seedhosts"];
@@ -24,11 +26,15 @@ namespace AkkaHost
             if (String.IsNullOrEmpty(sysName))
                 sysName = "LearningAPISystem";
 
+            var pubHostName = cfg["publichostname"];
+
+            var hostName = cfg["hostname"];
+
             Console.WriteLine("Started initialization of AKKA.NET Node");
 
             AkkaHostService svc = new AkkaHostService();
 
-            svc.Start("akkahost.hocon", sysName, seedHosts.Select(h=>h.TrimStart(' ').TrimEnd(' ')).ToArray(), port);
+            svc.Start("akkahost.hocon", pubHostName, hostName, sysName, seedHosts.Select(h=>h.TrimStart(' ').TrimEnd(' ')).ToArray(), port);
 
             Console.CancelKeyPress += (sender, eventArgs) =>
             {
