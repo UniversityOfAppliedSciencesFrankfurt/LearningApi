@@ -1,14 +1,14 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard1.3</TargetFramework>
+    <TargetFramework>netstandard2.0</TargetFramework>
     <AssemblyName>AnomDetect.KMeans</AssemblyName>
     <PackageId>Clustering.KMeans</PackageId>
    
     <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
     <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
     <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
-    <Version>1.0.6</Version>
+    <Version>1.2.0</Version>
     <Authors>daenet GmbH</Authors>
     <Description>KMeans Algorithm for LearningApi</Description>
     <Copyright>daenet GmbH</Copyright>

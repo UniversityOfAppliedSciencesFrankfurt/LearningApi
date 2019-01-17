@@ -19,10 +19,10 @@ namespace Test
         {
             string moduleName = "test-action";
 
-            double[][] clusterCentars = new double[3][];
-            clusterCentars[0] = new double[] { 5.0, 5.0 };
-            clusterCentars[1] = new double[] { 15.0, 15.0 };
-            clusterCentars[2] = new double[] { 30.0, 30.0 };
+            double[][] clusterCenters = new double[3][];
+            clusterCenters[0] = new double[] { 5.0, 5.0 };
+            clusterCenters[1] = new double[] { 15.0, 15.0 };
+            clusterCenters[2] = new double[] { 30.0, 30.0 };
 
             string[] attributes = new string[] { "Height", "Weight" };
 
@@ -39,7 +39,7 @@ namespace Test
             // Defines action method, which will generate training data.
             api.UseActionModule<object, double[][]>((data, ctx) =>
             {
-                var rawData = Helpers.CreateSampleData(clusterCentars, 2, 10000, 0.5);
+                var rawData = Helpers.CreateSampleData(clusterCenters, 2, 10000, 0.5);
                 return rawData;
             }, moduleName);
 
@@ -48,9 +48,9 @@ namespace Test
             var resp = api.Run() as KMeansScore;
 
             Assert.True(resp.Model.Clusters != null);
-            Assert.True(resp.Model.Clusters.Length == clusterCentars.Length);
+            Assert.True(resp.Model.Clusters.Length == clusterCenters.Length);
 
-            var result = api.Algorithm.Predict(clusterCentars, api.Context) as KMeansResult;
+            var result = api.Algorithm.Predict(clusterCenters, api.Context) as KMeansResult;
             Assert.True(result.PredictedClusters[0] == 0);
             Assert.True(result.PredictedClusters[1] == 1);
             Assert.True(result.PredictedClusters[2] == 2);
@@ -66,9 +66,15 @@ namespace Test
             // This is not required because API design limitation. It is restriction of .NET framework. It cannot persist code.
             loadedApi.ReplaceActionModule<object, double[][]>(moduleName, (data, ctx) =>
             {
-                var rawData = Helpers.CreateSampleData(clusterCentars, 2, 10000, 0.5);
+                var rawData = Helpers.CreateSampleData(clusterCenters, 2, 10000, 0.5);
                 return rawData;
             });
+
+            result = loadedApi.Algorithm.Predict(clusterCenters, api.Context) as KMeansResult;
+            Assert.True(result.PredictedClusters[0] == 0);
+            Assert.True(result.PredictedClusters[1] == 1);
+            Assert.True(result.PredictedClusters[2] == 2);
+
 
             loadedApi.Run();
         }

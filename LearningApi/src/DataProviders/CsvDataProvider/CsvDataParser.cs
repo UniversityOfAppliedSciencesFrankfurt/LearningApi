@@ -123,7 +123,7 @@ namespace LearningFoundation.DataProviders
             get
             {
                 return m_CurrentLine;
-            }
+            }         
         }
 
         /// <summary>
