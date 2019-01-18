@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using LearningFoundation;
-using MLPerceptron.NeuralNetworkCore;
+using NeuralNetworks.Core;
 
 namespace MLPerceptron.BackPropagation
 {
