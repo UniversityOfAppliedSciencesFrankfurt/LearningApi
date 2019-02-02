@@ -157,13 +157,20 @@ namespace LearningFoundation.Statistics
         /// </summary>
         /// <param name="dataset"></param>
         /// <returns>tuple where the first value is MIN, and second value is MAX</returns>
+        /// minmax values are retained till the end of batch - Changes Batching2018/2019 
+        static Tuple<double[], double[]> minMax;
         public static Tuple<double[], double[]> CalculateMinMax(this double[][] dataset)
         {
             //
             if (dataset == null || dataset.Length == 0)
                 throw new MLException("data cannot be null or empty!");
+            //minmax values are retained till the end of batch - Changes Batching2018/2019 
+            //var minMax = new Tuple<double[], double[]>( new double[dataset[0].Length], new double[dataset[0].Length]);
 
-            var minMax = new Tuple<double[], double[]>( new double[dataset[0].Length], new double[dataset[0].Length]);
+            if (minMax == null)
+            {
+                minMax = new Tuple<double[], double[]>(new double[dataset[0].Length], new double[dataset[0].Length]);
+            }
 
 
             for (int i = 0; i < dataset.Length; i++)

@@ -33,6 +33,8 @@ namespace LogisticRegression
         /// <param name="data"></param>
         /// <param name="ctx"></param>
         /// <returns>Errors during each iteration</returns>
+        /// Changes Batching2018/2019
+        double[] weights;
         public IScore Run(double[][] data, IContext ctx)
         {
             if(ctx.Score as LogisticRegressionScore == null)
@@ -41,7 +43,12 @@ namespace LogisticRegression
             var trainData = data;
 
             //construct weights according to features count
-            var weights = new double[trainData[0].Length];
+            //Commented the declaration for retaining the weights - Changes Batching2018/2019
+            //var weights = new double[trainData[0].Length];
+            if (weights == null)
+            {
+                weights = new double[trainData[0].Length];
+            }
 
             // alpha is the learning rate
             int epoch = 0;
