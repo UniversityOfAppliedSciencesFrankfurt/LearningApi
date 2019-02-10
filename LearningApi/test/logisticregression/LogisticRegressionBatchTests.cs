@@ -9,7 +9,7 @@ using Xunit;
 
 namespace test.logisticregression
 {
-    public class LogisticregressionBatchtest
+    public class LogisticregressionExperiment
     {
         /// <summary>
         /// Performs the LogisticRegression on specified dataset with 10 iteration and 0.15 learning rate.
