@@ -7,6 +7,7 @@ using System.Drawing.Imaging;
 using System.IO;
 using LearningFoundation.Statistics;
 using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace UnitTestRingProjectionAlgorithm
 {
@@ -19,17 +20,26 @@ namespace UnitTestRingProjectionAlgorithm
         [TestMethod]
         public void RingProjectionLoopPath()
         {
-            int size = 21;
-            double[][] data = new double[size][];
+            int sizeW = 21;
+            int sizeH = 21;
+            double[][] data = new double[sizeW][];
+            Stopwatch sw = new Stopwatch();
+            sw.Start();
             for (int i = 0; i < data.Length; i++)
             {
-                data[i] = new double[size];
+                data[i] = new double[sizeH];
                 for (int j = 0; j < data[i].Length; j++)
                 {
                     data[i][j] = 0;
                 }
             }
+            sw.Stop();
+            Debug.WriteLine("Normal iteration: {0} ns", sw.ElapsedTicks * (1000L * 1000L) / Stopwatch.Frequency);
+            sw.Restart();
             new RingProjectionPipelineModule().RingProjection(data, out double[][] loopPath);
+            sw.Stop();
+            Debug.WriteLine("Ring iteration: {0} ns", sw.ElapsedTicks * (1000L * 1000L) / Stopwatch.Frequency);
+
             string savePath = Path.Combine(AppContext.BaseDirectory, "LoopPath.csv");
             if (!File.Exists(savePath))
             {
@@ -39,12 +49,12 @@ namespace UnitTestRingProjectionAlgorithm
             {
                 // Header for CSV file compatible with Excel
                 streamWriter.WriteLine("sep=;");
-                for (int y = 0; y < loopPath.Length; y++)
+                for (int y = 0; y < loopPath[0].Length; y++)
                 {
-                    for (int x = 0; x < loopPath[y].Length; x++)
+                    for (int x = 0; x < loopPath.Length; x++)
                     {
-                        streamWriter.Write(loopPath[y][x]);
-                        if (x < loopPath[y].Length - 1)
+                        streamWriter.Write(loopPath[x][y]);
+                        if (x < loopPath.Length - 1)
                         {
                             streamWriter.Write(";");
                         }
@@ -184,7 +194,7 @@ namespace UnitTestRingProjectionAlgorithm
                 string basePath = Path.Combine(AppContext.BaseDirectory, $"Digit {mnistImages[i].Label}");
                 Directory.CreateDirectory(basePath);
                 int label = mnistImages[i].Label;
-                
+
                 // Create image file from MNIST dataset
                 api = new LearningApi();
                 api.UseActionModule<object, double[][]>((input, ctx) =>

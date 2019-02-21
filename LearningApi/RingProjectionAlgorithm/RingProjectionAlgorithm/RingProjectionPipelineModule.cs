@@ -50,7 +50,7 @@ namespace RingProjectionAlgorithm
                 {
                     if (y >= 0 && y < m_ColLength)
                     {
-                        for (int x = m_xCenter - r; x < m_xCenter + r; x++)
+                        for (int x = m_xCenter - r; x <= m_xCenter + r; x++)
                         {
                             if (x >= 0 && x < m_RowLength)
                             {
