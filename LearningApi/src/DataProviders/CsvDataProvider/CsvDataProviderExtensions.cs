@@ -30,6 +30,25 @@ namespace LearningFoundation.DataProviders
             return api;
         }
 
+        /// <summary>
+        /// perform the batch loading data from CSV file
+        /// </summary>
+        /// <param name="api">instance of the LearningAPI</param>
+        /// <param name="fileName">csv file path</param>
+        /// <param name="delimiter">csv delimiter</param>
+        /// <param name="isHeader"> is header included in the data after skiped rows. </param>
+        /// <param name="skipRows">firs several rows which should be skiped in parsing.</param>
+        /// <param name="batchSize">number of rows to be read for each run.</param>
+        /// <returns></returns>
+        public static LearningApi UseBatchCsvDataProvider(this LearningApi api, string fileName, char delimiter, bool isHeader, int skipRows = 0, int batchSize = 0)
+        {
+            var dp = new CsvDataProviderBatch(fileName, delimiter, isHeader, skipRows, batchSize);
+
+            api.AddModule(dp, "CsvDataProviderBatch");
+
+            return api;
+        }
+
 
         /// <summary>
         /// Creating dataset row by row
