@@ -133,10 +133,10 @@ namespace LearningFoundation.DataProviders
             }
         }
 
-        [JsonIgnore]
         /// <summary>
         /// Current item of the enumerator
         /// </summary>
+        [JsonIgnore]
         object IEnumerator.Current
         {
             get
