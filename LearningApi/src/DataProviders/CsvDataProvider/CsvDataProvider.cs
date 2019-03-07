@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using LearningFoundation;
 using System.IO;
 using System.Collections;
-
+using Newtonsoft.Json;
 
 namespace LearningFoundation.DataProviders
 {
@@ -86,20 +86,33 @@ namespace LearningFoundation.DataProviders
         {
         }
 
+
         /// <summary>
         /// Header of the data set
         /// </summary>
-        public string[] Header => m_Header;
-        
+        public string[] Header
+        {
+            get
+            {
+                return null;
+            }
+            set
+            {
+                this.m_Header = value;
+            }
+        }
+
+
         /// <summary>
         /// Current object of the enumerator
         /// </summary>
+        [JsonIgnore]
         public object[] Current
         {
             get
             {
                 if (m_CurrentLine == null)
-                    return null;
+                    return new object[0];
 
                 var strCols = m_CurrentLine.Split(m_Delimiter);
 
@@ -113,11 +126,14 @@ namespace LearningFoundation.DataProviders
                     rawData[i] = strCols[i];
                 }
 
-                return rawData;               
+                 return rawData;               
+            }
+            set {
+
             }
         }
 
-
+        [JsonIgnore]
         /// <summary>
         /// Current item of the enumerator
         /// </summary>

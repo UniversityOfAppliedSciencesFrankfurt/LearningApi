@@ -12,6 +12,7 @@ using LearningFoundation.DataMappers;
 using LearningFoundation.Normalizers;
 using LearningFoundation.Statistics;
 using NeuralNet.BackPropagation;
+using System.Globalization;
 
 namespace test.csvdataprovider
 {
@@ -55,8 +56,8 @@ namespace test.csvdataprovider
                         continue;
                     else if (col.Type == ColumnType.NUMERIC)//numeric column
                     {
-                        var val1 = double.Parse(result[i][j].ToString());
-                        var val2 = double.Parse(expected[i][j].ToString());
+                        var val1 = double.Parse((string)result[i][j], System.Globalization.NumberStyles.Any, CultureInfo.InvariantCulture);
+                        var val2 = Convert.ToDouble(expected[i][j], CultureInfo.InvariantCulture);
 
                         Assert.Equal(val1,val2);
                     }

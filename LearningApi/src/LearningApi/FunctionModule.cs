@@ -83,7 +83,7 @@ namespace LearningFoundation
         public TOUT Run(TIN data, IContext ctx)
         {
             if (m_ModuleFunction == null)
-                throw new ArgumentException("Module incorrecly initialized!");
+                throw new ArgumentException("Module incorrectly initialized!");
            return m_ModuleFunction.Invoke(data, ctx);
         }
     }
