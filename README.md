@@ -123,3 +123,67 @@ Following code in previous example shows how to evaluation (predict) the model:
 
 #### Working with batches of data
 For more information about training with huge amount of data please read [this](WorkingWithBatches.md)
+
+# Implementation of Canny Edge detection Algorithm
+Canny edge detector is an edge detecting algorithm which uses a multi stage algorithm to detect a wide range of edges in images.
+
+## The criteria for the edge detection includes:
+Edge detection with low error rate, that means it should catch as many edges as possible in the given image.
+It localize on the center of the edge from the detected edge point.
+A given edge in the image are marked once and does not create false edges.
+This algorithm follows the strict defined methods providing good and reliable detection
+
+## Process Procedure.
+1 Gaussian filter is applied to smooth the image in order to remove the noise  
+2 Find the intensity gradient of the image  
+3 Spurious response to detect the edges are taken care by applying the non/maximum suppression  
+4 Potential edges are detected using double threshold  
+5 Strong edges are finalized.  
+ 
+ Find [Documentation link **here**](https://google.com).
+
+# Implementation of Delta Rule Learning 
+
+Delta rule learning is a algorithm which uses gradient decent for updating weights of the inputs to neurons. It is a particular special type of Back propagation algorithm. Gradient descent is an optimization algorithm that locates a local minimum of a function by taking proportional steps towards negative gradient of the function as the current point.
+
+The difference between the target activation and the obtained activation is used drive learning. Linear activation method is used to calculate the activation of the output neurons. For a given input vector, the output vector is compared to the correct answer. If the difference is zero, no learning takes place; otherwise, the weights are adjusted to reduce this difference.
+
+The change in weight from ui to uj is given by: dwij = r* ai * ej
+
+where r is the learning rate, ai represents the activation of ui and ej is the difference between the expected output and the actual output of uj.
+
+The gradient descent rule updates the weights after calculating the whole error accumulated from all examples, the incremental version approximates the gradient descent error decrease by updating the weights after each training example.
+
+consider the below test example for the better understanding.
+
+Find [Documentation link **here**](https://google.com).
+
+# Implementation of Gaussian mean filters for noise 
+It is a method of smoothing images reducing the amount of intensity variation between one pixel and the next. It is often used to reduce noise in images
+
+How it works?
+It replaces each pixel value in an image with the mean or average value of its neighbors, including itself. It eliminates the pixel values which are unrepresentative of their surroundings. Mean filtering is also as a convolution filter, which is based around a kernel representing the shape and size of the neighborhood to be sampled when calculating the mean.
+
+Often a 3×3 square kernel is used, larger kernels can be used for severe smoothing. And also small kernel can be applied more than once in order to produce a similar but not identical effect as a single pass with a large kernel.
+
+Find [Documentation link **here**](https://google.com).
+
+# MULTILAYER         PERCEPTRON
+
+A Perceptron called an artificial neuron takes several inputs and produces a binary output. A multilayer perceptron (MLP) is a class of feed forward artificial neural network which contains of at least three layers of nodes. Except for the input nodes, each node is a neuron that uses a nonlinear activation function .
+
+The leftmost layer in this network is called the input layer, and the neurons within the layer are called input neurons. The rightmost or output layer contains the output neurons. The middle layer is called a hidden layer.
+
+Find [Documentation link **here**](https://google.com).
+
+
+# Self Organizing Map 
+
+The self-organizing map (SOM) is an automatic data-analysis method. It is widely applied to clustering problems and data exploration in industry, finance, natural sciences, and linguistics. It is one of the most popular artificial neural network (ANN) models that is trained using unsupervised learning to produce a low dimensional (especially two-dimensional), discretized representation of the input space of the training samples which is called a map.
+
+
+Self-Organizing map is introduced by the Finnish professor Teuvo Kohonen in 1980s is also known as kohonen map or network. With a small number of nodes, SOM behaves in a way that is similar to K-means, larger self-organizing maps rearrange data in a way that is fundamentally topological in character.
+
+Find [Documentation link **here**](https://google.com).
+
+
