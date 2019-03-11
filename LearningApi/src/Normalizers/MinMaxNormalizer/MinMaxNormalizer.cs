@@ -97,8 +97,10 @@ namespace LearningFoundation.Normalizers
                         for(int i=0; i < column.Values.Length; i++)
                         {
                             //change the index
-                            dataIndex += i;
+                            //Changes for Batching process- As the indexing has to calculated as increment of 1
+                            //dataIndex += i;
                             normalizedRow.Add(rawData[dataIndex]);
+                            dataIndex++;
                         }
                             
                     }
