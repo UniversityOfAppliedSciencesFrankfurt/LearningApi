@@ -372,3 +372,8 @@ LearningApi/test/obj/*
 /LearningApi/MouseGestureRecognition/.vs/MouseGestureRecognition/v15/Server/sqlite3
 /.vs
 /LearningApi/TestRunner/Properties/launchSettings.json
+/LearningApi/RingProjectionAlgorithm/.vs/RingProjectionProject/DesignTimeBuild/.dtbcache
+/LearningApi/RingProjectionAlgorithm/.vs/RingProjectionProject/v15/Server/sqlite3/storage.ide-wal
+/LearningApi/RingProjectionAlgorithm/.vs/RingProjectionProject/v15/Server/sqlite3/storage.ide-shm
+/LearningApi/RingProjectionAlgorithm/.vs/RingProjectionProject/v15/Server/sqlite3/storage.ide
+/LearningApi/RingProjectionAlgorithm/.vs/RingProjectionProject/v15/Server/sqlite3/db.lock
