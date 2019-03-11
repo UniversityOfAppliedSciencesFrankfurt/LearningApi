@@ -156,7 +156,7 @@ The gradient descent rule updates the weights after calculating the whole error 
 
 consider the below test example for the better understanding.
 
-Find [Documentation link **here**](https://google.com](https://github.com/UniversityOfAppliedSciencesFrankfurt/LearningApi/blob/review-2019/project_documentations/Delta%20rule%20learning%20.docx).
+Find [Documentation link **here**](https://github.com/UniversityOfAppliedSciencesFrankfurt/LearningApi/blob/review-2019/project_documentations/Delta%20rule%20learning%20.docx).
 
 # Implementation of Gaussian mean filters for noise 
 It is a method of smoothing images reducing the amount of intensity variation between one pixel and the next. It is often used to reduce noise in images
@@ -166,7 +166,7 @@ It replaces each pixel value in an image with the mean or average value of its n
 
 Often a 3×3 square kernel is used, larger kernels can be used for severe smoothing. And also small kernel can be applied more than once in order to produce a similar but not identical effect as a single pass with a large kernel.
 
-Find [Documentation link **here**](https://google.com](https://github.com/UniversityOfAppliedSciencesFrankfurt/LearningApi/blob/review-2019/project_documentations/Mean%20and%20Gaussian%20filters.docx).
+Find [Documentation link **here**](https://github.com/UniversityOfAppliedSciencesFrankfurt/LearningApi/blob/review-2019/project_documentations/Mean%20and%20Gaussian%20filters.docx).
 
 # MULTILAYER         PERCEPTRON
 
@@ -174,7 +174,7 @@ A Perceptron called an artificial neuron takes several inputs and produces a bin
 
 The leftmost layer in this network is called the input layer, and the neurons within the layer are called input neurons. The rightmost or output layer contains the output neurons. The middle layer is called a hidden layer.
 
-Find [Documentation link **here**](https://google.com](https://github.com/UniversityOfAppliedSciencesFrankfurt/LearningApi/blob/review-2019/project_documentations/MultilayerPerceptron%20column.docx).
+Find [Documentation link **here**](https://github.com/UniversityOfAppliedSciencesFrankfurt/LearningApi/blob/review-2019/project_documentations/MultilayerPerceptron%20column.docx).
 
 
 # Self Organizing Map 
@@ -184,6 +184,6 @@ The self-organizing map (SOM) is an automatic data-analysis method. It is widely
 
 Self-Organizing map is introduced by the Finnish professor Teuvo Kohonen in 1980s is also known as kohonen map or network. With a small number of nodes, SOM behaves in a way that is similar to K-means, larger self-organizing maps rearrange data in a way that is fundamentally topological in character.
 
-Find [Documentation link **here**](https://google.com](https://github.com/UniversityOfAppliedSciencesFrankfurt/LearningApi/blob/review-2019/project_documentations/sop.docx).
+Find [Documentation link **here**](https://github.com/UniversityOfAppliedSciencesFrankfurt/LearningApi/blob/review-2019/project_documentations/sop.docx).
 
 
