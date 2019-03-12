@@ -1,23 +1,20 @@
-﻿using LearningFoundation;
-using System;
-using System.Linq;
+﻿using LearningFoundation.Arrays;
+using LearningFoundation.DataMappers;
+using LearningFoundation.DataProviders;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NeuralNet.RestrictedBolzmannMachine2;
-using System.IO;
-using LearningFoundation.DataProviders;
-using LearningFoundation.DataMappers;
-using System.Diagnostics;
-using System.Drawing;
-using System.Text;
-using LearningFoundation.Arrays;
-using System.Threading;
+using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
+using System.Linq;
 
-namespace test.RestrictedBolzmannMachine2
+namespace LearningFoundation.Test
 {
     /// <summary>
     /// Tests for DeepRbm Algorithm.
     /// </summary>
+    [TestClass]
     public class DeepRbmUnitTests
     {
        

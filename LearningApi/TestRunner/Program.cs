@@ -4,8 +4,8 @@ using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Threading.Tasks;
-using test.RestrictedBolzmannMachine2;
-using test.MLPerceptron;
+using LearningFoundation.Test;
+
 
 namespace TestRunner
 {
@@ -147,7 +147,7 @@ namespace TestRunner
         {
             return Task.Run(() =>
             {
-                movieRecommendation test = new movieRecommendation();
+                MovieRecommendation test = new MovieRecommendation();
 
                 Stopwatch watch = new Stopwatch();
                 Console.WriteLine($"{DateTime.Now} - Started test I:{iterations} learning rate:{learningRate} Nodes:{String.Join("-", layers)}");
@@ -172,7 +172,7 @@ namespace TestRunner
             return Task.Run(() =>
             {
                 //RbmHandwrittenDigitUnitTests test = new RbmHandwrittenDigitUnitTests();
-                movieRecommendation test = new movieRecommendation();
+                MovieRecommendation test = new MovieRecommendation();
                 Stopwatch watch = new Stopwatch();
                 Console.WriteLine($"{DateTime.Now} - Started test I:{iterations} learning rate:{learningRate} Nodes:{String.Join("-", layers)}");
                 watch.Start();
@@ -204,7 +204,7 @@ namespace TestRunner
         {
             return Task.Run(() =>
             {
-                movieRecommendation test = new movieRecommendation();
+                MovieRecommendation test = new MovieRecommendation();
 
                 Stopwatch watch = new Stopwatch();
                 Console.WriteLine($"{DateTime.Now} - Started test I:{iterations} learning rate:{learningRate} Nodes:{String.Join("-", layers)}");

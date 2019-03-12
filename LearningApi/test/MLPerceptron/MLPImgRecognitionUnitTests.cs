@@ -1,21 +1,20 @@
-using LearningFoundation;
-using MLPerceptron;
-using System.IO;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using System;
+using ImageBinarizer;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using MLPerceptron;
+using NeuralNet.MLPerceptron;
+using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
-using NeuralNet.MLPerceptron;
-using ImageBinarizer;
+using System.IO;
+using System.Linq;
 
-namespace test.MLPerceptron
+namespace LearningFoundation.Test
 {
     /// <summary>
     /// Class MLPerceptronUnitTests contains the unit test cases to test the ML Perceptron algorithm
     /// </summary>
+    [TestClass]
     public class MLPImgRecognitionUnitTests
     {
         /// <summary>
@@ -51,7 +50,6 @@ namespace test.MLPerceptron
         }
 
         [TestMethod]
-        //[DataRow(new int[] { 6, 3 })]
         public void ImageRecognitionTest()
         {
             int size = 64;

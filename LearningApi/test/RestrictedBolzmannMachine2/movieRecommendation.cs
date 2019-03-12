@@ -1,19 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.IO;
-using NeuralNet.RestrictedBolzmannMachine2;
-using LearningFoundation.DataProviders;
-using LearningFoundation;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using LearningFoundation.Arrays;
 using LearningFoundation.DataMappers;
-using System.Globalization;
-using LearningFoundation.Arrays;
+using LearningFoundation.DataProviders;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NeuralNet.RestrictedBolzmannMachine2;
+using System;
+using System.Collections.Generic;
 using System.Diagnostics;
+using System.Globalization;
+using System.IO;
+using System.Linq;
 
-namespace test.RestrictedBolzmannMachine2
+namespace LearningFoundation.Test
 {
-    public class movieRecommendation
+    [TestClass]
+    public class MovieRecommendation
     {
 
         private DataDescriptor getDescriptorForRbm(int dims)

@@ -1,16 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.IO;
-using NeuralNet.RestrictedBolzmannMachine2;
-using ImageBinarizer;
-using NeuralNet.Perceptron;
-using LearningFoundation.DataProviders;
-using LearningFoundation;
+﻿using ImageBinarizer;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System.Collections.Generic;
+using System.IO;
 
-namespace test.RestrictedBolzmannMachine2
+namespace LearningFoundation.Test
 {
+    [TestClass]
     public class RBMCreatingDataSet
     {
         static RBMCreatingDataSet()

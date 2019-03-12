@@ -1,17 +1,12 @@
-﻿using LearningFoundation;
-using MLPerceptron;
-using System.IO;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System.Diagnostics;
+﻿using MLPerceptron;
 using NeuralNet.MLPerceptron;
-using ImageBinarizer;
+using System;
+using System.Collections.Generic;
 using System.Globalization;
+using System.IO;
+using System.Linq;
 
-namespace test.MLPerceptron
+namespace LearningFoundation.Test
 {
     public class MNISTFileRead
     {

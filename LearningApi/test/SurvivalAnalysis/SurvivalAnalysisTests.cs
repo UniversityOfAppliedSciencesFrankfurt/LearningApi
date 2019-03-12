@@ -1,21 +1,10 @@
-﻿using test;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
-using System.Linq;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using System.IO;
-using Newtonsoft.Json;
-using LearningFoundation;
-using LogisticRegression;
-using LearningFoundation.DataProviders;
-using LearningFoundation.DataMappers;
-using LearningFoundation.Normalizers;
-using LearningFoundation.Statistics;
 
-namespace test.survivalanalysis
+namespace LearningFoundation.Test
 {
-
+    [TestClass]
+    [Obsolete]
     public class SurvivalAnalysisTests
     {
 

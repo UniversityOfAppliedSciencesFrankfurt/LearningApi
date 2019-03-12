@@ -1,22 +1,16 @@
-﻿using LearningFoundation;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using NeuralNet.Perceptron;
-using NeuralNet.RestrictedBolzmannMachine2;
-using System.IO;
+﻿using LearningFoundation.DataMappers;
 using LearningFoundation.DataProviders;
-using LearningFoundation.DataMappers;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NeuralNet.RestrictedBolzmannMachine2;
+using System;
 using System.Diagnostics;
 using System.Drawing;
+using System.IO;
 using System.Text;
-using ImageBinarizer;
 
-namespace test.RestrictedBolzmannMachine
+namespace LearningFoundation.Test
 {
-
+    [TestClass]
     public class RbmUnitTests
     {
 

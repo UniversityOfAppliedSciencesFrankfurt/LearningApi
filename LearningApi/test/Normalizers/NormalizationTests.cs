@@ -1,23 +1,15 @@
-﻿
-
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Newtonsoft.Json;
-using System.IO;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using LearningFoundation;
-using LearningFoundation.DataProviders;
+﻿using LearningFoundation;
 using LearningFoundation.DataMappers;
-using LearningFoundation.Statistics;
 using LearningFoundation.Normalizers;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
 
-namespace test.scalers
+namespace LearningFoundation.Test
 {
     /// <summary>
     /// Test class for testing Normalizers in LearningAPI.
     /// </summary>
+    [TestClass]
     public class NormalizationTests
     {
         /// <summary>

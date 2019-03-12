@@ -1,14 +1,10 @@
-﻿using LearningFoundation;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using DeltaLearning;
+﻿using DeltaLearning;
 using DeltaRuleLearning;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace test
+namespace LearningFoundation.Test
 {
+    [TestClass]
     public class DeltaLearningUnitTest
     {
 

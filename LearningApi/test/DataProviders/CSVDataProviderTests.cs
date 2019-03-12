@@ -1,22 +1,15 @@
-﻿using test;
+﻿using LearningFoundation.DataMappers;
+using LearningFoundation.DataProviders;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
-using System.Linq;
 using System.Collections.Generic;
-using System.Threading.Tasks;
-using System.IO;
-using Newtonsoft.Json;
-using LearningFoundation;
-using LearningFoundation.DataProviders;
-using LearningFoundation.DataMappers;
-using LearningFoundation.Normalizers;
-using LearningFoundation.Statistics;
-using NeuralNet.BackPropagation;
 using System.Globalization;
+using System.IO;
+using System.Linq;
 
-namespace test.csvdataprovider
+namespace LearningFoundation.Test
 {
-
+    [TestClass]
     public class CSVDataProviderTast
     {
         string m_iris_data_path = @"SampleData\iris\iris.csv";

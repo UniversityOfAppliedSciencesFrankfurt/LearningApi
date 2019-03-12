@@ -1,21 +1,14 @@
-using LearningFoundation;
-using MLPerceptron;
-using System.IO;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System.Diagnostics;
-using System.Globalization;
-using NeuralNet.MLPerceptron;
 using ImageBinarizer;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
+using System.IO;
 
-namespace test.MLPerceptron
+namespace LearningFoundation.Test
 {
     /// <summary>
     /// Class MLPerceptronUnitTests contains the unit test cases to test the ML Perceptron algorithm
     /// </summary>
+    [TestClass]
     public class ImageBinarizationTests
     {
         

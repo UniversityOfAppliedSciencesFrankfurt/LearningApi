@@ -1,18 +1,13 @@
-﻿using System;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Collections.Generic;
+﻿using LearningFoundation.Arrays;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using LearningFoundation;
-using LearningFoundation.Statistics;
-using LearningFoundation.Arrays;
 
 
-namespace test.statistics
+namespace LearningFoundation.Test
 {
     /// <summary>
     /// Unit tests for validation and check corect result for advanced statistics calculation of various operations
     /// </summary>
+    [TestClass]
     public class ArraysTests
     {
         [TestMethod]

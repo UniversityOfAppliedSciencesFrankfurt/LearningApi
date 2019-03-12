@@ -1,21 +1,13 @@
-﻿using test;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
-using System.Linq;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using System.IO;
-using Newtonsoft.Json;
-using LearningFoundation;
+﻿using LearningFoundation.DataMappers;
 using LearningFoundation.DataProviders;
-using LearningFoundation.DataMappers;
-using LearningFoundation.Normalizers;
-using LearningFoundation.Statistics;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NeuralNet.BackPropagation;
+using Newtonsoft.Json;
+using System.IO;
 
-namespace UnitTests
+namespace LearningFoundation.Test
 {
-
+    [TestClass]
     public class ApiInitializationTests
     {
         string m_IrisDataPath;

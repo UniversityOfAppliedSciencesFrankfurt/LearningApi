@@ -1,23 +1,13 @@
-﻿
-
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Newtonsoft.Json;
-using System.IO;
+﻿using LearningFoundation.DataMappers;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using LearningFoundation;
-using LearningFoundation.DataProviders;
-using LearningFoundation.DataMappers;
-using LearningFoundation.Statistics;
-using LearningFoundation.Normalizers;
+using System.Linq;
 
-namespace test.datamapper
+namespace LearningFoundation.Test
 {
     /// <summary>
     /// Test class for testing data mapper - transformation of the RealData in to numeric ML ready data.
     /// </summary>
+    [TestClass]
     public class DataMapperTests
     {
         

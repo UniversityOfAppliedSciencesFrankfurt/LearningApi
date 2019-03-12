@@ -1,64 +1,13 @@
-﻿using LearningFoundation;
+﻿using LearningFoundation.Clustering.KMeans;
 using LearningFoundation.DataMappers;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using LearningFoundation.Clustering.KMeans;
+using System;
 
-namespace Test
+namespace LearningFoundation.Test
 {
-
+    [TestClass]
     public class IncrementalMeanTests
     {
-
-        //[TestMethod]
-        //public void Test_GetClusters()
-        //{
-        //    double[][] clusterCentars = new double[3][];
-        //    clusterCentars[0] = new double[] { 5.0, 5.0 };
-        //    clusterCentars[1] = new double[] { 15.0, 15.0 };
-        //    clusterCentars[2] = new double[] { 30.0, 30.0 };
-
-        //    //double[][] testData = new double[3][];
-        //    //testData[0] = new double[] { 5.0, 5.0 };
-        //    //testData[1] = new double[] { 15.0, 15.0 };
-        //    //clusterCentars[2] = new double[] { 30.0, 30.0 };
-
-        //    string[] attributes = new string[] { "Height", "Weight" };
-
-        //    int numAttributes = attributes.Length;  // 2 in this demo (height,weight)
-        //    int numClusters = 3;  // vary this to experiment (must be between 2 and number data tuples)
-        //    int maxCount = 300;  // trial and error
-
-        //    ClusteringSettings settings = new ClusteringSettings(maxCount, numClusters, numAttributes, KmeansAlgorithm: 1, InitialGuess: true, Replace: true);
-
-        //    // Creates learning api object
-        //    LearningApi api = new LearningApi(loadDescriptor());
-        //    api.UseActionModule<object, double[][]>((data, ctx) =>
-        //    {
-        //        var rawData = Helpers.CreateSampleData(clusterCentars, 2, 10000, 0.5);
-        //        return rawData;
-        //    });
-
-        //    api.UseKMeans(settings);
-
-        //    var resp = api.Run() as KMeansScore;
-
-        //    Assert.IsTrue(resp.Clusters != null);
-        //    Assert.IsTrue(resp.Clusters.Length == clusterCentars.Length);
-
-        //    var result = api.Algorithm.Predict(clusterCentars, api.Context) as KMeansResult;
-        //    Assert.IsTrue(result.PredictedClusters[0] == 0);
-        //    Assert.IsTrue(result.PredictedClusters[1] == 1);
-        //    Assert.IsTrue(result.PredictedClusters[2] == 2);
-        //}
-
-
-       
-
         /// <summary>
         /// Tests if incremental mean calculation works properly
         /// </summary>

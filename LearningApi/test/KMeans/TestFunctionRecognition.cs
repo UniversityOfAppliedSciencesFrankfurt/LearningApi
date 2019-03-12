@@ -1,18 +1,13 @@
-﻿using LearningFoundation;
-using LearningFoundation.DataMappers;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using LearningFoundation.Clustering.KMeans;
-using LearningFoundation.Helpers;
+﻿using LearningFoundation.Clustering.KMeans;
 using LearningFoundation.Clustering.KMeans.FunctionRecognition;
+using LearningFoundation.Helpers;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
 using System.Diagnostics;
 
-namespace Test
+namespace LearningFoundation.Test
 {
+    [TestClass]
     public class TestFunctionRecognition
     {
         private static string rootFolder = System.IO.Path.GetFullPath(@"..\..\..\") + "KMeans\\TestFiles\\";

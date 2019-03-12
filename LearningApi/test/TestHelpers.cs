@@ -7,7 +7,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using LearningFoundation.Arrays;
 
-namespace test
+namespace LearningFoundation.Test
 {
     public class TestHelpers
     {

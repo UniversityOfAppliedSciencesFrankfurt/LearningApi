@@ -8,17 +8,18 @@ using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using LearningFoundation.Clustering.KMeans;
 
-namespace Test
+namespace LearningFoundation.Test
 {
     static class Globals
     {
         // a global needed for creating permutations
         public static int PermCount;
-    }  
+    }
 
     /// <summary>
     /// UnitTest02 is a test/application for KMeans algorithm (function recognition).
     /// </summary>
+    [TestClass]
     public class TestTrainingSimilarFunctions
     {
 

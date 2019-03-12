@@ -1,14 +1,12 @@
-﻿using LearningFoundation;
-using System;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NeuralNet.Perceptron;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using NeuralNet.Perceptron;
 
 
-namespace test.Perceptron
+namespace LearningFoundation.Test
 {
+    [TestClass]
     public class PerceptronUnitTests
     {
 

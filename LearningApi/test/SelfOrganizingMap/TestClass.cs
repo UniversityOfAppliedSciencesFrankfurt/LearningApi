@@ -1,16 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using LearningFoundation;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SelfOrganizingMap;
+using System.Collections.Generic;
 using System.IO;
 
 
-namespace Test
+namespace LearningFoundation.Test
 {
-
+    [TestClass]
     public class SelfOrganizingMapTest
     {
         string path = Path.GetDirectoryName(Path.GetDirectoryName(Path.GetDirectoryName(System.IO.Directory.GetCurrentDirectory())));

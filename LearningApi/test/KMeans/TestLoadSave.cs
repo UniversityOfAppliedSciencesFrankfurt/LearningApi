@@ -1,12 +1,10 @@
-﻿using LearningFoundation;
-using LearningFoundation.Clustering.KMeans;
+﻿using LearningFoundation.Clustering.KMeans;
 using LearningFoundation.DataMappers;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System.Linq;
 
-namespace Test
+namespace LearningFoundation.Test
 {
-
+    [TestClass]
     public class TestLoadSave
     {
 

@@ -1,24 +1,18 @@
-﻿using LearningFoundation;
-using LearningFoundation.DataMappers;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using LearningFoundation.Helpers;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using LearningFoundation.Clustering.KMeans;
-using LearningFoundation.Helpers;
+using System;
+using System.IO;
 
-namespace Test
-{   
+namespace LearningFoundation.Test
+{
     /// <summary>
     /// UnitTest01 is a class that contains a function to automatically generate similar functions and its test
     /// </summary>
+    [TestClass]
     public class TestFunctionGenerators
     {
         private const string cPathPrefix = "\\NRP";
 
-        //private const string rootFolder = "Functions";
         private static string rootFolder = System.IO.Path.GetFullPath(@"..\..\..\") + "KMeans\\TestFiles\\Functions\\";
 
         #region Tests

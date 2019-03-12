@@ -1,17 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using NeuralNet.RestrictedBolzmannMachine2;
-using LearningFoundation.DataProviders;
-using LearningFoundation;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using LearningFoundation.Arrays;
 using LearningFoundation.DataMappers;
-using System.Globalization;
-using LearningFoundation.Arrays;
+using LearningFoundation.DataProviders;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NeuralNet.RestrictedBolzmannMachine2;
+using System;
+using System.Collections.Generic;
 using System.Diagnostics;
+using System.Globalization;
+using System.IO;
 
-namespace test.RestrictedBolzmannMachine2
+namespace LearningFoundation.Test
 {
+    [TestClass]
     public class RbmHandwrittenDigitUnitTests
     {
 

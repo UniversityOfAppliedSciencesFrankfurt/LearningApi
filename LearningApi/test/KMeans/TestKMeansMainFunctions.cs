@@ -1,19 +1,14 @@
-﻿using LearningFoundation;
+﻿using LearningFoundation.Clustering.KMeans;
 using LearningFoundation.DataMappers;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using LearningFoundation.Clustering.KMeans;
-using System.Reflection;
+using System.IO;
 
-namespace Test
+namespace LearningFoundation.Test
 {
     /// <summary>
     /// UnitTest00 is a class that contains tests for the main functions of "KMeans.cs" 
     /// </summary>
+    [TestClass]
     public class TestKMeansMainFunctions
     {
         private static string rootFolder = System.IO.Path.GetFullPath(@"..\..\..\") + "KMeans\\TestFiles\\JsonSaves\\";

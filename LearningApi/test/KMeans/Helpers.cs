@@ -6,7 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using LearningFoundation.Helpers;
 
-namespace Test
+namespace LearningFoundation.Test
 {
     public static class Helpers
     {

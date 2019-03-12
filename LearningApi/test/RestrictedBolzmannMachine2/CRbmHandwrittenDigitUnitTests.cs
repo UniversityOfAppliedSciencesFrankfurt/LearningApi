@@ -10,8 +10,9 @@ using System.Globalization;
 using LearningFoundation.Arrays;
 using System.Diagnostics;
 
-namespace test.RestrictedBolzmannMachine2
+namespace LearningFoundation.Test
 {
+    [TestClass]
     public class CRbmHandwrittenDigitUnitTests
     {
        

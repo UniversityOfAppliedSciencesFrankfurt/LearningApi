@@ -1,17 +1,13 @@
-﻿using System;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Collections.Generic;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using LearningFoundation;
+﻿using LearningFoundation.Arrays;
 using LearningFoundation.Statistics;
-using LearningFoundation.Arrays;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace test.statistics
+namespace LearningFoundation.Test
 {
     /// <summary>
     /// Unit tests for validation and check corect result for advanced statistics calculation of various operations
     /// </summary>
+    [TestClass]
     public class MarkovChainTests
     {
         [TestMethod]

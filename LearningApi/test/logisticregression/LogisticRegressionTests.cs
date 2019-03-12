@@ -1,21 +1,14 @@
-﻿using test;
+﻿using LearningFoundation.DataMappers;
+using LearningFoundation.DataProviders;
+using LearningFoundation.Normalizers;
+using LogisticRegression;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
-using System.Linq;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 using System.IO;
-using Newtonsoft.Json;
-using LearningFoundation;
-using LogisticRegression;
-using LearningFoundation.DataProviders;
-using LearningFoundation.DataMappers;
-using LearningFoundation.Normalizers;
-using LearningFoundation.Statistics;
 
-namespace test.logisticregression
+namespace LearningFoundation.Test
 {
-
+    [TestClass]
     public class LogisticRegressionTests
     {
 

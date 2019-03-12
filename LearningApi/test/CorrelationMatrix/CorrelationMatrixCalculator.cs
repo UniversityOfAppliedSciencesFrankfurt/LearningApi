@@ -1,23 +1,19 @@
-﻿
-
+﻿using LearningFoundation;
+using LearningFoundation.DataMappers;
+using LearningFoundation.DataProviders;
+using LearningFoundation.Statistics;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Newtonsoft.Json;
-using System.IO;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using LearningFoundation;
-using LearningFoundation.DataProviders;
-using LearningFoundation.DataMappers;
-using LearningFoundation.Statistics;
-using LearningFoundation.Normalizers;
 using System.Globalization;
-namespace test.datamapper
+using System.Linq;
+
+namespace LearningFoundation.Test
 {
     /// <summary>
     /// Test class for testing data mapper - transformation of the RealData in to numeric ML ready data.
     /// </summary>
+    [TestClass]
     public class CorrelationMatrixGenerator
     {
         

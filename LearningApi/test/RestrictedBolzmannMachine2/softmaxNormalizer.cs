@@ -1,22 +1,16 @@
-﻿using System;
-using System.Linq;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
 using System.Collections.Generic;
-using System.Text;
-using System.IO;
-using NeuralNet.RestrictedBolzmannMachine2;
-using ImageBinarizer;
-using NeuralNet.Perceptron;
-using LearningFoundation.DataProviders;
-using LearningFoundation;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using LearningFoundation.DataMappers;
 using System.Globalization;
+using System.IO;
+using System.Linq;
 
-namespace test.RestrictedBolzmannMachine2
+namespace LearningFoundation.Test
 {
-    public class softmaxNormalizer
+    [TestClass]
+    public class SoftmaxNormalizer
     {
-        static softmaxNormalizer()
+        static SoftmaxNormalizer()
         {
 
         }
