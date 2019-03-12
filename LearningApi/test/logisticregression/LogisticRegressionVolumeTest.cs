@@ -18,6 +18,7 @@ namespace test.logisticregression
     public class LogisticRegressionVolumeTest
     {
         /// <summary>
+        /// Unittest with real data containing 41K rows
         /// Performs the LogisticRegression algortim on dataset with 400 iteration and 0.029 learning rate.
         /// </summary>
         [Fact]

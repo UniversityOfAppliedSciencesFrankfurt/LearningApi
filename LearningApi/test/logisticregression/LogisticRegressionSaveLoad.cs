@@ -28,10 +28,11 @@ namespace test.logisticregression
         }
 
         /// <summary>
+        /// Unit test for save and load
         /// Performs the LogisticRegression on specified dataset with 10 iteration and 0.15 learning rate.
         /// </summary>
         [Fact]
-        public void LogisticsRegression_Test_iterations_10_learningrate_batch1()
+        public void LogisticsRegression_Test_Save_Load()
         {
             var desc = loadMetaData();
 
@@ -80,136 +81,6 @@ namespace test.logisticregression
 
             LogisticRegressionScore score2 = api2.GetScore() as LogisticRegressionScore;
 
-            ////Load batch 1 to batch2
-
-            //LearningApi api2 = new LearningApi(desc);
-
-            //var batch2 = LearningApi.Load("LogisticRegressionBatch1.json");
-
-            //api.UseActionModule<object[][], object[][]>((input, ctx) =>
-            //{
-            //    return loadRealDataSample2();
-            //});
-
-            //// Use mapper for data, which will extract (map) required columns 
-            //api.UseDefaultDataMapper();
-
-            //api.UseMinMaxNormalizer();
-
-            ////run logistic regression for 10 iterations with learningRate=0.13
-            //api.UseLogisticRegression(0.13, 10);
-
-            //api.Run();
-
-            //api.Save("LogisticRegressionBatch2.json");
-
-            //LogisticRegressionScore score2 = api.GetScore() as LogisticRegressionScore;
-
-            ////Load batch 2 to batch3
-
-            //LearningApi api3 = new LearningApi(desc);
-
-            //var batch3 = LearningApi.Load("LogisticRegressionBatch2.json");
-
-            //api.UseActionModule<object[][], object[][]>((input, ctx) =>
-            //{
-            //    return loadRealDataSample3();
-            //});
-
-            //// Use mapper for data, which will extract (map) required columns 
-            //api.UseDefaultDataMapper();
-
-            //api.UseMinMaxNormalizer();
-
-            ////run logistic regression for 10 iterations with learningRate=0.13
-            //api.UseLogisticRegression(0.13, 10);
-
-            //api.Run();
-
-            //api.Save("LogisticRegressionBatch3.json");
-
-            //LogisticRegressionScore score3 = api.GetScore() as LogisticRegressionScore;
-
-            ////Load batch 3 to batch 4
-
-            //LearningApi api4 = new LearningApi(desc);
-
-            //var batch4 = LearningApi.Load("LogisticRegressionBatch3.json");
-
-            //api.UseActionModule<object[][], object[][]>((input, ctx) =>
-            //{
-            //    return loadRealDataSample4();
-            //});
-
-            //// Use mapper for data, which will extract (map) required columns 
-            //api.UseDefaultDataMapper();
-
-            //api.UseMinMaxNormalizer();
-
-            ////run logistic regression for 10 iterations with learningRate=0.13
-            //api.UseLogisticRegression(0.13, 10);
-
-            //api.Run();
-
-            //api.Save("LogisticRegressionBatch4.json");
-
-            //LogisticRegressionScore score4 = api.GetScore() as LogisticRegressionScore;
-
-            ////Load batch 4 to batch 5
-
-            //LearningApi api5 = new LearningApi(desc);
-
-            //var batch5 = LearningApi.Load("LogisticRegressionBatch4.json");
-
-            //api.UseActionModule<object[][], object[][]>((input, ctx) =>
-            //{
-            //    return loadRealDataSample5();
-            //});
-
-            //// Use mapper for data, which will extract (map) required columns 
-            //api.UseDefaultDataMapper();
-
-            //api.UseMinMaxNormalizer();
-
-            ////run logistic regression for 10 iterations with learningRate=0.13
-            //api.UseLogisticRegression(0.13, 10);
-
-            //api.Run();
-
-            //api.Save("LogisticRegressionBatch5.json");
-
-            //LogisticRegressionScore score5 = api.GetScore() as LogisticRegressionScore;
-
-
-
-
-
-            //define data for testing (prediction)
-            LearningApi apiPrediction = new LearningApi(desc);
-            //Real dataset must be defined as object type, because data can be numeric, binary and classification
-            apiPrediction.UseActionModule<object[][], object[][]>((input, ctx) =>
-            {
-                var data = new object[4][]
-                {
-                    new object[]{0.202,"blue", "male",13,"yes" },
-                    new object[]{0.447,"green","female",37,"no" },
-                    new object[]{0.120,"red","male", "21", "yes" },
-                    new object[]{0.313,"green","male",22,"yes" },
-                    };
-                return data;
-            });
-
-            // Use mapper for data, which will extract (map) required columns 
-            apiPrediction.UseDefaultDataMapper();
-            var testData = apiPrediction.Run();
-
-            //use previous trained model
-            var result = api.Algorithm.Predict(testData as double[][], api.Context) as LogisticRegressionResult;
-
-            //Assert.Equal(Math.Round(result.PredictedValues[0], 5), 1E-05);
-            //Assert.Equal(Math.Round(result.PredictedValues[1], 5), 0);
-            //Assert.Equal(Math.Round(result.PredictedValues[2], 5), 0);
-            //Assert.Equal(Math.Round(result.PredictedValues[3], 5), 0);
         }
 
 
@@ -341,6 +212,37 @@ namespace test.logisticregression
 
             LogisticRegressionScore score5 = api5.GetScore() as LogisticRegressionScore;
 
+            //define data for testing (prediction)
+            LearningApi apiPrediction = new LearningApi(desc);
+            //Real dataset must be defined as object type, because data can be numeric, binary and classification
+            apiPrediction.UseActionModule<object[][], object[][]>((input, ctx) =>
+            {
+                var data = new object[4][]
+                {
+                    new object[]{0.202,"blue", "male",13,"yes" },
+                    new object[]{0.447,"green","female",37,"no" },
+                    new object[]{0.120,"red","male", "21", "yes" },
+                    new object[]{0.313,"green","male",22,"yes" },
+                    };
+                return data;
+            });
+
+            // Use mapper for data, which will extract (map) required columns 
+            apiPrediction.UseDefaultDataMapper();
+            var testData = apiPrediction.Run();
+
+            //use previous trained model
+            var result = api5.Algorithm.Predict(testData as double[][], api5.Context) as LogisticRegressionResult;
+
+            Assert.Equal(Math.Round(result.PredictedValues[0], 5), 1E-05);
+            Assert.Equal(Math.Round(result.PredictedValues[1], 5), 0);
+            Assert.Equal(Math.Round(result.PredictedValues[2], 5), 0);
+            Assert.Equal(Math.Round(result.PredictedValues[3], 5), 0);
+
+
+
+
+
 
         }
         //batch 5
@@ -403,26 +305,6 @@ namespace test.logisticregression
                     new object[]{0.120,"red","male", "21", "yes" },
                     new object[]{0.313,"green","male",22,"yes" },
                     new object[]{0.369,"blue","male",47,"no" }
-                    //new object[]{0.452,"blue", "male", 20,"no" },
-                    //new object[]{0.923,"green","female",35,"no" },
-                    //new object[]{0.354,"red","female",37,"yes" },
-                    //new object[]{0.814,"blue", "male", 14,  "yes" },
-                    //new object[]{0.443,"green", "male", 25,  "no" },
-                    //new object[]{0.761,"red", "female",  19,  "yes" },
-                    //new object[]{0.759,"red", "male", 44 , "no" },
-                    //new object[]{0.118,"green", "female", 10,  "yes" },
-                    //new object[]{0.343,"blue", "male", 30,  "no" },
-                    //new object[]{0.179,"red", "female",  26,  "no" },
-                    //new object[]{0.688,"green","female",  10,  "no" },
-                    //new object[]{0.915,"green","male", 33,  "yes" },
-                    //new object[]{0.582,"green","male", 49,  "yes" },
-                    //new object[]{0.111,"red", "male", 17,  "yes" },
-                    //new object[]{0.065,"blue","female",  32,  "no" },
-                    //new object[]{0.233,"blue","female",  24,  "no" },
-                    //new object[]{0.810,"red","male", 37,"no" },
-                    //new object[]{0.966,"red","male", 39,"yes" },
-                    //new object[]{0.644,"green","female",36,"yes" },
-                    //new object[]{0.169,"green","male", 43,"no" }
                     };
             //
             return data1;
@@ -431,31 +313,11 @@ namespace test.logisticregression
         private object[][] loadRealDataSample2()
         {
             var data2 = new object[5][] {
-                    //new object[]{0.202,"blue", "male",13,"yes" },
-                    //new object[]{0.447,"green","female",37,"no" },
-                    //new object[]{0.120,"red","male", "21", "yes" },
-                    //new object[]{0.313,"green","male",22,"yes" },
-                    //new object[]{0.369,"blue","male",47,"no" },
                     new object[]{0.452,"blue", "male", 20,"no" },
                     new object[]{0.923,"green","female",35,"no" },
                     new object[]{0.354,"red","female",37,"yes" },
                     new object[]{0.814,"blue", "male", 14,  "yes" },
                     new object[]{0.443,"green", "male", 25,  "no" }
-                    //new object[]{0.761,"red", "female",  19,  "yes" },
-                    //new object[]{0.759,"red", "male", 44 , "no" },
-                    //new object[]{0.118,"green", "female", 10,  "yes" },
-                    //new object[]{0.343,"blue", "male", 30,  "no" },
-                    //new object[]{0.179,"red", "female",  26,  "no" },
-                    //new object[]{0.688,"green","female",  10,  "no" },
-                    //new object[]{0.915,"green","male", 33,  "yes" },
-                    //new object[]{0.582,"green","male", 49,  "yes" },
-                    //new object[]{0.111,"red", "male", 17,  "yes" },
-                    //new object[]{0.065,"blue","female",  32,  "no" },
-                    //new object[]{0.233,"blue","female",  24,  "no" },
-                    //new object[]{0.810,"red","male", 37,"no" },
-                    //new object[]{0.966,"red","male", 39,"yes" },
-                    //new object[]{0.644,"green","female",36,"yes" },
-                    //new object[]{0.169,"green","male", 43,"no" }
                     };
             //
             return data2;
@@ -464,31 +326,11 @@ namespace test.logisticregression
         private object[][] loadRealDataSample3()
         {
             var data3 = new object[5][] {
-                    //new object[]{0.202,"blue", "male",13,"yes" },
-                    //new object[]{0.447,"green","female",37,"no" },
-                    //new object[]{0.120,"red","male", "21", "yes" },
-                    //new object[]{0.313,"green","male",22,"yes" },
-                    //new object[]{0.369,"blue","male",47,"no" },
-                    //new object[]{0.452,"blue", "male", 20,"no" },
-                    //new object[]{0.923,"green","female",35,"no" },
-                    //new object[]{0.354,"red","female",37,"yes" },
-                    //new object[]{0.814,"blue", "male", 14,  "yes" },
-                    //new object[]{0.443,"green", "male", 25,  "no" },
                     new object[]{0.761,"red", "female",  19,  "yes" },
                     new object[]{0.759,"red", "male", 44 , "no" },
                     new object[]{0.118,"green", "female", 10,  "yes" },
                     new object[]{0.343,"blue", "male", 30,  "no" },
                     new object[]{0.179,"red", "female",  26,  "no" }
-                    //new object[]{0.688,"green","female",  10,  "no" },
-                    //new object[]{0.915,"green","male", 33,  "yes" },
-                    //new object[]{0.582,"green","male", 49,  "yes" },
-                    //new object[]{0.111,"red", "male", 17,  "yes" },
-                    //new object[]{0.065,"blue","female",  32,  "no" },
-                    //new object[]{0.233,"blue","female",  24,  "no" },
-                    //new object[]{0.810,"red","male", 37,"no" },
-                    //new object[]{0.966,"red","male", 39,"yes" },
-                    //new object[]{0.644,"green","female",36,"yes" },
-                    //new object[]{0.169,"green","male", 43,"no" }
                     };
             //
             return data3;
@@ -497,31 +339,11 @@ namespace test.logisticregression
         private object[][] loadRealDataSample4()
     {
         var data4 = new object[5][] {
-                    //new object[]{0.202,"blue", "male",13,"yes" },
-                    //new object[]{0.447,"green","female",37,"no" },
-                    //new object[]{0.120,"red","male", "21", "yes" },
-                    //new object[]{0.313,"green","male",22,"yes" },
-                    //new object[]{0.369,"blue","male",47,"no" },
-                    //new object[]{0.452,"blue", "male", 20,"no" },
-                    //new object[]{0.923,"green","female",35,"no" },
-                    //new object[]{0.354,"red","female",37,"yes" },
-                    //new object[]{0.814,"blue", "male", 14,  "yes" },
-                    //new object[]{0.443,"green", "male", 25,  "no" },
-                    //new object[]{0.761,"red", "female",  19,  "yes" },
-                    //new object[]{0.759,"red", "male", 44 , "no" },
-                    //new object[]{0.118,"green", "female", 10,  "yes" },
-                    //new object[]{0.343,"blue", "male", 30,  "no" },
-                    //new object[]{0.179,"red", "female",  26,  "no" },
                     new object[]{0.688,"green","female",  10,  "no" },
                     new object[]{0.915,"green","male", 33,  "yes" },
                     new object[]{0.582,"green","male", 49,  "yes" },
                     new object[]{0.111,"red", "male", 17,  "yes" },
                     new object[]{0.065,"blue","female",  32,  "no" }
-                    //new object[]{0.233,"blue","female",  24,  "no" },
-                    //new object[]{0.810,"red","male", 37,"no" },
-                    //new object[]{0.966,"red","male", 39,"yes" },
-                    //new object[]{0.644,"green","female",36,"yes" },
-                    //new object[]{0.169,"green","male", 43,"no" }
                     };
         //
         return data4;
@@ -530,26 +352,6 @@ namespace test.logisticregression
     private object[][] loadRealDataSample5()
     {
         var data5 = new object[5][] {
-                    //new object[]{0.202,"blue", "male",13,"yes" },
-                    //new object[]{0.447,"green","female",37,"no" },
-                    //new object[]{0.120,"red","male", "21", "yes" },
-                    //new object[]{0.313,"green","male",22,"yes" },
-                    //new object[]{0.369,"blue","male",47,"no" },
-                    //new object[]{0.452,"blue", "male", 20,"no" },
-                    //new object[]{0.923,"green","female",35,"no" },
-                    //new object[]{0.354,"red","female",37,"yes" },
-                    //new object[]{0.814,"blue", "male", 14,  "yes" },
-                    //new object[]{0.443,"green", "male", 25,  "no" },
-                    //new object[]{0.761,"red", "female",  19,  "yes" },
-                    //new object[]{0.759,"red", "male", 44 , "no" },
-                    //new object[]{0.118,"green", "female", 10,  "yes" },
-                    //new object[]{0.343,"blue", "male", 30,  "no" },
-                    //new object[]{0.179,"red", "female",  26,  "no" },
-                    //new object[]{0.688,"green","female",  10,  "no" },
-                    //new object[]{0.915,"green","male", 33,  "yes" },
-                    //new object[]{0.582,"green","male", 49,  "yes" },
-                    //new object[]{0.111,"red", "male", 17,  "yes" },
-                    //new object[]{0.065,"blue","female",  32,  "no" },
                     new object[]{0.233,"blue","female",  24,  "no" },
                     new object[]{0.810,"red","male", 37,"no" },
                     new object[]{0.966,"red","male", 39,"yes" },

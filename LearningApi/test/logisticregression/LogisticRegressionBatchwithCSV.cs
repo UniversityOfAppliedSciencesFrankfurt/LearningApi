@@ -18,6 +18,7 @@ namespace test.logisticregression
     public class LogisticRegressionBatchwithCSV
     {
         /// <summary>
+        /// Unit Test Batch with a CSV file
         /// Performs the LogisticRegression algortim on dataset with 10 iteration and 0.15 learning rate.
         /// </summary>
         [Fact]
