@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using Xunit;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using LearningFoundation.Clustering.KMeans;
 
 namespace Test
@@ -14,7 +14,7 @@ namespace Test
     public class IncrementalMeanTests
     {
 
-        //[Fact]
+        //[TestMethod]
         //public void Test_GetClusters()
         //{
         //    double[][] clusterCentars = new double[3][];
@@ -47,13 +47,13 @@ namespace Test
 
         //    var resp = api.Run() as KMeansScore;
 
-        //    Assert.True(resp.Clusters != null);
-        //    Assert.True(resp.Clusters.Length == clusterCentars.Length);
+        //    Assert.IsTrue(resp.Clusters != null);
+        //    Assert.IsTrue(resp.Clusters.Length == clusterCentars.Length);
 
         //    var result = api.Algorithm.Predict(clusterCentars, api.Context) as KMeansResult;
-        //    Assert.True(result.PredictedClusters[0] == 0);
-        //    Assert.True(result.PredictedClusters[1] == 1);
-        //    Assert.True(result.PredictedClusters[2] == 2);
+        //    Assert.IsTrue(result.PredictedClusters[0] == 0);
+        //    Assert.IsTrue(result.PredictedClusters[1] == 1);
+        //    Assert.IsTrue(result.PredictedClusters[2] == 2);
         //}
 
 
@@ -62,7 +62,7 @@ namespace Test
         /// <summary>
         /// Tests if incremental mean calculation works properly
         /// </summary>
-        [Fact]
+        [TestMethod]
         public void Test_IncrementalMeanAverage()
         {
             // Test samples.
@@ -82,7 +82,7 @@ namespace Test
 
             KMeansAlgorithm.UpdateMeans(data, clustering, means);
             // Mean of 1,2,3,4,5,6,7,8,9, 10 is 4.5
-            Assert.True(means[0][0] == 4.5);
+            Assert.IsTrue(means[0][0] == 4.5);
 
             data = new double[5][];
 
@@ -97,7 +97,7 @@ namespace Test
 
             // Mean of 1,2,3,4,5 is 2
             KMeansAlgorithm.UpdateMeans(data, clustering, means, 0, new double[] { 0 });
-            Assert.True(means[0][0] == 2);
+            Assert.IsTrue(means[0][0] == 2);
 
             data = new double[5][];
 
@@ -116,14 +116,14 @@ namespace Test
             // Mean of M1 and M2 together is 4.5
             // (1/q1+q2)[q1*M1+q2*M2]
             // where q1 is number of elements inside of M1 and q2 number of elements inside of M2
-            Assert.True(means[0][0] == 4.5);
+            Assert.IsTrue(means[0][0] == 4.5);
         }
 
 
         /// <summary>
         /// Tests if incremental mean calculation works properly
         /// </summary>
-        [Fact]
+        [TestMethod]
         public void Test_IncrementalMeanAverageSet()
         {
             for (int numOfSamples = 100; numOfSamples < 150000; numOfSamples += 15000)
@@ -185,7 +185,7 @@ namespace Test
                 // mean is batch for numbers from 1 to numOfSamples
                 // (1/q1+q2)[q1*M1+q2*M2]
                 // where q1 is number of elements inside of M1 and q2 number of elements inside of M2
-                Assert.True(Math.Round(mean2,2) == Math.Round(mean,2));
+                Assert.IsTrue(Math.Round(mean2,2) == Math.Round(mean,2));
             }
         }
 

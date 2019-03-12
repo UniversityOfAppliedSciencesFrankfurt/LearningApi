@@ -4,7 +4,7 @@ using System.IO;
 using NeuralNet.RestrictedBolzmannMachine2;
 using LearningFoundation.DataProviders;
 using LearningFoundation;
-using Xunit;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using LearningFoundation.DataMappers;
 using System.Globalization;
 using LearningFoundation.Arrays;
@@ -57,26 +57,26 @@ namespace test.RestrictedBolzmannMachine2
         /// </summary>
         /// <param name="iterations"></param>
         /// <param name="layers"></param>
-        [Theory]
-        [InlineData(1, new int[] { 9, 5 })]
-        [InlineData(1, new int[] { 19, 15, 14, 7 })]
-        [InlineData(1, new int[] { 250, 150, 10 })]
+        [DataTestMethod]
+        [DataRow(1, new int[] { 9, 5 })]
+        [DataRow(1, new int[] { 19, 15, 14, 7 })]
+        [DataRow(1, new int[] { 250, 150, 10 })]
         public void DeepRbmConstructorTest(int iterations, int[] layers)
         {
             DeepRbm rbm = new DeepRbm(layers, iterations, 0.01);
-            Assert.True(rbm.Layers.Length == layers.Length - 1);
+            Assert.IsTrue(rbm.Layers.Length == layers.Length - 1);
             foreach (var layer in rbm.Layers)
             {
-                Assert.True(layer != null);
+                Assert.IsTrue(layer != null);
             }
         }
 
         /// <summary>
         /// TODO...
         /// </summary>
-        [Theory]
-        [InlineData(1, 0.01, 4096, 50)]
-        //[InlineData(10, 4096, 10)]
+        [DataTestMethod]
+        [DataRow(1, 0.01, 4096, 50)]
+        //[DataRow(10, 4096, 10)]
        
         public void DigitRecognitionTest(int iterations,double learningRate, int visNodes, int hidNodes)
         {
@@ -128,8 +128,8 @@ namespace test.RestrictedBolzmannMachine2
             WriteOutputMatrix(iterations, new int[] { visNodes, hidNodes }, predictedData, testData);
         }
 
-        [Theory]
-        [InlineData(1000, 0.01, 1600, 500)]
+        [DataTestMethod]
+        [DataRow(1000, 0.01, 1600, 500)]
         // Smiley test
         public void SmileyClassificationTest(int iterations, double learningRate, int visNodes, int hidNodes)
         {

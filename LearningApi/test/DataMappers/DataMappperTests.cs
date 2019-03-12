@@ -6,7 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using System.IO;
-using Xunit;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using LearningFoundation;
 using LearningFoundation.DataProviders;
 using LearningFoundation.DataMappers;
@@ -29,7 +29,7 @@ namespace test.datamapper
             
         }
 
-        [Fact]
+        [TestMethod]
         public void NumericTransformation_test1()
         {
             // Creates learning api object
@@ -56,7 +56,7 @@ namespace test.datamapper
                 for(int j = 0; j < expected[0].Length; j++)
                 {
 
-                    Assert.Equal(result[i][j], expected[i][j]);
+                    Assert.AreEqual(result[i][j], expected[i][j]);
                 }
                 
                 
@@ -66,7 +66,7 @@ namespace test.datamapper
             return;
         }
 
-        [Fact]
+        [TestMethod]
         public void NumericTransformation_test2()
         {
             // Creates learning api object
@@ -93,7 +93,7 @@ namespace test.datamapper
                 for (int j = 0; j < expected[0].Length; j++)
                 {
 
-                    Assert.Equal(result[i][j], expected[i][j]);
+                    Assert.AreEqual(result[i][j], expected[i][j]);
                 }
             }
 
@@ -102,7 +102,7 @@ namespace test.datamapper
         }
 
         //feature count when category column is feature  
-        [Fact]
+        [TestMethod]
         public void Feature_and_LabelIndex_Mapping_Test2()
         {
             var desc = loadMetaData_with_CategoricFeature();
@@ -127,11 +127,11 @@ namespace test.datamapper
             //there is one category column in features so the number of features is increased with (calssCount-1)
             // featureCount = columnCount- strinCoulumnCount-LabelColumn + calssCount-1
             var featureCount = 4 - 1 - 1 + (3 - 1);
-            Assert.Equal(featureNumber, featureCount);
+            Assert.AreEqual(featureNumber, featureCount);
 
         }
         //feature count when category column is a label and noone feature is class column.
-        [Fact]
+        [TestMethod]
         public void Feature_and_LabelIndex_Mapping_Test1()
         {
             var desc = loadMetaData_with_CategoricLabel();
@@ -156,7 +156,7 @@ namespace test.datamapper
             //there is no category column in features so the number of features is 
             //  featureCount = columnCount-IngoredCoulmnCount-1 labelcolumn
             var featureCount = 4-1-1 ;
-            Assert.Equal(featureNumber, featureCount);
+            Assert.AreEqual(featureNumber, featureCount);
 
         }
 

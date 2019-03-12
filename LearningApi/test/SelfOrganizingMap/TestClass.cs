@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Xunit;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using LearningFoundation;
 using SelfOrganizingMap;
 using System.IO;
@@ -15,7 +15,7 @@ namespace Test
     {
         string path = Path.GetDirectoryName(Path.GetDirectoryName(Path.GetDirectoryName(System.IO.Directory.GetCurrentDirectory())));
 
-        [Fact]
+        [TestMethod]
         public void TestMapWithLearningAPI()
         {
             List<string> labels = new List<string>();

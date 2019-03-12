@@ -1,7 +1,7 @@
 ﻿using LearningFoundation;
 using LearningFoundation.Clustering.KMeans;
 using LearningFoundation.DataMappers;
-using Xunit;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Linq;
 
 namespace Test
@@ -14,7 +14,7 @@ namespace Test
         /// Demonstrates how to use Save and Load of KMeans.
         /// Same principal can be used for every other algorithm, as long algoritm does support model persistence.
         /// </summary>
-        [Fact]
+        [TestMethod]
         public void Test_LoadSave()
         {
             string moduleName = "test-action";
@@ -47,13 +47,13 @@ namespace Test
 
             var resp = api.Run() as KMeansScore;
 
-            Assert.True(resp.Model.Clusters != null);
-            Assert.True(resp.Model.Clusters.Length == clusterCenters.Length);
+            Assert.IsTrue(resp.Model.Clusters != null);
+            Assert.IsTrue(resp.Model.Clusters.Length == clusterCenters.Length);
 
             var result = api.Algorithm.Predict(clusterCenters, api.Context) as KMeansResult;
-            Assert.True(result.PredictedClusters[0] == 0);
-            Assert.True(result.PredictedClusters[1] == 1);
-            Assert.True(result.PredictedClusters[2] == 2);
+            Assert.IsTrue(result.PredictedClusters[0] == 0);
+            Assert.IsTrue(result.PredictedClusters[1] == 1);
+            Assert.IsTrue(result.PredictedClusters[2] == 2);
 
             // This is where trained model is saved.
             api.Save(nameof(TestLoadSave));
@@ -71,9 +71,9 @@ namespace Test
             });
 
             result = loadedApi.Algorithm.Predict(clusterCenters, api.Context) as KMeansResult;
-            Assert.True(result.PredictedClusters[0] == 0);
-            Assert.True(result.PredictedClusters[1] == 1);
-            Assert.True(result.PredictedClusters[2] == 2);
+            Assert.IsTrue(result.PredictedClusters[0] == 0);
+            Assert.IsTrue(result.PredictedClusters[1] == 1);
+            Assert.IsTrue(result.PredictedClusters[2] == 2);
 
 
             loadedApi.Run();

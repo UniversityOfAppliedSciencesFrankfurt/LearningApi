@@ -7,7 +7,7 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using Xunit;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace test
 {
@@ -39,7 +39,7 @@ namespace test
         /// <summary>
         /// Unit test for Mean Filter
         /// </summary>
-        [Fact]
+        [TestMethod]
         public void MeanF()
         {
             LearningApi lApi = new LearningApi();
@@ -67,7 +67,7 @@ namespace test
 
             double[,,] result = lApi.Run() as double[,,];
 
-            Assert.True(result != null);
+            Assert.IsTrue(result != null);
 
             Bitmap blurBitmap = new Bitmap(result.GetLength(0), result.GetLength(1));
 
@@ -88,7 +88,7 @@ namespace test
         /// <summary>
         /// Unit test for Gaussian Filter
         /// </summary>
-        [Fact]
+        [TestMethod]
         public void Gaussian()
         {
             LearningApi lApi = new LearningApi();
@@ -116,7 +116,7 @@ namespace test
 
             double[,,] result = lApi.Run() as double[,,];
 
-            Assert.True(result != null);
+            Assert.IsTrue(result != null);
 
             Bitmap blurBitmap = new Bitmap(result.GetLength(0), result.GetLength(1));
 
@@ -137,7 +137,7 @@ namespace test
         /// <summary>
         /// Unit test for Gaussian and Mean Filter together
         /// </summary>
-        [Fact]
+        [TestMethod]
         public void GaussianAndMean()
         {
             LearningApi lApi = new LearningApi();
@@ -167,7 +167,7 @@ namespace test
 
             double[,,] result = lApi.Run() as double[,,];
 
-            Assert.True(result != null);
+            Assert.IsTrue(result != null);
 
             Bitmap blurBitmap = new Bitmap(result.GetLength(0), result.GetLength(1));
 

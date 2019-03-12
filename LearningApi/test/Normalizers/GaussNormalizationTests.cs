@@ -6,7 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using System.IO;
-using Xunit;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using LearningFoundation;
 using LearningFoundation.DataProviders;
 using LearningFoundation.DataMappers;
@@ -35,7 +35,7 @@ namespace test.scalers
         // 3. Checck if the numeric data is corectly converted by comparing with the data which is alredy pre-transformed.
         // 4. Transform the data in to normalized form
         // 5. Check if the normalized data is corectly calculated by comparing with the data which is alredy pre-normalized.
-        [Fact]
+        [TestMethod]
         public void GaussNormalizationTests_test1()
         {
             // Creates learning api object
@@ -65,7 +65,7 @@ namespace test.scalers
                 for(int j = 0; j < expected[0].Length; j++)
                 {
 
-                    Assert.Equal(Math.Round(result[i][j], 4), expected[i][j]);
+                    Assert.AreEqual(Math.Round(result[i][j], 4), expected[i][j]);
                 }
                 
                 
@@ -82,7 +82,7 @@ namespace test.scalers
         // 4. Transform the data in to normalized form using Gauss Standardisation
         // 5. Transform data in to denormalized form (numeric form)  using Gauss Standardisation
         // 6. Check if the normalized data is corectly calculated by comparing with the data which is alredy pre-transformed.
-        [Fact]
+        [TestMethod]
         public void GaussDeNormalizationTestsn_test1()
         {
             // Creates learning api object
@@ -115,7 +115,7 @@ namespace test.scalers
                 for (int j = 0; j < expected[0].Length; j++)
                 {
 
-                    Assert.Equal(Math.Round(result[i][j],4), expected[i][j]);
+                    Assert.AreEqual(Math.Round(result[i][j],4), expected[i][j]);
                 }
 
             }

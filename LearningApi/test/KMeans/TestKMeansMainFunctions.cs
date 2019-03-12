@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using Xunit;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using LearningFoundation.Clustering.KMeans;
 using System.Reflection;
 
@@ -31,7 +31,7 @@ namespace Test
         /// <summary>
         /// Test_TrainAndPredict is a test for the KMeans.Run or KMeans.Train and KMeans.Predict functions through LearningApi
         /// </summary>
-        [Fact]
+        [TestMethod]
         public void Test_TrainAndPredict()
         {
             double[][] clusterCenters = new double[3][];
@@ -60,18 +60,18 @@ namespace Test
             // train
             var resp = api.Run() as KMeansScore;
             
-            Assert.True(resp.Model.Clusters != null);
-            Assert.True(resp.Model.Clusters.Length == clusterCenters.Length);
+            Assert.IsTrue(resp.Model.Clusters != null);
+            Assert.IsTrue(resp.Model.Clusters.Length == clusterCenters.Length);
 
             // Predict
             var result = api.Algorithm.Predict(clusterCenters, api.Context) as KMeansResult;
-            Assert.True(result.PredictedClusters[0] == 0);
-            Assert.True(result.PredictedClusters[1] == 1);
-            Assert.True(result.PredictedClusters[2] == 2);
+            Assert.IsTrue(result.PredictedClusters[0] == 0);
+            Assert.IsTrue(result.PredictedClusters[1] == 1);
+            Assert.IsTrue(result.PredictedClusters[2] == 2);
         }
 
 
-        [Fact]
+        [TestMethod]
         public void Test_TrainPartials()
         {
             double[][] clusterCenters = new double[3][];
@@ -125,8 +125,8 @@ namespace Test
             // train
             var api2Resp = api2.Run() as KMeansScore;
 
-            Assert.True(api2Resp.Model.Clusters != null);
-            Assert.True(api2Resp.Model.Clusters.Length == clusterCenters.Length);
+            Assert.IsTrue(api2Resp.Model.Clusters != null);
+            Assert.IsTrue(api2Resp.Model.Clusters.Length == clusterCenters.Length);
 
             // start api that runs first raw data (rawData) and save results in variables
             api.UseKMeans(settings);
@@ -134,8 +134,8 @@ namespace Test
             // train
             var apiResp = api.Run() as KMeansScore;
 
-            Assert.True(apiResp.Model.Clusters != null);
-            Assert.True(apiResp.Model.Clusters.Length == clusterCenters.Length);
+            Assert.IsTrue(apiResp.Model.Clusters != null);
+            Assert.IsTrue(apiResp.Model.Clusters.Length == clusterCenters.Length);
 
             // save first run results in variables
             for (int i = 0; i < numClusters; i++)
@@ -155,8 +155,8 @@ namespace Test
             // train
             apiResp = api.Run() as KMeansScore;
 
-            Assert.True(apiResp.Model.Clusters != null);
-            Assert.True(apiResp.Model.Clusters.Length == clusterCenters.Length);
+            Assert.IsTrue(apiResp.Model.Clusters != null);
+            Assert.IsTrue(apiResp.Model.Clusters.Length == clusterCenters.Length);
 
             //// compare results 
 
@@ -170,10 +170,10 @@ namespace Test
                 {
                     res = apiResp1Centroid[i][j] * apiResp1NumSamples[i] + api2Resp.Model.Clusters[i].Centroid[j] * api2Resp.Model.Clusters[i].NumberOfSamples;
                     // partial centroid check
-                    Assert.True(apiResp.Model.Clusters[i].Centroid[j] == f * res);
+                    Assert.IsTrue(apiResp.Model.Clusters[i].Centroid[j] == f * res);
                 }
                 // max distance in cluster check
-                Assert.True(apiResp.Model.Clusters[i].InClusterMaxDistance >= apiResp1MaxDistance[i] + KMeansAlgorithm.calculateDistance(apiResp1Centroid[i], apiResp.Model.Clusters[i].Centroid));
+                Assert.IsTrue(apiResp.Model.Clusters[i].InClusterMaxDistance >= apiResp1MaxDistance[i] + KMeansAlgorithm.calculateDistance(apiResp1Centroid[i], apiResp.Model.Clusters[i].Centroid));
             }
 
         }      
@@ -181,7 +181,7 @@ namespace Test
         /// <summary>
         /// Test_Save is a test for KMeans.Save function
         /// </summary>
-        [Fact]
+        [TestMethod]
         public void Test_Save()
         {
 
@@ -215,7 +215,7 @@ namespace Test
         /// <summary>
         /// Test_Load is a test for KMeans.Load function
         /// </summary>
-        [Fact]
+        [TestMethod]
         public void Test_Load()
         {
             string fileName = "Test01.json";
@@ -223,14 +223,14 @@ namespace Test
             KMeansAlgorithm kMeans = new KMeansAlgorithm(new ClusteringSettings(0,2,2));
             kMeans.Load(rootFolder + fileName);
 
-            Assert.True(kMeans.Instance != null);
-            Assert.True(kMeans.Instance.Clusters != null);
+            Assert.IsTrue(kMeans.Instance != null);
+            Assert.IsTrue(kMeans.Instance.Clusters != null);
         }
 
         /// <summary>
         /// Test_LoadSave is a test for the api.Save method
         /// </summary>
-        [Fact]
+        [TestMethod]
         public void Test_ApiSave()
         {
             double[][] clusterCenters = new double[3][];
@@ -258,13 +258,13 @@ namespace Test
 
             var resp = api.Run() as KMeansScore;
 
-            Assert.True(resp.Model.Clusters != null);
-            Assert.True(resp.Model.Clusters.Length == clusterCenters.Length);
+            Assert.IsTrue(resp.Model.Clusters != null);
+            Assert.IsTrue(resp.Model.Clusters.Length == clusterCenters.Length);
 
             var result = api.Algorithm.Predict(clusterCenters, api.Context) as KMeansResult;
-            Assert.True(result.PredictedClusters[0] == 0);
-            Assert.True(result.PredictedClusters[1] == 1);
-            Assert.True(result.PredictedClusters[2] == 2);
+            Assert.IsTrue(result.PredictedClusters[0] == 0);
+            Assert.IsTrue(result.PredictedClusters[1] == 1);
+            Assert.IsTrue(result.PredictedClusters[2] == 2);
 
             api.Save("unittestmodel.json");
         }

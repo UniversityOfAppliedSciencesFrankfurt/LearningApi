@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System;
-using Xunit;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Diagnostics;
 using NeuralNet.MLPerceptron;
 using ImageBinarizer;
@@ -405,7 +405,7 @@ namespace test.MLPerceptron
 
                 for (int j = 0; j < numberOfOutputs; j++)
                 {
-                    //Assert.True(testData[i][(testData[i].Length - numberOfOutputs) + j] == (result[i * numberOfOutputs + j] >= 0.5 ? 1 : 0));
+                    //Assert.IsTrue(testData[i][(testData[i].Length - numberOfOutputs) + j] == (result[i * numberOfOutputs + j] >= 0.5 ? 1 : 0));
                     if (testData[i][(testData[i].Length - numberOfOutputs) + j] != (result[i * numberOfOutputs + j] >= 0.5 ? 1 : 0))
                     {
                         accurateResults--;

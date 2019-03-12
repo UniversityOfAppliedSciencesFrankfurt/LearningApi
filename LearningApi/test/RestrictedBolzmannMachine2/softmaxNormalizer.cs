@@ -8,7 +8,7 @@ using ImageBinarizer;
 using NeuralNet.Perceptron;
 using LearningFoundation.DataProviders;
 using LearningFoundation;
-using Xunit;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using LearningFoundation.DataMappers;
 using System.Globalization;
 
@@ -29,8 +29,7 @@ namespace test.RestrictedBolzmannMachine2
         string PathToDestinationFile = @"D:\LearningApi\LearningApi\test\RestrictedBolzmannMachine2\Data\rbm_sample1_result.csv";//Path.Combine(Directory.GetCurrentDirectory(), @"RestrictedBolzmannMachine2\Data\rbm_Sample1_result.csv");
 
 
-        [Theory]
-        [InlineData()]
+        [TestMethod]
         public void softMax()
         {
             List<string> termsList = new List<string>();
@@ -69,7 +68,7 @@ namespace test.RestrictedBolzmannMachine2
             int countColumn = 0;
             using (var file = new StreamWriter(pathToDestinationFile))
             {
-                for(int i= 0; i < softmax.Length; i++)
+                for (int i = 0; i < softmax.Length; i++)
                 {
                     countColumn++;
                     file.Write(softmax[i] + ",");

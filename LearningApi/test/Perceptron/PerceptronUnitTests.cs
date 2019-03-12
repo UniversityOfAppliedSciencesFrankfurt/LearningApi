@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Xunit;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NeuralNet.Perceptron;
 
 
@@ -58,7 +58,7 @@ namespace test.Perceptron
             return desc;
         }
 
-        [Fact]
+        [TestMethod]
         public void SimpleSequenceTest()
         {
             LearningApi api = new LearningApi();
@@ -100,17 +100,17 @@ namespace test.Perceptron
 
             var result = api.Algorithm.Predict(testData, api.Context) as PerceptronResult;
 
-            Assert.True(result.PredictedValues[0] == 0);
-            Assert.True(result.PredictedValues[1] == 0);
-            Assert.True(result.PredictedValues[2] == 1);
-            Assert.True(result.PredictedValues[3] == 1);
+            Assert.IsTrue(result.PredictedValues[0] == 0);
+            Assert.IsTrue(result.PredictedValues[1] == 0);
+            Assert.IsTrue(result.PredictedValues[2] == 1);
+            Assert.IsTrue(result.PredictedValues[3] == 1);
         }
 
 
     
 
 
-        [Fact]
+        [TestMethod]
         public void SimpleSequence2DTest()
         {
             LearningApi api = new LearningApi();
@@ -149,19 +149,19 @@ namespace test.Perceptron
 
             var result = api.Algorithm.Predict(testData, api.Context) as PerceptronResult;
 
-            Assert.True(result.PredictedValues[0] == 1);
-            Assert.True(result.PredictedValues[1] == 0);
-            Assert.True(result.PredictedValues[2] == 0);
-            Assert.True(result.PredictedValues[3] == 0);
-            Assert.True(result.PredictedValues[4] == 1);
-            Assert.True(result.PredictedValues[5] == 0);
+            Assert.IsTrue(result.PredictedValues[0] == 1);
+            Assert.IsTrue(result.PredictedValues[1] == 0);
+            Assert.IsTrue(result.PredictedValues[2] == 0);
+            Assert.IsTrue(result.PredictedValues[3] == 0);
+            Assert.IsTrue(result.PredictedValues[4] == 1);
+            Assert.IsTrue(result.PredictedValues[5] == 0);
         }
 
 
         private double[][] data;
         int currentBatch = 0;
 
-        [Fact]
+        [TestMethod]
         public void BatchingTest()
         {
             LearningApi api = new LearningApi();
@@ -224,10 +224,10 @@ namespace test.Perceptron
 
             var result = api.Algorithm.Predict(testData, api.Context) as PerceptronResult;
 
-            Assert.True(result.PredictedValues[0] == 0);
-            Assert.True(result.PredictedValues[1] == 0);
-            Assert.True(result.PredictedValues[2] == 1);
-            Assert.True(result.PredictedValues[3] == 1);
+            Assert.IsTrue(result.PredictedValues[0] == 0);
+            Assert.IsTrue(result.PredictedValues[1] == 0);
+            Assert.IsTrue(result.PredictedValues[2] == 1);
+            Assert.IsTrue(result.PredictedValues[3] == 1);
         }
 
 
@@ -237,7 +237,7 @@ namespace test.Perceptron
         /// Please note that data generated in this test cannot be learned by perceptron perfect way.
         /// This test might sometimes fail.
         /// </summary>
-        [Fact]
+        [TestMethod]
         public void SimpleSequenceWithGapsTest()
         {
             LearningApi api = new LearningApi();
@@ -281,12 +281,12 @@ namespace test.Perceptron
 
             // TODO... THUS TEST iS NOT COMPLETED
 
-            //Assert.True(result.PredictedValues[0] == 0);
-            //Assert.True(result.PredictedValues[1] == 0);
-            //Assert.True(result.PredictedValues[2] == 0);
-            //Assert.True(result.PredictedValues[3] == 1);
-            //Assert.True(result.PredictedValues[4] == 1);
-            //Assert.True(result.PredictedValues[5] == 1);
+            //Assert.IsTrue(result.PredictedValues[0] == 0);
+            //Assert.IsTrue(result.PredictedValues[1] == 0);
+            //Assert.IsTrue(result.PredictedValues[2] == 0);
+            //Assert.IsTrue(result.PredictedValues[3] == 1);
+            //Assert.IsTrue(result.PredictedValues[4] == 1);
+            //Assert.IsTrue(result.PredictedValues[5] == 1);
         }
 
     }

@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using Xunit;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using LearningFoundation.Clustering.KMeans;
 using LearningFoundation.Clustering.KMeans.FunctionRecognition;
 using System.Reflection;
@@ -16,7 +16,7 @@ namespace Test
     {
         private static string rootFolder = System.IO.Path.GetFullPath(@"..\..\..\") + "KMeans\\TestFiles\\";
 
-        [Fact]
+        [TestMethod]
         public void Test_OptimalNumberOfCLustersBasic()
         {
             double[][] clusterCenters = new double[3][];
@@ -45,7 +45,7 @@ namespace Test
             // train
             var resp = api.Run() as KMeansScore;
 
-            Assert.True(resp.Model.NumberOfClusters > 1);
+            Assert.IsTrue(resp.Model.NumberOfClusters > 1);
 
             int points = 150;
             var delta = 2 * Math.PI / 100;
@@ -73,11 +73,11 @@ namespace Test
             // train
             var resp2 = api2.Run() as KMeansScore;
 
-            Assert.True(resp2.Model.NumberOfClusters > 1);
+            Assert.IsTrue(resp2.Model.NumberOfClusters > 1);
 
         }
 
-        [Fact]
+        [TestMethod]
         public void Test_OptimalNumberOfCLusters()
         {
             // directory to load
@@ -106,7 +106,7 @@ namespace Test
             // train
             var resp = api.Run() as KMeansScore;
 
-            Assert.True(resp.Model.NumberOfClusters > 1);
+            Assert.IsTrue(resp.Model.NumberOfClusters > 1);
 
             double[][] OptimalClustersResults = new double[4][];
             OptimalClustersResults[0] = new double[] { 2, 3, 4, 5, 6, 7, 8, 9, 10 };
@@ -119,7 +119,7 @@ namespace Test
             // implement
         }
 
-        [Fact]
+        [TestMethod]
         public void Test_OptimalNumberOfClusters_TwoFunctions()
         {
             int numAttributes = 3;

@@ -6,14 +6,13 @@ using System.Linq;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using System.IO;
-using Xunit;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using LearningFoundation;
 using LearningFoundation.DataProviders;
 using LearningFoundation.DataMappers;
 using LearningFoundation.Statistics;
 using LearningFoundation.Normalizers;
 using System.Globalization;
-using LearningFoundation.Statistics;
 namespace test.datamapper
 {
     /// <summary>
@@ -30,7 +29,7 @@ namespace test.datamapper
             
         }
 
-        [Fact]
+        [TestMethod]
         public void calculateCorrelation_test1()
         {
 
@@ -78,7 +77,7 @@ namespace test.datamapper
                 strData.Add(string.Join(",", lst));
             }
 
-            Assert.True("Col1,1.00000,0.16892,0.99111,0.75077,-0.82354,-0.85164"==strData[1]);
+            Assert.IsTrue("Col1,1.00000,0.16892,0.99111,0.75077,-0.82354,-0.85164"==strData[1]);
 
             System.IO.File.WriteAllLines(@"CorrelationMatrix/strCorrlation.txt", strData);
             //

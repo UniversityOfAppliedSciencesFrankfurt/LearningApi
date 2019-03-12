@@ -5,10 +5,9 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using Xunit;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using LearningFoundation.Clustering.KMeans;
 using LearningFoundation.Helpers;
-//using AnomDetect.KMeans.FunctionRecognition;
 using LearningFoundation.Clustering.KMeans.FunctionRecognition;
 using System.Diagnostics;
 
@@ -23,7 +22,7 @@ namespace Test
         /// <summary>
         /// Test_FunctionRecognitionApp is an application for KMeans where the algorithm is used to detect a function
         /// </summary>
-        [Fact]
+        [TestMethod]
         public void Test_FunctionRecognitionApp()
         {
             int numCluster = 2;
@@ -34,7 +33,7 @@ namespace Test
             // directory to save
             string saveDirectory = rootFolder + "Function Recognition\\";
 
-            //Assert.True(File.Exists("KMeans\\TestFiles\\TestFile01.csv"), "Expected file was not deployed to unit test foilder.");
+            //Assert.IsTrue(File.Exists("KMeans\\TestFiles\\TestFile01.csv"), "Expected file was not deployed to unit test foilder.");
 
             // functions' paths
             string[] FunctionPaths = new string[]
@@ -103,7 +102,7 @@ namespace Test
 
         }
 
-        [Fact]
+        [TestMethod]
         public void Test_FunctionRecognition()
         {
             int numAttributes = 3;
@@ -264,17 +263,17 @@ namespace Test
         /// All values higher than 25% should be recognized as true negatives.
         /// All other values between 10 and 24 are most likely recognized as true negatives. This is not mathematicall 100% safe, so we excluded these values 
         /// from tests.</param>
-        [Theory]
-        [InlineData(200, 7, 10)]
-        [InlineData(200, 5, 9)]
-        [InlineData(200, 2, 5)]
-        [InlineData(200, 0, 1)]
-        [InlineData(400, 25, 28)]
-        [InlineData(200, 21, 25)]
-        [InlineData(400, 25, 30)]
-        [InlineData(1000, 27, 30)]
-        [InlineData(1000, 22, 25)]
-        [InlineData(1000, 30, 35)]
+        [DataTestMethod]
+        [DataRow(200, 7, 10)]
+        [DataRow(200, 5, 9)]
+        [DataRow(200, 2, 5)]
+        [DataRow(200, 0, 1)]
+        [DataRow(400, 25, 28)]
+        [DataRow(200, 21, 25)]
+        [DataRow(400, 25, 30)]
+        [DataRow(1000, 27, 30)]
+        [DataRow(1000, 22, 25)]
+        [DataRow(1000, 30, 35)]
         public void Test_FunctionRecognitionModule(int points, int MinNoiseForPrediction, int MaxNoiseForPrediction)
         {
             #region Training
@@ -325,25 +324,25 @@ namespace Test
             // TRUE positives
             if (MaxNoiseForPrediction <= 10)
             {
-                Assert.True(predictionResult.Loss == 1.0);
+                Assert.IsTrue(predictionResult.Loss == 1.0);
             }
             // TRUE negatives
             else if (MaxNoiseForPrediction >= 25)
             {
-                Assert.False(predictionResult.Loss == 1.0);
+                Assert.IsFalse(predictionResult.Loss == 1.0);
             }
             #endregion
         }
 
-        [InlineData(7, 10)]
-        [InlineData(7, 9)]
-        [InlineData(2, 5)]
-        [InlineData(0, 1)]
-        [InlineData(24, 28)]
-        [InlineData(20, 25)]
-        [InlineData(25, 30)]
-        [InlineData(32, 35)]
-        [Theory]
+        [DataRow(7, 10)]
+        [DataRow(7, 9)]
+        [DataRow(2, 5)]
+        [DataRow(0, 1)]
+        [DataRow(24, 28)]
+        [DataRow(20, 25)]
+        [DataRow(25, 30)]
+        [DataRow(32, 35)]
+        [DataTestMethod]
         public void Test_FunctionRecognitionModuleSave(int MinNoiseForPrediction, int MaxNoiseForPrediction)
         {
             #region Train and Save
@@ -392,12 +391,12 @@ namespace Test
             // TRUE positives
             if (MaxNoiseForPrediction <= 10)
             {
-                Assert.True(predictionResult.Loss == 1.0);
+                Assert.IsTrue(predictionResult.Loss == 1.0);
             }
             // TRUE negatives
             else if (MaxNoiseForPrediction >= 25)
             {
-                Assert.False(predictionResult.Loss == 1.0);
+                Assert.IsFalse(predictionResult.Loss == 1.0);
             }
             #endregion
         }
@@ -406,7 +405,7 @@ namespace Test
         /// <summary>
         /// Traines and predicts the model from custom function defined by customFunc1().
         /// </summary>      
-        [Fact]
+        [TestMethod]
         public void Test_FunctionRecognitionModule_CustomFunc()
         {
             #region Training
@@ -463,7 +462,7 @@ namespace Test
                 //// TRUE positives
                 if (noiseForPrediction <= 10)
                 {
-                    Assert.True(predictionResult.Loss == 1.0);
+                    Assert.IsTrue(predictionResult.Loss == 1.0);
                     Debug.WriteLine($"Recognized: noise: {noiseForPrediction} - {predictionResult.Result} - {predictionResult.Loss}");
 
                 }
@@ -483,7 +482,7 @@ namespace Test
             }
 
             // This is a statistical value. Test might theoretically fail.
-            Assert.True(numOfAnomalliesDetected > 2, $"Num of anomallies detected = {numOfAnomalliesDetected}. Expected at least 2.");
+            Assert.IsTrue(numOfAnomalliesDetected > 2, $"Num of anomallies detected = {numOfAnomalliesDetected}. Expected at least 2.");
             #endregion
         }
         #endregion

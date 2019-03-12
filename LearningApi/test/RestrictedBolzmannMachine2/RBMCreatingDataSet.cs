@@ -7,7 +7,7 @@ using ImageBinarizer;
 using NeuralNet.Perceptron;
 using LearningFoundation.DataProviders;
 using LearningFoundation;
-using Xunit;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace test.RestrictedBolzmannMachine2
 {
@@ -58,7 +58,7 @@ namespace test.RestrictedBolzmannMachine2
         /// <summary>
         /// Test case for creating and storing binary data in csv file. 
         /// </summary>
-        [Fact]
+        [TestMethod]
         public void RBMBinaryDataCreation()
         {
             //size of image

@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Xunit;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using DeltaLearning;
 using DeltaRuleLearning;
 
@@ -88,7 +88,7 @@ namespace test
             return desc;
         }
 
-        [Fact]
+        [TestMethod]
         public void SimpleSequenceTest()
         {
             LearningApi api = new LearningApi();
@@ -132,10 +132,10 @@ namespace test
             var result = api.Algorithm.Predict(testData, api.Context) as DeltaLearningResult;
 
 
-            Assert.True(result.PredictedResults[0] == 0);
-            Assert.True(result.PredictedResults[1] == 0);
-            Assert.True(result.PredictedResults[2] == 1);
-            Assert.True(result.PredictedResults[3] == 1);
+            Assert.IsTrue(result.PredictedResults[0] == 0);
+            Assert.IsTrue(result.PredictedResults[1] == 0);
+            Assert.IsTrue(result.PredictedResults[2] == 1);
+            Assert.IsTrue(result.PredictedResults[3] == 1);
 
         }
 
@@ -144,7 +144,7 @@ namespace test
         /// for odd number of samples we should get -5.0 0.0
         /// </summary>
 
-        [Fact]
+        [TestMethod]
         public void SimpleSequence2DTest()
         {
             LearningApi api = new LearningApi();
@@ -183,12 +183,12 @@ namespace test
 
             var result = api.Algorithm.Predict(testData, api.Context) as DeltaLearningResult;
 
-            Assert.True(result.PredictedResults[0] == 1);
-            Assert.True(result.PredictedResults[1] == 0);
-            Assert.True(result.PredictedResults[2] == 0);
-            Assert.True(result.PredictedResults[3] == 0);
-            Assert.True(result.PredictedResults[4] == 1);
-            Assert.True(result.PredictedResults[5] == 0);
+            Assert.IsTrue(result.PredictedResults[0] == 1);
+            Assert.IsTrue(result.PredictedResults[1] == 0);
+            Assert.IsTrue(result.PredictedResults[2] == 0);
+            Assert.IsTrue(result.PredictedResults[3] == 0);
+            Assert.IsTrue(result.PredictedResults[4] == 1);
+            Assert.IsTrue(result.PredictedResults[5] == 0);
 
         }
 
@@ -196,7 +196,7 @@ namespace test
         /// OR gate implementation
         /// </summary>
 
-        [Fact]
+        [TestMethod]
         public void OR_Test()
         {
             LearningApi api = new LearningApi();
@@ -225,9 +225,9 @@ namespace test
 
             var result = api.Algorithm.Predict(testData, api.Context) as DeltaLearningResult;
 
-            Assert.True(result.PredictedResults[0] == 0);
-            Assert.True(result.PredictedResults[1] == 1);
-            Assert.True(result.PredictedResults[2] == 1);
+            Assert.IsTrue(result.PredictedResults[0] == 0);
+            Assert.IsTrue(result.PredictedResults[1] == 1);
+            Assert.IsTrue(result.PredictedResults[2] == 1);
         }
     }
 }

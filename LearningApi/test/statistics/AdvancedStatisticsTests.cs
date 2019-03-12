@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using System.Collections.Generic;
-using Xunit;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using LearningFoundation;
 using LearningFoundation.Statistics;
 
@@ -13,7 +13,7 @@ namespace test.statistics
     /// </summary>
     public class AdvancedStatisticsTests
     {
-        [Fact]
+        [TestMethod]
         public void CorrelationCoefficientTests()
         {
             //define stats modul 
@@ -24,34 +24,34 @@ namespace test.statistics
 
             //Pearson correlation
             var result = dataSample1.CorrCoeffOf(dataSample2);
-            Assert.Equal(Math.Round(result, 4), 0.7294);
+            Assert.AreEqual(Math.Round(result, 4), 0.7294);
 
             //Sperman correlation
             var result1 = dataSample1.CorrCoeffRankOf(dataSample2);
-            Assert.Equal(Math.Round(result1, 4), 0.7182);
+            Assert.AreEqual(Math.Round(result1, 4), 0.7182);
 
             dataSample1 = new double[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
             dataSample2 = new double[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
                        
             result = dataSample1.CorrCoeffOf(dataSample2);
-            Assert.Equal(result,1);
+            Assert.AreEqual(result,1);
 
             dataSample1 = new double[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
             dataSample2 = new double[] { -1,- 2, -3, -4, -5, -6, -7, -8, -9, -10 };
 
             result = dataSample1.CorrCoeffOf(dataSample2);
-            Assert.Equal(result, -1);
+            Assert.AreEqual(result, -1);
 
             dataSample1 = new double[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
             dataSample2 = new double[] { 4, 5, 4, 4, 4, 4, 4, 4, 4, 4 };
 
             result = dataSample1.CorrCoeffOf(dataSample2);
-            Assert.Equal(-0.4062, Math.Round(result, 4));
+            Assert.AreEqual(-0.4062, Math.Round(result, 4));
 
         }
 
 
-        [Fact]
+        [TestMethod]
         public void CorrelationCoefficientTests2()
         {
             //define stats modul 
@@ -61,13 +61,13 @@ namespace test.statistics
             var dataSample2 = new double[] { 178, 171, 149, 195, 162, 181, 160, 175, 159, 168 };
 
             var result = dataSample1.CorrCoeffOf(dataSample2);
-            Assert.Equal(Math.Round(result, 4), 0.9584);
+            Assert.AreEqual(Math.Round(result, 4), 0.9584);
 
             //Sperman correlation
             var result1 = dataSample1.CorrCoeffRankOf(dataSample2);
-            Assert.Equal(Math.Round(result1, 4), 0.9758);
+            Assert.AreEqual(Math.Round(result1, 4), 0.9758);
         }
-        [Fact]
+        [TestMethod]
         public void CalculateMeanStDev_Tests2()
         {
             //define stats modul 
@@ -77,17 +77,17 @@ namespace test.statistics
 
             var result = dataset.CalculateMeanStDev();
             //mean
-            Assert.Equal(Math.Round(result.Item1[0], 4), -0.2916);
-            Assert.Equal(Math.Round(result.Item1[1], 4), 0.55);
-            Assert.Equal(Math.Round(result.Item1[2], 4), 1);
+            Assert.AreEqual(Math.Round(result.Item1[0], 4), -0.2916);
+            Assert.AreEqual(Math.Round(result.Item1[1], 4), 0.55);
+            Assert.AreEqual(Math.Round(result.Item1[2], 4), 1);
 
             //stdev
-            Assert.Equal(Math.Round(result.Item2[0], 4), 2.6234);
-            Assert.Equal(Math.Round(result.Item2[1], 4), 0.5104);
-            Assert.Equal(Math.Round(result.Item2[2], 4), 0.7947);
+            Assert.AreEqual(Math.Round(result.Item2[0], 4), 2.6234);
+            Assert.AreEqual(Math.Round(result.Item2[1], 4), 0.5104);
+            Assert.AreEqual(Math.Round(result.Item2[2], 4), 0.7947);
         }
 
-        [Fact]
+        [TestMethod]
         public void PointBiserialCorrelationCoefficientTests()
         {
             //define stats modul 
@@ -98,11 +98,11 @@ namespace test.statistics
 
             //Point Biserial correlation
             var result = dataSample1.CorrCoeffPBOf(dataSample2);
-            Assert.Equal(Math.Round(result, 4), -0.0682);
+            Assert.AreEqual(Math.Round(result, 4), -0.0682);
 
         }
 
-        [Fact]
+        [TestMethod]
         public void AutocorrelationTests()
         {
           
@@ -111,7 +111,7 @@ namespace test.statistics
           
             //Point Biserial correlation
             var result = dataSample1.Autocorelate();
-            //Assert.Equal(Math.Round(result, 4), -0.0682);
+            //Assert.AreEqual(Math.Round(result, 4), -0.0682);
 
         }
 

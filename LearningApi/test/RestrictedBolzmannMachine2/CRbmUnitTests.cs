@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Xunit;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NeuralNet.Perceptron;
 using NeuralNet.RestrictedBolzmannMachine2;
 using System.IO;
@@ -76,7 +76,7 @@ namespace test.RestrictedBolzmannMachine2
         }
 
 
-        [Fact]
+        [TestMethod]
         public void SimpleCRBMTest()
         {
             LearningApi api = new LearningApi();
@@ -111,7 +111,7 @@ namespace test.RestrictedBolzmannMachine2
 
             double[][] testData = new double[4][];
 
-            Assert.True(score.Loss < 1.0);
+            Assert.IsTrue(score.Loss < 1.0);
 
             testData[0] = new double[] { 1, 1, 0, 0, 0, 0 };
             testData[1] = new double[] { 0, 0, 0, 0, 1, 1 };
@@ -121,15 +121,15 @@ namespace test.RestrictedBolzmannMachine2
             var result = api.Algorithm.Predict(testData, api.Context);
 
             // NOT FINISHED.
-            //Assert.True(result[0] == 1);
-            //Assert.True(result[1] == 0);
-            //Assert.True(result[2] == 0);
-            //Assert.True(result[3] == 0);
-            //Assert.True(result[4] == 1);
-            //Assert.True(result[5] == 0);
+            //Assert.IsTrue(result[0] == 1);
+            //Assert.IsTrue(result[1] == 0);
+            //Assert.IsTrue(result[2] == 0);
+            //Assert.IsTrue(result[3] == 0);
+            //Assert.IsTrue(result[4] == 1);
+            //Assert.IsTrue(result[5] == 0);
         }
 
-        [Fact]
+        [TestMethod]
         public void SimpleRBMDeepTest()
         {
             LearningApi api = new LearningApi();
@@ -164,7 +164,7 @@ namespace test.RestrictedBolzmannMachine2
 
             double[][] testData = new double[4][];
 
-            Assert.True(score.Loss < 1.0);
+            Assert.IsTrue(score.Loss < 1.0);
 
             testData[0] = new double[] { 1, 1, 0, 0, 0, 0 };
             testData[1] = new double[] { 0, 0, 0, 0, 1, 1 };
@@ -174,15 +174,15 @@ namespace test.RestrictedBolzmannMachine2
             var result = api.Algorithm.Predict(testData, api.Context);
 
             // NOT FINISHED.
-            //Assert.True(result[0] == 1);
-            //Assert.True(result[1] == 0);
-            //Assert.True(result[2] == 0);
-            //Assert.True(result[3] == 0);
-            //Assert.True(result[4] == 1);
-            //Assert.True(result[5] == 0);
+            //Assert.IsTrue(result[0] == 1);
+            //Assert.IsTrue(result[1] == 0);
+            //Assert.IsTrue(result[2] == 0);
+            //Assert.IsTrue(result[3] == 0);
+            //Assert.IsTrue(result[4] == 1);
+            //Assert.IsTrue(result[5] == 0);
         }
 
-        [Fact]
+        [TestMethod]
         public void RBMDataSample1Test()
         {
             var dataPath = System.IO.Path.Combine(Directory.GetCurrentDirectory(), @"RestrictedBolzmannMachine2\Data\rbm_sample1.csv");
@@ -206,18 +206,18 @@ namespace test.RestrictedBolzmannMachine2
             var result = api.Algorithm.Predict(testData, api.Context);
 
             // NOT FINISHED.
-            //Assert.True(result[0] == 1);
-            //Assert.True(result[1] == 0);
-            //Assert.True(result[2] == 0);
-            //Assert.True(result[3] == 0);
-            //Assert.True(result[4] == 1);
-            //Assert.True(result[5] == 0);
+            //Assert.IsTrue(result[0] == 1);
+            //Assert.IsTrue(result[1] == 0);
+            //Assert.IsTrue(result[2] == 0);
+            //Assert.IsTrue(result[3] == 0);
+            //Assert.IsTrue(result[4] == 1);
+            //Assert.IsTrue(result[5] == 0);
         }
 
         /// <summary>
         /// NOT USED.
         /// </summary>
-        [Fact]
+        [TestMethod]
         public void LinearEquationSolver()
         {
             LearningApi api = new LearningApi();
@@ -260,19 +260,19 @@ namespace test.RestrictedBolzmannMachine2
             var result = api.Algorithm.Predict(testData, api.Context);
 
             // NOT FINISHED.
-            //Assert.True(result[0] == 1);
-            //Assert.True(result[1] == 0);
-            //Assert.True(result[2] == 0);
-            //Assert.True(result[3] == 0);
-            //Assert.True(result[4] == 1);
-            //Assert.True(result[5] == 0);
+            //Assert.IsTrue(result[0] == 1);
+            //Assert.IsTrue(result[1] == 0);
+            //Assert.IsTrue(result[2] == 0);
+            //Assert.IsTrue(result[3] == 0);
+            //Assert.IsTrue(result[4] == 1);
+            //Assert.IsTrue(result[5] == 0);
         }
 
 
         /// <summary>
         /// Gives full dataset.
         /// </summary>
-        [Fact]
+        [TestMethod]
         public void FullDataSetRBMTest()
         {
             const int bits = 10; 
@@ -318,12 +318,12 @@ namespace test.RestrictedBolzmannMachine2
             var result = api.Algorithm.Predict(testData, api.Context);
 
             // NOT FINISHED.
-            //Assert.True(result[0] == 1);
-            //Assert.True(result[1] == 0);
-            //Assert.True(result[2] == 0);
-            //Assert.True(result[3] == 0);
-            //Assert.True(result[4] == 1);
-            //Assert.True(result[5] == 0);
+            //Assert.IsTrue(result[0] == 1);
+            //Assert.IsTrue(result[1] == 0);
+            //Assert.IsTrue(result[2] == 0);
+            //Assert.IsTrue(result[3] == 0);
+            //Assert.IsTrue(result[4] == 1);
+            //Assert.IsTrue(result[5] == 0);
         }
 
 
@@ -336,7 +336,7 @@ namespace test.RestrictedBolzmannMachine2
         /// 000000001110
         /// It is concentrated on left or on right.
         /// </summary>
-        [Fact]
+        [TestMethod]
         public void CRbm_ClassifierTest()
         {
             var dataPath = System.IO.Path.Combine(Directory.GetCurrentDirectory(), @"RestrictedBolzmannMachine2\Data\rbm_twoclass_sample.csv");
@@ -372,11 +372,11 @@ namespace test.RestrictedBolzmannMachine2
             // First and second data sample are of same class. Third and fourth are also of same class.
 
             // Here we check first classs.
-            Assert.True(2 * result.HiddenNodesPredictions[0][0] + result.HiddenNodesPredictions[0][1] ==
+            Assert.IsTrue(2 * result.HiddenNodesPredictions[0][0] + result.HiddenNodesPredictions[0][1] ==
                 2 * result.HiddenNodesPredictions[1][0] + result.HiddenNodesPredictions[1][1]);
 
             // Here is test for second class.
-            Assert.True(2 * result.HiddenNodesPredictions[2][0] + result.HiddenNodesPredictions[2][1] ==
+            Assert.IsTrue(2 * result.HiddenNodesPredictions[2][0] + result.HiddenNodesPredictions[2][1] ==
                 2 * result.HiddenNodesPredictions[3][0] + result.HiddenNodesPredictions[3][1]);
 
             printVector("Weights", result.Weights);

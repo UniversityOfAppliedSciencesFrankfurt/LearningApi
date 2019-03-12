@@ -1,5 +1,5 @@
 ﻿using test;
-using Xunit;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Linq;
 using System.Collections.Generic;
@@ -27,11 +27,11 @@ namespace test.survivalanalysis
         /// <summary>
         /// Performs the SurvivalAnalysis on specified dataset with 10 iteration and 0.15 learning rate.
         /// </summary>
-        [Fact]
+        [TestMethod]
         public void SurvivalAnalysis_Tests_iterations_10_learningrate_013()
         {
             
-           // Assert.Equal(Math.Round(score.Weights[6], 5), -0.85624);
+           // Assert.AreEqual(Math.Round(score.Weights[6], 5), -0.85624);
         }
 
       

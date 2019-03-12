@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System;
-using Xunit;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Diagnostics;
 using System.Globalization;
 using NeuralNet.MLPerceptron;
@@ -50,8 +50,8 @@ namespace test.MLPerceptron
             return bizer.GetBinary(imageName);
         }
 
-        [Fact]
-        //[InlineData(new int[] { 6, 3 })]
+        [TestMethod]
+        //[DataRow(new int[] { 6, 3 })]
         public void ImageRecognitionTest()
         {
             int size = 64;

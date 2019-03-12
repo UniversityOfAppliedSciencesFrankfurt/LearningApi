@@ -5,7 +5,7 @@ using System.IO;
 using NeuralNet.RestrictedBolzmannMachine2;
 using LearningFoundation.DataProviders;
 using LearningFoundation;
-using Xunit;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using LearningFoundation.DataMappers;
 using System.Globalization;
 using LearningFoundation.Arrays;
@@ -51,8 +51,8 @@ namespace test.RestrictedBolzmannMachine2
         /// <summary>
         /// TODO...
         /// </summary>
-        [Theory]
-        [InlineData(1000, 0.01, 1600, 500)]
+        [DataTestMethod]
+        [DataRow(1000, 0.01, 1600, 500)]
 
         public void smileyTestRbm(int iterations,double learningRate, int visNodes, int hidNodes)
         {
@@ -101,8 +101,8 @@ namespace test.RestrictedBolzmannMachine2
             WriteOutputMatrix(iterations, new int[] { visNodes, hidNodes }, predictedData, testData);
         }
 
-        [Theory]
-        [InlineData(1000, 0.01, 1600, 500)]
+        [DataTestMethod]
+        [DataRow(1000, 0.01, 1600, 500)]
 
         public void smileyTestCRbm(int iterations, double learningRate, int visNodes, int hidNodes)
         {
@@ -152,8 +152,8 @@ namespace test.RestrictedBolzmannMachine2
             WriteOutputMatrix(iterations, new int[] { visNodes, hidNodes }, predictedData, testData);
         }
 
-        [Theory]
-        [InlineData(1000, 0.01, new int[] {1600, 500, 300 })]
+        [DataTestMethod]
+        [DataRow(1000, 0.01, new int[] {1600, 500, 300 })]
 
         public void smileyTestDeepRbm(int iterations, double learningRate, int[] layers)
         {

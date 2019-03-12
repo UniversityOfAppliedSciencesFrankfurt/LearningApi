@@ -1,5 +1,5 @@
 ﻿using test;
-using Xunit;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Linq;
 using System.Collections.Generic;
@@ -30,7 +30,7 @@ namespace UnitTests
         /// <summary>
         /// Demonstrates how to inject a data provider as an action.
         /// </summary>
-        [Fact]
+        [TestMethod]
         public void ActionModuleTest()
         {
             LearningApi api = new LearningApi(null);
@@ -41,15 +41,15 @@ namespace UnitTests
 
             var result = api.Run();
 
-            Assert.Equal(1.1, ((double[])result)[0]);
-            Assert.Equal(4.4, ((double[])result)[3]);
+            Assert.AreEqual(1.1, ((double[])result)[0]);
+            Assert.AreEqual(4.4, ((double[])result)[3]);
         }
 
 
         /// <summary>
         /// Demonstrates ho to setup a chain of action modules.
         /// </summary>
-        [Fact]
+        [TestMethod]
         public void ActionModuleChainTest()
         {
             LearningApi api = new LearningApi(null);
@@ -67,8 +67,8 @@ namespace UnitTests
 
             var result = api.Run();
 
-            Assert.Equal(2.1, ((double[])result)[0]);
-            Assert.Equal(5.4, ((double[])result)[3]);
+            Assert.AreEqual(2.1, ((double[])result)[0]);
+            Assert.AreEqual(5.4, ((double[])result)[3]);
         }
 
 
@@ -76,7 +76,7 @@ namespace UnitTests
         /// Runs BackPropagation algorithm.
         /// </summary>
         /// <returns></returns>
-        [Fact]
+        [TestMethod]
         public bool InitNeuralBackPropagationTest()
         {
             //  InitIrisMapperInJsonFormat_helper();
@@ -107,7 +107,7 @@ namespace UnitTests
             return true;
         }
 
-        [Fact]
+        [TestMethod]
         public void RunPipelineTest()
         {
             // Creates learning api object
@@ -166,7 +166,7 @@ namespace UnitTests
             return jsonString;
         }
 
-        [Fact]
+        [TestMethod]
         public void Save_Test()
         {
             // Creates learning api object
@@ -185,7 +185,7 @@ namespace UnitTests
 
             var loadedApi = LearningApi.Load("model1");
 
-            Assert.True(((BackPropagationNetwork)loadedApi.Algorithm).learningRate == ((BackPropagationNetwork)api.Algorithm).learningRate);
+            Assert.IsTrue(((BackPropagationNetwork)loadedApi.Algorithm).learningRate == ((BackPropagationNetwork)api.Algorithm).learningRate);
         }
     }
 }

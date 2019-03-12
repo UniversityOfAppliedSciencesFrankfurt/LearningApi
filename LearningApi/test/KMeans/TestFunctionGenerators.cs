@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using Xunit;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using LearningFoundation.Clustering.KMeans;
 using LearningFoundation.Helpers;
 
@@ -34,7 +34,7 @@ namespace Test
         /// <summary>
         /// Test_GenerateSimilarFunctions is a test for generateSimilarFunctions
         /// </summary>
-        [Fact]
+        [TestMethod]
         public void Test_GenerateSimilarFunctions()
         {
             // number of similar functions

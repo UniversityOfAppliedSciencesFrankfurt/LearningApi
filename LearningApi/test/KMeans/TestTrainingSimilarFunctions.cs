@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using Xunit;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using LearningFoundation.Clustering.KMeans;
 
 namespace Test
@@ -30,7 +30,7 @@ namespace Test
         /// <summary>
         /// Test_TrainingSimilarFunctions is a test that trains the similar functions and saves the resulting centroids 
         /// </summary>
-        [Fact]
+        [TestMethod]
         public void Test_TrainingSimilarFunctions()
         {
             // Settings to import the functions (NRP should match the desired loading file)

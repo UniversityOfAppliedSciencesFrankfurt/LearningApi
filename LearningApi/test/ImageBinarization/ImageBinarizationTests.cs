@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System;
-using Xunit;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Diagnostics;
 using System.Globalization;
 using NeuralNet.MLPerceptron;
@@ -23,7 +23,7 @@ namespace test.MLPerceptron
         /// Loads a single JPG and create a binarized version with zeros and ones.
         /// Look after executing of test for file binary.txt.
         /// </summary>
-        [Fact]
+        [TestMethod]
         public void BinarizerTest()
         {
             Binarizer bizer = new Binarizer();
@@ -40,7 +40,7 @@ namespace test.MLPerceptron
         /// <summary>
         /// Loads a single JPG and create a binarized version with zeros and ones in specified size, which is not image original size.
         /// </summary>
-        [Fact]
+        [TestMethod]
         public void BinarizerWithTargetSizeTest()
         {
             Binarizer bizer = new Binarizer(targetHeight: 256, targetWidth: 256 );

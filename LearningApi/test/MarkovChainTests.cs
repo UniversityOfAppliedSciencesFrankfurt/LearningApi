@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using System.Collections.Generic;
-using Xunit;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using LearningFoundation;
 using LearningFoundation.Statistics;
 using LearningFoundation.Arrays;
@@ -14,7 +14,7 @@ namespace test.statistics
     /// </summary>
     public class MarkovChainTests
     {
-        [Fact]
+        [TestMethod]
         public void FindFirstOrderTest()
         {
             var dataSample1 = new object[] { 1, 2, 3, 4, 4, 4, 7, 7, 1, 2, 3, 5, 6, 7, 2, 5, 7, 8, 3, 4, 5, 2, 3, 4 };
@@ -24,7 +24,7 @@ namespace test.statistics
 
             var result = MarkovChain.CalculateFirstOrder(new object[][] { dataSample1, dataSample2 }, ocurrences);
 
-            Assert.Equal(ocurrences.Length, 8);
+            Assert.AreEqual(ocurrences.Length, 8);
         }
 
 

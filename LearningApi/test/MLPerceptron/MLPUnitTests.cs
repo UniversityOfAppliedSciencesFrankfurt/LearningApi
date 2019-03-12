@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System;
-using Xunit;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Diagnostics;
 using NeuralNet.MLPerceptron;
 using ImageBinarizer;
@@ -30,7 +30,7 @@ namespace test.MLPerceptron
         /// UnitTestOne - The first unit test consists of non linear set of data pairs between 0 and 1,
         /// that are classified into two groups, 0 and 1.s
         /// </summary>
-        [Fact]
+        [TestMethod]
         public void UnitTestOne()
         {
             // Read the csv file which contains the training data
@@ -173,7 +173,7 @@ namespace test.MLPerceptron
 
                         for (int j = 0; j < numberOfOutputs; j++)
                         {
-                            //Assert.True(testData[i][(testData[i].Length - numberOfOutputs) + j] == (result[i * numberOfOutputs + j] >= 0.5 ? 1 : 0));
+                            //Assert.IsTrue(testData[i][(testData[i].Length - numberOfOutputs) + j] == (result[i * numberOfOutputs + j] >= 0.5 ? 1 : 0));
                             if (testData[i][(testData[i].Length - numberOfOutputs) + j] == (result[i * numberOfOutputs + j] >= 0.5 ? 1 : 0))
                                 expectedResults++;
 
@@ -200,21 +200,21 @@ namespace test.MLPerceptron
         /// <summary>
         /// UnitTestIris - The second unit test consists of the “Iris” dataset which classifies iris plants into three species. It includes 100 samples distributed between three species, with some properties about each flower
         /// </summary>
-        [Theory]
-        //[InlineData(new int[] { 5, 2 })]
-        [InlineData(1000, 0.1, 25, new int[] { 6 }, 1)]
-        //[InlineData(new int[] { 7, 2 })]
-        //[InlineData(new int[] { 8, 2 })]
-        //[InlineData(new int[] { 9, 2 })]
-        //[InlineData(new int[] { 10, 2 })]
-        //[InlineData(new int[] { 20, 2 })]
-        //[InlineData(new int[] { 30, 2 })]
-        //[InlineData(new int[] { 30, 20, 10, 5 })]
-        //[InlineData(new int[] { 15, 10, 5, 2 })]
-        //[InlineData(new int[] { 50, 30, 20, 10 })]
-        //[InlineData(new int[] { 10, 7, 5, 3 })]
-        //[InlineData(new int[] { 125, 77, 45, 34 , 19, 12, 9, 3})]
-        //[InlineData(new int[] { 50, 30, 20 })]
+        [DataTestMethod]
+        //[DataRow(new int[] { 5, 2 })]
+        [DataRow(1000, 0.1, 25, new int[] { 6 }, 1)]
+        //[DataRow(new int[] { 7, 2 })]
+        //[DataRow(new int[] { 8, 2 })]
+        //[DataRow(new int[] { 9, 2 })]
+        //[DataRow(new int[] { 10, 2 })]
+        //[DataRow(new int[] { 20, 2 })]
+        //[DataRow(new int[] { 30, 2 })]
+        //[DataRow(new int[] { 30, 20, 10, 5 })]
+        //[DataRow(new int[] { 15, 10, 5, 2 })]
+        //[DataRow(new int[] { 50, 30, 20, 10 })]
+        //[DataRow(new int[] { 10, 7, 5, 3 })]
+        //[DataRow(new int[] { 125, 77, 45, 34 , 19, 12, 9, 3})]
+        //[DataRow(new int[] { 50, 30, 20 })]
 
         public void UnitTestIris(int iterations, double learningrate, int batchSize, int[] hiddenLayerNeurons, int iterationnumber)
         {
@@ -416,7 +416,7 @@ namespace test.MLPerceptron
                     {
                         for (int j = 0; j < numberOfOutputs; j++)
                         {
-                            //Assert.True(testData[i][(testData[i].Length - numberOfOutputs) + j] == (result[i * numberOfOutputs + j] >= 0.5 ? 1 : 0));
+                            //Assert.IsTrue(testData[i][(testData[i].Length - numberOfOutputs) + j] == (result[i * numberOfOutputs + j] >= 0.5 ? 1 : 0));
                             if (testData[i][(testData[i].Length - numberOfOutputs) + j] == (result[i * numberOfOutputs + j] >= 0.5 ? 1 : 0))
                                 expectedResults++;
                         }
@@ -459,18 +459,18 @@ namespace test.MLPerceptron
             }
         }
 
-        [Theory]
-        //[InlineData(new int[] { 5, 2 })]
-        [InlineData(25, 0.01, 128, new int[] { 32, 32, 32, 32, 32, 32, 32, 32, 32, 32 }, 10)]
-        [InlineData(25, 0.01, 128, new int[] { 32, 32, 32, 32, 32, 32, 32, 32, 32 }, 9)]
-        [InlineData(25, 0.01, 128, new int[] { 32, 32, 32, 32, 32, 32, 32, 32 }, 8)]
-        [InlineData(25, 0.01, 128, new int[] { 32, 32, 32, 32, 32, 32, 32 }, 7)]
-        [InlineData(25, 0.01, 128, new int[] { 32, 32, 32, 32, 32, 32 }, 6)]
-        [InlineData(25, 0.01, 128, new int[] { 32, 32, 32, 32, 32 }, 5)]
-        [InlineData(25, 0.01, 128, new int[] { 32, 32, 32, 32 }, 4)]
-        [InlineData(25, 0.01, 128, new int[] { 32, 32, 32 }, 3)]
-        [InlineData(25, 0.01, 128, new int[] { 32, 32 }, 2)]
-        [InlineData(2, 0.01, 128, new int[] { 32 }, 1)]
+        [DataTestMethod]
+        //[DataRow(new int[] { 5, 2 })]
+        [DataRow(25, 0.01, 128, new int[] { 32, 32, 32, 32, 32, 32, 32, 32, 32, 32 }, 10)]
+        [DataRow(25, 0.01, 128, new int[] { 32, 32, 32, 32, 32, 32, 32, 32, 32 }, 9)]
+        [DataRow(25, 0.01, 128, new int[] { 32, 32, 32, 32, 32, 32, 32, 32 }, 8)]
+        [DataRow(25, 0.01, 128, new int[] { 32, 32, 32, 32, 32, 32, 32 }, 7)]
+        [DataRow(25, 0.01, 128, new int[] { 32, 32, 32, 32, 32, 32 }, 6)]
+        [DataRow(25, 0.01, 128, new int[] { 32, 32, 32, 32, 32 }, 5)]
+        [DataRow(25, 0.01, 128, new int[] { 32, 32, 32, 32 }, 4)]
+        [DataRow(25, 0.01, 128, new int[] { 32, 32, 32 }, 3)]
+        [DataRow(25, 0.01, 128, new int[] { 32, 32 }, 2)]
+        [DataRow(2, 0.01, 128, new int[] { 32 }, 1)]
 
         public void UnitTestMNIST(int iterations, double learningrate, int batchSize, int[] hiddenLayerNeurons, int testCaseNumber)
         {
@@ -532,7 +532,7 @@ namespace test.MLPerceptron
 
                 for (int j = 0; j < numberOfOutputs; j++)
                 {
-                    //Assert.True(testData[i][(testData[i].Length - numberOfOutputs) + j] == (result[i * numberOfOutputs + j] >= 0.5 ? 1 : 0));
+                    //Assert.IsTrue(testData[i][(testData[i].Length - numberOfOutputs) + j] == (result[i * numberOfOutputs + j] >= 0.5 ? 1 : 0));
                     if (MNISTFileRead.testData[i][(MNISTFileRead.testData[i].Length - numberOfOutputs) + j] != (result[i * numberOfOutputs + j] >= 0.5 ? 1 : 0))
                     {
                         accurateResults--;
@@ -554,7 +554,7 @@ namespace test.MLPerceptron
         /// This test case uses the German Dataset as the training dataset for credit prediction.
         /// It classifies people described by a set of attributes as good or bad for bank regarding the credit risk.
         /// </summary>
-        [Fact]
+        [TestMethod]
         public void UnitTestCreditApproval()
         {
             // Read the csv file which contains the training data
@@ -780,7 +780,7 @@ namespace test.MLPerceptron
         /// Loads a single JPG and create a binarized version with zeros and ones.
         /// Look after executing of test for file binary.txt.
         /// </summary>
-        [Fact]
+        [TestMethod]
         public void BinarizerTest()
         {
 

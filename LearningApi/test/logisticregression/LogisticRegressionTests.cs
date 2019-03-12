@@ -1,5 +1,5 @@
 ﻿using test;
-using Xunit;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Linq;
 using System.Collections.Generic;
@@ -27,7 +27,7 @@ namespace test.logisticregression
         /// <summary>
         /// Performs the LogisticRegression on specified dataset with 10 iteration and 0.15 learning rate.
         /// </summary>
-        [Fact]
+        [TestMethod]
         public void LogisticsRegression_Test_iterations_10_learningrate_013()
         {
             var desc = loadMetaData();
@@ -52,25 +52,25 @@ namespace test.logisticregression
             LogisticRegressionScore score = api.GetScore() as LogisticRegressionScore;
 
             //Errors during each iteration. IF the learningRate is suitable errors is describing for every next iteration 
-            Assert.Equal(Math.Round(score.Errors[0], 5), 0.24278);
-            Assert.Equal(Math.Round(score.Errors[1], 5), 0.23749);
-            Assert.Equal(Math.Round(score.Errors[2], 5), 0.23359);
-            Assert.Equal(Math.Round(score.Errors[3], 5), 0.23010);
-            Assert.Equal(Math.Round(score.Errors[4], 5), 0.22740);
-            Assert.Equal(Math.Round(score.Errors[5], 5), 0.22476);
-            Assert.Equal(Math.Round(score.Errors[6], 5), 0.22271);
-            Assert.Equal(Math.Round(score.Errors[7], 5), 0.22065);
-            Assert.Equal(Math.Round(score.Errors[8], 5), 0.21902);
-            Assert.Equal(Math.Round(score.Errors[9], 5), 0.21739);
+            Assert.AreEqual(Math.Round(score.Errors[0], 5), 0.24278);
+            Assert.AreEqual(Math.Round(score.Errors[1], 5), 0.23749);
+            Assert.AreEqual(Math.Round(score.Errors[2], 5), 0.23359);
+            Assert.AreEqual(Math.Round(score.Errors[3], 5), 0.23010);
+            Assert.AreEqual(Math.Round(score.Errors[4], 5), 0.22740);
+            Assert.AreEqual(Math.Round(score.Errors[5], 5), 0.22476);
+            Assert.AreEqual(Math.Round(score.Errors[6], 5), 0.22271);
+            Assert.AreEqual(Math.Round(score.Errors[7], 5), 0.22065);
+            Assert.AreEqual(Math.Round(score.Errors[8], 5), 0.21902);
+            Assert.AreEqual(Math.Round(score.Errors[9], 5), 0.21739);
 
             //LG Model Best Found model in 10 iteration
-            Assert.Equal(Math.Round(score.Weights[0], 5), 0.06494);
-            Assert.Equal(Math.Round(score.Weights[1], 5), 0.21584);
-            Assert.Equal(Math.Round(score.Weights[2], 5), 0.89901);
-            Assert.Equal(Math.Round(score.Weights[3], 5), 0.51497);
-            Assert.Equal(Math.Round(score.Weights[4], 5), -0.30213);
-            Assert.Equal(Math.Round(score.Weights[5], 5), -0.30213);
-            Assert.Equal(Math.Round(score.Weights[6], 5), -0.85624);
+            Assert.AreEqual(Math.Round(score.Weights[0], 5), 0.06494);
+            Assert.AreEqual(Math.Round(score.Weights[1], 5), 0.21584);
+            Assert.AreEqual(Math.Round(score.Weights[2], 5), 0.89901);
+            Assert.AreEqual(Math.Round(score.Weights[3], 5), 0.51497);
+            Assert.AreEqual(Math.Round(score.Weights[4], 5), -0.30213);
+            Assert.AreEqual(Math.Round(score.Weights[5], 5), -0.30213);
+            Assert.AreEqual(Math.Round(score.Weights[6], 5), -0.85624);
 
 
             //define data for testing (prediction)
@@ -95,16 +95,16 @@ namespace test.logisticregression
             //use previous trained model
            var result=  api.Algorithm.Predict(testData as double[][], api.Context) as LogisticRegressionResult;
 
-            Assert.Equal(Math.Round(result.PredictedValues[0], 5), 1E-05);
-            Assert.Equal(Math.Round(result.PredictedValues[1], 5), 0);
-            Assert.Equal(Math.Round(result.PredictedValues[2], 5), 0);
-            Assert.Equal(Math.Round(result.PredictedValues[3], 5), 0);
+            Assert.AreEqual(Math.Round(result.PredictedValues[0], 5), 1E-05);
+            Assert.AreEqual(Math.Round(result.PredictedValues[1], 5), 0);
+            Assert.AreEqual(Math.Round(result.PredictedValues[2], 5), 0);
+            Assert.AreEqual(Math.Round(result.PredictedValues[3], 5), 0);
         }
 
         /// <summary>
         /// Performs the LogisticRegression algortim on dataset with 10 iteration and 0.15 learning rate.
         /// </summary>
-        [Fact]
+        [TestMethod]
         public void LogisticRegression_Test_Real_Example()
         {
             string m_binary_data_path = @"SampleData\binary\admit_binary.csv";
@@ -152,11 +152,11 @@ namespace test.logisticregression
             var result = api.Algorithm.Predict(testData as double[][], api.Context) as LogisticRegressionResult;
 
             //
-            Assert.Equal(Math.Round(result.PredictedValues[0], 0), 0);
-            Assert.Equal(Math.Round(result.PredictedValues[1], 0), 0);
-            Assert.Equal(Math.Round(result.PredictedValues[2], 0), 0);
-            Assert.Equal(Math.Round(result.PredictedValues[3], 0), 0);
-            Assert.Equal(Math.Round(result.PredictedValues[3], 0), 0);
+            Assert.AreEqual(Math.Round(result.PredictedValues[0], 0), 0);
+            Assert.AreEqual(Math.Round(result.PredictedValues[1], 0), 0);
+            Assert.AreEqual(Math.Round(result.PredictedValues[2], 0), 0);
+            Assert.AreEqual(Math.Round(result.PredictedValues[3], 0), 0);
+            Assert.AreEqual(Math.Round(result.PredictedValues[3], 0), 0);
 
 
         }

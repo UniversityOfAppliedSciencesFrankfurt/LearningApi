@@ -1,7 +1,7 @@
 ﻿using LearningFoundation;
 using System;
 using System.Linq;
-using Xunit;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NeuralNet.RestrictedBolzmannMachine2;
 using System.IO;
 using LearningFoundation.DataProviders;
@@ -73,9 +73,9 @@ namespace test.RestrictedBolzmannMachine2
         /// <summary>
         /// TODO...
         /// </summary>
-        [Theory]
-        //[InlineData(1, 4096, new int[] { 4096, 250, 10 })]       
-        [InlineData(10, 0.01, new int[] { 4096, 1500, 30 })]
+        [DataTestMethod]
+        //[DataRow(1, 4096, new int[] { 4096, 250, 10 })]       
+        [DataRow(10, 0.01, new int[] { 4096, 1500, 30 })]
         public void DigitRecognitionDeepTest(int iterations, double learningRate, int[] layers)
         {
             Debug.WriteLine($"{iterations}-{String.Join("", layers)}");
@@ -127,7 +127,7 @@ namespace test.RestrictedBolzmannMachine2
         /// 000000001110
         /// It is concentrated on left or on right.
         /// </summary>
-        [Fact]
+        [TestMethod]
         public void Rbm_ClassifierTest()
         {
             var dataPath = System.IO.Path.Combine(Directory.GetCurrentDirectory(), @"RestrictedBolzmannMachine2\Data\rbm_twoclass_sample.csv");
@@ -189,17 +189,17 @@ namespace test.RestrictedBolzmannMachine2
             // Third and fourth are also of same class. See data.
 
             //// Here we check first classs.
-            //Assert.True(result.Results[0].ToArray()[0].HiddenNodesPredictions[0] == result.Results[1].ToArray()[0].HiddenNodesPredictions[0] &&
+            //Assert.IsTrue(result.Results[0].ToArray()[0].HiddenNodesPredictions[0] == result.Results[1].ToArray()[0].HiddenNodesPredictions[0] &&
             //    result.Results[0].ToArray()[0].HiddenNodesPredictions[1] == result.Results[1].ToArray()[0].HiddenNodesPredictions[1]);
 
             //// Here is test for second class.
-            //Assert.True(result.Results[2].ToArray()[0].HiddenNodesPredictions[0] == result.Results[3].ToArray()[0].HiddenNodesPredictions[0] &&
+            //Assert.IsTrue(result.Results[2].ToArray()[0].HiddenNodesPredictions[0] == result.Results[3].ToArray()[0].HiddenNodesPredictions[0] &&
             //    result.Results[2].ToArray()[0].HiddenNodesPredictions[1] == result.Results[3].ToArray()[0].HiddenNodesPredictions[1]);
 
         }
 
 
-        [Fact]
+        [TestMethod]
         public void Rbm_ClassifierDeepTest()
         {
             var dataPath = System.IO.Path.Combine(Directory.GetCurrentDirectory(), @"RestrictedBolzmannMachine2\Data\rbm_twoclass_sample.csv");
@@ -236,11 +236,11 @@ namespace test.RestrictedBolzmannMachine2
             // Third and fourth are also of same class. See data.
 
             // Here we check first classs.
-            Assert.True(result.Results[0].ToArray()[1].HiddenNodesPredictions[0] == result.Results[1].ToArray()[1].HiddenNodesPredictions[0] &&
+            Assert.IsTrue(result.Results[0].ToArray()[1].HiddenNodesPredictions[0] == result.Results[1].ToArray()[1].HiddenNodesPredictions[0] &&
                 result.Results[0].ToArray()[1].HiddenNodesPredictions[1] == result.Results[1].ToArray()[1].HiddenNodesPredictions[1]);
 
             // Here is test for second class.
-            Assert.True(result.Results[2].ToArray()[1].HiddenNodesPredictions[0] == result.Results[3].ToArray()[1].HiddenNodesPredictions[0] &&
+            Assert.IsTrue(result.Results[2].ToArray()[1].HiddenNodesPredictions[0] == result.Results[3].ToArray()[1].HiddenNodesPredictions[0] &&
                 result.Results[2].ToArray()[1].HiddenNodesPredictions[1] == result.Results[3].ToArray()[1].HiddenNodesPredictions[1]);
 
         }
@@ -249,7 +249,7 @@ namespace test.RestrictedBolzmannMachine2
         /// <summary>
         ///
         /// </summary>
-        [Fact]
+        [TestMethod]
         public void Rbm_ClassifierTest2()
         {
             var dataPath = System.IO.Path.Combine(Directory.GetCurrentDirectory(), @"RestrictedBolzmannMachine2\Data\rbm_sample2.csv");
@@ -316,7 +316,7 @@ namespace test.RestrictedBolzmannMachine2
                 // means same.
                 for (var i = 0; i < result.Results.Count; i++)
                 {
-                    Assert.True(result.Results[i].Last().HiddenNodesPredictions.ToBinary() == classResult);
+                    Assert.IsTrue(result.Results[i].Last().HiddenNodesPredictions.ToBinary() == classResult);
                 }
 
                 distinctResults.Add(classResult);
@@ -328,7 +328,7 @@ namespace test.RestrictedBolzmannMachine2
             {
                 for (int j = i+1; j < distinctResults.Count; j++)
                 {
-                    Assert.True(distinctResults[i] != distinctResults[j]);
+                    Assert.IsTrue(distinctResults[i] != distinctResults[j]);
                 }
             }
         }
