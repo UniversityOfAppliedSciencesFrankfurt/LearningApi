@@ -3,6 +3,9 @@ using LearningFoundation;
 
 namespace RingProjectionAlgorithm
 {
+    /// <summary>
+    /// public level is used to test RingProjection() method
+    /// </summary>
     public class RingProjectionPipelineModule : IPipelineModule<double[][], double[]>
     {
         /// <summary>

@@ -4,6 +4,10 @@
     <TargetFramework>netcoreapp2.1</TargetFramework>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DocumentationFile>E:\Github\FH-FrankfurtWS1819\Source\My Project\RingProjectionAlgorithm\RingProjectionAlgorithm.xml</DocumentationFile>
+  </PropertyGroup>
+
   <ItemGroup>
     <PackageReference Include="ImageBinarizer" Version="1.0.0" />
     <PackageReference Include="LearningApi" Version="1.2.3" />
