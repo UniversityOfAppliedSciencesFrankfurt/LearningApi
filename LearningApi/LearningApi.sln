@@ -30,7 +30,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NeuralNet.BackPropagation",
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CsvDataProvider", "src\DataProviders\CsvDataProvider\CsvDataProvider.csproj", "{D140A327-23E3-4618-9212-EC9D03508017}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "test", "test\test.csproj", "{EFB4F6BE-A506-4AFD-A2DF-58FB5198A30B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Test", "test\Test.csproj", "{EFB4F6BE-A506-4AFD-A2DF-58FB5198A30B}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MinMaxNormalizer", "src\Normalizers\MinMaxNormalizer\MinMaxNormalizer.csproj", "{9D8E58CC-49F0-4A65-B610-E6E2F2036151}"
 EndProject

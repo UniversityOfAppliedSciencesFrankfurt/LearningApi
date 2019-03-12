@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp2.1</TargetFramework>
     <DebugType>portable</DebugType>
-    <AssemblyName>test</AssemblyName>
+    <AssemblyName>Test</AssemblyName>
     <PackageId>test</PackageId>
     <GenerateRuntimeConfigurationFiles>true</GenerateRuntimeConfigurationFiles>
     <NetStandardImplicitPackageVersion>1.6.0</NetStandardImplicitPackageVersion>
@@ -20,6 +20,7 @@
     <AssemblyVersion>1.0.0.1</AssemblyVersion>
     <FileVersion>1.0.0.1</FileVersion>
     <PackageIconUrl>https://upload.wikimedia.org/wikipedia/commons/d/d8/Logo-fu%402x.png</PackageIconUrl>
+    <RootNamespace>LearningFoundation.Test</RootNamespace>
     <!--<RuntimeFrameworkVersion>netcoreapp2.0</RuntimeFrameworkVersion>-->
   </PropertyGroup>
 
