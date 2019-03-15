@@ -3,8 +3,8 @@
 # LearningApi
 Learning API is Machine Learning Foundation of useful libraries fully implemented in .NET Core. It provides a unique processing API for Machine Learning solutions. 
 
-It has been developed in cooperation between daenet GmBh and Frankfurt University of applied sciences.
-![daenet](https://avatars3.githubusercontent.com/u/12556447?s=400&u=f2cd3be70373c9654b9d53a4f69ddfd7a8ed6596&v=4=)
+It has been developed in cooperation with daenet GmBh.
+![daenet](https://avatars3.githubusercontent.com/u/12556447?s=50&u=f2cd3be70373c9654b9d53a4f69ddfd7a8ed6596&v=4=)
 ![uni](https://avatars0.githubusercontent.com/u/12556434?s=400&u=94c1f1c45bee9ffcb167f2f2246dddab19fec420&v=4)
 
 LearningAPI is a foundation of Machine Learning algorithms, which can run in the pipeline of modules compatiple to each other. 
