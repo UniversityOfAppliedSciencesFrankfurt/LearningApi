@@ -25,6 +25,7 @@ namespace MouseGestureRecognition
         private Label lblTrainingCounter;
         private Label lblResult;
         private Button btnReset;
+        private Button button1;
         private System.Drawing.Point mouseDownPoint = System.Drawing.Point.Empty;
 
         private void shapePB_MouseDown(object sender, MouseEventArgs e)
@@ -152,6 +153,7 @@ namespace MouseGestureRecognition
             this.lblTrainingCounter = new System.Windows.Forms.Label();
             this.lblResult = new System.Windows.Forms.Label();
             this.btnReset = new System.Windows.Forms.Button();
+            this.button1 = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.shapePB)).BeginInit();
             this.SuspendLayout();
             // 
@@ -159,10 +161,10 @@ namespace MouseGestureRecognition
             // 
             this.shapePB.BackColor = System.Drawing.SystemColors.Window;
             this.shapePB.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.shapePB.Location = new System.Drawing.Point(24, 29);
-            this.shapePB.Margin = new System.Windows.Forms.Padding(6);
+            this.shapePB.Location = new System.Drawing.Point(16, 19);
+            this.shapePB.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.shapePB.Name = "shapePB";
-            this.shapePB.Size = new System.Drawing.Size(1428, 954);
+            this.shapePB.Size = new System.Drawing.Size(953, 611);
             this.shapePB.TabIndex = 1;
             this.shapePB.TabStop = false;
             this.shapePB.Paint += new System.Windows.Forms.PaintEventHandler(this.shapePB_Paint);
@@ -172,9 +174,10 @@ namespace MouseGestureRecognition
             // 
             // btnStartStop
             // 
-            this.btnStartStop.Location = new System.Drawing.Point(1477, 64);
+            this.btnStartStop.Location = new System.Drawing.Point(985, 41);
+            this.btnStartStop.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.btnStartStop.Name = "btnStartStop";
-            this.btnStartStop.Size = new System.Drawing.Size(129, 71);
+            this.btnStartStop.Size = new System.Drawing.Size(86, 45);
             this.btnStartStop.TabIndex = 2;
             this.btnStartStop.Text = "Start training";
             this.btnStartStop.UseVisualStyleBackColor = true;
@@ -184,9 +187,10 @@ namespace MouseGestureRecognition
             // 
             this.label1.AutoSize = true;
             this.label1.Enabled = false;
-            this.label1.Location = new System.Drawing.Point(1491, 273);
+            this.label1.Location = new System.Drawing.Point(994, 175);
+            this.label1.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(101, 25);
+            this.label1.Size = new System.Drawing.Size(67, 17);
             this.label1.TabIndex = 3;
             this.label1.Text = "Trainings";
             this.label1.Click += new System.EventHandler(this.label1_Click);
@@ -197,9 +201,10 @@ namespace MouseGestureRecognition
             this.lblTrainingCounter.Enabled = false;
             this.lblTrainingCounter.Font = new System.Drawing.Font("Microsoft Sans Serif", 17.875F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblTrainingCounter.ForeColor = System.Drawing.Color.OrangeRed;
-            this.lblTrainingCounter.Location = new System.Drawing.Point(1516, 218);
+            this.lblTrainingCounter.Location = new System.Drawing.Point(1011, 140);
+            this.lblTrainingCounter.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lblTrainingCounter.Name = "lblTrainingCounter";
-            this.lblTrainingCounter.Size = new System.Drawing.Size(51, 55);
+            this.lblTrainingCounter.Size = new System.Drawing.Size(32, 36);
             this.lblTrainingCounter.TabIndex = 4;
             this.lblTrainingCounter.Text = "0";
             // 
@@ -209,35 +214,48 @@ namespace MouseGestureRecognition
             this.lblResult.BackColor = System.Drawing.Color.White;
             this.lblResult.Enabled = false;
             this.lblResult.Font = new System.Drawing.Font("Microsoft Sans Serif", 37.875F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblResult.Location = new System.Drawing.Point(602, 379);
+            this.lblResult.Location = new System.Drawing.Point(401, 243);
+            this.lblResult.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lblResult.Name = "lblResult";
-            this.lblResult.Size = new System.Drawing.Size(0, 114);
+            this.lblResult.Size = new System.Drawing.Size(0, 73);
             this.lblResult.TabIndex = 5;
             this.lblResult.Visible = false;
             // 
             // btnReset
             // 
-            this.btnReset.Location = new System.Drawing.Point(1491, 878);
+            this.btnReset.Location = new System.Drawing.Point(994, 562);
+            this.btnReset.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.btnReset.Name = "btnReset";
-            this.btnReset.Size = new System.Drawing.Size(115, 52);
+            this.btnReset.Size = new System.Drawing.Size(77, 33);
             this.btnReset.TabIndex = 6;
             this.btnReset.Text = "Reset";
             this.btnReset.UseVisualStyleBackColor = true;
             this.btnReset.Visible = false;
             this.btnReset.Click += new System.EventHandler(this.btnReset_Click);
             // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(994, 230);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(75, 23);
+            this.button1.TabIndex = 7;
+            this.button1.Text = "Save model";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click_1);
+            // 
             // Form1
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(12F, 25F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1630, 1008);
+            this.ClientSize = new System.Drawing.Size(1087, 645);
+            this.Controls.Add(this.button1);
             this.Controls.Add(this.btnReset);
             this.Controls.Add(this.lblResult);
             this.Controls.Add(this.lblTrainingCounter);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.btnStartStop);
             this.Controls.Add(this.shapePB);
-            this.Margin = new System.Windows.Forms.Padding(6);
+            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.MaximizeBox = false;
             this.Name = "Form1";
             this.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
@@ -293,6 +311,11 @@ namespace MouseGestureRecognition
             shapePB.Invalidate();
             lblResult.Invalidate();
             lblTrainingCounter.Invalidate();
+        }
+
+        private void button1_Click_1(object sender, EventArgs e)
+        {
+            m_PredictionModule.SaveModel();
         }
     }
 

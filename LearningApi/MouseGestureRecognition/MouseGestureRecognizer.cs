@@ -36,6 +36,11 @@ namespace MouseGestureRecognition
             m_LearningApi.UseKMeansFunctionRecognitionModule(m_Settings);
         }
 
+        public void SaveModel()
+        {
+            m_LearningApi.Save("model");
+        }
+
         public void Train(List<Point> points)
         {
             //double[][] initCentroids = new double[2][];
