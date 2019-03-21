@@ -6,6 +6,7 @@ using LearningFoundation;
 using DeltaLearning;
 using System.IO;
 using DeltaRuleLearning;
+using NeuralNetworks.Core;
 
 namespace DeltaLearning
 {
@@ -28,7 +29,7 @@ namespace DeltaLearning
 
         double Aggregate_Weight = 0;
 
-        private Func<double, double> m_ActivationFunction = ActivationFunction.Sigmoid;
+        private Func<double, double> m_ActivationFunction = ActivationFunctions.Sigmoid;
 
 
         public IScore Train(double[][] featureValues, IContext ctx)

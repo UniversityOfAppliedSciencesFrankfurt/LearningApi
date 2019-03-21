@@ -1,6 +1,5 @@
 using LearningFoundation;
 using MLPerceptron;
-using MLPerceptron.NeuralNetworkCore;
 using System.IO;
 using System.Collections.Generic;
 using System.Linq;

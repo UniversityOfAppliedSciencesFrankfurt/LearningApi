@@ -1,9 +1,12 @@
-
+[![license](https://img.shields.io/github/license/mashape/apistatus.svg?maxAge=2592000)](https://github.com/UniversityOfAppliedSciencesFrankfurt/LearningApi/blob/master/LICENSE)
 
 # LearningApi
-Learning API is Machine Learning Foundation of useful libraries fully implemented in .NET Core. It provides a unique processing API for Machine Learning solutions. 
+Learning API is Machine Learning Foundation of a set of ML libraries fully implemented as .NET Standard library. It provides a unique processing API for Machine Learning solutions. Because it is implemented fully in .NET, developers do not have to bridge .NET and Python or other popular ML frameworks. It has been developed in cooperation with daenet GmBh and Frankfurt University of Applied Sciences.
 
-LearningAPI is a foundation of Machine Learning algorithms, which can run in the pipeline of modules compatiple to each other. 
+![daenet](https://avatars3.githubusercontent.com/u/12556447?s=150&u=f2cd3be70373c9654b9d53a4f69ddfd7a8ed6596&v=4=)
+![uni](https://avatars0.githubusercontent.com/u/12556434?s=150&u=94c1f1c45bee9ffcb167f2f2246dddab19fec420&v=4)
+
+LearningAPI is a foundation of Machine Learning algorithms, which can run in the pipeline of modules compatiple to each other. This concept allows using of conceptualy different algorithms in the same API, which consists of a chain of modules. 
 One pipeline module is defined as implementation of interface *IPipeline*.
 ~~~ csharp
    public interface IPipelineModule

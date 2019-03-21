@@ -1,5 +1,4 @@
-﻿using MLPerceptron.NeuralNetworkCore;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -29,7 +28,7 @@ namespace MLPerceptron
 
         private int m_batchSize = 1;
 
-        private Func<double, double> m_ActivationFunction = MLPerceptron.NeuralNetworkCore.ActivationFunctions.HyperbolicTan;//TODO Patrick
+        private Func<double, double> m_ActivationFunction = ActivationFunctions.HyperbolicTan;
 
         private int m_InpDims;
 
@@ -422,7 +421,7 @@ namespace MLPerceptron
 
                 if (softmax == false)
                 {
-                    output[j] = MLPerceptron.NeuralNetworkCore.ActivationFunctions.Sigmoid(outputSum[j]);
+                    output[j] = ActivationFunctions.Sigmoid(outputSum[j]);
                 }
                 else
                 {
@@ -432,7 +431,7 @@ namespace MLPerceptron
 
             if (softmax == true)
             {
-                output = MLPerceptron.NeuralNetworkCore.ActivationFunctions.SoftMaxClassifier(outputSum);
+                output = ActivationFunctions.SoftMaxClassifier(outputSum);
             }
         }
         #endregion

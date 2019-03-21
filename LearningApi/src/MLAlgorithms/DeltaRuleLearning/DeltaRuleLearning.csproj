@@ -13,6 +13,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\LearningApi\LearningApi.csproj" />
+    <ProjectReference Include="..\NeuralNetworks\NeuralNetworks.Core\NeuralNetworks.Core.csproj" />
   </ItemGroup>
 
 </Project>
