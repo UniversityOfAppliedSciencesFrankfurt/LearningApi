@@ -459,24 +459,46 @@ namespace test.MLPerceptron
                         while ((line = reader.ReadLine()) != null)
                         {
                             var tokens = line.Split(",");
-                            if (rowCnt == 0)
+                            List<string> newTokens = new List<string>();
+                            foreach (var token in tokens)
                             {
-                                ctx.DataDescriptor.Features = new LearningFoundation.DataMappers.Column[tokens.Length];
-                                for (int i = 1; i < tokens.Length; i++)
-                                {
-                                    ctx.DataDescriptor.Features[i] = new LearningFoundation.DataMappers.Column();
-                                    ctx.DataDescriptor.Features[i].Id = i;
-                                    ctx.DataDescriptor.Features[i].Index = i;
-                                    ctx.DataDescriptor.Features[i].Type = LearningFoundation.DataMappers.ColumnType.BINARY;
-                                }
-                                ctx.DataDescriptor.LabelIndex = 0;
+                                if (token != " ")
+                                    newTokens.Add(token);
                             }
 
-                            double[] row = new double[tokens.Length];
+                            tokens = newTokens.ToArray();
+
+                            if (rowCnt == 0)
+                            {
+                                ctx.DataDescriptor.Features = new LearningFoundation.DataMappers.Column[tokens.Length - 1];
+                                for (int i = 1; i < tokens.Length; i++)
+                                {
+                                    ctx.DataDescriptor.Features[i - 1] = new LearningFoundation.DataMappers.Column
+                                    {
+                                        Id = i,
+                                        Index = i,
+                                        Type = LearningFoundation.DataMappers.ColumnType.BINARY
+                                    };
+                                }
+                                ctx.DataDescriptor.LabelIndex = -1;
+                            }
+
+                            // We have 65 features and digit number in file. to encode digits 0-9. 
+                            // Digits can be represented as 9 bits.
+                            double[] row = new double[tokens.Length - 1 + 10];
                             for (int i = 0; i < tokens.Length; i++)
                             {
-                                if (tokens[i] != " ")
-                                    row[i] = double.Parse(tokens[i], CultureInfo.InvariantCulture);
+                                row[i] = double.Parse(tokens[i], CultureInfo.InvariantCulture);
+                            }
+
+                            //
+                            // This code encodes 9 digit classes as last 9 bits of training vector.
+                            for (int k = 0; k < 10; k++)
+                            {
+                                if (double.Parse(tokens[0], CultureInfo.InvariantCulture) == k)
+                                    row[tokens.Length - 1 + k] = 1;
+                                else
+                                    row[tokens.Length - 1 + k] = 0;
                             }
 
                             rows.Add(row);
@@ -493,7 +515,7 @@ namespace test.MLPerceptron
             // Invoke the MLPerecptronAlgorithm with a specific learning rate, number of iterations
             api.UseMLPerceptron(learningrate, iterations, batchSize, iterationnumber, hiddenLayerNeurons);
 
-            IScore score = api.Run() as IScore;
+            MLPerceptronAlgorithmScore score = api.Run() as MLPerceptronAlgorithmScore;
 
         }
 
