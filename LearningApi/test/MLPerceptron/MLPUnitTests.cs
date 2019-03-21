@@ -517,6 +517,8 @@ namespace test.MLPerceptron
 
             MLPerceptronAlgorithmScore score = api.Run() as MLPerceptronAlgorithmScore;
 
+            api.Save("SdrMnistModel");
+
         }
 
 

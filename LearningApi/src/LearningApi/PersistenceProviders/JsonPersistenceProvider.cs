@@ -20,8 +20,15 @@ namespace LearningFoundation.PersistenceProviders
             {
                 ContractResolver = new PrivateFieldsContractResolver(),
                 Culture = CultureInfo.InvariantCulture,
-                TypeNameHandling = TypeNameHandling.All
+                TypeNameHandling = TypeNameHandling.All,
+                Error = HandleDeserializationError
             };
+        }
+
+        public void HandleDeserializationError(object sender, Newtonsoft.Json.Serialization.ErrorEventArgs errorArgs)
+        {
+            var currentError = errorArgs.ErrorContext.Error.Message;
+            errorArgs.ErrorContext.Handled = true;
         }
 
         public LearningApi Load(string name)
