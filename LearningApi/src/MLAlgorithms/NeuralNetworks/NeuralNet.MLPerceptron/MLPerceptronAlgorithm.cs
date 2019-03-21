@@ -161,7 +161,7 @@ namespace MLPerceptron
                     {
                         BackPropagationNetwork backPropagation = new BackPropagationNetwork(m_Biases, m_HiddenLayerNeurons, m_OutputLayerNeurons, m_InpDims);
 
-                        for (int inputVectIndx = miniBatchStartIndex; inputVectIndx < m_batchSize + miniBatchStartIndex; inputVectIndx++)
+                        for (int inputVectIndx = miniBatchStartIndex; inputVectIndx < m_batchSize + miniBatchStartIndex && inputVectIndx < trainingData.Length; inputVectIndx++)
                         {
                             // Z2 = actFnc(X * W1)
                             CalcFirstHiddenLayer(trainingData[inputVectIndx], m_InpDims, out hidLyrOut[0], out hidLyrNeuronSum[0]);

@@ -429,6 +429,76 @@ namespace test.MLPerceptron
             }
         }
 
+        /// <summary>
+        /// Supervised training of unsupervised SDR output.
+        /// </summary>
+        /// <param name="iterations"></param>
+        /// <param name="learningrate"></param>
+        /// <param name="batchSize"></param>
+        /// <param name="hiddenLayerNeurons"></param>
+        /// <param name="iterationnumber"></param>
+        [Theory]
+        [InlineData(1000, 0.1, 25, new int[] { 6 }, 1)]
+        public void UnitTestSdr(int iterations, double learningrate, int batchSize, int[] hiddenLayerNeurons, int iterationnumber)
+        {
+            LearningApi api = new LearningApi();
+
+            api.UseActionModule<object, double[][]>((notUsed, ctx) =>
+            {
+                List<double[]> rows = new List<double[]>();
+
+                ctx.DataDescriptor = new DataDescriptor();
+
+                var trainingFiles = Directory.GetFiles($"{Directory.GetCurrentDirectory()}\\MLPerceptron\\TestFiles\\Sdr");
+                int rowCnt = 0;
+                foreach (var file in trainingFiles)
+                {
+                    using (var reader = new StreamReader(file))
+                    {
+                        string line;
+
+                        while ((line = reader.ReadLine()) != null)
+                        {
+                            var tokens = line.Split(",");
+                            if (rowCnt == 0)
+                            {
+                                ctx.DataDescriptor.Features = new LearningFoundation.DataMappers.Column[tokens.Length];
+                                for (int i = 1; i < tokens.Length; i++)
+                                {
+                                    ctx.DataDescriptor.Features[i] = new LearningFoundation.DataMappers.Column();
+                                    ctx.DataDescriptor.Features[i].Id = i;
+                                    ctx.DataDescriptor.Features[i].Index = i;
+                                    ctx.DataDescriptor.Features[i].Type = LearningFoundation.DataMappers.ColumnType.BINARY;
+                                }
+                                ctx.DataDescriptor.LabelIndex = 0;
+                            }
+
+                            double[] row = new double[tokens.Length];
+                            for (int i = 0; i < tokens.Length; i++)
+                            {
+                                if (tokens[i] != " ")
+                                    row[i] = double.Parse(tokens[i], CultureInfo.InvariantCulture);
+                            }
+
+                            rows.Add(row);
+                        }
+                    }
+
+                    rowCnt++;
+                }
+
+                return rows.ToArray();
+            });
+
+            //int[] hiddenLayerNeurons = { 6 };
+            // Invoke the MLPerecptronAlgorithm with a specific learning rate, number of iterations
+            api.UseMLPerceptron(learningrate, iterations, batchSize, iterationnumber, hiddenLayerNeurons);
+
+            IScore score = api.Run() as IScore;
+
+        }
+
+
         private static string hiddleLayerToString(int[] hiddenLayer)
         {
             return $"[{String.Join(',', hiddenLayer)}]";
@@ -787,7 +857,7 @@ namespace test.MLPerceptron
 
             string trainingImagesPath = Path.Combine(Path.Combine(AppContext.BaseDirectory, "MLPerceptron"), "TrainingImages");
             Binarizer bizer = new Binarizer();
-            bizer.CreateBinary(Path.Combine(trainingImagesPath, "1 (168).jpeg"), "binary.txt");
+            bizer.CreateBinary(Path.Combine(trainingImagesPath, "positive (1).jpeg"), "binary.txt");
 
         }
     }

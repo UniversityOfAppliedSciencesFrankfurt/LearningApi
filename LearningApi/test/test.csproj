@@ -107,6 +107,36 @@
     <None Update="KMeans\Script.R">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Update="MLPerceptron\TestFiles\Sdr\digit0_64_activeCol.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="MLPerceptron\TestFiles\Sdr\digit1_64_activeCol.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="MLPerceptron\TestFiles\Sdr\digit2_64_activeCol.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="MLPerceptron\TestFiles\Sdr\digit3_64_activeCol.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="MLPerceptron\TestFiles\Sdr\digit4_64_activeCol.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="MLPerceptron\TestFiles\Sdr\digit5_64_activeCol.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="MLPerceptron\TestFiles\Sdr\digit6_64_activeCol.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="MLPerceptron\TestFiles\Sdr\digit7_64_activeCol.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="MLPerceptron\TestFiles\Sdr\digit8_64_activeCol.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="MLPerceptron\TestFiles\Sdr\digit9_64_activeCol.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Update="MLPerceptron\TestFiles\TestData.csv">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
