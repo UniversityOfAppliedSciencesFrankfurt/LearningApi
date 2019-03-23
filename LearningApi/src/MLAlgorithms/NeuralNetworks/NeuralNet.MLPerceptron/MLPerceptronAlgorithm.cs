@@ -130,7 +130,7 @@ namespace MLPerceptron
             double lastLoss = 0;
 
             double lastValidationLoss = 0;
-
+#if TESTING
             string path = Directory.GetCurrentDirectory() + "\\MLPerceptron\\TestFiles\\mnist_performance_params_" + this.TestCaseNumber.ToString() + ".csv";
 
             if (!File.Exists(path))
@@ -139,13 +139,15 @@ namespace MLPerceptron
             }
 
             using (var performanceData = new StreamWriter(path))
+#endif
             {
                 Stopwatch watch = new Stopwatch();
 
                 double timeElapsed = 0;
 
+#if TESTING
                 performanceData.WriteLine("{0},{1},{2},{3},{4},{5}", "Epoch", "Epoch Loss", "Epoch Accuracy", "Validation Loss", "Validation Accuracy", "Time Elapsed");
-
+#endif
                 for (int i = 0; i < m_Iterations; i++)
                 {
                     watch.Restart();
@@ -252,8 +254,9 @@ namespace MLPerceptron
 
                     //  Debug.WriteLine($"Loss: {score.Loss}, Last loss: {lastLoss}, Delta: {deltaLoss}, Accuracy: {accuracy}, ValidationLoss: {validationSetLoss}, Last Validationloss: {lastValidationLoss}, Delta: {deltaValidationLoss}, ValidationAccuracy: {validationAccuracy}, TimeElapsed: {timeElapsed}");
 
+#if TESTING
                     performanceData.WriteLine("{0},{1},{2},{3},{4},{5}", i.ToString(), score.Loss.ToString("F3"), accuracy.ToString("F3"), validationSetLoss.ToString("F3"), validationAccuracy.ToString("F3"), timeElapsed.ToString("F3"));
-
+#endif
                     lastLoss = score.Loss;
 
                     lastValidationLoss = validationSetLoss;
@@ -264,9 +267,9 @@ namespace MLPerceptron
             }
         }
 
-        #endregion
+#endregion
 
-        #region Prediction
+#region Prediction
         /// <summary>
         /// This method accepts the test data as input and determines the output for each sample of test data
         /// </summary>
@@ -301,9 +304,9 @@ namespace MLPerceptron
             return result;
         }
 
-        #endregion
+#endregion
 
-        #region ResultCalculationFirstHiddenLayer
+#region ResultCalculationFirstHiddenLayer
         /// <summary>
         /// This method calculates the results of the network at the first hidden layer
         /// </summary>
@@ -331,9 +334,9 @@ namespace MLPerceptron
                 layerOutput[j] = m_ActivationFunction(layerNeuronSum[j]);
             }
         }
-        #endregion
+#endregion
 
-        #region ResultCalculationRemainingHiddenLayers
+#region ResultCalculationRemainingHiddenLayers
         /// <summary>
         /// This method calculates the results of the network at the hidden layers that follow the first hidden layer
         /// </summary>
@@ -390,9 +393,9 @@ namespace MLPerceptron
             }
 
         }
-        #endregion
+#endregion
 
-        #region ResultCalculationOutputLayer
+#region ResultCalculationOutputLayer
         /// <summary>
         /// This method calculates the results of the network at the output layer
         /// </summary>
@@ -434,9 +437,9 @@ namespace MLPerceptron
                 output = ActivationFunctions.SoftMaxClassifier(outputSum);
             }
         }
-        #endregion
+#endregion
 
-        #region InitializeWeightsandBiasesinputlayer
+#region InitializeWeightsandBiasesinputlayer
         /// <summary>
         /// This method intializes the weights and biases at the input layer
         /// </summary>
@@ -475,9 +478,9 @@ namespace MLPerceptron
                 m_Biases[0][j] = randVal * Math.Sqrt((double)1 / (double)inpDims);
             }
         }
-        #endregion
+#endregion
 
-        #region InitializeWeightsandBiaseshiddenlayers
+#region InitializeWeightsandBiaseshiddenlayers
         /// <summary>
         /// This method initializes the weights and biases at the hidden layers
         /// </summary>
@@ -527,9 +530,9 @@ namespace MLPerceptron
                 index++;
             }
         }
-        #endregion
+#endregion
 
-        #region InitializeWeightsandBiasesoutputlayer
+#region InitializeWeightsandBiasesoutputlayer
         /// <summary>
         /// This method initializes the weights and biases at the output layer
         /// </summary>
@@ -570,7 +573,7 @@ namespace MLPerceptron
                 m_Biases[m_HiddenLayerNeurons.Length][k] = randVal * Math.Sqrt((double)1 / (double)hiddenLayerNeurons[m_HiddenLayerNeurons.Length - 1]);
             }
         }
-        #endregion
+#endregion
     }
 }
 
