@@ -6,12 +6,17 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Akka.Cluster" Version="1.3.10" />
-    <PackageReference Include="Microsoft.Extensions.Configuration.CommandLine" Version="2.2.0" />
-    <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="2.2.0" />
+    <Compile Remove="AkkaHostService.cs" />
   </ItemGroup>
 
   <ItemGroup>
+    <None Include="AkkaHostService.cs" />
+  </ItemGroup>
+
+
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\AkkaHostLib\AkkaHostLib.csproj" />
     <ProjectReference Include="..\..\src\MLAlgorithms\NeuralNetworks\NeuralNet.AkkaMLPerceptron\AkkaMLPerceptron\AkkaMLPerceptron.csproj" />
     <ProjectReference Include="..\..\test\test.csproj" />
   </ItemGroup>

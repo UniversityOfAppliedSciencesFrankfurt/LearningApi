@@ -8,7 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AkkaHost
+namespace AkkaHostLib
 {
     public class AkkaHostService
     {
@@ -102,9 +102,5 @@ namespace AkkaHost
             this.WhenTerminated.Wait();
         }
 
-        //public static Akka.Configuration.Config ParseConfig(string hoconPath)
-        //{
-        //    return ConfigurationFactory.ParseString(File.ReadAllText(hoconPath));
-        //}
     }
 }
