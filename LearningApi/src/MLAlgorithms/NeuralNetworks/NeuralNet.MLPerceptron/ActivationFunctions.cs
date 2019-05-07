@@ -48,7 +48,7 @@ namespace MLPerceptron.NeuralNetworkCore
         /// <returns>double</returns>
         public static double DerivativeHyperbolicTan(double val)
         {
-            return (1 - Math.Pow(HyperbolicTan(val),2));
+            return (1 - Math.Pow(HyperbolicTan(val), 2));
         }
 
         /// <summary>
@@ -68,7 +68,7 @@ namespace MLPerceptron.NeuralNetworkCore
         /// <returns>double</returns>
         public static double DerivativeLeakyReLU(double val)
         {
-            if(val <= 0)
+            if (val <= 0)
             {
                 return 0.01;
             }
@@ -76,6 +76,29 @@ namespace MLPerceptron.NeuralNetworkCore
             {
                 return 1;
             }
+        }
+
+        public static double[,] SoftMaxClassifierTrain(double[,] weightedip, int batchSize)
+        {
+            double sum = 0.0;
+
+            double[,] outputvector = new double[batchSize, weightedip.GetLength(1)];
+
+            for (int i = 0; i < batchSize; i++)
+            {
+                for (int j = 0; j < weightedip.GetLength(1); j++)
+                {
+                    sum += Math.Exp(weightedip[i, j]);
+                }
+
+                for (int k = 0; k < weightedip.GetLength(1); k++)
+                {
+                    outputvector[i, k] = Math.Exp(weightedip[i, k]) / sum;
+                }
+
+                sum = 0.0;
+            }
+            return outputvector;
         }
 
         public static double[] SoftMaxClassifier(double[] weightedip)
@@ -89,7 +112,7 @@ namespace MLPerceptron.NeuralNetworkCore
                 sum += Math.Exp(item);
             }
 
-            for(int i = 0; i < weightedip.Length; i++)
+            for (int i = 0; i < weightedip.Length; i++)
             {
                 outputvector[i] = Math.Exp(weightedip[i]) / sum;
             }
