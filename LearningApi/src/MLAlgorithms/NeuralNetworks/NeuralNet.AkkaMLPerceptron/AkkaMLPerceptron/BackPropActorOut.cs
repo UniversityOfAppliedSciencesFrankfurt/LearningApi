@@ -6,12 +6,10 @@ namespace AkkaMLPerceptron
 {
     public class BackPropActorOut
     {
-        public long Test { get; set; }
-
-        public string Status { get; set; }
-
-        public double[][] LayerOutput { get; set; }
-
-        public double[][] LayerNeuronSum { get; set; }
+        public int actorNum { get; set; }
+        public double[,] Errors { get; set; }
+        public double[] CostChangeDueToBiases { get; set; }
+        public double[,] CostChangeDueToWeights { get; set; }
+        public bool[] result { get; set; }
     }
 }

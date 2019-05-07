@@ -7,7 +7,7 @@
 		dot-netty.tcp {
 			hostname = "127.0.0.1"
 			port = @PORT
-			maximum-frame-size = 256000b
+			maximum-frame-size = 30000000b
 		}
 	}            
 

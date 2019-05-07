@@ -13,6 +13,7 @@
 
 
   <ItemGroup>
+    <ProjectReference Include="..\..\NeuralNet.MLPerceptron\NeuralNet.MLPerceptron.csproj" />
     <ProjectReference Include="..\..\NeuralNetworks.Core\NeuralNetworks.Core.csproj" />
   </ItemGroup>
 

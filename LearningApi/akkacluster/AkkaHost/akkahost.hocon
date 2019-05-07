@@ -1,14 +1,18 @@
 ﻿akka {
     actor.provider = cluster
     remote {
+	    maximum-payload-bytes = 30000000 bytes
         dot-netty.tcp {
             port = @PORT
 			public-hostname = @PUBHOSTNAME
             hostname = @HOSTNAME
+			message-frame-size =  30000000b
+            send-buffer-size =  30000000b
+            receive-buffer-size =  30000000b
+            maximum-frame-size =   30000000b
 		}
     }
     cluster {
         seed-nodes = [@SEEDHOSTS]
     }
 }
-
