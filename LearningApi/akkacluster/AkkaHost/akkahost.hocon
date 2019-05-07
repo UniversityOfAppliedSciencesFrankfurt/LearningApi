@@ -1,4 +1,5 @@
 ﻿akka {
+	
     actor.provider = cluster
     remote {
         dot-netty.tcp {
