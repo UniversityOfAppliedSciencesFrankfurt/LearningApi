@@ -106,6 +106,8 @@ namespace test.MLPerceptron
 
         public void UnitTestMNIST(int iterations, double learningrate, int batchSize, int[] hiddenLayerNeurons)
         {
+            Thread.Sleep(15000);
+
             MNISTFileRead mnistObj = new MNISTFileRead();
 
             MNISTFileRead.ReadMNISTTrainingData();

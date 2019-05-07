@@ -187,7 +187,7 @@ namespace AkkaMLPerceptron
 
             double lastValidationLoss = 0;
 
-            string path = Directory.GetCurrentDirectory() + "\\mnist_performance_params.csv";
+            string path = Directory.GetCurrentDirectory() + "\\wmnist_performance_params.csv";
 
             if (!File.Exists(path))
             {
@@ -195,7 +195,7 @@ namespace AkkaMLPerceptron
             }
 
 
-
+            IActorRef remoteBackPropagationActor;
             // Number of slots inside of weight matrix. It specifies in how many
             // slots (parts) the matrix will be split to execute calculation.
             int numOfSlots = 2;
@@ -208,7 +208,7 @@ namespace AkkaMLPerceptron
                 string targetUri = this.akkaNodes[slot % this.numOfNodes];
                 var remoteAddress = Address.Parse(targetUri);
 
-                var remoteBackPropagationActor =
+                remoteBackPropagationActor =
                 this.actorSystem.ActorOf(Props.Create(() => new BackPropagationActor(this.m_HiddenLayerNeurons, this.m_OutputLayerNeurons, this.m_InpDims, this.m_LearningRate))
                 .WithDeploy(Deploy.None.WithScope(new RemoteScope(remoteAddress))), $"bp{slot}");
             }
@@ -383,6 +383,10 @@ namespace AkkaMLPerceptron
 
                         tasks.Clear();
 
+                        //
+                        // Error calculation starting at last layer.
+                        //
+
                         for (int slot = 0; slot < numOfSlots; slot++)
                         {
                             // In this loop, we have to setup BackPropActorIn with all required parameters.
@@ -420,6 +424,10 @@ namespace AkkaMLPerceptron
                         batchAccuracy += ((double)accuracyArr.Count(c => c) / m_batchSize);
 
                         Debug.WriteLine($"Batch Accuracy = {batchAccuracy}");
+
+                        //
+                        // Propagating error from last hidden to first layer
+                        //
 
                         for (int layer = m_HiddenLayerNeurons.Length - 1; layer >= 0; layer--)
                         {
@@ -487,6 +495,9 @@ namespace AkkaMLPerceptron
 
                         tasks.Clear();
 
+                        //
+                        // Updating weights
+                        // 
                         for (int slot = 0; slot < numOfSlots; slot++)
                         {
                             // In this loop, we have to setup BackPropActorIn with all required parameters.
@@ -519,6 +530,12 @@ namespace AkkaMLPerceptron
 
                         for (int slot = 0; slot < numOfSlots; slot++)
                         {
+                            // while(batch)
+                            //        tasks.Add(slotActor.Tell(uploadBatch))
+                            //        tasks.Add(slotActor.Ask<BiasUpdateBackPropActorOut>(new BiasUpdateBackPropActorIn() { batchIndex = inputVectIndx, batchSize = m_batchSize, actorNum = slot, CostChangeDueToBiases = costChangeBiases, currentbiases = m_Biases, NeuronsCurrentActor = NumOfNeuronsForCurrentActor[slot], StartIndex = StartIndex[slot] }));
+
+
+
                             // In this loop, we have to setup BackPropActorIn with all required parameters.
                             // This is the place to provide all input vector with all weights.
                             tasks.Add(this.actorSystem.ActorSelection($"/user/bp{slot}").Ask<BiasUpdateBackPropActorOut>(new BiasUpdateBackPropActorIn() { batchIndex = inputVectIndx, batchSize = m_batchSize, actorNum = slot, CostChangeDueToBiases = costChangeBiases, currentbiases = m_Biases, NeuronsCurrentActor = NumOfNeuronsForCurrentActor[slot], StartIndex = StartIndex[slot] }));
