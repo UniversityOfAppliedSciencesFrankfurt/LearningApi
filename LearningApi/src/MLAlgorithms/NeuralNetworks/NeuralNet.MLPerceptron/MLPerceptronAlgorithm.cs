@@ -323,7 +323,7 @@ namespace MLPerceptron
 
             layerNeuronSum = new double[m_batchSize, m_HiddenLayerNeurons[0]];
 
-            for (int i = batchIndex; i < batchIndex + m_batchSize; i++)
+            for (int i = batchIndex; i < batchIndex + m_batchSize && i < input.Length; i++)
             {
                 for (int j = 0; j < m_HiddenLayerNeurons[0]; j++)
                 {

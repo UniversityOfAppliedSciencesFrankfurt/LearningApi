@@ -203,7 +203,8 @@ namespace test.MLPerceptron
         /// </summary>
         [Theory]
         //[InlineData(new int[] { 5, 2 })]
-        [InlineData(1000, 0.1, 25, new int[] { 6 }, 1)]
+        [InlineData(10000, 0.1, 25, new int[] { 6 }, 1)]
+        [InlineData(10000, 0.05, 25, new int[] { 6, 3, 2 }, 2)]
         //[InlineData(new int[] { 7, 2 })]
         //[InlineData(new int[] { 8, 2 })]
         //[InlineData(new int[] { 9, 2 })]

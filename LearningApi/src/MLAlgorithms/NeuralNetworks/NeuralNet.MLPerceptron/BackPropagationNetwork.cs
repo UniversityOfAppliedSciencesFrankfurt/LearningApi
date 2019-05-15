@@ -146,7 +146,7 @@ namespace MLPerceptron.BackPropagation
 
             bool result = true;
 
-            for (int i = batchIndex; i < batchIndex + batchSize; i++)
+            for (int i = batchIndex; i < batchIndex + batchSize && i < inputVector.Length; i++)
             {
                 result = true;
 
@@ -212,7 +212,7 @@ namespace MLPerceptron.BackPropagation
             {
                 Errors[hidLayerIndx - 1] = new double[batchSize, hiddenlayerneurons[hidLayerIndx - 1]];
 
-                for (int i = batchIndex; i < batchSize + batchIndex; i++)
+                for (int i = batchIndex; i < batchSize + batchIndex && i < inputVector.Length; i++)
                 {
                     for (int hidLayerNeuronIndx = 0; hidLayerNeuronIndx < hiddenlayerneurons[hidLayerIndx - 1]; hidLayerNeuronIndx++)
                     {
