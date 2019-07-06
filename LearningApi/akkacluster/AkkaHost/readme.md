@@ -49,7 +49,7 @@ docker run -it --rm -p:8081:8081 akkahost:v1 --port 8081 --sysname ClusterSystem
 ~~~
 
 ~~~
-docker run -it --rm -p:8081:8081 akkahost:v1 --port 8081 --sysname ClusterSystem --seedhosts=DADO-SR1:8081 --hostname=0.0.0.0 --publichostname=DADO-SR1
+docker run -it --rm -p:8081:8081 akkahost:v1 --port 8081 --sysname=ClusterSystem --seedhosts=DADO-SR1:8081 --hostname=0.0.0.0 --publichostname=DADO-SR1
 ~~~
 
 ### Debug Arguments
@@ -57,10 +57,10 @@ docker run -it --rm -p:8081:8081 akkahost:v1 --port 8081 --sysname ClusterSystem
 Paste this in debug properties and hit F5 to run the host:
 
 ~~~
---port  8081  --sysname ClusterSystem --seedhosts=localhost:8081 --hostname=localhost --publichostname=localhost
+--port  8081  --sysname=ClusterSystem --seedhosts=localhost:8081 --hostname=localhost --publichostname=localhost
 ~~~
 
 ~~~
---port  8081  --sysname ClusterSystem --seedhosts=DADO-SR1:8081 --hostname=0.0.0.0 --publichostname=DADO-SR1
+--port  8081  --sysname ClusterSystem --seedhosts DADO-SR1:8081 --hostname=0.0.0.0 --publichostname=DADO-SR1
 ~~~
 

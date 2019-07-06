@@ -76,7 +76,7 @@ namespace AkkaHostLib
             IConfigurationRoot cfg = builder.Build();
 
             var strSeedHosts = cfg["seedhosts"];
-            var seedHosts = strSeedHosts.Split(',');
+            var seedHosts = strSeedHosts == null ? new string[0] : strSeedHosts.Split(',');
 
             var strPort = cfg["port"];
             int port = -1;
