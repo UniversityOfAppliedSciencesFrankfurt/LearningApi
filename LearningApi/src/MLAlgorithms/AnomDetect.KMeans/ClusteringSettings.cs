@@ -28,7 +28,7 @@ namespace LearningFoundation.Clustering.KMeans
         /// maximum allowed number of Kmeans iteration for clustering
         /// </summary>
         [DataMember]
-        public int KmeansMaxIterations { get; internal set; }
+        public int KmeansMaxIterations { get; set; }
 
         /// <summary>
         /// number of clusters

@@ -205,7 +205,7 @@ namespace LearningFoundation.Clustering.KMeans.FunctionRecognition
                 double currDistance;
                 for (int i = 0; i < results.Length; i++)
                 {
-                    currDistance = KMeansAlgorithm.calculateDistance(Score.Centroids[i], res.Model.Clusters[i].Centroid);
+                    currDistance = KMeansAlgorithm.CalculateDistance(Score.Centroids[i], res.Model.Clusters[i].Centroid);
 
                     if (currDistance <= Score.InClusterMaxDistance[i] * (1.0 + this.Settings.Tolerance / 100.0))
                     {
@@ -293,7 +293,7 @@ namespace LearningFoundation.Clustering.KMeans.FunctionRecognition
                 numFun = functions1.Length / settings.NumOfDimensions;
                 for (int f = 0; f < numFun; f++)
                 {
-                    oneFunction = KMeansAlgorithm.transposeFunction(KMeansAlgorithm.selectFunction(functions1, f + 1, settings.NumOfDimensions));
+                    oneFunction = KMeansAlgorithm.TransposeFunction(KMeansAlgorithm.selectFunction(functions1, f + 1, settings.NumOfDimensions));
                     res1 = kMeansFR1.Run(oneFunction, null) as KMeansFunctionRecognitonScore;
                 }
 
@@ -302,7 +302,7 @@ namespace LearningFoundation.Clustering.KMeans.FunctionRecognition
                 settings.InitialCentroids = null;
                 for (int f = 0; f < numFun; f++)
                 {
-                    oneFunction = KMeansAlgorithm.transposeFunction(KMeansAlgorithm.selectFunction(functions2, f + 1, settings.NumOfDimensions));
+                    oneFunction = KMeansAlgorithm.TransposeFunction(KMeansAlgorithm.selectFunction(functions2, f + 1, settings.NumOfDimensions));
                     res2 = kMeansFR2.Run(oneFunction, null) as KMeansFunctionRecognitonScore;
                 }
 
@@ -314,7 +314,7 @@ namespace LearningFoundation.Clustering.KMeans.FunctionRecognition
                     score = 0;
                     for (int j = 0; j < k; j++)
                     {
-                        dist = KMeansAlgorithm.calculateDistance(res1.Centroids[i], res2.Centroids[j]);
+                        dist = KMeansAlgorithm.CalculateDistance(res1.Centroids[i], res2.Centroids[j]);
                         if (dist > res1.InClusterMaxDistance[i] + res2.InClusterMaxDistance[j])
                         {
                             score++;
@@ -326,7 +326,7 @@ namespace LearningFoundation.Clustering.KMeans.FunctionRecognition
                         //calculate F;
                         for (int j = 0; j < k; j++)
                         {
-                            F = KMeansAlgorithm.calculateDistance(res1.Centroids[i], res2.Centroids[j])/(res1.InClusterMaxDistance[i] + res2.InClusterMaxDistance[j]);
+                            F = KMeansAlgorithm.CalculateDistance(res1.Centroids[i], res2.Centroids[j])/(res1.InClusterMaxDistance[i] + res2.InClusterMaxDistance[j]);
                             // select min F among the two functions
                             if (F < Fmin)
                             {
@@ -372,11 +372,11 @@ namespace LearningFoundation.Clustering.KMeans.FunctionRecognition
         private void adjustInClusterMaxDistance(int cluster, KMeansScore res, double[][] oldCentroids)
         {
             // calculate new in cluster max distance
-            double curDistance = KMeansAlgorithm.calculateDistance(res.Model.Clusters[cluster].Centroid, this.Score.Centroids[cluster]);
+            double curDistance = KMeansAlgorithm.CalculateDistance(res.Model.Clusters[cluster].Centroid, this.Score.Centroids[cluster]);
             
 
             // compare to max possible old in cluster max distance
-            double oldDistance = this.Score.InClusterMaxDistance[cluster] + KMeansAlgorithm.calculateDistance(this.Score.Centroids[cluster], oldCentroids[cluster]);
+            double oldDistance = this.Score.InClusterMaxDistance[cluster] + KMeansAlgorithm.CalculateDistance(this.Score.Centroids[cluster], oldCentroids[cluster]);
 
             if (oldDistance > curDistance)
             {

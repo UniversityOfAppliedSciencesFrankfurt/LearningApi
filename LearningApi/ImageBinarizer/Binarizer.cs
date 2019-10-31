@@ -3,7 +3,7 @@ using System.Drawing;
 using System.IO;
 using System.Text;
 
-namespace ImageBinarizer
+namespace LearningFoundation.ImageBinarizer
 {
     /// <summary>
     /// Creates binarized representation form specified image.

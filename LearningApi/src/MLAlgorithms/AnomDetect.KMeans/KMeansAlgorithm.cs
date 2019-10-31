@@ -117,7 +117,7 @@ namespace LearningFoundation.Clustering.KMeans
             int numFunctions = 50;
             int minClusters = 2;
             int maxClusters = 10;
-            double[][] funcData = transposeFunction(rawData);
+            double[][] funcData = TransposeFunction(rawData);
             double[][] similarFunctions = getSimilarFunctions(funcData, numFunctions);
             double[][] trainedCentroids;
 
@@ -137,7 +137,7 @@ namespace LearningFoundation.Clustering.KMeans
 
                 for (int f = 0; f < numFunctions; f++)
                 {
-                    rawData = transposeFunction(selectFunction(similarFunctions, f + 1, funcData.Length));
+                    rawData = TransposeFunction(selectFunction(similarFunctions, f + 1, funcData.Length));
 
                     this.m_instance = null;
                     score = runCalculation(rawData);
@@ -185,7 +185,7 @@ namespace LearningFoundation.Clustering.KMeans
             {
                 for (int i = k + 1; i < score.Model.NumberOfClusters; i++)
                 {
-                    distance = calculateDistance(score.Model.Clusters[k].Centroid, score.Model.Clusters[i].Centroid);
+                    distance = CalculateDistance(score.Model.Clusters[k].Centroid, score.Model.Clusters[i].Centroid);
                     Fcur = (float)(distance / (score.Model.Clusters[k].InClusterMaxDistance + score.Model.Clusters[i].InClusterMaxDistance));
                     if (Fcur < FMin)
                     {
@@ -278,7 +278,7 @@ namespace LearningFoundation.Clustering.KMeans
             {
                 for (int j = 0; j < numClusters; j++)
                 {
-                    calDist = calculateDistance(clusterCentroids[j], trainedCentroids[i * numClusters + j]);
+                    calDist = CalculateDistance(clusterCentroids[j], trainedCentroids[i * numClusters + j]);
                     if (calDist > maxDistance[j])
                     {
                         maxDistance[j] = calDist;
@@ -487,7 +487,7 @@ namespace LearningFoundation.Clustering.KMeans
                 //determines to which centroid the sample is closest and the distance
                 for (int j = 0; j < this.m_instance.NumberOfClusters; j++)
                 {
-                    calculatedDistance = calculateDistance(Sample, this.m_instance.Clusters[j].Centroid);
+                    calculatedDistance = CalculateDistance(Sample, this.m_instance.Clusters[j].Centroid);
 
                     if (calculatedDistance < minDistance)
                     {
@@ -788,7 +788,7 @@ namespace LearningFoundation.Clustering.KMeans
                 double curDistance;
                 for (int i = 0; i < this.Instance.Clusters[cluster].NumberOfSamples; i++)
                 {
-                    curDistance = calculateDistance(this.Instance.Clusters[cluster].Centroid, this.Instance.Clusters[cluster].ClusterData[i]);
+                    curDistance = CalculateDistance(this.Instance.Clusters[cluster].Centroid, this.Instance.Clusters[cluster].ClusterData[i]);
                     if (curDistance > this.Instance.Clusters[cluster].InClusterMaxDistance)
                     {
                         this.Instance.Clusters[cluster].InClusterMaxDistance = curDistance;
@@ -796,7 +796,7 @@ namespace LearningFoundation.Clustering.KMeans
                 }
 
                 // compare to max possible old in cluster max distance
-                double oldDistance = this.Instance.Clusters[cluster].PreviousInClusterMaxDistance + calculateDistance(this.Instance.Clusters[cluster].Centroid, this.Instance.Clusters[cluster].PreviousCentroid);
+                double oldDistance = this.Instance.Clusters[cluster].PreviousInClusterMaxDistance + CalculateDistance(this.Instance.Clusters[cluster].Centroid, this.Instance.Clusters[cluster].PreviousCentroid);
                 if (oldDistance > this.Instance.Clusters[cluster].InClusterMaxDistance)
                 {
                     this.Instance.Clusters[cluster].InClusterMaxDistance = oldDistance;
@@ -875,7 +875,7 @@ namespace LearningFoundation.Clustering.KMeans
                 {
                     for (int j = 0; j < numClusters; j++)
                     {
-                        currDist[j] = calculateDistance(rawData[i], means[j]);
+                        currDist[j] = CalculateDistance(rawData[i], means[j]);
 
                         if (currDist[j] < minDist[j])
                         {
@@ -1009,7 +1009,7 @@ namespace LearningFoundation.Clustering.KMeans
         /// <param name="firstElement">First element</param>
         /// <param name="secondElement">Second element</param>
         /// <returns>Distance between the two elements</returns>
-        internal static double calculateDistance(double[] firstElement, double[] secondElement)
+        public static double CalculateDistance(double[] firstElement, double[] secondElement)
         {
             int Code;
             string Message = "Function <calculateDistance>: ";
@@ -1106,7 +1106,7 @@ namespace LearningFoundation.Clustering.KMeans
         /// <param name="clustering">contains the assigned cluster number for each sample of the RawData</param>
         /// <param name="means">mean of each cluster (Updated in the function)</param>
 
-        internal static void UpdateMeans(double[][] rawData, int[] clustering, double[][] means, long previousSampleCount = 0, double[] previousMeanValues = null)
+        public static void UpdateMeans(double[][] rawData, int[] clustering, double[][] means, long previousSampleCount = 0, double[] previousMeanValues = null)
         {
             int Code;
             string Message = "Function <updateMeans>: ";
@@ -1241,7 +1241,7 @@ namespace LearningFoundation.Clustering.KMeans
                     if (c != cluster)
                         continue;
 
-                    double currDist = calculateDistance(rawData[i], means[cluster]);  // call helper
+                    double currDist = CalculateDistance(rawData[i], means[cluster]);  // call helper
 
                     if (currDist < minDist)
                     {
@@ -1323,7 +1323,7 @@ namespace LearningFoundation.Clustering.KMeans
                 {
                     for (int k = 0; k < numClusters; ++k)       // compute distances to all centroids
                     {
-                        distances[k] = calculateDistance(rawData[i], centroids[k]);
+                        distances[k] = CalculateDistance(rawData[i], centroids[k]);
                     }
                     // distances[k] = Distance(rawData[i], centroids[k]);
 
@@ -1383,7 +1383,7 @@ namespace LearningFoundation.Clustering.KMeans
             }
         }
 
-        internal static double[][] transposeFunction(double[][] similarFuncData)
+        public static double[][] TransposeFunction(double[][] similarFuncData)
         {
             double[][] data = new double[similarFuncData[0].Length][];
             for (int i = 0; i < similarFuncData[0].Length; i++)

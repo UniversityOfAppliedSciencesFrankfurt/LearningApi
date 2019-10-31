@@ -8,4 +8,8 @@
     <PackageReference Include="Microsoft.Windows.Compatibility" Version="2.0.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\src\LearningApi\LearningApi.csproj" />
+  </ItemGroup>
+
 </Project>
