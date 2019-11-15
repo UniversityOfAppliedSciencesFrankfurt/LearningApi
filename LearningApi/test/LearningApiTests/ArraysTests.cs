@@ -22,7 +22,7 @@ namespace LearningFoundation.Test.Statistics
 
             var ocurrences = dataSample1.FindAllOcurrences();
 
-            Assert.Equals(ocurrences.Length, 8);
+            Assert.AreEqual(ocurrences.Length, 8);
         }
 
         /// <summary>
@@ -36,27 +36,27 @@ namespace LearningFoundation.Test.Statistics
 
             var acc = dataSample1.GetHammingDistance(dataSample2);
 
-            Assert.Equals(acc, 100);
+            Assert.AreEqual(acc, 100);
 
             dataSample2 = new double[] { 1.0, 1.0, 0.0, 0.0, 0.0 };
 
             acc = dataSample1.GetHammingDistance(dataSample2);
 
-            Assert.Equals(acc, 80);
+            Assert.AreEqual(acc, 80);
 
             dataSample2 = new double[] { 1.0, 0.0, 1.0, 1.0, 0.0 };
 
             acc = dataSample1.GetHammingDistance(dataSample2);
 
-            Assert.Equals(acc, 20);
+            Assert.AreEqual(acc, 20);
         }
 
         [TestMethod]
         public void BinaryConversionTest()
         {
-            Assert.Equals(new double[] { 1, 1, 1 }.ToBinary(), 7);
-            Assert.Equals(new double[] { 0, 1, 0 }.ToBinary(), 2);
-            Assert.Equals(new double[] { 0, 0, 1 }.ToBinary(), 4); 
+            Assert.AreEqual(new double[] { 1, 1, 1 }.ToBinary(), 7);
+            Assert.AreEqual(new double[] { 0, 1, 0 }.ToBinary(), 2);
+            Assert.AreEqual(new double[] { 0, 0, 1 }.ToBinary(), 4); 
         }
 
     }

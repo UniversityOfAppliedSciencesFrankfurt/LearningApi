@@ -85,7 +85,7 @@ namespace UnitTestRingProjectionAlgorithm
         public void RingProjection2D()
         {
             string[] testImages = { "LetterA.jpg", "LetterA45.jpg", "LetterA-45.jpg", "LetterA180.jpg" };
-            string trainingImagesPath = Path.Combine(AppContext.BaseDirectory, "TestImages");
+            string trainingImagesPath = Path.Combine(AppContext.BaseDirectory, @"UnitTestRingProjectionAlgorithm\TestImages");
 
             LearningApi api;
             for (int i = 0; i < testImages.Length; i++)
@@ -173,8 +173,8 @@ namespace UnitTestRingProjectionAlgorithm
             api.UseActionModule<string[], BinaryReader[]>((input, ctx) =>
             {
                 string[] trainDatabase = { "train-images.idx3-ubyte", "train-labels.idx1-ubyte" };
-                string trainImages = Path.Combine(AppContext.BaseDirectory, "MNISTImages", trainDatabase[0]);
-                string trainLabels = Path.Combine(AppContext.BaseDirectory, "MNISTImages", trainDatabase[1]);
+                string trainImages = Path.Combine(AppContext.BaseDirectory, @"UnitTestRingProjectionAlgorithm\MNISTImages", trainDatabase[0]);
+                string trainLabels = Path.Combine(AppContext.BaseDirectory, @"UnitTestRingProjectionAlgorithm\MNISTImages", trainDatabase[1]);
 
                 BinaryReader[] mnistData = new BinaryReader[2];
                 mnistData[0] = new BinaryReader(new FileStream(trainImages, FileMode.Open));

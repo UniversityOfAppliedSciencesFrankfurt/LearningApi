@@ -35,7 +35,8 @@ namespace LearningFoundation.Test.ImageBinarizerTest
 
             api.UseActionModule<double[,,], double[,,]>((input, ctx) =>
             {
-                string path = Path.Combine(AppContext.BaseDirectory, "Images\\a.png");
+                //string path = @"Images\a.png";
+                string path = Path.Combine(AppContext.BaseDirectory, @"ImageBinarization\Images\a.png");
 
                 Bitmap bitmap = new Bitmap(path);
 
@@ -68,7 +69,7 @@ namespace LearningFoundation.Test.ImageBinarizerTest
                 }
                 stringArray.AppendLine();
             }
-            using (StreamWriter writer = File.CreateText(Path.Combine(AppContext.BaseDirectory, "Images\\a.txt")))
+            using (StreamWriter writer = File.CreateText(Path.Combine(AppContext.BaseDirectory, @"ImageBinarization\Images\a.txt")))
             {
                 writer.Write(stringArray.ToString());
             }
@@ -93,7 +94,7 @@ namespace LearningFoundation.Test.ImageBinarizerTest
 
             api.UseActionModule<double[,,], double[,,]>((input, ctx) =>
             {
-                string path = Path.Combine(AppContext.BaseDirectory, "Images\\black and white.jpg");
+                string path = Path.Combine(AppContext.BaseDirectory, @"ImageBinarization\Images\black and white.jpg");
 
                 Bitmap bitmap = new Bitmap(path);
 
@@ -126,7 +127,7 @@ namespace LearningFoundation.Test.ImageBinarizerTest
                 }
                 stringArray.AppendLine();
             }
-            using (StreamWriter writer = File.CreateText(Path.Combine(AppContext.BaseDirectory, "Images\\black and white.txt")))
+            using (StreamWriter writer = File.CreateText(Path.Combine(AppContext.BaseDirectory, @"ImageBinarization\Images\black and white.txt")))
             {
                 writer.Write(stringArray.ToString());
             }
@@ -151,7 +152,7 @@ namespace LearningFoundation.Test.ImageBinarizerTest
 
             api.UseActionModule<double[,,], double[,,]>((input, ctx) =>
             {
-                string path = Path.Combine(AppContext.BaseDirectory, "Images\\coloured.jpg");
+                string path = Path.Combine(AppContext.BaseDirectory, @"ImageBinarization\Images\coloured.jpg");
 
                 Bitmap bitmap = new Bitmap(path);
 
@@ -184,7 +185,7 @@ namespace LearningFoundation.Test.ImageBinarizerTest
                 }
                 stringArray.AppendLine();
             }
-            using (StreamWriter writer = File.CreateText(Path.Combine(AppContext.BaseDirectory, "Images\\coloured.txt")))
+            using (StreamWriter writer = File.CreateText(Path.Combine(AppContext.BaseDirectory, @"ImageBinarization\Images\coloured.txt")))
             {
                 writer.Write(stringArray.ToString());
             }
@@ -209,7 +210,7 @@ namespace LearningFoundation.Test.ImageBinarizerTest
 
             api.UseActionModule<double[,,], double[,,]>((input, ctx) =>
             {
-                string path = Path.Combine(AppContext.BaseDirectory, "Images\\grayscale.jpg");
+                string path = Path.Combine(AppContext.BaseDirectory, @"ImageBinarization\Images\grayscale.jpg");
 
                 Bitmap bitmap = new Bitmap(path);
 
@@ -242,7 +243,7 @@ namespace LearningFoundation.Test.ImageBinarizerTest
                 }
                 stringArray.AppendLine();
             }
-            using (StreamWriter writer = File.CreateText(Path.Combine(AppContext.BaseDirectory, "Images\\grayscale.txt")))
+            using (StreamWriter writer = File.CreateText(Path.Combine(AppContext.BaseDirectory, @"ImageBinarization\Images\grayscale.txt")))
             {
                 writer.Write(stringArray.ToString());
             }

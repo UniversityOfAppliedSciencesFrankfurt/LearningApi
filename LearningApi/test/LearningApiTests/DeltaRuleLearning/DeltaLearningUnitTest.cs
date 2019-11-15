@@ -133,10 +133,10 @@ namespace LearningFoundation.Test
             var result = api.Algorithm.Predict(testData, api.Context) as DeltaLearningResult;
 
 
-            Assert.Equals(result.PredictedResults[0], 0);
-            Assert.Equals(result.PredictedResults[1], 0);
-            Assert.Equals(result.PredictedResults[2], 1);
-            Assert.Equals(result.PredictedResults[3], 1);
+            Assert.AreEqual(result.PredictedResults[0], 0);
+            Assert.AreEqual(result.PredictedResults[1], 0);
+            Assert.AreEqual(result.PredictedResults[2], 1);
+            Assert.AreEqual(result.PredictedResults[3], 1);
         }
 
         /// <summary>
@@ -182,12 +182,12 @@ namespace LearningFoundation.Test
 
             var result = api.Algorithm.Predict(testData, api.Context) as DeltaLearningResult;
 
-            Assert.Equals(result.PredictedResults[0], 1);
-            Assert.Equals(result.PredictedResults[1], 0);
-            Assert.Equals(result.PredictedResults[2], 0);
-            Assert.Equals(result.PredictedResults[3], 0);
-            Assert.Equals(result.PredictedResults[4], 1);
-            Assert.Equals(result.PredictedResults[5], 0);
+            Assert.AreEqual(result.PredictedResults[0], 1);
+            Assert.AreEqual(result.PredictedResults[1], 0);
+            Assert.AreEqual(result.PredictedResults[2], 0);
+            Assert.AreEqual(result.PredictedResults[3], 0);
+            Assert.AreEqual(result.PredictedResults[4], 1);
+            Assert.AreEqual(result.PredictedResults[5], 0);
         }
 
         /// <summary>
@@ -222,9 +222,9 @@ namespace LearningFoundation.Test
 
             var result = api.Algorithm.Predict(testData, api.Context) as DeltaLearningResult;
 
-            Assert.Equals(result.PredictedResults[0], 0);
-            Assert.Equals(result.PredictedResults[1], 1);
-            Assert.Equals(result.PredictedResults[2], 1);
+            Assert.AreEqual(result.PredictedResults[0], 0);
+            Assert.AreEqual(result.PredictedResults[1], 1);
+            Assert.AreEqual(result.PredictedResults[2], 1);
         }
     }
 }

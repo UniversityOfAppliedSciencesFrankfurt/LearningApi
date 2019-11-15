@@ -59,15 +59,15 @@ namespace LearningFoundation.Test.CsvDataProvider
                         var val1 = double.Parse((string)result[i][j], System.Globalization.NumberStyles.Any, CultureInfo.InvariantCulture);
                         var val2 = Convert.ToDouble(expected[i][j], CultureInfo.InvariantCulture);
 
-                        Assert.Equals(val1,val2);
+                        Assert.AreEqual(val1,val2);
                     }
                     else if (col.Type == ColumnType.BINARY)//binary column
                     {
-                        Assert.Equals(result[i][j].ToString(), expected[i][j].ToString());
+                        Assert.AreEqual(result[i][j].ToString(), expected[i][j].ToString());
                     }
                     else if (col.Type == ColumnType.CLASS)//class column
                     {
-                        Assert.Equals(result[i][j].ToString(), expected[i][j].ToString());
+                        Assert.AreEqual(result[i][j].ToString(), expected[i][j].ToString());
                     }
                 }
             }
@@ -98,21 +98,21 @@ namespace LearningFoundation.Test.CsvDataProvider
                 {
                     var col = api.Context.DataDescriptor.Features[j];
                     if (col.Type == ColumnType.STRING)
-                        Assert.Equals(result[i][j], expected[i][j]);
+                        Assert.AreEqual(result[i][j], expected[i][j]);
                     else if (col.Type == ColumnType.NUMERIC)//numeric column
                     {
                         //var val1 = double.Parse(result[i][j].ToString());
                         //var val2 = double.Parse(expected[i][j].ToString());
 
-                        Assert.Equals(result[i][j], expected[i][j]);
+                        Assert.AreEqual(result[i][j], expected[i][j]);
                     }
                     else if (col.Type == ColumnType.BINARY)//binary column
                     {
-                        Assert.Equals(result[i][j].ToString(), expected[i][j].ToString());
+                        Assert.AreEqual(result[i][j].ToString(), expected[i][j].ToString());
                     }
                     else if (col.Type == ColumnType.CLASS)//class column
                     {
-                        Assert.Equals(result[i][j].ToString(), expected[i][j].ToString());
+                        Assert.AreEqual(result[i][j].ToString(), expected[i][j].ToString());
                     }
                 }
             }

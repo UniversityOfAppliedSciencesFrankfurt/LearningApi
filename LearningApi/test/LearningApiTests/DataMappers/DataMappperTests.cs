@@ -55,7 +55,7 @@ namespace LearningFoundation.Test.Datamapper
                 for (int j = 0; j < expected[0].Length; j++)
                 {
 
-                    Assert.Equals(result[i][j], expected[i][j]);
+                    Assert.AreEqual(result[i][j], expected[i][j]);
                 }
 
 
@@ -86,7 +86,7 @@ namespace LearningFoundation.Test.Datamapper
             {
                 for (int j = 0; j < expected[0].Length; j++)
                 {
-                    Assert.Equals(result[i][j], expected[i][j]);
+                    Assert.AreEqual(result[i][j], expected[i][j]);
                 }
             }
         }
@@ -117,7 +117,7 @@ namespace LearningFoundation.Test.Datamapper
             //there is one category column in features so the number of features is increased with (calssCount-1)
             // featureCount = columnCount- strinCoulumnCount-LabelColumn + calssCount-1
             var featureCount = 4 - 1 - 1 + (3 - 1);
-            Assert.Equals(featureNumber, featureCount);
+            Assert.AreEqual(featureNumber, featureCount);
 
         }
         //feature count when category column is a label and noone feature is class column.
@@ -146,7 +146,7 @@ namespace LearningFoundation.Test.Datamapper
             //there is no category column in features so the number of features is 
             //  featureCount = columnCount-IngoredCoulmnCount-1 labelcolumn
             var featureCount = 4 - 1 - 1;
-            Assert.Equals(featureNumber, featureCount);
+            Assert.AreEqual(featureNumber, featureCount);
 
         }
 

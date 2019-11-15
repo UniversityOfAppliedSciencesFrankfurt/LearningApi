@@ -41,8 +41,8 @@ namespace UnitTests
 
             var result = api.Run();
 
-            Assert.Equals(1.1, ((double[])result)[0]);
-            Assert.Equals(4.4, ((double[])result)[3]);
+            Assert.AreEqual(1.1, ((double[])result)[0]);
+            Assert.AreEqual(4.4, ((double[])result)[3]);
         }
 
 
@@ -67,8 +67,8 @@ namespace UnitTests
 
             var result = api.Run();
 
-            Assert.Equals(2.1, ((double[])result)[0]);
-            Assert.Equals(5.4, ((double[])result)[3]);
+            Assert.AreEqual(2.1, ((double[])result)[0]);
+            Assert.AreEqual(5.4, ((double[])result)[3]);
         }
 
 

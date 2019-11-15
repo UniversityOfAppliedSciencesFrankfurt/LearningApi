@@ -27,52 +27,52 @@ namespace test.datamapper
             
         }
 
-        [TestMethod]
-        public void CalculateCorrelationTest()
-        {
-            LearningApi api = new LearningApi(null);
+        //[TestMethod]
+        //public void CalculateCorrelationTest()
+        //{
+        //    LearningApi api = new LearningApi(null);
 
-            // Initialize data provider
-            api.UseCsvDataProvider(@"CorrelationMatrix/corellation_data.csv", ',',true,0);
-
-
-            //Custom action of dataset 
-            api.UseActionModule<object[][], double[][]>((input,ctx) =>
-            {
-                return toColumnVector(input);
-            });
-
-            var data = api.Run() as double[][];
-
-            var prov = api.GetModule<CsvDataProvider>("CsvDataProvider");
-
-            var strData = new List<string>();
-            var hed = prov.Header.ToList();
-            hed.Insert(0, "");
-            strData.Add(string.Join(",", hed.ToArray()));
-            for (int i=0; i< data.Length; i++)
-            {
-                var lst = new List<string>();
-                lst.Add(prov.Header[i]);
-                for(int  k=0; k < i;k++)
-                    lst.Add(" ");
-
-                for (int j = i; j < data.Length; j++)
-                {
-                    var corValue = data[i].CorrCoeffOf(data[j]);
-                    if (double.IsNaN(corValue))
-                        continue;
-                    lst.Add(corValue.ToString("n5", CultureInfo.InvariantCulture));
-                }
+        //    // Initialize data provider
+        //    api.UseCsvDataProvider(@"CorrelationMatrix/corellation_data.csv", ',',true,0);
 
 
-                strData.Add(string.Join(",", lst));
-            }
+        //    //Custom action of dataset 
+        //    api.UseActionModule<object[][], double[][]>((input,ctx) =>
+        //    {
+        //        return toColumnVector(input);
+        //    });
 
-            Assert.Equals("Col1,1.00000,0.16892,0.99111,0.75077,-0.82354,-0.85164", strData[1]);
+        //    var data = api.Run() as double[][];
 
-            System.IO.File.WriteAllLines(@"CorrelationMatrix/strCorrlation.txt", strData);
-        }
+        //    var prov = api.GetModule<CsvDataProvider>("CsvDataProvider");
+
+        //    var strData = new List<string>();
+        //    var hed = prov.Header.ToList();
+        //    hed.Insert(0, "");
+        //    strData.Add(string.Join(",", hed.ToArray()));
+        //    for (int i=0; i< data.Length; i++)
+        //    {
+        //        var lst = new List<string>();
+        //        lst.Add(prov.Header[i]);
+        //        for(int  k=0; k < i;k++)
+        //            lst.Add(" ");
+
+        //        for (int j = i; j < data.Length; j++)
+        //        {
+        //            var corValue = data[i].CorrCoeffOf(data[j]);
+        //            if (double.IsNaN(corValue))
+        //                continue;
+        //            lst.Add(corValue.ToString("n5", CultureInfo.InvariantCulture));
+        //        }
+
+
+        //        strData.Add(string.Join(",", lst));
+        //    }
+
+        //    Assert.Equals("Col1,1.00000,0.16892,0.99111,0.75077,-0.82354,-0.85164", strData[1]);
+
+        //    System.IO.File.WriteAllLines(@"CorrelationMatrix/strCorrlation.txt", strData);
+        //}
 
         private double[][] toColumnVector(object[][] input)
         {

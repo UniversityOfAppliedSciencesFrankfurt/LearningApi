@@ -24,17 +24,17 @@ namespace LearningFoundation.Test.RestrictedBolzmannMachine
             
         }
 
-        [TestMethod]
-        public void TestBinarization()
-        {
-            var images = Directory.GetFiles(Path.Combine(AppContext.BaseDirectory, "RestrictedBolzmannMachine2\\TrainingImages"));
+        //[TestMethod]
+        //public void TestBinarization()
+        //{
+        //    var images = Directory.GetFiles(Path.Combine(AppContext.BaseDirectory, "RestrictedBolzmannMachine2\\TrainingImages"));
 
-            foreach (var item in images)
-            {
-                appendImageBinary(item, "binarized.txt");
-            }
+        //    foreach (var item in images)
+        //    {
+        //        appendImageBinary(item, "binarized.txt");
+        //    }
 
-        }
+        //}
 
         /// <summary>
         /// RBM is not supervised algorithm. This is why we do not have a label.

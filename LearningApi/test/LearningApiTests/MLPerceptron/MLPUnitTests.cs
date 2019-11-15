@@ -461,96 +461,96 @@ namespace LearningFoundation.Test.MLPerceptron
             }
         }
 
-        [DataTestMethod]
-        //[InlineData(new int[] { 5, 2 })]
-        [DataRow(25, 0.01, 128, new int[] { 32, 32, 32, 32, 32, 32, 32, 32, 32, 32 }, 10)]
-        [DataRow(25, 0.01, 128, new int[] { 32, 32, 32, 32, 32, 32, 32, 32, 32 }, 9)]
-        [DataRow(25, 0.01, 128, new int[] { 32, 32, 32, 32, 32, 32, 32, 32 }, 8)]
-        [DataRow(25, 0.01, 128, new int[] { 32, 32, 32, 32, 32, 32, 32 }, 7)]
-        [DataRow(25, 0.01, 128, new int[] { 32, 32, 32, 32, 32, 32 }, 6)]
-        [DataRow(25, 0.01, 128, new int[] { 32, 32, 32, 32, 32 }, 5)]
-        [DataRow(25, 0.01, 128, new int[] { 32, 32, 32, 32 }, 4)]
-        [DataRow(25, 0.01, 128, new int[] { 32, 32, 32 }, 3)]
-        [DataRow(25, 0.01, 128, new int[] { 32, 32 }, 2)]
-        [DataRow(2, 0.01, 128, new int[] { 32 }, 1)]
+        //[DataTestMethod]
+        ////[InlineData(new int[] { 5, 2 })]
+        //[DataRow(25, 0.01, 128, new int[] { 32, 32, 32, 32, 32, 32, 32, 32, 32, 32 }, 10)]
+        //[DataRow(25, 0.01, 128, new int[] { 32, 32, 32, 32, 32, 32, 32, 32, 32 }, 9)]
+        //[DataRow(25, 0.01, 128, new int[] { 32, 32, 32, 32, 32, 32, 32, 32 }, 8)]
+        //[DataRow(25, 0.01, 128, new int[] { 32, 32, 32, 32, 32, 32, 32 }, 7)]
+        //[DataRow(25, 0.01, 128, new int[] { 32, 32, 32, 32, 32, 32 }, 6)]
+        //[DataRow(25, 0.01, 128, new int[] { 32, 32, 32, 32, 32 }, 5)]
+        //[DataRow(25, 0.01, 128, new int[] { 32, 32, 32, 32 }, 4)]
+        //[DataRow(25, 0.01, 128, new int[] { 32, 32, 32 }, 3)]
+        //[DataRow(25, 0.01, 128, new int[] { 32, 32 }, 2)]
+        //[DataRow(2, 0.01, 128, new int[] { 32 }, 1)]
 
-        public void UnitTestMNIST(int iterations, double learningrate, int batchSize, int[] hiddenLayerNeurons, int testCaseNumber)
-        {
-            MNISTFileRead mnistObj = new MNISTFileRead();
+        //public void UnitTestMNIST(int iterations, double learningrate, int batchSize, int[] hiddenLayerNeurons, int testCaseNumber)
+        //{
+        //    MNISTFileRead mnistObj = new MNISTFileRead();
 
-            MNISTFileRead.ReadMNISTTrainingData();
+        //    MNISTFileRead.ReadMNISTTrainingData();
 
-            MNISTFileRead.ReadMNISTTestData();
+        //    MNISTFileRead.ReadMNISTTestData();
 
-            // TODO
-            // test by using same test cases in dependence on number of iterations.
-            // test by dependence on number of layers
-            // test by dependence on number of neurons in layers.
-            // [2 layers]: [x,x] [1,2] [1,3] [1,4]
+        //    // TODO
+        //    // test by using same test cases in dependence on number of iterations.
+        //    // test by dependence on number of layers
+        //    // test by dependence on number of neurons in layers.
+        //    // [2 layers]: [x,x] [1,2] [1,3] [1,4]
 
-            // Read the csv file which contains the training data
+        //    // Read the csv file which contains the training data
 
-            int numberOfOutputs = 10;
+        //    int numberOfOutputs = 10;
 
-            LearningApi api = new LearningApi();
+        //    LearningApi api = new LearningApi();
 
-            api.UseActionModule<object, double[][]>((notUsed, ctx) =>
-            {
-                ctx.DataDescriptor = new DataDescriptor();
+        //    api.UseActionModule<object, double[][]>((notUsed, ctx) =>
+        //    {
+        //        ctx.DataDescriptor = new DataDescriptor();
 
-                ctx.DataDescriptor.Features = new LearningFoundation.DataMappers.Column[MNISTFileRead.firstLineValues.Length - 1];
+        //        ctx.DataDescriptor.Features = new LearningFoundation.DataMappers.Column[MNISTFileRead.firstLineValues.Length - 1];
 
-                for (int i = 0; i < (MNISTFileRead.firstLineValues.Length - 1); i++)
-                {
-                    ctx.DataDescriptor.Features[i] = new LearningFoundation.DataMappers.Column
-                    {
-                        Id = i,
-                        Name = MNISTFileRead.firstLineValues[i],
-                        Type = LearningFoundation.DataMappers.ColumnType.NUMERIC,
-                        Index = i,
-                    };
-                }
+        //        for (int i = 0; i < (MNISTFileRead.firstLineValues.Length - 1); i++)
+        //        {
+        //            ctx.DataDescriptor.Features[i] = new LearningFoundation.DataMappers.Column
+        //            {
+        //                Id = i,
+        //                Name = MNISTFileRead.firstLineValues[i],
+        //                Type = LearningFoundation.DataMappers.ColumnType.NUMERIC,
+        //                Index = i,
+        //            };
+        //        }
 
-                ctx.DataDescriptor.LabelIndex = MNISTFileRead.firstLineValues.Length - 1;
+        //        ctx.DataDescriptor.LabelIndex = MNISTFileRead.firstLineValues.Length - 1;
 
-                return MNISTFileRead.trainingData;
-            });
+        //        return MNISTFileRead.trainingData;
+        //    });
 
-            //int[] hiddenLayerNeurons = { 6 };
-            // Invoke the MLPerecptronAlgorithm with a specific learning rate, number of iterations
-            api.UseMLPerceptron(learningrate, iterations, batchSize, testCaseNumber, hiddenLayerNeurons);
+        //    //int[] hiddenLayerNeurons = { 6 };
+        //    // Invoke the MLPerecptronAlgorithm with a specific learning rate, number of iterations
+        //    api.UseMLPerceptron(learningrate, iterations, batchSize, testCaseNumber, hiddenLayerNeurons);
 
-            IScore score = api.Run() as IScore;
+        //    IScore score = api.Run() as IScore;
 
-            // Invoke the Predict method to predict the results on the test data
-            var result = ((MLPerceptronResult)api.Algorithm.Predict(MNISTFileRead.testData, api.Context)).results;
+        //    // Invoke the Predict method to predict the results on the test data
+        //    var result = ((MLPerceptronResult)api.Algorithm.Predict(MNISTFileRead.testData, api.Context)).results;
 
-            int accurateResults = 0;
+        //    int accurateResults = 0;
 
-            // Check if the test data has been correctly classified by the neural network
-            for (int i = 0; i < MNISTFileRead.testData.Length; i++)
-            {
-                accurateResults++;
+        //    // Check if the test data has been correctly classified by the neural network
+        //    for (int i = 0; i < MNISTFileRead.testData.Length; i++)
+        //    {
+        //        accurateResults++;
 
-                for (int j = 0; j < numberOfOutputs; j++)
-                {
-                    //Assert.True(testData[i][(testData[i].Length - numberOfOutputs) + j] == (result[i * numberOfOutputs + j] >= 0.5 ? 1 : 0));
-                    if (MNISTFileRead.testData[i][(MNISTFileRead.testData[i].Length - numberOfOutputs) + j] != (result[i * numberOfOutputs + j] >= 0.5 ? 1 : 0))
-                    {
-                        accurateResults--;
-                        break;
-                    }
-                }
-            }
+        //        for (int j = 0; j < numberOfOutputs; j++)
+        //        {
+        //            //Assert.True(testData[i][(testData[i].Length - numberOfOutputs) + j] == (result[i * numberOfOutputs + j] >= 0.5 ? 1 : 0));
+        //            if (MNISTFileRead.testData[i][(MNISTFileRead.testData[i].Length - numberOfOutputs) + j] != (result[i * numberOfOutputs + j] >= 0.5 ? 1 : 0))
+        //            {
+        //                accurateResults--;
+        //                break;
+        //            }
+        //        }
+        //    }
 
-            /*
-            float loss = expectedResults / (numberOfOutputs) / testData.Length;
-            Debug.WriteLine($"{hiddleLayerToString(hiddenLayerNeurons)} - Loss: {loss}");
-            */
-            double accuracy = ((double)accurateResults * numberOfOutputs) / result.Length;
-            Debug.WriteLine($"Accuracy: {accuracy}");
+        //    /*
+        //    float loss = expectedResults / (numberOfOutputs) / testData.Length;
+        //    Debug.WriteLine($"{hiddleLayerToString(hiddenLayerNeurons)} - Loss: {loss}");
+        //    */
+        //    double accuracy = ((double)accurateResults * numberOfOutputs) / result.Length;
+        //    Debug.WriteLine($"Accuracy: {accuracy}");
 
-        }
+        //}
 
         /// <summary>
         /// This test case uses the German Dataset as the training dataset for credit prediction.
