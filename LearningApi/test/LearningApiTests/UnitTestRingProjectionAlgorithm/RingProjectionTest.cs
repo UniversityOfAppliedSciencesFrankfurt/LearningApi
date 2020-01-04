@@ -9,6 +9,7 @@ using System.Diagnostics;
 using LearningFoundation.ImageBinarizer;
 using LearningFoundation.RingProjectionAlgorithm;
 using LearningFoundation.MlAlgorithms.RingProjectionAlgorithm;
+using System.Linq;
 
 namespace UnitTestRingProjectionAlgorithm
 {
@@ -78,39 +79,55 @@ namespace UnitTestRingProjectionAlgorithm
             Assert.AreEqual(new LoadMNISTPipelineModule().ReverseBytes(60000), 1625948160);
         }
 
+        public static IEnumerable<object[]> GetRingProjectionInputData()
+        {
+            yield return new object[] {
+                new []{ "MaskA.jpg", "MaskB.jpg", "MaskC.jpg", "MaskD.jpg" },
+                "OutputMask",
+                "CoeffMask"};
+            yield return new object[] {
+                new []{ "BlackWhiteA.jpg", "BlackWhiteB.jpg", "BlackWhiteC.jpg", "BlackWhiteD.jpg" },
+                "OutputBlackWhite",
+                "CoeffBlackWhite" };
+            yield return new object[] {
+                new []{ "BlackPatternA.jpg", "BlackPatternB.jpg", "BlackPatternC.jpg", "BlackPatternD.jpg" },
+                "OutputBlackPattern",
+                "CoeffBlackPattern"};
+        }
+
         /// <summary>
         /// Letter A samples with cross correlation and visualized function
         /// </summary>
-        [TestMethod]
-        public void RingProjection2D()
+        [DataTestMethod]
+        [DynamicData(nameof(GetRingProjectionInputData), DynamicDataSourceType.Method)]
+        public void RingProjection2D(string[] inputImageFileNames, string outputImageFilePrefix, string coeffOutputFileName)
         {
-            string[] testImages = { "LetterA.jpg", "LetterA45.jpg", "LetterA-45.jpg", "LetterA180.jpg" };
             string trainingImagesPath = Path.Combine(AppContext.BaseDirectory, @"UnitTestRingProjectionAlgorithm\TestImages");
 
             LearningApi api;
-            for (int i = 0; i < testImages.Length; i++)
+            for (int i = 0; i < inputImageFileNames.Length; i++)
             {
                 api = new LearningApi();
                 api.UseActionModule<object, double[][]>((input, ctx) =>
                 {
                     Binarizer biImg = new Binarizer();
                     double[][] data = biImg.GetBinaryArray(
-                        Path.Combine(trainingImagesPath, testImages[i]), 50);
+                        Path.Combine(trainingImagesPath, inputImageFileNames[i]), 50);
                     return data;
                 });
                 api.UseRingProjectionPipelineComponent();
-                api.AddModule(new RingProjectionFunctionToCSVPipelineModule("LetterA", i, ";", trainingImagesPath));
+                api.AddModule(new RingProjectionFunctionToCSVPipelineModule(outputImageFilePrefix, i, ";", trainingImagesPath));
                 api.Run();
             }
 
             // Loading the CSV files created before back to the test
             int count = 0;
             List<double[]> functions = new List<double[]>();
-            while (File.Exists(Path.Combine(trainingImagesPath, $"LetterA.{count++}.csv"))) ;
+            while (File.Exists(Path.Combine(trainingImagesPath, $"{outputImageFilePrefix}.{count++}.csv"))) ;
 
             for (int i = 0; i < count - 1; i++)
             {
-                using (var reader = new StreamReader(@Path.Combine(trainingImagesPath, $"LetterA.{i}.csv")))
+                using (var reader = new StreamReader(@Path.Combine(trainingImagesPath, $"{outputImageFilePrefix}.{i}.csv")))
                 {
                     List<int> tempList = new List<int>();
                     reader.ReadLine();
@@ -147,15 +164,17 @@ namespace UnitTestRingProjectionAlgorithm
                 }
             }
 
+            Assert.IsTrue(corrCoefficient.All(coeff => coeff <= 1 && coeff > 0));
+
             Directory.CreateDirectory(Path.Combine(AppContext.BaseDirectory, trainingImagesPath, "Boxplot"));
-            string savePath = Path.Combine(trainingImagesPath, "Boxplot", "LetterA.txt");
+            string savePath = Path.Combine(trainingImagesPath, "Boxplot", $"{coeffOutputFileName}.txt");
             if (!File.Exists(savePath))
             {
                 File.Create(savePath).Dispose();
             }
             using (StreamWriter streamWriter = new StreamWriter(savePath))
             {
-                streamWriter.Write("LetterA ");
+                streamWriter.Write($"{coeffOutputFileName} ");
                 foreach (var item in corrCoefficient)
                 {
                     streamWriter.Write($" | {item.ToString("0.0000")}");

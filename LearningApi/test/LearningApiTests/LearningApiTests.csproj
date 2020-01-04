@@ -446,6 +446,30 @@
     <None Update="UnitTestRingProjectionAlgorithm\MNISTImages\train-labels.idx1-ubyte">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Update="UnitTestRingProjectionAlgorithm\TestImages\BlackPatternA.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="UnitTestRingProjectionAlgorithm\TestImages\BlackPatternB.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="UnitTestRingProjectionAlgorithm\TestImages\BlackPatternC.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="UnitTestRingProjectionAlgorithm\TestImages\BlackPatternD.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="UnitTestRingProjectionAlgorithm\TestImages\BlackWhiteA.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="UnitTestRingProjectionAlgorithm\TestImages\BlackWhiteB.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="UnitTestRingProjectionAlgorithm\TestImages\BlackWhiteC.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="UnitTestRingProjectionAlgorithm\TestImages\BlackWhiteD.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="UnitTestRingProjectionAlgorithm\TestImages\LetterA-45.jpg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
@@ -484,6 +508,18 @@
     </None>
     <None Update="UnitTestRingProjectionAlgorithm\TestImages\LetterO45.jpg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="UnitTestRingProjectionAlgorithm\TestImages\MaskA.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="UnitTestRingProjectionAlgorithm\TestImages\MaskB.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="UnitTestRingProjectionAlgorithm\TestImages\MaskC.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="UnitTestRingProjectionAlgorithm\TestImages\MaskD.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="UnitTestRingProjectionAlgorithm\TestImages\myFace.jpg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
