@@ -167,6 +167,7 @@ namespace ImageBinarizerTest
                         data[i, j, 0] = color.R;
                         data[i, j, 1] = color.G;
                         data[i, j, 2] = color.B;
+                        //
                     }
                 }
                 return data;
