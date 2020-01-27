@@ -17,7 +17,8 @@ namespace ImageBinarizerApp
             Console.WriteLine("\nWelcome to Image Binarizer Application [Version 1.0.2]");
             Console.WriteLine("Copyright <c> 2019 daenet GmbH, Damir Dobric. All rights reserved.");            
             Console.WriteLine("\nUse following command for help:");
-            Console.WriteLine("dotnet ImageBinarizerApp -help");            
+            Console.WriteLine("dotnet ImageBinarizerApp -help");
+            //args = new String[] { Console.ReadLine() };
             
             //Test if necessary input arguments were supplied.
             if (args.Length < 8)
