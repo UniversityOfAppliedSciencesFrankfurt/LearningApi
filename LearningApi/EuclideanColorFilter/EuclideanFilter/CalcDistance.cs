@@ -6,7 +6,7 @@ namespace EuclideanFilter
     /// <summary>
     /// 
     /// </summary>
-    public class CalcDistance
+    public static class CalcDistance
     {
         /// <summary>
         /// Calculate the Distance between two Points in 3D with the formula: distance = Sqrt((x2 - x1)² + (y2 - y1)² + (z2 - z1)²)    
