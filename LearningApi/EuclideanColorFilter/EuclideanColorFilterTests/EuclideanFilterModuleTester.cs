@@ -147,6 +147,5 @@ namespace EuclideanColorFilterTests
             Assert.AreEqual(Color.FromArgb(0, 0, 0), outputAsBitmap.GetPixel(1, 0));
             Assert.AreEqual(Color.FromArgb(0, 0, 0), outputAsBitmap.GetPixel(1, 1));
         }
-            
     }
 }
