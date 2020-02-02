@@ -147,5 +147,36 @@ namespace EuclideanColorFilterTests
             Assert.AreEqual(Color.FromArgb(0, 0, 0), outputAsBitmap.GetPixel(1, 0));
             Assert.AreEqual(Color.FromArgb(0, 0, 0), outputAsBitmap.GetPixel(1, 1));
         }
+        /// <summary>
+        /// This TestMethod gerneretes an 2x2 bitmap. The center Color is green, and the radius is 1.5.
+        /// So every other color, which is not exactly red (255,0,0), should be set to black (in this case the last two Asserts)
+        /// </summary>
+        [TestMethod]
+        public void GenerateImageAndRunApi_Green()
+        {
+            LearningApi api = new LearningApi();
+            EuclideanFilterModule module = new EuclideanFilterModule(Color.FromArgb(255, 0, 255, 0), 1.0f);
+            Bitmap bitmap = new Bitmap(2, 2);
+
+            bitmap.SetPixel(0, 0, Color.FromArgb(0, 255, 0));
+            bitmap.SetPixel(0, 1, Color.FromArgb(0, 255, 0));
+            bitmap.SetPixel(1, 0, Color.FromArgb(255, 0, 0));
+            bitmap.SetPixel(1, 1, Color.FromArgb(0, 0, 255));
+
+            double[,,] data = ConvertFromBitmapTo3dArray(bitmap);
+
+            api.UseActionModule<double[,,], double[,,]>((input, ctx) => { return data; });
+
+            api.AddModule(module);
+
+            double[,,] output = api.Run() as double[,,];
+
+            Bitmap outputAsBitmap = ConvertFrom3dArrayToBitmap(output);
+
+            Assert.AreEqual(Color.FromArgb(0, 255, 0), outputAsBitmap.GetPixel(0, 0));
+            Assert.AreEqual(Color.FromArgb(0, 0, 0), outputAsBitmap.GetPixel(0, 1));
+            Assert.AreEqual(Color.FromArgb(0, 0, 0), outputAsBitmap.GetPixel(1, 0));
+            Assert.AreEqual(Color.FromArgb(0, 0, 0), outputAsBitmap.GetPixel(1, 1));
+        }
     }
 }
