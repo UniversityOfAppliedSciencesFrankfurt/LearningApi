@@ -61,13 +61,48 @@ namespace EuclideanColorFilterTests
 
             return bitmap;
         }
+            /// <summary>
+            /// Converts the color image into grayscale
+            /// </summary>
+            /// <param name="imageArray"></param>
+            /// <returns></returns>
+            public static Bitmap ConvertColorintoGrayscale(double[,,] imageArray)
+            {
+                int imgWidth = imageArray.GetLength(0);
+                int imgHeight = imageArray.GetLength(1);
 
-        /// <summary>
-        /// Load Method for loading a Bitmap, which will be converted to double[,,]
-        /// </summary>
-        /// <param name="filename"></param>
-        /// <returns></returns>
-        public static double[,,] Load(string filename)
+                //0 -> R, 1 -> G, 2 -> B
+                Bitmap bitmap = new Bitmap(imgWidth, imgHeight);
+
+                for (int i = 0; i < imgWidth; i++)
+                {
+                    for (int j = 0; j < imgHeight; j++)
+                    {
+                        Color color = GetAndSetPixels.GetPixel(imageArray, i, j);
+                        
+                        // get pixel value
+                        int r = color.R;
+                        int g = color.G;
+                        int b = color.B;
+
+                        // Find Average
+                        int Avg = (r + g + b) / 3;
+
+                    // Set ne pixel Value
+                    //bitmap.SetPixel(i, j, color);    
+                    GetAndSetPixels.SetPixel(imageArray, i, j, Color.FromArgb(Avg, Avg, Avg));
+                    }
+
+                }
+                return bitmap;
+            }
+
+            /// <summary>
+            /// Load Method for loading a Bitmap, which will be converted to double[,,]
+            /// </summary>
+            /// <param name="filename"></param>
+            /// <returns></returns>
+            public static double[,,] Load(string filename)
         {
             Bitmap bitmap = new Bitmap(filename);
 
@@ -147,36 +182,6 @@ namespace EuclideanColorFilterTests
             Assert.AreEqual(Color.FromArgb(0, 0, 0), outputAsBitmap.GetPixel(1, 0));
             Assert.AreEqual(Color.FromArgb(0, 0, 0), outputAsBitmap.GetPixel(1, 1));
         }
-        /// <summary>
-        /// This TestMethod gerneretes an 2x2 bitmap. The center Color is green, and the radius is 1.5.
-        /// So every other color, which is not exactly red (255,0,0), should be set to black (in this case the last two Asserts)
-        /// </summary>
-        [TestMethod]
-        public void GenerateImageAndRunApi_Green()
-        {
-            LearningApi api = new LearningApi();
-            EuclideanFilterModule module = new EuclideanFilterModule(Color.FromArgb(255, 0, 255, 0), 1.0f);
-            Bitmap bitmap = new Bitmap(2, 2);
-
-            bitmap.SetPixel(0, 0, Color.FromArgb(0, 255, 0));
-            bitmap.SetPixel(0, 1, Color.FromArgb(0, 255, 0));
-            bitmap.SetPixel(1, 0, Color.FromArgb(255, 0, 0));
-            bitmap.SetPixel(1, 1, Color.FromArgb(0, 0, 255));
-
-            double[,,] data = ConvertFromBitmapTo3dArray(bitmap);
-
-            api.UseActionModule<double[,,], double[,,]>((input, ctx) => { return data; });
-
-            api.AddModule(module);
-
-            double[,,] output = api.Run() as double[,,];
-
-            Bitmap outputAsBitmap = ConvertFrom3dArrayToBitmap(output);
-
-            Assert.AreEqual(Color.FromArgb(0, 255, 0), outputAsBitmap.GetPixel(0, 0));
-            Assert.AreEqual(Color.FromArgb(0, 0, 0), outputAsBitmap.GetPixel(0, 1));
-            Assert.AreEqual(Color.FromArgb(0, 0, 0), outputAsBitmap.GetPixel(1, 0));
-            Assert.AreEqual(Color.FromArgb(0, 0, 0), outputAsBitmap.GetPixel(1, 1));
-        }
+               
     }
 }

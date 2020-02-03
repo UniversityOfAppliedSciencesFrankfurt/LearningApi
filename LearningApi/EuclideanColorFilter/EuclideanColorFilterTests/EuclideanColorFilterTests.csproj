@@ -111,4 +111,13 @@
     <ProjectReference Include="..\EuclideanFilter\EuclideanFilter.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Reference Include="EuclideanFilter">
+      <HintPath>..\EuclideanFilter\bin\Debug\netstandard2.0\EuclideanFilter.dll</HintPath>
+    </Reference>
+    <Reference Include="EuclideanFilterWinFormApp">
+      <HintPath>..\EuclideanFilterWinFormApp\EuclideanFilterWinFormApp\obj\Debug\EuclideanFilterWinFormApp.exe</HintPath>
+    </Reference>
+  </ItemGroup>
+
 </Project>

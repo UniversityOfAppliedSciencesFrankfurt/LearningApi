@@ -9,7 +9,7 @@ namespace EuclideanFilter
     /// <summary>
     /// 
     /// </summary>
-    public class GetAndSetPixels
+    public static class GetAndSetPixels
     {
         /// <summary>
         /// Setpixel method, which will be used to set the RGB-values for the current row/col
