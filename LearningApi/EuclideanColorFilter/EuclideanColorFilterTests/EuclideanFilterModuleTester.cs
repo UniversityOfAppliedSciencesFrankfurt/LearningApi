@@ -61,42 +61,7 @@ namespace EuclideanColorFilterTests
 
             return bitmap;
         }
-            /// <summary>
-            /// Converts the color image into grayscale
-            /// </summary>
-            /// <param name="imageArray"></param>
-            /// <returns></returns>
-            public static Bitmap ConvertColorintoGrayscale(double[,,] imageArray)
-            {
-                int imgWidth = imageArray.GetLength(0);
-                int imgHeight = imageArray.GetLength(1);
-
-                //0 -> R, 1 -> G, 2 -> B
-                Bitmap bitmap = new Bitmap(imgWidth, imgHeight);
-
-                for (int i = 0; i < imgWidth; i++)
-                {
-                    for (int j = 0; j < imgHeight; j++)
-                    {
-                        Color color = GetAndSetPixels.GetPixel(imageArray, i, j);
-                        
-                        // get pixel value
-                        int r = color.R;
-                        int g = color.G;
-                        int b = color.B;
-
-                        // Find Average
-                        int Avg = (r + g + b) / 3;
-
-                    // Set ne pixel Value
-                    //bitmap.SetPixel(i, j, color);    
-                    GetAndSetPixels.SetPixel(imageArray, i, j, Color.FromArgb(Avg, Avg, Avg));
-                    }
-
-                }
-                return bitmap;
-            }
-
+                   
             /// <summary>
             /// Load Method for loading a Bitmap, which will be converted to double[,,]
             /// </summary>
