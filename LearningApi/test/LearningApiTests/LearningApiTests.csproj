@@ -14,6 +14,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\HelloWorldTutorial\HelloWorldTutorial.csproj" />
     <ProjectReference Include="..\..\ImageBinarizer\ImageBinarizer.csproj" />
     <ProjectReference Include="..\..\src\CannyEdgeDetector\CannyEdgeDetector.csproj" />
     <ProjectReference Include="..\..\src\DataProviders\CsvDataProvider\CsvDataProvider.csproj" />
@@ -445,6 +446,11 @@
     <None Update="UnitTestRingProjectionAlgorithm\TestImages\myFace.jpg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="HelloWorldTutorial\" />
+    <Folder Include="SampleData\Tutorial\" />
   </ItemGroup>
 
 </Project>
