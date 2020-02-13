@@ -449,7 +449,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="HelloWorldTutorial\" />
     <Folder Include="SampleData\Tutorial\" />
   </ItemGroup>
 

@@ -13,7 +13,7 @@ namespace LearningApiTest
     /// Testing the Functionality of learning-API Algorithm 
     /// </summary>
     [TestClass]
-    public class UnitTest1
+    public class HelloWorldTutorialTests
     {
         /// <summary>
         /// UnitestMethod1 which describes how to use algorithm
