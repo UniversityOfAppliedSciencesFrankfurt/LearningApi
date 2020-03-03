@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.28307.136
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29709.97
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EuclideanFilter", "EuclideanFilter\EuclideanFilter.csproj", "{6436F4AD-8FD2-4FCB-B731-5C2AE1305881}"
 EndProject
@@ -18,6 +18,11 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SolutionItems", "SolutionItems", "{AE69B818-8F19-4474-BF69-F55E527F33ED}"
 	ProjectSection(SolutionItems) = preProject
 		..\..\..\..\..\..\temp\.editorconfig = ..\..\..\..\..\..\temp\.editorconfig
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{2243589E-6769-48CC-AA8E-02242B0ABC92}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
 	EndProjectSection
 EndProject
 Global
