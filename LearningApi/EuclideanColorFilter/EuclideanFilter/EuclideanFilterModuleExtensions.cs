@@ -5,7 +5,7 @@ using System.Drawing;
 namespace EuclideanFilter
 {
     /// <summary>
-    ///ExtenstionMethod class
+    ///ExtenstionMethod Class
     /// </summary>
     public static class EuclideanFilterModuleExtensions
     {
