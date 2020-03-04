@@ -1,0 +1,31 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <Version>1.2.2</Version>
+    <Product>LearningAPI</Product>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="MLPerceptron\**" />
+    <Compile Remove="MLPUnitTests\**" />
+    <EmbeddedResource Remove="MLPerceptron\**" />
+    <EmbeddedResource Remove="MLPUnitTests\**" />
+    <None Remove="MLPerceptron\**" />
+    <None Remove="MLPUnitTests\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="NeuralNetCore.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="NeuralNetCore.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\LearningApi\LearningApi.csproj" />
+    <ProjectReference Include="..\NeuralNetworks.Core\NeuralNetworks.Core.csproj" />
+  </ItemGroup>
+
+</Project>

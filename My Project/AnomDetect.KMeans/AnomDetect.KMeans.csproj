@@ -1,0 +1,37 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <AssemblyName>AnomDetect.KMeans</AssemblyName>
+    <PackageId>Clustering.KMeans</PackageId>
+   
+    <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
+    <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
+    <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
+    <Version>1.2.0</Version>
+    <Authors>daenet GmbH</Authors>
+    <Description>KMeans Algorithm for LearningApi</Description>
+    <Copyright>daenet GmbH</Copyright>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="REMOVE_AnomalyDetectionAPI.cs" />
+    <Compile Remove="REMOVE_CheckingSampleSettings.cs" />
+    <Compile Remove="REMOVE_IAnomalyDetectionApi.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="REMOVE_CheckingSampleSettings.cs" />
+    <None Include="REMOVE_AnomalyDetectionAPI.cs" />
+    <None Include="REMOVE_IAnomalyDetectionApi.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="System.Runtime.Serialization.Json" Version="4.3.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\LearningApi\LearningApi.csproj" />
+  </ItemGroup>
+
+</Project>

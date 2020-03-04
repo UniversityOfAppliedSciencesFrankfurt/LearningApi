@@ -1,0 +1,256 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>SupportVectorMachineAlgorithm</name>
+    </assembly>
+    <members>
+        <member name="T:SupportVectorMachineAlgorithm.SVMAlgorithm">
+            <summary>
+            SupportVectorMachineAlgorithm is implementation of classification objects by using Support Vector Machince (SVM) Technique.
+            In this project, SVM will consider a linear classifier for a binary classification problem with labels y (y = 1 or y = -1) and features.
+            It follows the Simplified Sequential Minimal Optimization algorithm.
+            </summary>
+        </member>
+        <member name="M:SupportVectorMachineAlgorithm.SVMAlgorithm.#ctor(System.Double,System.Double)">
+            <summary>
+            Constructor for SVM. Set value of regularization parameter
+            </summary>
+            <param name="c">regularization parameter</param>
+            <param name="tol">tolerance nummerical is set to 0.01. It can be changed by users</param>
+        </member>
+        <member name="M:SupportVectorMachineAlgorithm.SVMAlgorithm.Train(System.Double[][],LearningFoundation.IContext)">
+            <summary>
+            Train is method that will call Run to start training data
+            </summary>
+            <param name="data">data for training</param>
+            <param name="ctx"></param>
+            <returns>the training results</returns>
+        </member>
+        <member name="M:SupportVectorMachineAlgorithm.SVMAlgorithm.Run(System.Double[][],LearningFoundation.IContext)">
+            <summary>
+            Run is a method that starts training data
+            </summary>
+            <param name="rawData">data for training</param>
+            <param name="ctx"></param>
+            <returns></returns>
+        </member>
+        <member name="M:SupportVectorMachineAlgorithm.SVMAlgorithm.Predict(System.Double[][],LearningFoundation.IContext)">
+            <summary>
+            Predict is a method that classify the data based on the training result
+            </summary>
+            <param name="data">data for testing</param>
+            <param name="ctx"></param>
+            <returns>the testing results</returns>
+        </member>
+        <member name="M:SupportVectorMachineAlgorithm.SVMAlgorithm.RunCalculation(System.Double[][])">
+            <summary>
+            RunCalculation is method that training data in method Train
+            </summary>
+            <param name="rawData"></param>
+            <returns></returns>
+        </member>
+        <member name="M:SupportVectorMachineAlgorithm.SVMAlgorithm.VerifyRawDataConsistency(System.Double[][])">
+            <summary>
+            verifyRawDataConsistency is a method that checks that all the samples have same given number of attributes.
+            </summary>
+            <param name="rawData">the samples</param>
+        </member>
+        <member name="M:SupportVectorMachineAlgorithm.SVMAlgorithm.ConvertRawDataToArray(System.Double[][])">
+            <summary>
+            convertDataToArray is a method that convert jagged array raw data to multidimensional array
+            </summary>
+            <param name="rawData"></param>
+            <returns></returns>
+        </member>
+        <member name="M:SupportVectorMachineAlgorithm.SVMAlgorithm.RawDataInput(System.Double[0:,0:])">
+            <summary>
+            rawDataInput is a method that split raw input data from raw array data 
+            </summary>
+            <param name="rawDataArray"></param>
+            <returns></returns>
+        </member>
+        <member name="M:SupportVectorMachineAlgorithm.SVMAlgorithm.RawDataOutput(System.Double[0:,0:])">
+            <summary>
+            rawDataOutput is a method that split raw output data from raw array data
+            </summary>
+            <param name="rawDataArray"></param>
+            <returns></returns>
+        </member>
+        <member name="M:SupportVectorMachineAlgorithm.SVMAlgorithm.SelectJRandom(System.Int32,System.Int32)">
+            <summary>
+            SelectJRandom chooses the order of the number alphaJ
+            </summary>
+            <param name="i">the order of alpha i</param>
+            <param name="m">number of element in array alpha</param>
+            <returns></returns>
+        </member>
+        <member name="M:SupportVectorMachineAlgorithm.SVMAlgorithm.ClipAlphaJ(System.Double,System.Double,System.Double)">
+            <summary>
+            ClipAlphaJ adjusts the value alphaJ depending on the constraint
+            </summary>
+            <param name="alphaJ"></param>
+            <param name="h"></param>
+            <param name="l"></param>
+            <returns></returns>
+        </member>
+        <member name="M:SupportVectorMachineAlgorithm.SVMAlgorithm.SimplifiedSMO(System.Double[0:,0:],System.Double[],System.Double,System.Double,System.Double,System.Double[]@,System.Double@)">
+            <summary>
+            SimplifiedSMO finds the value of bias and array alpha 
+            </summary>
+            <param name="rawDataInput"></param>
+            <param name="rawDataOutput"></param>
+            <param name="c">regularization parameter</param>
+            <param name="tol">numerical tolerance</param>
+            <param name="max_passes">maximum number of times to iterate over alpha without changing</param>
+            <param name="alphas_out">the value of alpha after calculation</param>
+            <param name="bias_out">the value of bias after calculation</param>
+        </member>
+        <member name="M:SupportVectorMachineAlgorithm.SVMAlgorithm.CalculateFx(System.Double[0:,0:],System.Double[],System.Double[],System.Double,System.Double[])">
+            <summary>
+            CalculateFx calculates the value for a new data point
+            </summary>
+            <param name="rawDataInput"></param>
+            <param name="rawDataOutput"></param>
+            <param name="alphas"></param>
+            <param name="bias"></param>
+            <param name="x"></param>
+            <returns></returns>
+        </member>
+        <member name="M:SupportVectorMachineAlgorithm.SVMAlgorithm.ComputeWeight(System.Double[],System.Double[0:,0:],System.Double[])">
+            <summary>
+            ComputeWeight finds the value of the weight
+            </summary>
+            <param name="alphas"></param>
+            <param name="rawDataInput"></param>
+            <param name="rawDataOutput"></param>
+            <returns></returns>
+        </member>
+        <member name="M:SupportVectorMachineAlgorithm.SVMAlgorithm.PredictSample(System.Double[],System.Double[],System.Double)">
+            <summary>
+            PredictSample detects to which class the given sample belongs to
+            </summary>
+            <param name="sample"></param>
+            <param name="weight"></param>
+            <param name="bias"></param>
+            <returns></returns>
+        </member>
+        <member name="M:SupportVectorMachineAlgorithm.SVMAlgorithm.InitArray(System.Double[])">
+            <summary>
+            InitArray is a method that fill the array with specific value. In this case the value is 0.
+            </summary>
+            <param name="array"></param>
+            <returns></returns>
+        </member>
+        <member name="M:SupportVectorMachineAlgorithm.SVMAlgorithm.MultiplyNumberAndArray(System.Double,System.Double[])">
+            <summary>
+            multiplyNumberAndArray is a method that multiply number and array
+            </summary>
+            <param name="number"></param>
+            <param name="array"></param>
+            <returns></returns>
+        </member>
+        <member name="M:SupportVectorMachineAlgorithm.SVMAlgorithm.AddArray(System.Double[],System.Double[])">
+            <summary>
+            addArray is a method that add two arrays
+            </summary>
+            <param name="array1"></param>
+            <param name="array2"></param>
+            <returns></returns>
+        </member>
+        <member name="M:SupportVectorMachineAlgorithm.SVMAlgorithm.DotProduct(System.Double[],System.Double[])">
+            <summary>
+            DotProduct is a method that calculate dot product of two vectors
+            </summary>
+            <param name="vec1"></param>
+            <param name="vec2"></param>
+            <returns></returns>
+        </member>
+        <member name="M:SupportVectorMachineAlgorithm.SVMAlgorithm.MultiToSingle(System.Double[0:,0:])">
+            <summary>
+            MultiToSingle is a method that convert multidimensional array to single array
+            </summary>
+            <param name="array"></param>
+            <returns></returns>
+        </member>
+        <member name="T:SupportVectorMachineAlgorithm.SVMException">
+            <summary>
+            SVMException is an exception class that is used to throw the encountered errors. Note that the error message is preceded by the function name where the error was encountered
+            Code: 100    "RawData is null"
+            Code: 101	  "RawData is not the right form. At least one attribute column and one target column.
+            Code: 102    "RawData is empty"
+            Code: 400     "Unhnadled exception: " + Exception
+            </summary>
+        </member>
+        <member name="P:SupportVectorMachineAlgorithm.SVMException.Code">
+            <summary>
+            Function error code
+            </summary>
+        </member>
+        <member name="P:SupportVectorMachineAlgorithm.SVMException.ErrorMessage">
+            <summary>
+            Function error message
+            </summary>
+        </member>
+        <member name="M:SupportVectorMachineAlgorithm.SVMException.#ctor(System.Int32,System.String)">
+            <summary>
+            Constructor to create the KMeans Exception
+            </summary>
+            <param name="code"> Function error code </param>
+            <param name="message"> Function error message </param>
+        </member>
+        <member name="T:SupportVectorMachineAlgorithm.SVMExtensions">
+            <summary>
+            SVMExtensions is an extension that call SVM through Learning API
+            </summary>
+        </member>
+        <member name="M:SupportVectorMachineAlgorithm.SVMExtensions.UseSVMAlgorithm(LearningFoundation.LearningApi,System.Double,System.Double)">
+            <summary>
+            UseSVMAlgorithm is used to call SVMAlgorithm from Learning Api NuGet
+            </summary>
+            <param name="api"></param>
+            <param name="c"></param>
+            <param name="tol"></param>
+            <returns></returns>
+        </member>
+        <member name="T:SupportVectorMachineAlgorithm.SVMResult">
+            <summary>
+            SVMResult is a class that contains the response object of the SVM's Predict function.
+            </summary>
+        </member>
+        <member name="P:SupportVectorMachineAlgorithm.SVMResult.PredictedResult">
+            <summary>
+            List of results. 1 and -1 are different value of two classes. 
+            </summary>
+        </member>
+        <member name="T:SupportVectorMachineAlgorithm.SVMScore">
+            <summary>
+            MyAlgorithmScore is a class that contains the response object of the SVM training function.
+            </summary>
+        </member>
+        <member name="M:SupportVectorMachineAlgorithm.SVMScore.#ctor">
+            <summary>
+            Constructor of class SVMScore
+            </summary>
+        </member>
+        <member name="P:SupportVectorMachineAlgorithm.SVMScore.Bias">
+            <summary>
+            The value of bias
+            </summary>
+        </member>
+        <member name="P:SupportVectorMachineAlgorithm.SVMScore.Alphas">
+            <summary>
+            The value of alphas
+            </summary>
+        </member>
+        <member name="P:SupportVectorMachineAlgorithm.SVMScore.Weight">
+            <summary>
+            The value of weight
+            </summary>
+        </member>
+        <member name="P:SupportVectorMachineAlgorithm.SVMScore.Message">
+            <summary>
+            A message to the user
+            </summary>
+        </member>
+    </members>
+</doc>
