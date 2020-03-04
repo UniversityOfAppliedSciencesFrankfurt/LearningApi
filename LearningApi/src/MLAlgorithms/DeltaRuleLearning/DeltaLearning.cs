@@ -10,7 +10,7 @@ using NeuralNetworks.Core;
 
 namespace DeltaLearning
 {
-    /// <summary>
+    ///  <summary>
     /// Defining Input and Output values
     /// 
     /// </summary>
