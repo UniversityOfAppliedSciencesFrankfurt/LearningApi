@@ -1,0 +1,19 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <AssemblyName>NeuralNet.Perceptron</AssemblyName>
+    <PackageId>NeuralNet.Perceptron</PackageId>
+  
+    <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
+    <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
+    <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
+    <Version>1.2.0</Version>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\LearningApi\LearningApi.csproj" />
+    <ProjectReference Include="..\NeuralNetworks.Core\NeuralNetworks.Core.csproj" />
+  </ItemGroup>
+
+</Project>
