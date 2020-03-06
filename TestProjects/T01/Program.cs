@@ -6,7 +6,12 @@ namespace T01
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+
+            string cName = Console.ReadLine();
+            int x = 7;
+            Console.WriteLine("Hello World! " + cName + x);
+            Console.WriteLine(10);
+            Console.WriteLine(false);
         }
     }
 }
