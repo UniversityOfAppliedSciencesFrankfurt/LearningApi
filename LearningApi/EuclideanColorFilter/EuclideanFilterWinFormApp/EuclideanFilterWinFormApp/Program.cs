@@ -7,7 +7,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace EuclideanFilterWinFormApp
+namespace LearningFoundation.EuclideanFilterWinFormApp
 {
     static class Program
     {

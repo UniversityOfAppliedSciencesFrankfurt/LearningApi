@@ -4,7 +4,7 @@
 using System;
 using System.Drawing;
 
-namespace EuclideanFilter
+namespace LearningFoundation.EuclideanColorFilter
 {
     /// <summary>
     /// 

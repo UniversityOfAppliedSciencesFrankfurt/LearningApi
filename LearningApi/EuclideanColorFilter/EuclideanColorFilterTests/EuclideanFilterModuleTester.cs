@@ -2,13 +2,13 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using System.Drawing;
-using EuclideanFilter;
+using LearningFoundation.EuclideanColorFilter;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using LearningFoundation;
 using System.IO;
 using System;
 
-namespace EuclideanColorFilterTests
+namespace LearningFoundation.EuclideanColorFilterTests
 {
     [TestClass]
     public class EuclideanFilterModuleTester

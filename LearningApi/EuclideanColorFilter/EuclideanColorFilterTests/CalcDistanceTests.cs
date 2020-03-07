@@ -3,10 +3,10 @@
 
 using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using EuclideanFilter;
+using LearningFoundation.EuclideanColorFilter;
 using System.Drawing;
 
-namespace EuclideanColorFilterTests
+namespace LearningFoundation.EuclideanColorFilterTests
 {
     [TestClass]
     public class CalcDistanceTests
