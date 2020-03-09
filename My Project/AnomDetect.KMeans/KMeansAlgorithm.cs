@@ -1,12 +1,4 @@
-﻿using LearningFoundation;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.Serialization;
-using System.Threading.Tasks;
-
-
-namespace LearningFoundation.Clustering.KMeans
+﻿namespace LearningFoundation.Clustering.KMeans
 {
     /// <summary>
     /// KMeans is the class responsible for clustering data based on K-means algorithm
