@@ -1,12 +1,12 @@
-﻿using System.Drawing;
+﻿// Copyright (c) daenet GmbH / Frankfurt University of Applied Sciences. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+
+using System.Drawing;
 using EuclideanColorFilter;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using LearningFoundation;
 using System.IO;
 using System;
-
-// Copyright (c) daenet GmbH / Frankfurt University of Applied Sciences. All rights reserved.
-// Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 namespace EuclideanColorFilterTests
 {
