@@ -6,7 +6,7 @@ using System.Windows.Forms;
 using LearningFoundation;
 using EuclideanFilter;
 
-namespace LearningFoundation.EuclideanFilterWinFormApp
+namespace EuclideanFilterWinFormApp
 {
     public partial class Form1 : Form
     {

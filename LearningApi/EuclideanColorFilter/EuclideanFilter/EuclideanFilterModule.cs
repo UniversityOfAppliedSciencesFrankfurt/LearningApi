@@ -1,11 +1,11 @@
-﻿// Copyright (c) daenet GmbH / Frankfurt University of Applied Sciences. All rights reserved.
-// Licensed under the MIT license. See LICENSE file in the project root for full license information.
-
-using System;
+﻿using System;
 using System.Drawing;
 using LearningFoundation;
 
-namespace LearningFoundation.EuclideanColorFilter
+// Copyright (c) daenet GmbH / Frankfurt University of Applied Sciences. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+
+namespace EuclideanColorFilter
 {
     /// <summary>
     ///Main class in which the algorithm is implemented

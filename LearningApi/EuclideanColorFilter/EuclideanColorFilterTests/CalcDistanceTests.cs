@@ -1,12 +1,12 @@
+using System;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using EuclideanColorFilter;
+using System.Drawing;
+
 // Copyright (c) daenet GmbH / Frankfurt University of Applied Sciences. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using LearningFoundation.EuclideanColorFilter;
-using System.Drawing;
-
-namespace LearningFoundation.EuclideanColorFilterTests
+namespace EuclideanColorFilterTests
 {
     [TestClass]
     public class CalcDistanceTests
@@ -24,7 +24,7 @@ namespace LearningFoundation.EuclideanColorFilterTests
             float actual = CalcDistance.ComputeEuclideanDistance(color1, color2);
             Assert.AreEqual(441.672955930063709849498817084f, actual, 0.01f);
         }
-
+        
         /// <summary>
         /// This Unit Test calculates the distance between Black (RGB 0,0,0) and Black (RGB 0,0,0) which should be 0 ((0-0)²+(0-0)²+(0-0)²) = 0
         /// </summary>
