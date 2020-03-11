@@ -12,9 +12,9 @@ namespace LogisticRegression
     {
         private bool m_UseSGD= false;
 
-        private double m_Alpha;//learning rates
+        private double m_Alpha;     //learning rates
       
-        private double m_L1, m_L2; //regularization
+        private double m_L1, m_L2;  //regularization
 
         private Random m_Rnd;
 
