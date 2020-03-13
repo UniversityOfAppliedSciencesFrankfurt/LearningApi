@@ -325,7 +325,7 @@ namespace ImageBinarizerTest
 
             api.UseActionModule<double[,,], double[,,]>((input, ctx) =>
             {
-                string path = Path.Combine(AppContext.BaseDirectory, "Images\\black and white II.jpg");
+                string path = Path.Combine(AppContext.BaseDirectory, "Images\\black and white2.jpg");
 
                 Bitmap bitmap = new Bitmap(path);
 
@@ -358,7 +358,7 @@ namespace ImageBinarizerTest
                 }
                 stringArray.AppendLine();
             }
-            using (StreamWriter writer = File.CreateText(Path.Combine(AppContext.BaseDirectory, "Images\\black and white II.txt")))
+            using (StreamWriter writer = File.CreateText(Path.Combine(AppContext.BaseDirectory, "Images\\black and white2.txt")))
             {
                 writer.Write(stringArray.ToString());
             }
@@ -383,7 +383,7 @@ namespace ImageBinarizerTest
 
             api.UseActionModule<double[,,], double[,,]>((input, ctx) =>
             {
-                string path = Path.Combine(AppContext.BaseDirectory, "Images\\coloured II.jpg");
+                string path = Path.Combine(AppContext.BaseDirectory, "Images\\coloured2.jpg");
 
                 Bitmap bitmap = new Bitmap(path);
 
@@ -416,7 +416,7 @@ namespace ImageBinarizerTest
                 }
                 stringArray.AppendLine();
             }
-            using (StreamWriter writer = File.CreateText(Path.Combine(AppContext.BaseDirectory, "Images\\coloured II.txt")))
+            using (StreamWriter writer = File.CreateText(Path.Combine(AppContext.BaseDirectory, "Images\\coloured2.txt")))
             {
                 writer.Write(stringArray.ToString());
             }
@@ -433,15 +433,15 @@ namespace ImageBinarizerTest
             Dictionary<String, int> imageParams = new Dictionary<string, int>();
             imageParams.Add("imageWidth", 160);
             imageParams.Add("imageHeight", 160);
-            imageParams.Add("redThreshold", 0);
-            imageParams.Add("greenThreshold", 0);
-            imageParams.Add("blueThreshold", 0);
+            imageParams.Add("redThreshold", -1);
+            imageParams.Add("greenThreshold", -1);
+            imageParams.Add("blueThreshold", -1);
 
             var api = new LearningApi();
 
             api.UseActionModule<double[,,], double[,,]>((input, ctx) =>
             {
-                string path = Path.Combine(AppContext.BaseDirectory, "Images\\grayscale II.jpg");
+                string path = Path.Combine(AppContext.BaseDirectory, "Images\\grayscale2.jpg");
 
                 Bitmap bitmap = new Bitmap(path);
 
@@ -474,7 +474,7 @@ namespace ImageBinarizerTest
                 }
                 stringArray.AppendLine();
             }
-            using (StreamWriter writer = File.CreateText(Path.Combine(AppContext.BaseDirectory, "Images\\grayscale II.txt")))
+            using (StreamWriter writer = File.CreateText(Path.Combine(AppContext.BaseDirectory, "Images\\grayscale2.txt")))
             {
                 writer.Write(stringArray.ToString());
             }
