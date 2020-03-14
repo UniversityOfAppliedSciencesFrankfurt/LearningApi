@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Windows.Forms;
 using LearningFoundation;
 using EuclideanFilter;
+using System.Threading;
 
 namespace LearningFoundation.EuclideanFilterWinFormApp
 {
