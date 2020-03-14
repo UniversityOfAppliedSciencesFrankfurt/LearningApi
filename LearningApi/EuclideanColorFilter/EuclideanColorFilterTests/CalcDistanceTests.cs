@@ -3,7 +3,7 @@
 
 using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using EuclideanColorFilter;
+using LearningFoundation.EuclideanColorFilter;
 using System.Drawing;
 
 namespace LearningFoundation.EuclideanColorFilterTests
