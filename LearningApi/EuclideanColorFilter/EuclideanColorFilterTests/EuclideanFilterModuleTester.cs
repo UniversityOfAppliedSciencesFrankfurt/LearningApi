@@ -8,7 +8,7 @@ using LearningFoundation;
 using System.IO;
 using System;
 
-namespace EuclideanColorFilterTests
+namespace LearningFoundation.EuclideanColorFilterTests
 {
     [TestClass]
     public class EuclideanFilterModuleTester

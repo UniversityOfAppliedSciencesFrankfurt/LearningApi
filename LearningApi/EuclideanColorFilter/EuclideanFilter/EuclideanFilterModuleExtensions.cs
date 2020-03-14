@@ -5,7 +5,7 @@ using System;
 using LearningFoundation;
 using System.Drawing;
 
-namespace EuclideanColorFilter
+namespace LearningFoundation.EuclideanColorFilter
 {
     /// <summary>
     ///ExtenstionMethod Class

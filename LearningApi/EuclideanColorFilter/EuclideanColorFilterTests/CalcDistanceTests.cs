@@ -6,7 +6,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using EuclideanColorFilter;
 using System.Drawing;
 
-namespace EuclideanColorFilterTests
+namespace LearningFoundation.EuclideanColorFilterTests
 {
     [TestClass]
     public class CalcDistanceTests

@@ -5,7 +5,7 @@ using System;
 using System.Drawing;
 using LearningFoundation;
 
-namespace EuclideanColorFilter
+namespace LearningFoundation.EuclideanColorFilter
 {
     /// <summary>
     ///Main class in which the algorithm is implemented
