@@ -26,4 +26,24 @@ namespace LearningFoundation.EuclideanColorFilter
             return api;
         }
     }
+    public class Distance
+    {
+
+        /// <summary>
+        /// Return the distance between 2 points
+        /// </summary>
+        public static double Euclidean(Point p1, Point p2)
+        {
+            return Math.Sqrt(Math.Pow(p1.X - p2.X, 2) + Math.Pow(p1.Y - p2.Y, 2));
+        }
+
+        /// <summary>
+        /// Calculates the similarity between 2 points using Euclidean distance.
+        /// Returns a value between 0 and 1 where 1 means they are identical
+        /// </summary>
+        public static double EuclideanSimilarity(Point p1, Point p2)
+        {
+            return 1 / (1 + Euclidean(p1, p2));
+        }
+    }
 }
