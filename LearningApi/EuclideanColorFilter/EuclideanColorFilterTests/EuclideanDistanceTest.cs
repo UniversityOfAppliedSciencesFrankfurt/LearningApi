@@ -9,7 +9,9 @@ namespace LearningFoundation.EuclideanColorFilterTests
         [TestClass]
         public class TestDistance
         {
-            [TestMethod]
+        
+
+        [TestMethod]
             public void Test_Euclidean()
             {
                 var p1 = new Point(5, 4);
@@ -27,6 +29,22 @@ namespace LearningFoundation.EuclideanColorFilterTests
                 Assert.AreEqual(0.2402530733520421, Distance.EuclideanSimilarity(p1, p2));
 
             }
+        [TestMethod]
+        public void Test_GetDistance()
+        {
+            var current = new Color() ;
+            var match = new Color();
+
+            Assert.AreEqual(0.0f, Distance.GetDistance(current, match));
         }
+        [TestMethod]
+        public void Test_FindNearestColor()
+        {
+            var map = new Color();
+            var current = new Color();
+
+            Assert.AreEqual(0.0f, Distance.FindNearestColor(map, current));
+        }
+    }
 }
 

@@ -45,5 +45,43 @@ namespace LearningFoundation.EuclideanColorFilter
         {
             return 1 / (1 + Euclidean(p1, p2));
         }
+        public static int GetDistance(Color current, Color match)
+        {
+            int redDifference;
+            int greenDifference;
+            int blueDifference;
+
+            redDifference = current.R - match.R;
+            greenDifference = current.G - match.G;
+            blueDifference = current.B - match.B;
+
+            return redDifference * redDifference + greenDifference * greenDifference + blueDifference * blueDifference;
+            
+        }
+        public static int FindNearestColor(Color[] map, Color current)
+        {
+            int shortestDistance;
+            int index;
+
+            index = -1;
+            shortestDistance = int.MaxValue;
+
+            for (int i = 0; i < map.Length; i++)
+            {
+                Color match;
+                int distance;
+
+                match = map[i];
+                distance = GetDistance(current, match);
+
+                if (distance < shortestDistance)
+                {
+                    index = i;
+                    shortestDistance = distance;
+                }
+            }
+
+            return index;
+        }
     }
 }
