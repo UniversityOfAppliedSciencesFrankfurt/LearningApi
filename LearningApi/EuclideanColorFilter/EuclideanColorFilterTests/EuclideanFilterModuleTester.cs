@@ -182,7 +182,7 @@ namespace LearningFoundation.EuclideanColorFilterTests
             Assert.AreEqual(Color.FromArgb(0, 0, 0), outputAsBitmap.GetPixel(1, 1));
         }
         /// <summary>
-        /// This TestMethod gerneretes an 2x2 bitmap. The center Color is Green, and the radius is 1.0.
+        /// This TestMethod gerneretes an 2x2 bitmap. The center Color is Blue, and the radius is 1.0.
         /// So every other color, which is not exactly blue (0,0,255), should be set to black (in this case the last two Asserts)
         /// </summary>
         [TestMethod]
