@@ -39,7 +39,7 @@ namespace LearningFoundation.EuclideanColorFilter
 
         /// <summary>
         /// Calculates the similarity between 2 points using Euclidean distance.
-        /// Returns a value between 0 and 1 where 1 means they are identical
+        /// Returns a value between 0 and 1 where 0 means they are identical
         /// </summary>
         public static double EuclideanSimilarity(Point p1, Point p2)
         {
@@ -58,6 +58,10 @@ namespace LearningFoundation.EuclideanColorFilter
             return redDifference * redDifference + greenDifference * greenDifference + blueDifference * blueDifference;
             
         }
+        /// <summary>
+        /// Find the nearest color using Euclidean distance.
+        /// Returns a value between 0 and 1 where 0 means that color is neaest color.
+        /// </summary>
         public static int FindNearestColor(Color[] map, Color current)
         {
             int shortestDistance;
