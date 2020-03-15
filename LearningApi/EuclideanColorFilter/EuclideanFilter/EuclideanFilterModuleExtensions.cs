@@ -30,7 +30,7 @@ namespace LearningFoundation.EuclideanColorFilter
     {
 
         /// <summary>
-        /// Return the distance between 2 points
+        /// Return the distance between 2 points using euclidean distance formula.
         /// </summary>
         public static double Euclidean(Point p1, Point p2)
         {
@@ -45,6 +45,11 @@ namespace LearningFoundation.EuclideanColorFilter
         {
             return 1 / (1 + Euclidean(p1, p2));
         }
+
+        /// <summary>
+        /// Calculates the distance between match and current color using Euclidean distance.
+        /// Returns a value between 0 and 1 where 0 means current color equals to match color.
+        /// </summary>
         public static int GetDistance(Color current, Color match)
         {
             int redDifference;
@@ -58,10 +63,12 @@ namespace LearningFoundation.EuclideanColorFilter
             return redDifference * redDifference + greenDifference * greenDifference + blueDifference * blueDifference;
             
         }
+
         /// <summary>
-        /// Find the nearest color using Euclidean distance.
-        /// Returns a value between 0 and 1 where 0 means that color is neaest color.
+        /// Find the nearest color for current color from various map color using Euclidean distance.
+        /// Returns a value between 0 and 1 where 0 means map color is nearest to match color.
         /// </summary>
+        /// 
         public static int FindNearestColor(Color[] map, Color current)
         {
             int shortestDistance;
