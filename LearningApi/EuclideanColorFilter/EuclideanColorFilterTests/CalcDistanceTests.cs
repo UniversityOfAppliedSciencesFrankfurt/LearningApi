@@ -24,6 +24,33 @@ namespace LearningFoundation.EuclideanColorFilterTests
             float actual = CalcDistance.ComputeEuclideanDistance(color1, color2);
             Assert.AreEqual(441.672955930063709849498817084f, actual, 0.01f);
         }
+
+        /// <summary>
+        /// This Unit Test calculates the distance between Black (RGB 0,0,0) and Black (RGB 0,0,0) which should be 0 ((0-0)²+(0-0)²+(0-0)²) = 0
+        /// </summary>
+        [TestMethod]
+        public void CalcDistance_Color1IsBlackColor2IsBlack_ReturnZero()
+        {
+            Color color1 = Color.Black;
+            Color color2 = Color.Black;
+
+            float actual = CalcDistance.ComputeEuclideanDistance(color1, color2);
+            Assert.AreEqual(0f, actual, 0.01f);
+        }
+
+        /// <summary>
+        /// This Unit Test calculates the distance between Red (RGB 255,0,0) and Blue (RGB 0,0,255) which should be 360.6244584... ((255-0)²+(0-0)²+(0-255)²) = 360.6244584...
+        /// </summary>
+        [TestMethod]
+        public void CalcDistance_Color1IsBlueColor2IsRed_ReturnsMaxValue()
+        {
+            Color color1 = Color.Red;
+            Color color2 = Color.Blue;
+
+            float actual = CalcDistance.ComputeEuclideanDistance(color1, color2);
+            Assert.AreEqual(360.6244584f, actual, 0.01f);
+        }
+
         /// <summary>
         /// This Unit Test calculates the distance between White (RGB 255,255,255) and White (RGB 255,255,255) and Returns the Max Value Sqrt((255-255)²(255-255)²+(255-255)²) = 0
         ///  We have to use a delta because the float might make some trouble...
@@ -39,31 +66,7 @@ namespace LearningFoundation.EuclideanColorFilterTests
         }
 
         /// <summary>
-        /// This Unit Test calculates the distance between Black (RGB 0,0,0) and Black (RGB 0,0,0) which should be 0 ((0-0)²+(0-0)²+(0-0)²) = 0
-        /// </summary>
-        [TestMethod]
-        public void CalcDistance_Color1IsBlackColor2IsBlack_ReturnZero()
-        {
-            Color color1 = Color.Black;
-            Color color2 = Color.Black;
-
-            float actual = CalcDistance.ComputeEuclideanDistance(color1, color2);
-            Assert.AreEqual(0f, actual, 0.01f);
-        }
-        /// <summary>
-        /// This Unit Test calculates the distance between Red (RGB 255,0,0) and Blue (RGB 0,0,255) which should be 360.6244584... ((255-0)²+(0-0)²+(0-255)²) = 360.6244584...
-        /// </summary>
-        [TestMethod]
-        public void CalcDistance_Color1IsBlueColor2IsRed_ReturnsMaxValue()
-        {
-            Color color1 = Color.Red;
-            Color color2 = Color.Blue;
-
-            float actual = CalcDistance.ComputeEuclideanDistance(color1, color2);
-            Assert.AreEqual(360.6244584f, actual, 0.01f);
-        }
-        /// <summary>
-        /// This Unit Test calculates the distance between Green (RGB 0,255,0) and Green (RGB 0,255,0) which should be 360.6244584... ((0-0)²+(255-255)²+(0-0)²) = 0
+        /// This Unit Test calculates the distance between Green (RGB 0,255,0) and Green (RGB 0,255,0) which should be 0 ((0-0)²+(255-255)²+(0-0)²) = 0
         /// </summary>
         [TestMethod]
         public void CalcDistance_Color1IsGreenColor2IsGreen_ReturnsMaxValue()
@@ -75,7 +78,7 @@ namespace LearningFoundation.EuclideanColorFilterTests
             Assert.AreEqual(0f, actual, 0.01f);
         }
         /// <summary>
-        /// This Unit Test calculates the distance between Blue (RGB 0,0,255) and Blue (RGB 0,0,255) which should be 360.6244584... ((0-0)²+(0-0)²+(255-255)²) = 0
+        /// This Unit Test calculates the distance between Blue (RGB 0,0,255) and Blue (RGB 0,0,255) which should be 0 ((0-0)²+(0-0)²+(255-255)²) = 0
         /// </summary>
         [TestMethod]
         public void CalcDistance_Color1IsBlueColor2IsBlue_ReturnsMaxValue()
@@ -85,6 +88,19 @@ namespace LearningFoundation.EuclideanColorFilterTests
 
             float actual = CalcDistance.ComputeEuclideanDistance(color1, color2);
             Assert.AreEqual(0f, actual, 0.01f);
+        }
+
+        /// <summary>
+        /// This Unit Test calculates the distance between Red (RGB 0,0,255) and Green (RGB 0,0,255) which should be 360.6244584... ((255-0)²+(0-255)²+(0-0)²) = 285.32263
+        /// </summary>
+        [TestMethod]
+        public void CalcDistance_Color1IsRedColor2IsGreen_ReturnsMaxValue()
+        {
+            Color color1 = Color.Red;
+            Color color2 = Color.Green;
+
+            float actual = CalcDistance.ComputeEuclideanDistance(color1, color2);
+            Assert.AreEqual(285.32263, actual, 0.01f);
         }
     }
 }
