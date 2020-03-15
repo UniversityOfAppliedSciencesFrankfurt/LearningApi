@@ -20,7 +20,7 @@ namespace LearningFoundation.Test.LogisticRegression
 
         public LogisticRegressionTests()
         {
-            //
+            ///
         }
 
         /// <summary>
