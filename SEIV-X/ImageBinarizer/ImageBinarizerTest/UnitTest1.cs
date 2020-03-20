@@ -199,8 +199,8 @@ namespace ImageBinarizerTest
         {
 
             Dictionary<String, int> imageParams = new Dictionary<string, int>();
-            imageParams.Add("imageWidth", 120);
-            imageParams.Add("imageHeight", 200);
+            imageParams.Add("imageWidth", 240);
+            imageParams.Add("imageHeight", 400);
             imageParams.Add("redThreshold", 0);
             imageParams.Add("greenThreshold", 0);
             imageParams.Add("blueThreshold", 0);
@@ -257,8 +257,8 @@ namespace ImageBinarizerTest
         {
 
             Dictionary<String, int> imageParams = new Dictionary<string, int>();
-            imageParams.Add("imageWidth", 120);
-            imageParams.Add("imageHeight", 200);
+            imageParams.Add("imageWidth", 240);
+            imageParams.Add("imageHeight", 400);
             imageParams.Add("redThreshold", -1);
             imageParams.Add("greenThreshold", -1);
             imageParams.Add("blueThreshold", -1);
@@ -315,8 +315,8 @@ namespace ImageBinarizerTest
         {
 
             Dictionary<String, int> imageParams = new Dictionary<string, int>();
-            imageParams.Add("imageWidth", 120);
-            imageParams.Add("imageHeight", 200);
+            imageParams.Add("imageWidth", 240);
+            imageParams.Add("imageHeight", 400);
             imageParams.Add("redThreshold", -1);
             imageParams.Add("greenThreshold", -1);
             imageParams.Add("blueThreshold", -1);
@@ -373,8 +373,8 @@ namespace ImageBinarizerTest
         {
 
             Dictionary<String, int> imageParams = new Dictionary<string, int>();
-            imageParams.Add("imageWidth", 120);
-            imageParams.Add("imageHeight", 200);
+            imageParams.Add("imageWidth", 240);
+            imageParams.Add("imageHeight", 400);
             imageParams.Add("redThreshold", -1);
             imageParams.Add("greenThreshold", -1);
             imageParams.Add("blueThreshold", -1);
@@ -431,8 +431,8 @@ namespace ImageBinarizerTest
         {
 
             Dictionary<String, int> imageParams = new Dictionary<string, int>();
-            imageParams.Add("imageWidth", 120);
-            imageParams.Add("imageHeight", 200);
+            imageParams.Add("imageWidth", 240);
+            imageParams.Add("imageHeight", 400);
             imageParams.Add("redThreshold", -1);
             imageParams.Add("greenThreshold", -1);
             imageParams.Add("blueThreshold", -1);
@@ -475,6 +475,238 @@ namespace ImageBinarizerTest
                 stringArray.AppendLine();
             }
             using (StreamWriter writer = File.CreateText(Path.Combine(AppContext.BaseDirectory, "Images\\grayscale2.txt")))
+            {
+                writer.Write(stringArray.ToString());
+            }
+        }
+        /// <summary>
+        /// This method is used to Test the Algorithm by taking the Input Image (II) and setting the parameters
+        /// Bitmap image will be loaded from Image Folder and converted into double[,,].
+        /// After that Image Binarization will be executed and hence the Binarized Image will be formed.
+        /// </summary>
+        [TestMethod]
+        public void TestMethod9()
+        {
+
+            Dictionary<String, int> imageParams = new Dictionary<string, int>();
+            imageParams.Add("imageWidth", 100);
+            imageParams.Add("imageHeight", 100);
+            imageParams.Add("redThreshold", 1);
+            imageParams.Add("greenThreshold", 1);
+            imageParams.Add("blueThreshold", 1);
+
+            var api = new LearningApi();
+
+            api.UseActionModule<double[,,], double[,,]>((input, ctx) =>
+            {
+                string path = Path.Combine(AppContext.BaseDirectory, "Images\\a3.png");
+
+                Bitmap bitmap = new Bitmap(path);
+
+                int imgWidth = bitmap.Width;
+                int imgHeight = bitmap.Height;
+                double[,,] data = new double[imgWidth, imgHeight, 3];
+
+                for (int i = 0; i < imgWidth; i++)
+                {
+                    for (int j = 0; j < imgHeight; j++)
+                    {
+                        Color color = bitmap.GetPixel(i, j);
+                        data[i, j, 0] = color.R;
+                        data[i, j, 1] = color.G;
+                        data[i, j, 2] = color.B;
+                    }
+                }
+                return data;
+            });
+
+            api.UseImageBinarizer(imageParams);
+            var result = api.Run() as double[,,];
+
+            StringBuilder stringArray = new StringBuilder();
+            for (int i = 0; i < result.GetLength(0); i++)
+            {
+                for (int j = 0; j < result.GetLength(1); j++)
+                {
+                    stringArray.Append(result[i, j, 0]);
+                }
+                stringArray.AppendLine();
+            }
+            using (StreamWriter writer = File.CreateText(Path.Combine(AppContext.BaseDirectory, "Images\\a3.txt")))
+            {
+                writer.Write(stringArray.ToString());
+            }
+        }
+        /// <summary>
+        /// This method is used to Test the Algorithm by taking a Black and White Image (II) and setting the parameters
+        /// Bitmap image will be loaded from Image Folder and converted into double[,,].
+        /// After that Image Binarization will be executed and hence the Binarized Image will be formed.
+        /// </summary>
+        [TestMethod]
+        public void TestMethod10()
+        {
+
+            Dictionary<String, int> imageParams = new Dictionary<string, int>();
+            imageParams.Add("imageWidth", 100);
+            imageParams.Add("imageHeight", 100);
+            imageParams.Add("redThreshold", 1);
+            imageParams.Add("greenThreshold", 1);
+            imageParams.Add("blueThreshold", 1);
+
+            var api = new LearningApi();
+
+            api.UseActionModule<double[,,], double[,,]>((input, ctx) =>
+            {
+                string path = Path.Combine(AppContext.BaseDirectory, "Images\\black and white3.jpg");
+
+                Bitmap bitmap = new Bitmap(path);
+
+                int imgWidth = bitmap.Width;
+                int imgHeight = bitmap.Height;
+                double[,,] data = new double[imgWidth, imgHeight, 3];
+
+                for (int i = 0; i < imgWidth; i++)
+                {
+                    for (int j = 0; j < imgHeight; j++)
+                    {
+                        Color color = bitmap.GetPixel(i, j);
+                        data[i, j, 0] = color.R;
+                        data[i, j, 1] = color.G;
+                        data[i, j, 2] = color.B;
+                    }
+                }
+                return data;
+            });
+
+            api.UseImageBinarizer(imageParams);
+            var result = api.Run() as double[,,];
+
+            StringBuilder stringArray = new StringBuilder();
+            for (int i = 0; i < result.GetLength(0); i++)
+            {
+                for (int j = 0; j < result.GetLength(1); j++)
+                {
+                    stringArray.Append(result[i, j, 0]);
+                }
+                stringArray.AppendLine();
+            }
+            using (StreamWriter writer = File.CreateText(Path.Combine(AppContext.BaseDirectory, "Images\\black and white3.txt")))
+            {
+                writer.Write(stringArray.ToString());
+            }
+        }
+        /// <summary>
+        /// This method is used to Test the Algorithm by taking a Coloured Image (II) and setting the parameters
+        /// Bitmap image will be loaded from Image Folder and converted into double[,,].
+        /// After that Image Binarization will be executed and hence the Binarized Image will be formed.
+        /// </summary>
+        [TestMethod]
+        public void TestMethod11()
+        {
+
+            Dictionary<String, int> imageParams = new Dictionary<string, int>();
+            imageParams.Add("imageWidth", 100);
+            imageParams.Add("imageHeight", 100);
+            imageParams.Add("redThreshold", 1);
+            imageParams.Add("greenThreshold", 1);
+            imageParams.Add("blueThreshold", 1);
+
+            var api = new LearningApi();
+
+            api.UseActionModule<double[,,], double[,,]>((input, ctx) =>
+            {
+                string path = Path.Combine(AppContext.BaseDirectory, "Images\\coloured3.jpg");
+
+                Bitmap bitmap = new Bitmap(path);
+
+                int imgWidth = bitmap.Width;
+                int imgHeight = bitmap.Height;
+                double[,,] data = new double[imgWidth, imgHeight, 3];
+
+                for (int i = 0; i < imgWidth; i++)
+                {
+                    for (int j = 0; j < imgHeight; j++)
+                    {
+                        Color color = bitmap.GetPixel(i, j);
+                        data[i, j, 0] = color.R;
+                        data[i, j, 1] = color.G;
+                        data[i, j, 2] = color.B;
+                    }
+                }
+                return data;
+            });
+
+            api.UseImageBinarizer(imageParams);
+            var result = api.Run() as double[,,];
+
+            StringBuilder stringArray = new StringBuilder();
+            for (int i = 0; i < result.GetLength(0); i++)
+            {
+                for (int j = 0; j < result.GetLength(1); j++)
+                {
+                    stringArray.Append(result[i, j, 0]);
+                }
+                stringArray.AppendLine();
+            }
+            using (StreamWriter writer = File.CreateText(Path.Combine(AppContext.BaseDirectory, "Images\\coloured3.txt")))
+            {
+                writer.Write(stringArray.ToString());
+            }
+        }
+        /// <summary>
+        /// This method is used to Test the Algorithm by taking a Grayscale Image (II) and setting the parameters
+        /// Bitmap image will be loaded from Image Folder and converted into double[,,].
+        /// After that Image Binarization will be executed and hence the Binarized Image will be formed.
+        /// </summary>
+        [TestMethod]
+        public void TestMethod12()
+        {
+
+            Dictionary<String, int> imageParams = new Dictionary<string, int>();
+            imageParams.Add("imageWidth", 100);
+            imageParams.Add("imageHeight", 100);
+            imageParams.Add("redThreshold", 1);
+            imageParams.Add("greenThreshold", 1);
+            imageParams.Add("blueThreshold", 1);
+
+            var api = new LearningApi();
+
+            api.UseActionModule<double[,,], double[,,]>((input, ctx) =>
+            {
+                string path = Path.Combine(AppContext.BaseDirectory, "Images\\grayscale3.jpg");
+
+                Bitmap bitmap = new Bitmap(path);
+
+                int imgWidth = bitmap.Width;
+                int imgHeight = bitmap.Height;
+                double[,,] data = new double[imgWidth, imgHeight, 3];
+
+                for (int i = 0; i < imgWidth; i++)
+                {
+                    for (int j = 0; j < imgHeight; j++)
+                    {
+                        Color color = bitmap.GetPixel(i, j);
+                        data[i, j, 0] = color.R;
+                        data[i, j, 1] = color.G;
+                        data[i, j, 2] = color.B;
+                    }
+                }
+                return data;
+            });
+
+            api.UseImageBinarizer(imageParams);
+            var result = api.Run() as double[,,];
+
+            StringBuilder stringArray = new StringBuilder();
+            for (int i = 0; i < result.GetLength(0); i++)
+            {
+                for (int j = 0; j < result.GetLength(1); j++)
+                {
+                    stringArray.Append(result[i, j, 0]);
+                }
+                stringArray.AppendLine();
+            }
+            using (StreamWriter writer = File.CreateText(Path.Combine(AppContext.BaseDirectory, "Images\\grayscale3.txt")))
             {
                 writer.Write(stringArray.ToString());
             }
