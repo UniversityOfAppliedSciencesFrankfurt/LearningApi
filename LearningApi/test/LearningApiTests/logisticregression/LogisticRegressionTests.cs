@@ -160,6 +160,9 @@ namespace LearningFoundation.Test.LogisticRegression
 
         }
 
+
+        [TestMethod]
+
        
 
         #region Data Sample
