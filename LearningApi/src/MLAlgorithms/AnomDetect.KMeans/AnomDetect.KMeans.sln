@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29519.181
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AnomDetect.KMeans", "AnomDetect.KMeans.csproj", "{1CFB7D62-ACD2-44D2-9B7A-B09F3ED5933C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AnomDetect.KMeans", "AnomDetect.KMeans.csproj", "{08978A98-114C-4C11-9011-558F433E9AF4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -11,15 +11,15 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{1CFB7D62-ACD2-44D2-9B7A-B09F3ED5933C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{1CFB7D62-ACD2-44D2-9B7A-B09F3ED5933C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{1CFB7D62-ACD2-44D2-9B7A-B09F3ED5933C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{1CFB7D62-ACD2-44D2-9B7A-B09F3ED5933C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{08978A98-114C-4C11-9011-558F433E9AF4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{08978A98-114C-4C11-9011-558F433E9AF4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{08978A98-114C-4C11-9011-558F433E9AF4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{08978A98-114C-4C11-9011-558F433E9AF4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {3827398E-7F52-46FF-9AF3-5C16053525E1}
+		SolutionGuid = {33FB7F23-25F6-4482-B8BE-EC7ED9B76342}
 	EndGlobalSection
 EndGlobal

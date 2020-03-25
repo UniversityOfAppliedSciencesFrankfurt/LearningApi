@@ -1,6 +1,6 @@
 ﻿namespace LearningFoundation.Clustering.KMeans
 {
-    /// <summary>
+    /// <summary> 
     /// KMeans is the class responsible for clustering data based on K-means algorithm
     /// </summary>
     public class KMeansAlgorithm : IAlgorithm

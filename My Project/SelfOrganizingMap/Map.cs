@@ -10,7 +10,7 @@ namespace SelfOrganizingMap
     /// 
     /// </summary>A list of Labels and the corresponding pattern is initialized. 
     ///
-    public class Map : IPipelineModule<List<double[]>, ICollection<Neuron>>
+    public class Map : IPipelineModule<List<double[]>, ICollection<Neuron>> 
     {
         private Neuron[,] m_Outputs;  // Collection of weights.
         private int m_Iteration;      // Current m_Iteration.

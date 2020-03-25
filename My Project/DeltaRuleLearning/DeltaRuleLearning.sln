@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29519.181
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DeltaRuleLearning", "DeltaRuleLearning.csproj", "{DCA5C277-9D36-43FD-ABFD-EAB945AC62D1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DeltaRuleLearning", "DeltaRuleLearning.csproj", "{C1F1902B-5633-4C34-A1FF-432BFBF4DAB4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -11,15 +11,15 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{DCA5C277-9D36-43FD-ABFD-EAB945AC62D1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{DCA5C277-9D36-43FD-ABFD-EAB945AC62D1}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{DCA5C277-9D36-43FD-ABFD-EAB945AC62D1}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{DCA5C277-9D36-43FD-ABFD-EAB945AC62D1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C1F1902B-5633-4C34-A1FF-432BFBF4DAB4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C1F1902B-5633-4C34-A1FF-432BFBF4DAB4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C1F1902B-5633-4C34-A1FF-432BFBF4DAB4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C1F1902B-5633-4C34-A1FF-432BFBF4DAB4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {8E93CA64-C293-4938-BED0-D40F9CE9E6C7}
+		SolutionGuid = {1AFCEE33-9701-400C-AA5A-89A42CA9475D}
 	EndGlobalSection
 EndGlobal
