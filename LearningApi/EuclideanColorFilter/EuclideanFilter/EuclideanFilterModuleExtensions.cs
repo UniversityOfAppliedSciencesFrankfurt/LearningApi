@@ -61,7 +61,7 @@ namespace LearningFoundation.EuclideanColorFilter
             blueDifference = current.B - match.B;
 
             return redDifference * redDifference + greenDifference * greenDifference + blueDifference * blueDifference;
-            
+
         }
 
         /// <summary>
@@ -94,5 +94,5 @@ namespace LearningFoundation.EuclideanColorFilter
 
             return index;
         }
-    }
+    }   
 }

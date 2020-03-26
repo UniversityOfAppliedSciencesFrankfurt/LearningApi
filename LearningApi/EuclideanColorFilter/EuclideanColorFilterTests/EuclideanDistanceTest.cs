@@ -2,27 +2,26 @@
 using System.Drawing;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-
 namespace LearningFoundation.EuclideanColorFilterTests
 {
 
-        [TestClass]
-        public class TestDistance
-        {
+    [TestClass]
+    public class TestDistance
+    {
         /// <summary>
         /// This Unit Test calculates the distance between assumed data point(pixel)
         /// This test returns the Max Value Sqrt((5-4)²+(4-1)²) = 3.1622776601683
         ///  We have to use a delta because the float might make some trouble...
         /// </summary>
         [TestMethod]
-            public void Test_Euclidean()
-            {
-                var p1 = new Point(5, 4);
-                var p2 = new Point(4, 1);
+        public void Test_Euclidean()
+        {
+            var p1 = new Point(5, 4);
+            var p2 = new Point(4, 1);
 
-                Assert.AreEqual(3.1622776601683795, Distance.Euclidean(p1, p2));
+            Assert.AreEqual(3.1622776601683795, Distance.Euclidean(p1, p2));
 
-            }
+        }
 
         /// <summary>
         /// This Unit Test calculates the distance between assumed data point(pixel) using Euclidean Distance similaity
@@ -30,13 +29,13 @@ namespace LearningFoundation.EuclideanColorFilterTests
         ///  We have to use a delta because the float might make some trouble...
         /// </summary>
         [TestMethod]
-            public void Test_EuclideanSimilarity()
-            {
-                var p1 = new Point(5, 4);
-                var p2 = new Point(4, 1);
+        public void Test_EuclideanSimilarity()
+        {
+            var p1 = new Point(5, 4);
+            var p2 = new Point(4, 1);
 
-                Assert.AreEqual(0.2402530733520421, Distance.EuclideanSimilarity(p1, p2));
-            }
+            Assert.AreEqual(0.2402530733520421, Distance.EuclideanSimilarity(p1, p2));
+        }
 
         /// <summary>
         /// This Unit Test calculates the distance between current color and match color
@@ -47,7 +46,7 @@ namespace LearningFoundation.EuclideanColorFilterTests
         [TestMethod]
         public void Test_GetDistance()
         {
-            var current = new Color() ;
+            var current = new Color();
             var match = new Color();
 
             Assert.AreEqual(0.0f, Distance.GetDistance(current, match));
@@ -58,7 +57,7 @@ namespace LearningFoundation.EuclideanColorFilterTests
         /// If code retruns the 0.0f value then as per Euclidean Distance formula test will passed to show that selected match color is nearest color of current color.
         ///  We have to use a delta because the float might make some trouble...
         ///  </summary>
- 
+
         [TestMethod]
         public void Test_FindNearestColor()
         {
@@ -67,6 +66,7 @@ namespace LearningFoundation.EuclideanColorFilterTests
 
             Assert.AreEqual(0.0f, Distance.FindNearestColor(map, current));
         }
+
     }
 }
 
