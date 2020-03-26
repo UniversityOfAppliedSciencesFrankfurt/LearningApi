@@ -8,12 +8,12 @@ using System.Drawing;
 namespace LearningFoundation.EuclideanColorFilter
 {
     /// <summary>
-    ///ExtenstionMethod Class
+    ///ExtenstionMethod Class of Euclidean Filter Module Tester
     /// </summary>
     public static class EuclideanFilterModuleExtensions
     {
         /// <summary>
-        /// Extension method of Learning Api -> This is needed, to use the "api.Run() as.." - metho
+        /// Extension method of Learning Api -> This is needed, to use the "api.Run() as.." - method
         /// </summary>
         /// <param name="api"></param>
         /// <param name="color"></param>
@@ -30,20 +30,22 @@ namespace LearningFoundation.EuclideanColorFilter
     {
 
         /// <summary>
+        /// Apply the Euclidean Color Filter Formula on two random point on pixel of Image. 
         /// Return the distance between 2 points using euclidean distance formula.
         /// </summary>
-        public static double Euclidean(Point p1, Point p2)
+        public static double EuclideanFormula(Point p1, Point p2)
         {
             return Math.Sqrt(Math.Pow(p1.X - p2.X, 2) + Math.Pow(p1.Y - p2.Y, 2));
         }
 
         /// <summary>
+        /// Take two any points from Image as pixel point to check whether collected two points of same color or not.
         /// Calculates the similarity between 2 points using Euclidean distance.
         /// Returns a value between 0 and 1 where 0 means they are identical
         /// </summary>
         public static double EuclideanSimilarity(Point p1, Point p2)
         {
-            return 1 / (1 + Euclidean(p1, p2));
+            return 1 / (1 + EuclideanFormula(p1, p2));
         }
 
         /// <summary>
@@ -66,7 +68,7 @@ namespace LearningFoundation.EuclideanColorFilter
 
         /// <summary>
         /// Find the nearest color for current color from various map color using Euclidean distance.
-        /// Returns a value between 0 and 1 where 0 means map color is nearest to match color.
+        /// Returns a value of index where 0 index means map color is nearest to match color.
         /// </summary>
         /// 
         public static int FindNearestColor(Color[] map, Color current)

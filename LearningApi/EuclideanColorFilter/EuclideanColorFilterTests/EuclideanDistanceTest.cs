@@ -14,12 +14,12 @@ namespace LearningFoundation.EuclideanColorFilterTests
         ///  We have to use a delta because the float might make some trouble...
         /// </summary>
         [TestMethod]
-        public void Test_Euclidean()
+        public void Test_EuclideanFormula()
         {
             var p1 = new Point(5, 4);
             var p2 = new Point(4, 1);
 
-            Assert.AreEqual(3.1622776601683795, Distance.Euclidean(p1, p2));
+            Assert.AreEqual(3.1622776601683795, Distance.EuclideanFormula(p1, p2));
 
         }
 
