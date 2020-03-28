@@ -52,7 +52,7 @@ namespace LearningFoundation.EuclideanColorFilter
         /// Calculates the distance between match and current color using Euclidean distance.
         /// Returns a value between 0 and 1 where 0 means current color equals to match color.
         /// </summary>
-        public static int GetDistance(Color current, Color match)
+        public static int ColorMatching(Color current, Color match)
         {
             int redDifference;
             int greenDifference;
@@ -85,7 +85,7 @@ namespace LearningFoundation.EuclideanColorFilter
                 int distance;
 
                 match = map[i];
-                distance = GetDistance(current, match);
+                distance = ColorMatching(current, match);
 
                 if (distance < shortestDistance)
                 {

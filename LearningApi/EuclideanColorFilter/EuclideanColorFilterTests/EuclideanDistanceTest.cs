@@ -44,12 +44,12 @@ namespace LearningFoundation.EuclideanColorFilterTests
         ///  </summary>
 
         [TestMethod]
-        public void Test_GetDistance()
+        public void Test_ColorMatching()
         {
             var current = new Color();
             var match = new Color();
 
-            Assert.AreEqual(0.0f, Distance.GetDistance(current, match));
+            Assert.AreEqual(0.0f, Distance.ColorMatching(current, match));
         }
 
         /// <summary>
@@ -62,7 +62,7 @@ namespace LearningFoundation.EuclideanColorFilterTests
         public void Test_FindNearestColor()
         {
             var map = new Color[1];
-            var current = new Color();
+            var current = new Color(); 
 
             Assert.AreEqual(0.0f, Distance.FindNearestColor(map, current));
         }
