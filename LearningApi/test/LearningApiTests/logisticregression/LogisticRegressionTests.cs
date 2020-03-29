@@ -160,7 +160,13 @@ namespace LearningFoundation.Test.LogisticRegression
 
         }
 
-       
+        [TestMethod]
+        public void LogisticRegression_Test_New_()
+        {
+            // test code
+        }
+
+
 
         #region Data Sample
         private DataDescriptor loadMetaData()
