@@ -372,3 +372,5 @@ LearningApi/test/obj/*
 /LearningApi/MouseGestureRecognition/.vs/MouseGestureRecognition/v15/Server/sqlite3
 /.vs
 /LearningApi/TestRunner/Properties/launchSettings.json
+*.ide-shm
+*.ide-wal
