@@ -14,7 +14,7 @@ namespace LearningFoundation.EuclideanColorFilterTests
         ///  We have to use a delta because the float might make some trouble...
         /// </summary>
         [TestMethod]
-        public void Test_EuclideanFormula()
+        public void EuclideanFormulaTest()
         {
             var p1 = new Point(5, 4);
             var p2 = new Point(4, 1);
@@ -29,7 +29,7 @@ namespace LearningFoundation.EuclideanColorFilterTests
         ///  We have to use a delta because the float might make some trouble...
         /// </summary>
         [TestMethod]
-        public void Test_EuclideanSimilarity()
+        public void EuclideanSimilarityTest()
         {
             var p1 = new Point(5, 4);
             var p2 = new Point(4, 1);
@@ -44,7 +44,7 @@ namespace LearningFoundation.EuclideanColorFilterTests
         ///  </summary>
 
         [TestMethod]
-        public void Test_ColorMatching()
+        public void ColorMatchingTest()
         {
             var current = new Color();
             var match = new Color();
@@ -59,7 +59,7 @@ namespace LearningFoundation.EuclideanColorFilterTests
         ///  </summary>
 
         [TestMethod]
-        public void Test_FindNearestColor()
+        public void FindNearestColorTest()
         {
             var map = new Color[1];
             var current = new Color(); 
