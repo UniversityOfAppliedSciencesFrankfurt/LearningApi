@@ -1,23 +1,22 @@
-﻿using System;
-using System.Linq;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using System.IO;
-using Newtonsoft.Json;
-using LearningFoundation;
-using LogisticRegression;
-using LearningFoundation.DataProviders;
+﻿using LearningFoundation;
 using LearningFoundation.DataMappers;
+using LearningFoundation.DataProviders;
 using LearningFoundation.Normalizers;
 using LearningFoundation.Statistics;
+using LogisticRegression;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Newtonsoft.Json;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace LearningFoundation.Test.LogisticRegression
 {
     [TestClass]
     public class LogisticRegressionTests
     {
-
         public LogisticRegressionTests()
         {
             ///
@@ -160,6 +159,11 @@ namespace LearningFoundation.Test.LogisticRegression
 
         }
 
+
+        /// <summary>
+        /// Performs the LogisticRegression algorithm on dataset with 1000 iterations and 0.02 learning rate 
+        /// on Breast Cancer Diagonis Dataset
+        /// </summary>
         [TestMethod]
         public void LogisticRegressionTest_BreastCancerDataset_RealExample()
         {
@@ -167,7 +171,7 @@ namespace LearningFoundation.Test.LogisticRegression
 
             var BreastCancerFile_path = System.IO.Path.Combine(Directory.GetCurrentDirectory(), BreastCancerData_path);
 
-            LearningApi api = new LearningApi(loadBreastCancerMetaData());
+            LearningApi api = new LearningApi(LoadBreastCancerMetaData());
             api.UseCsvDataProvider(BreastCancerFile_path, ',', false, 50);
 
             // Use mapper for data, which will extract (map) required columns 
@@ -175,28 +179,124 @@ namespace LearningFoundation.Test.LogisticRegression
 
             api.UseMinMaxNormalizer();
 
-            //run logistic regression for 200 iteration with learningRate=0.05
-            api.UseLogisticRegression(0.05, 200);
+            //run logistic regression for 1000 iterations with learningRate=0.02
+            api.UseLogisticRegression(0.02, 1000);
 
 
             var score = api.Run();
 
             ///**************PREDICTION AFTER MODEL IS CREATED*********////
             /////define data for testing (prediction)
-            LearningApi apiPrediction = new LearningApi(loadBreastCancerMetaData());
+            LearningApi apiPrediction = new LearningApi(LoadBreastCancerMetaData());
             //Real dataset must be defined as object type, because data can be numeric, binary and classification
             apiPrediction.UseActionModule<object[][], object[][]>((input, ctx) =>
             {
-                var data = new object[6][]
+                var data = new object[16][]
                 {
-                    new object[]{5,1,1,1,2,1,3,1,1,0},
-                    new object[]{3,1,1,1,2,2,3,1,1,0},
-                    new object[]{4,1,1,3,2,1,3,1,1,0},
-                    new object[]{2,1,2,1,2,1,3,1,1,0},
-                    new object[]{2,1,1,1,2,1,1,1,5,0},
-                    new object[]{8,7,5,10,7,9,5,5,4,1},
-
+                    new object[] { 4, 1, 1, 3, 2, 1, 3, 1, 1, 0 },
+                    new object[] { 8, 10, 10, 8, 7, 10, 9, 7, 1, 1 },
+                    new object[] { 1, 1, 1, 1, 2, 10, 3, 1, 1, 0 },
+                    new object[] { 2, 1, 2, 1, 2, 1, 3, 1, 1, 0 },
+                    new object[] { 2, 1, 1, 1, 2, 1, 1, 1, 5, 0 },
+                    new object[] { 4, 2, 1, 1, 2, 1, 2, 1, 1, 0 },
+                    new object[] { 1, 1, 1, 1, 1, 1, 3, 1, 1, 0 },
+                    new object[] { 2, 1, 1, 1, 2, 1, 2, 1, 1, 0 },
+                    new object[] { 5, 3, 3, 3, 2, 3, 4, 4, 1, 1 },
+                    new object[] { 1, 1, 1, 1, 2, 3, 3, 1, 1, 0 },
+                    new object[] { 8, 7, 5, 10, 7, 9, 5, 5, 4, 1 },
+                    new object[] { 7, 4, 6, 4, 6, 1, 4, 3, 1, 1 },
+                    new object[] { 4, 1, 1, 1, 2, 1, 2, 1, 1, 0 },
+                    new object[] { 4, 1, 1, 1, 2, 1, 3, 1, 1, 0 },
+                    new object[] { 10, 7, 7, 6, 4, 10, 4, 1, 2, 1 },
+                    new object[] { 6, 1, 1, 1, 2, 1, 3, 1, 1, 0 },
                     };
+
+                return data;
+            });
+
+            // Use mapper for data, which will extract (map) required columns 
+            apiPrediction.UseDefaultDataMapper();
+            apiPrediction.UseMinMaxNormalizer();
+            var testData = apiPrediction.Run();
+
+            //use previous trained model
+            var result = api.Algorithm.Predict(testData as double[][], api.Context) as LogisticRegressionResult;
+
+            //
+            Assert.AreEqual(Math.Round(result.PredictedValues[0], 0), 0);
+            Assert.AreEqual(Math.Round(result.PredictedValues[1], 0), 1);
+            Assert.AreEqual(Math.Round(result.PredictedValues[2], 0), 0);
+            Assert.AreEqual(Math.Round(result.PredictedValues[3], 0), 0);
+            Assert.AreEqual(Math.Round(result.PredictedValues[4], 0), 0);
+            Assert.AreEqual(Math.Round(result.PredictedValues[5], 0), 0);
+            Assert.AreEqual(Math.Round(result.PredictedValues[6], 0), 0);
+            Assert.AreEqual(Math.Round(result.PredictedValues[7], 0), 0);
+            Assert.AreEqual(Math.Round(result.PredictedValues[8], 0), 1);
+            Assert.AreEqual(Math.Round(result.PredictedValues[9], 0), 0);
+            Assert.AreEqual(Math.Round(result.PredictedValues[10], 0), 1);
+            Assert.AreEqual(Math.Round(result.PredictedValues[11], 0), 1);
+            Assert.AreEqual(Math.Round(result.PredictedValues[12], 0), 0);
+            Assert.AreEqual(Math.Round(result.PredictedValues[13], 0), 0);
+            Assert.AreEqual(Math.Round(result.PredictedValues[14], 0), 1);
+            Assert.AreEqual(Math.Round(result.PredictedValues[15], 0), 0);
+        }
+
+        /// <summary>
+        /// Performs the LogisticRegression algorithm on dataset with 90 iterations and 0.02 learning rate 
+        /// on Social Network Ads DataSet
+        /// </summary>
+        /// <returns></returns>
+        [TestMethod]
+        public void LogisticRegressionTest_SocialNetworkAdsDataset_RealExample()
+        {
+            string NetworkAdsData_path = @"SampleData\binary\social_network_ads_dataset.csv";
+
+            var NetworkAdsFile_path = System.IO.Path.Combine(Directory.GetCurrentDirectory(), NetworkAdsData_path);
+
+            LearningApi api = new LearningApi(LoadSocialNetworkAdsMetaData());
+            api.UseCsvDataProvider(NetworkAdsFile_path, ',', false, 50);
+
+            // Use mapper for data, which will extract (map) required columns 
+            api.UseDefaultDataMapper();
+
+            api.UseMinMaxNormalizer();
+
+            //run logistic regression for 90 iterations with learningRate=0.02
+            api.UseLogisticRegression(0.02, 90);
+
+
+            var score = api.Run();
+
+            ///**************PREDICTION AFTER MODEL IS CREATED*********////
+            /////define data for testing (prediction)
+            LearningApi apiPrediction = new LearningApi(LoadSocialNetworkAdsMetaData());
+            //Real dataset must be defined as object type, because data can be numeric, binary and classification
+            apiPrediction.UseActionModule<object[][], object[][]>((input, ctx) =>
+            {
+                var data = new object[20][]
+                {
+                    new object[]{"Male", 19, 19000, 0 },
+                    new object[]{"Male", 35, 20000, 0 },
+                    new object[]{"Female", 26, 43000, 0 },
+                    new object[]{"Female", 27, 57000, 0 },
+                    new object[]{"Male", 19, 76000, 0 },
+                    new object[]{"Male", 27, 58000, 0 },
+                    new object[]{"Female", 27, 84000, 0 },
+                    new object[]{"Female", 32, 150000, 1 },
+                    new object[]{"Male", 25, 33000, 0 },
+                    new object[]{"Female", 35, 65000, 0 },
+                    new object[]{"Female", 26, 80000, 0 },
+                    new object[]{"Female", 26, 52000, 0 },
+                    new object[]{"Male", 20, 86000, 0 },
+                    new object[]{"Male", 32, 18000, 0 },
+                    new object[]{"Male", 18, 82000, 0 },
+                    new object[]{"Male", 29, 80000, 0 },
+                    new object[]{"Male", 47, 25000, 1 },
+                    new object[]{"Male", 45, 26000, 1 },
+                    new object[]{"Male", 46, 28000, 1 },
+                    new object[]{"Female", 48, 29000, 1 },
+                    };
+
                 return data;
             });
 
@@ -214,13 +314,26 @@ namespace LearningFoundation.Test.LogisticRegression
             Assert.AreEqual(Math.Round(result.PredictedValues[2], 0), 0);
             Assert.AreEqual(Math.Round(result.PredictedValues[3], 0), 0);
             Assert.AreEqual(Math.Round(result.PredictedValues[4], 0), 0);
-            Assert.AreEqual(Math.Round(result.PredictedValues[5], 0), 1);
-
+            Assert.AreEqual(Math.Round(result.PredictedValues[5], 0), 0);
+            Assert.AreEqual(Math.Round(result.PredictedValues[6], 0), 0);
+            Assert.AreEqual(Math.Round(result.PredictedValues[7], 0), 1);
+            Assert.AreEqual(Math.Round(result.PredictedValues[8], 0), 0);
+            Assert.AreEqual(Math.Round(result.PredictedValues[9], 0), 0);
+            Assert.AreEqual(Math.Round(result.PredictedValues[10], 0), 0);
+            Assert.AreEqual(Math.Round(result.PredictedValues[11], 0), 0);
+            Assert.AreEqual(Math.Round(result.PredictedValues[12], 0), 0);
+            Assert.AreEqual(Math.Round(result.PredictedValues[13], 0), 0);
+            Assert.AreEqual(Math.Round(result.PredictedValues[14], 0), 0);
+            Assert.AreEqual(Math.Round(result.PredictedValues[15], 0), 0);
+            Assert.AreEqual(Math.Round(result.PredictedValues[16], 0), 1);
+            Assert.AreEqual(Math.Round(result.PredictedValues[17], 0), 1);
+            Assert.AreEqual(Math.Round(result.PredictedValues[18], 0), 1);
+            Assert.AreEqual(Math.Round(result.PredictedValues[19], 0), 1);
         }
 
 
-
         #region Data Sample
+
         private DataDescriptor loadMetaData()
         {
             var des = new DataDescriptor();
@@ -265,11 +378,13 @@ namespace LearningFoundation.Test.LogisticRegression
                     new object[]{0.644,"green","female",36,"yes" },
                     new object[]{0.169,"green","male", 43,"no" }
                     };
-            //
+            
             return data;
         }
 
         #endregion
+
+        #region Metadata for Data samples
 
         /// <summary>
         /// Meta data for binary__admin data sample
@@ -289,7 +404,12 @@ namespace LearningFoundation.Test.LogisticRegression
             return des;
         }
 
-        private DataDescriptor loadBreastCancerMetaData()
+
+        /// <summary>
+        /// Meta Data for Breast Cancer Diagonosis Data Sample
+        /// </summary>
+        /// <returns></returns>
+        private DataDescriptor LoadBreastCancerMetaData()
         {
             var des = new DataDescriptor();
 
@@ -308,5 +428,25 @@ namespace LearningFoundation.Test.LogisticRegression
             des.LabelIndex = 9;
             return des;
         }
+
+        /// <summary>
+        /// Meta Data for Social Network Ads/Purchase Data Sample
+        /// </summary>
+        /// <returns></returns>
+        private DataDescriptor LoadSocialNetworkAdsMetaData()
+        {
+            var des = new DataDescriptor();
+
+            des.Features = new Column[4];
+            des.Features[0] = new Column { Id = 1, Name = "Gender", Index = 0, Type = ColumnType.BINARY, DefaultMissingValue = 1, Values = new string[2] { "Male", "Female" } };
+            des.Features[1] = new Column { Id = 2, Name = "Age", Index = 1, Type = ColumnType.NUMERIC, DefaultMissingValue = 20, Values = null };
+            des.Features[2] = new Column { Id = 3, Name = "EstimatedSalary", Index = 2, Type = ColumnType.NUMERIC, DefaultMissingValue = 0, Values = null };
+            des.Features[3] = new Column { Id = 4, Name = "Purchased", Index = 3, Type = ColumnType.BINARY, DefaultMissingValue = 0, Values = new string[2] { "0", "1" } };
+
+            des.LabelIndex = 3;
+            return des;
+        }
+
+        #endregion
     }
 }
