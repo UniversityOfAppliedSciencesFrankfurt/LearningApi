@@ -12,6 +12,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="LearningApi" Version="1.3.0" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\ImageBinarizerLib\ImageBinarizerLib.csproj" />
   </ItemGroup>
 
