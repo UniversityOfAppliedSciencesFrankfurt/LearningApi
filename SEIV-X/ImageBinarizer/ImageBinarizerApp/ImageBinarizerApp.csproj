@@ -4,6 +4,8 @@
     <OutputType>Exe</OutputType>
     <TargetFramework>netcoreapp2.1</TargetFramework>
     <PackAsTool>true</PackAsTool>
+    <ToolCommandName>ImageBinarizer</ToolCommandName>
+    <PackageOutputPath>./nupkg</PackageOutputPath>
     <AssemblyVersion>1.0.0.2</AssemblyVersion>
     <Version>1.0.2</Version>
     <Authors>daenet GmbH, Damir Dobric</Authors>

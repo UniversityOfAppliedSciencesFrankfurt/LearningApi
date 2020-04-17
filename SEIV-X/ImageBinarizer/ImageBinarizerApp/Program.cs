@@ -14,43 +14,45 @@ namespace ImageBinarizerApp
         /// <param name="args">Argument of main method</param>
         static void Main(string[] args)
         {
-            Console.WriteLine("\nWelcome to Image Binarizer Application [Version 1.0.2]");
-            Console.WriteLine("Copyright <c> 2019 daenet GmbH, Damir Dobric. All rights reserved.");            
+            Console.WriteLine("\nWelcome to Image Binarizer Application [Version 1.0.3]");
+            Console.WriteLine("Copyright <c> 2020 daenet GmbH, Damir Dobric. All rights reserved.");
             Console.WriteLine("\nUse following command for help:");
-            Console.WriteLine("dotnet ImageBinarizerApp -help");
+            Console.WriteLine("-help\n");
             args = new String[] { Console.ReadLine() };
-            
+
             //Test if necessary input arguments were supplied.
-            if (args.Length < 8)
+            if (args.Length == 1 && args[0].Equals("-help"))
             {
-                if(args.Length == 1 && args[0].Equals("-help"))
-                {
-                    Console.WriteLine("\nHelp:");
-                    Console.WriteLine("\nPass the arguments as following:");
-                    Console.WriteLine("\nExample with automatic RGB:\ndotnet ImageBinarizerApp --input-image c:\\a.png --output-image d:\\out.txt -width 32 -height 32");
-                    Console.WriteLine("\nExample with explicit RGB:\ndotnet ImageBinarizerApp --input-image c:\\a.png --output-image d:\\out.txt -width 32 -height 32 -red 100 -green 100 -blue 100");
-                }
-                else
-                {
-                    Console.WriteLine("\nError: All necessary arguments are not passed. Please pass the arguments first.");
-                }
+                Console.WriteLine("\nHelp:");
+                Console.WriteLine("\nPass the arguments as following:");
+                Console.WriteLine("\nExample with automatic RGB:\n--input-image c:\\a.png --output-image c:\\Images\\out.txt -width 32 -height 32");
+                Console.WriteLine("\nExample with explicit RGB:\n-input-image c:\\a.png --output-image c:\\Images\\out.txt -width 32 -height 32 -red 100 -green 100 -blue 100");
+            }
+            else
+            {
+                Console.WriteLine("\nError: All necessary arguments are not passed. Please pass the arguments first.");
+
                 Console.WriteLine("\nPress any key to exit the application.");
                 Console.ReadLine();
                 return;
             }
-            else
-            {
-                String inputImagePath = "";
-                String outputImagePath = "";
-                int imageWidth = 0;
-                int imageHeight = 0;
-                int redThreshold = -1;
-                int greenThreshold = -1;
-                int blueThreshold = -1;
 
-                if(args[0].Equals("--input-image") && File.Exists(args[1]))
+            string inputImagePath = " ";
+            string outputImagePath = " ";
+            int imageWidth = 0;
+            int imageHeight = 0;
+            int redThreshold = -1;
+            int greenThreshold = -1;
+            int blueThreshold = -1;
+
+            string readline = Console.ReadLine();
+            string[] args1 = readline.Split(' ');
+
+            if (args1.Length == 8)
+            {
+                if (args1[0].Equals("--input-image") && File.Exists(args1[1]))
                 {
-                    inputImagePath = args[1];
+                    inputImagePath = args1[1];
                 }
                 else
                 {
@@ -60,10 +62,11 @@ namespace ImageBinarizerApp
                     return;
                 }
 
-                int separatorIndex = args[3].LastIndexOf(Path.DirectorySeparatorChar);
-                if (args[2].Equals("--output-image") && separatorIndex >= 0 && Directory.Exists(args[3].Substring(0, separatorIndex)))
+                int separatorIndex = args1[3].LastIndexOf(Path.DirectorySeparatorChar);
+
+                if (args1[2].Equals("--output-image") && separatorIndex >= 0 && Directory.Exists(args1[3].Substring(0, separatorIndex)))
                 {
-                    outputImagePath = args[3];
+                    outputImagePath = args1[3];
                 }
                 else
                 {
@@ -73,7 +76,7 @@ namespace ImageBinarizerApp
                     return;
                 }
 
-                if (!args[4].Equals("-width") || !int.TryParse(args[5], out imageWidth))
+                if (!args1[4].Equals("-width") || !int.TryParse(args1[5], out imageWidth))
                 {
                     Console.WriteLine("\nError: Image Width should be integer.");
                     Console.WriteLine("\nPress any key to exit the application.");
@@ -81,17 +84,20 @@ namespace ImageBinarizerApp
                     return;
                 }
 
-                if (!args[6].Equals("-height") || !int.TryParse(args[7], out imageHeight))
+                if (!args1[6].Equals("-height") || !int.TryParse(args1[7], out imageHeight))
                 {
                     Console.WriteLine("\nError: Image Height should be integer.");
                     Console.WriteLine("\nPress any key to exit the application.");
                     Console.ReadLine();
                     return;
                 }
+            }
 
-                if(args.Length > 8)
+            else
+            {
+                if (args1.Length > 8)
                 {
-                    if(args.Length < 14)
+                    if (args1.Length < 14)
                     {
                         Console.WriteLine("\nError: All three Red, Green and Blue Thresholds should be passed.");
                         Console.WriteLine("\nPress any key to exit the application.");
@@ -100,7 +106,48 @@ namespace ImageBinarizerApp
                     }
                     else
                     {
-                        if (!args[8].Equals("-red") || !(int.TryParse(args[9], out redThreshold)) || redThreshold < 0 || redThreshold > 255)
+                        if (args1[0].Equals("--input-image") && File.Exists(args1[1]))
+                        {
+                            inputImagePath = args1[1];
+                        }
+                        else
+                        {
+                            Console.WriteLine("\nError: Input file doesn't exist.");
+                            Console.WriteLine("\nPress any key to exit the application.");
+                            Console.ReadLine();
+                            return;
+                        }
+
+                        int separatorIndex = args1[3].LastIndexOf(Path.DirectorySeparatorChar);
+
+                        if (args1[2].Equals("--output-image") && separatorIndex >= 0 && Directory.Exists(args1[3].Substring(0, separatorIndex)))
+                        {
+                            outputImagePath = args1[3];
+                        }
+                        else
+                        {
+                            Console.WriteLine("\nError: Output Directory doesn't exist.");
+                            Console.WriteLine("\nPress any key to exit the application.");
+                            Console.ReadLine();
+                            return;
+                        }
+
+                        if (!args1[4].Equals("-width") || !int.TryParse(args1[5], out imageWidth))
+                        {
+                            Console.WriteLine("\nError: Image Width should be integer.");
+                            Console.WriteLine("\nPress any key to exit the application.");
+                            Console.ReadLine();
+                            return;
+                        }
+
+                        if (!args1[6].Equals("-height") || !int.TryParse(args1[7], out imageHeight))
+                        {
+                            Console.WriteLine("\nError: Image Height should be integer.");
+                            Console.WriteLine("\nPress any key to exit the application.");
+                            Console.ReadLine();
+                            return;
+                        }
+                        if (!args1[8].Equals("-red") || !(int.TryParse(args1[9], out redThreshold)) || redThreshold < 0 || redThreshold > 255)
                         {
                             Console.WriteLine("\nError: Red Threshold should be in between 0 and 255.");
                             Console.WriteLine("\nPress any key to exit the application.");
@@ -108,7 +155,7 @@ namespace ImageBinarizerApp
                             return;
                         }
 
-                        if (!args[10].Equals("-green") || !(int.TryParse(args[11], out greenThreshold)) || greenThreshold < 0 || greenThreshold > 255)
+                        if (!args1[10].Equals("-green") || !(int.TryParse(args1[11], out greenThreshold)) || greenThreshold < 0 || greenThreshold > 255)
                         {
                             Console.WriteLine("\nError: Green Threshold should be in between 0 and 255.");
                             Console.WriteLine("\nPress any key to exit the application.");
@@ -116,14 +163,14 @@ namespace ImageBinarizerApp
                             return;
                         }
 
-                        if (!args[12].Equals("-blue") || !(int.TryParse(args[13], out blueThreshold)) || blueThreshold < 0 || blueThreshold > 255)
+                        if (!args1[12].Equals("-blue") || !(int.TryParse(args1[13], out blueThreshold)) || blueThreshold < 0 || blueThreshold > 255)
                         {
                             Console.WriteLine("\nError: Blue Threshold should be in between 0 and 255.");
                             Console.WriteLine("\nPress any key to exit the application.");
                             Console.ReadLine();
                             return;
                         }
-                    }                    
+                    }
                 }
                 else
                 {
@@ -132,26 +179,30 @@ namespace ImageBinarizerApp
                     blueThreshold = -1;
                 }
 
-                Console.WriteLine("\nImage Binarization in progress...");
+            }
 
-                try
-                {
-                    ImageBinarizerApplication obj = new ImageBinarizerApplication();
-                    obj.Binarizer(inputImagePath, outputImagePath, imageWidth, imageHeight, redThreshold, greenThreshold, blueThreshold);
-                }
-                catch (Exception e)
-                {
-                    Console.WriteLine($"\nError: {e.Message}");
-                    Console.WriteLine("\nPress any key to exit the application.");
-                    Console.ReadLine();
-                    return;
-                }
+            Console.WriteLine("\nImage Binarization in progress...");
 
-                Console.WriteLine("\nImage Binarization completed.");
+            try
+            {
+                ImageBinarizerApplication obj = new ImageBinarizerApplication();
+                obj.Binarizer(inputImagePath, outputImagePath, imageWidth, imageHeight, redThreshold, greenThreshold, blueThreshold);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine($"\nError: {e.Message}");
                 Console.WriteLine("\nPress any key to exit the application.");
-
                 Console.ReadLine();
-            }            
+                return;
+            }
+
+
+
+            Console.WriteLine("\nImage Binarization completed.");
+            Console.WriteLine("\nPress any key to exit the application.");
+
+            Console.ReadLine();
+
         }
     }
 }
