@@ -9,6 +9,7 @@ using System.Diagnostics;
 using LearningFoundation.ImageBinarizer;
 using LearningFoundation.RingProjectionAlgorithm;
 using LearningFoundation.MlAlgorithms.RingProjectionAlgorithm;
+using System.Linq;
 
 namespace UnitTestRingProjectionAlgorithm
 {
@@ -78,39 +79,55 @@ namespace UnitTestRingProjectionAlgorithm
             Assert.AreEqual(new LoadMNISTPipelineModule().ReverseBytes(60000), 1625948160);
         }
 
+        public static IEnumerable<object[]> GetRingProjectionInputData()
+        {
+            yield return new object[] {
+                new []{ "MaskA.jpg", "MaskB.jpg", "MaskC.jpg", "MaskD.jpg" },
+                "OutputMask",
+                "CoeffMask"};
+            yield return new object[] {
+                new []{ "BlackWhiteA.jpg", "BlackWhiteB.jpg", "BlackWhiteC.jpg", "BlackWhiteD.jpg" },
+                "OutputBlackWhite",
+                "CoeffBlackWhite" };
+            yield return new object[] {
+                new []{ "BlackPatternA.jpg", "BlackPatternB.jpg", "BlackPatternC.jpg", "BlackPatternD.jpg" },
+                "OutputBlackPattern",
+                "CoeffBlackPattern"};
+        }
+
         /// <summary>
         /// Letter A samples with cross correlation and visualized function
         /// </summary>
-        [TestMethod]
-        public void RingProjection2D()
+        [DataTestMethod]
+        [DynamicData(nameof(GetRingProjectionInputData), DynamicDataSourceType.Method)]
+        public void RingProjection2D(string[] inputImageFileNames, string outputImageFilePrefix, string coeffOutputFileName)
         {
-            string[] testImages = { "LetterA.jpg", "LetterA45.jpg", "LetterA-45.jpg", "LetterA180.jpg" };
             string trainingImagesPath = Path.Combine(AppContext.BaseDirectory, @"UnitTestRingProjectionAlgorithm\TestImages");
 
             LearningApi api;
-            for (int i = 0; i < testImages.Length; i++)
+            for (int i = 0; i < inputImageFileNames.Length; i++)
             {
                 api = new LearningApi();
                 api.UseActionModule<object, double[][]>((input, ctx) =>
                 {
                     Binarizer biImg = new Binarizer();
                     double[][] data = biImg.GetBinaryArray(
-                        Path.Combine(trainingImagesPath, testImages[i]), 50);
+                        Path.Combine(trainingImagesPath, inputImageFileNames[i]), 50);
                     return data;
                 });
                 api.UseRingProjectionPipelineComponent();
-                api.AddModule(new RingProjectionFunctionToCSVPipelineModule("LetterA", i, ";", trainingImagesPath));
+                api.AddModule(new RingProjectionFunctionToCSVPipelineModule(outputImageFilePrefix, i, ";", trainingImagesPath));
                 api.Run();
             }
 
             // Loading the CSV files created before back to the test
             int count = 0;
             List<double[]> functions = new List<double[]>();
-            while (File.Exists(Path.Combine(trainingImagesPath, $"LetterA.{count++}.csv"))) ;
+            while (File.Exists(Path.Combine(trainingImagesPath, $"{outputImageFilePrefix}.{count++}.csv"))) ;
 
             for (int i = 0; i < count - 1; i++)
             {
-                using (var reader = new StreamReader(@Path.Combine(trainingImagesPath, $"LetterA.{i}.csv")))
+                using (var reader = new StreamReader(@Path.Combine(trainingImagesPath, $"{outputImageFilePrefix}.{i}.csv")))
                 {
                     List<int> tempList = new List<int>();
                     reader.ReadLine();
@@ -147,15 +164,17 @@ namespace UnitTestRingProjectionAlgorithm
                 }
             }
 
+            Assert.IsTrue(corrCoefficient.All(coeff => coeff <= 1 && coeff > 0));
+
             Directory.CreateDirectory(Path.Combine(AppContext.BaseDirectory, trainingImagesPath, "Boxplot"));
-            string savePath = Path.Combine(trainingImagesPath, "Boxplot", "LetterA.txt");
+            string savePath = Path.Combine(trainingImagesPath, "Boxplot", $"{coeffOutputFileName}.txt");
             if (!File.Exists(savePath))
             {
                 File.Create(savePath).Dispose();
             }
             using (StreamWriter streamWriter = new StreamWriter(savePath))
             {
-                streamWriter.Write("LetterA ");
+                streamWriter.Write($"{coeffOutputFileName} ");
                 foreach (var item in corrCoefficient)
                 {
                     streamWriter.Write($" | {item.ToString("0.0000")}");
@@ -166,19 +185,21 @@ namespace UnitTestRingProjectionAlgorithm
         /// <summary>
         /// Image dimension reduction of MNIST database of handwritten digits (traning data)
         /// </summary>
-        [TestMethod]
-        public void RingProjectionMNISTImage()
+        [DataTestMethod]
+        [DataRow("train-images.idx3-ubyte", "train-labels.idx1-ubyte")]
+        [DataRow("t10k-images.idx3-ubyte", "t10k-labels.idx1-ubyte")]
+        public void RingProjectionMNISTImage(string inputImageFileName, string inputLabelFileName)
         {
             LearningApi api = new LearningApi();
             api.UseActionModule<string[], BinaryReader[]>((input, ctx) =>
             {
-                string[] trainDatabase = { "train-images.idx3-ubyte", "train-labels.idx1-ubyte" };
-                string trainImages = Path.Combine(AppContext.BaseDirectory, @"UnitTestRingProjectionAlgorithm\MNISTImages", trainDatabase[0]);
-                string trainLabels = Path.Combine(AppContext.BaseDirectory, @"UnitTestRingProjectionAlgorithm\MNISTImages", trainDatabase[1]);
+                var inputDataFolder = @"UnitTestRingProjectionAlgorithm\MNISTImages";
+                string inputImages = Path.Combine(AppContext.BaseDirectory, inputDataFolder, inputImageFileName);
+                string inputLabels = Path.Combine(AppContext.BaseDirectory, inputDataFolder, inputLabelFileName);
 
                 BinaryReader[] mnistData = new BinaryReader[2];
-                mnistData[0] = new BinaryReader(new FileStream(trainImages, FileMode.Open));
-                mnistData[1] = new BinaryReader(new FileStream(trainLabels, FileMode.Open));
+                mnistData[0] = new BinaryReader(new FileStream(inputImages, FileMode.Open));
+                mnistData[1] = new BinaryReader(new FileStream(inputLabels, FileMode.Open));
                 return mnistData;
             });
             api.AddModule(new LoadMNISTPipelineModule());
@@ -223,10 +244,20 @@ namespace UnitTestRingProjectionAlgorithm
                 api.Run();
             }
 
+            var resultStat = new List<MNISTStat>();
             // Calculate cross-correlation coefficients
             for (int i = 0; i < 10; i++)
             {
-                CrossCorrCoeff(i);
+                var stat = CrossCorrCoeff(i);
+                resultStat.Add(stat);
+            }
+
+            foreach (var stat in resultStat)
+            {
+                Assert.IsTrue(stat.Average > 0.8);
+                Assert.IsTrue(stat.Minimum > -0.3);
+                Assert.IsTrue(stat.Maximum >= 0.9);
+                Assert.IsTrue(stat.Deviation < 1.5 && stat.Deviation >= 0);
             }
         }
 
@@ -254,7 +285,8 @@ namespace UnitTestRingProjectionAlgorithm
         /// Calculate the cross-correlation coefficients among the Functions from the same digit
         /// </summary>
         /// <param name="digit">digit representation</param>
-        private void CrossCorrCoeff(int digit)
+        /// <returns>MNISTStat</returns>
+        private MNISTStat CrossCorrCoeff(int digit)
         {
             string folder = Path.Combine(AppContext.BaseDirectory, $"Digit {digit}");
             int count = 0;
@@ -328,8 +360,18 @@ namespace UnitTestRingProjectionAlgorithm
             deviation /= corrCoefficient.Count;
             deviation = Math.Sqrt(deviation);
 
+            var stat = new MNISTStat()
+            {
+                Minimum = min,
+                Maximum = max,
+                Deviation = deviation,
+                Average = average
+            };
+
             // Export the statistical result of cross-correlation coefficients
-            WriteToCSVStat(AppContext.BaseDirectory, digit, count - 1, average, min, max, deviation);
+            WriteToCSVStat(AppContext.BaseDirectory, digit, count - 1, stat);
+
+            return stat;
         }
 
         /// <summary>
@@ -338,11 +380,8 @@ namespace UnitTestRingProjectionAlgorithm
         /// <param name="baseFolder">save path of csv file</param>
         /// <param name="digit">digit representation</param>
         /// <param name="noSample">number of sample</param>
-        /// <param name="average">average of cross correlation coefficients </param>
-        /// <param name="min">minimum cross correlation coefficient</param>
-        /// <param name="max">maximum cross correlation coefficient</param>
-        /// <param name="deviation">standard deviation of cross correlation coefficients</param>
-        private void WriteToCSVStat(string baseFolder, int digit, int noSample, double average, double min, double max, double deviation)
+        /// <param name="stat">stats of MNIST image cross correlation coefficients </param>
+        private void WriteToCSVStat(string baseFolder, int digit, int noSample, MNISTStat stat)
         {
             string csvPath = Path.Combine(baseFolder, "stat.csv");
             if (digit < 1)
@@ -351,26 +390,33 @@ namespace UnitTestRingProjectionAlgorithm
                 using (StreamWriter sw = new StreamWriter(csvPath))
                 {
                     sw.WriteLine($"digit;number of samples;avgcorrcoeff;mincorrcoeff;maxcorrcoeff;deviation");
-                    sw.Write($"{digit};");
-                    sw.Write($"{noSample};");
-                    sw.Write($"{average.ToString("0.0000")};");
-                    sw.Write($"{min.ToString("0.0000")};");
-                    sw.Write($"{max.ToString("0.0000")};");
-                    sw.WriteLine($"{deviation.ToString("0.0000")}");
+                    AddCSVStatData(digit, noSample, stat, sw);
                 }
             }
             else
             {
                 using (StreamWriter sw = File.AppendText(csvPath))
                 {
-                    sw.Write($"{digit};");
-                    sw.Write($"{noSample};");
-                    sw.Write($"{average.ToString("0.0000")};");
-                    sw.Write($"{min.ToString("0.0000")};");
-                    sw.Write($"{max.ToString("0.0000")};");
-                    sw.WriteLine($"{deviation.ToString("0.0000")}");
+                    AddCSVStatData(digit, noSample, stat, sw);
                 }
             }
+        }
+
+        /// <summary>
+        /// Adds stat data to csv file
+        /// </summary>
+        /// <param name="digit"></param>
+        /// <param name="noSample"></param>
+        /// <param name="stat"></param>
+        /// <param name="sw"></param>
+        private static void AddCSVStatData(int digit, int noSample, MNISTStat stat, StreamWriter sw)
+        {
+            sw.Write($"{digit};");
+            sw.Write($"{noSample};");
+            sw.Write($"{stat.Average.ToString("0.0000")};");
+            sw.Write($"{stat.Minimum.ToString("0.0000")};");
+            sw.Write($"{stat.Maximum.ToString("0.0000")};");
+            sw.WriteLine($"{stat.Deviation.ToString("0.0000")}");
         }
     }
 }

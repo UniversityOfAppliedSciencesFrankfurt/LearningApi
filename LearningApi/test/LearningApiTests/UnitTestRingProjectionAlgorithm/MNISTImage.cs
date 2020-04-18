@@ -25,8 +25,16 @@ namespace UnitTestRingProjectionAlgorithm
         {
             this.Width = width;
             this.Height = height;
-            this.Pixels = pixels;
             this.Label = label;
+            this.Pixels = new byte[width][];
+            for (int x = 0; x < width; x++)
+            {
+                this.Pixels[x] = new byte[height];
+                for (int y = 0; y < height; y++)
+                {
+                    this.Pixels[x][y] = pixels[x][y];
+                }
+            }
         }
     }
 }

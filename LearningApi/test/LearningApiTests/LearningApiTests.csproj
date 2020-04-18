@@ -7,6 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="FluentAssertions" Version="5.9.0" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.0.1" />
     <PackageReference Include="MSTest.TestAdapter" Version="1.4.0" />
     <PackageReference Include="MSTest.TestFramework" Version="1.4.0" />
@@ -36,6 +37,48 @@
   <ItemGroup>
     <None Update="CorrelationMatrix\corellation_data.csv">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="GaussianAndMeanFilter\ExpectedPicture\Gaussian\test1.gif">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="GaussianAndMeanFilter\ExpectedPicture\Gaussian\test2.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="GaussianAndMeanFilter\ExpectedPicture\Gaussian\test3.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="GaussianAndMeanFilter\ExpectedPicture\Gaussian\test4.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="GaussianAndMeanFilter\ExpectedPicture\Gaussian\test5.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="GaussianAndMeanFilter\ExpectedPicture\Gaussian\test6.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="GaussianAndMeanFilter\ExpectedPicture\Gaussian\test7.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="GaussianAndMeanFilter\TestPicture\test1.gif">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="GaussianAndMeanFilter\TestPicture\test2.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="GaussianAndMeanFilter\TestPicture\test3.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="GaussianAndMeanFilter\TestPicture\test4.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="GaussianAndMeanFilter\TestPicture\test5.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="GaussianAndMeanFilter\TestPicture\test6.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="GaussianAndMeanFilter\TestPicture\test7.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="ImageBinarization\Images\a.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -397,11 +440,41 @@
     <None Update="SampleData\secom\SECOM_data_mapper.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Update="UnitTestRingProjectionAlgorithm\MNISTImages\t10k-images.idx3-ubyte">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="UnitTestRingProjectionAlgorithm\MNISTImages\t10k-labels.idx1-ubyte">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="UnitTestRingProjectionAlgorithm\MNISTImages\train-images.idx3-ubyte">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Update="UnitTestRingProjectionAlgorithm\MNISTImages\train-labels.idx1-ubyte">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="UnitTestRingProjectionAlgorithm\TestImages\BlackPatternA.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="UnitTestRingProjectionAlgorithm\TestImages\BlackPatternB.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="UnitTestRingProjectionAlgorithm\TestImages\BlackPatternC.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="UnitTestRingProjectionAlgorithm\TestImages\BlackPatternD.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="UnitTestRingProjectionAlgorithm\TestImages\BlackWhiteA.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="UnitTestRingProjectionAlgorithm\TestImages\BlackWhiteB.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="UnitTestRingProjectionAlgorithm\TestImages\BlackWhiteC.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="UnitTestRingProjectionAlgorithm\TestImages\BlackWhiteD.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="UnitTestRingProjectionAlgorithm\TestImages\LetterA-45.jpg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -441,6 +514,18 @@
     </None>
     <None Update="UnitTestRingProjectionAlgorithm\TestImages\LetterO45.jpg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="UnitTestRingProjectionAlgorithm\TestImages\MaskA.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="UnitTestRingProjectionAlgorithm\TestImages\MaskB.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="UnitTestRingProjectionAlgorithm\TestImages\MaskC.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="UnitTestRingProjectionAlgorithm\TestImages\MaskD.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="UnitTestRingProjectionAlgorithm\TestImages\myFace.jpg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
