@@ -14,6 +14,17 @@ namespace ImageBinarizerApp
         /// <param name="args">Argument of main method</param>
         static void Main(string[] args)
         {
+            string Intro1 = "<path> \t \t \t \t Absolute path of the input-file|output-file. eg: c:\\Images\\flower.jpg";
+            string Intro2 = "<int> \t \t\t \t Dimension of the image width|height. [use range : 100-500]";
+            string Intro3 = "<value> \t \t\t Value of the RGB color thresholding. [Optimal value: 100-240]";
+            string Intro4 = "--input-image <path> \t \t Path containing the image file to be processed.";
+            string Intro5 = "--output-image <path> \t \t Path containing the binary image file.";
+            string Intro6 = "-width <int> \t\t \t Specification of the image width dimension.";
+            string Intro7 = "-height <int> \t\t\t Specification of the image height dimension.";
+            string Intro8 = "-red <value> \t\t \t Specification of the redThreshold value.";
+            string Intro9 = "-green <value> \t\t\t Specification of the greenThreshold value.";
+            string Intro10 = "-blue <value> \t\t \t Specification of the blueThreshold value.";
+
             Console.WriteLine("\nWelcome to Image Binarizer Application [Version 1.0.3]");
             Console.WriteLine("Copyright <c> 2020 daenet GmbH, Damir Dobric. All rights reserved.");
             Console.WriteLine("\nUse following command for help:");
@@ -23,7 +34,8 @@ namespace ImageBinarizerApp
             //Test if necessary input arguments were supplied.
             if (args.Length == 1 && args[0].Equals("-help"))
             {
-                Console.WriteLine("\nHelp:");
+                Console.WriteLine("\nruntime options:");
+                Console.WriteLine($"\n{Intro1}\n{Intro2}\n{Intro3}\n{Intro4}\n{Intro5}\n{Intro6}\n{Intro7}\n{Intro8}\n{Intro9}\n{Intro10}\n");
                 Console.WriteLine("\nPass the arguments as following:");
                 Console.WriteLine("\nExample with automatic RGB:\n--input-image c:\\a.png --output-image c:\\Images\\out.txt -width 32 -height 32");
                 Console.WriteLine("\nExample with explicit RGB:\n-input-image c:\\a.png --output-image c:\\Images\\out.txt -width 32 -height 32 -red 100 -green 100 -blue 100");
