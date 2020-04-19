@@ -27,9 +27,9 @@ namespace ImageBinarizerTest
             Dictionary<String, int> imageParams = new Dictionary<string, int>();
             imageParams.Add("imageWidth", 100);
             imageParams.Add("imageHeight", 200);
-            imageParams.Add("redThreshold", 0);
+            imageParams.Add("redThreshold", 10);
             imageParams.Add("greenThreshold", 0);
-            imageParams.Add("blueThreshold", 0);
+            imageParams.Add("blueThreshold", 30);
 
             var api = new LearningApi();
 
@@ -85,9 +85,9 @@ namespace ImageBinarizerTest
             Dictionary<String, int> imageParams = new Dictionary<string, int>();
             imageParams.Add("imageWidth", 100);
             imageParams.Add("imageHeight", 200);
-            imageParams.Add("redThreshold", 0);
+            imageParams.Add("redThreshold", 10);
             imageParams.Add("greenThreshold", 0);
-            imageParams.Add("blueThreshold", 0);
+            imageParams.Add("blueThreshold", 30);
 
             var api = new LearningApi();
 
@@ -143,9 +143,9 @@ namespace ImageBinarizerTest
             Dictionary<String, int> imageParams = new Dictionary<string, int>();
             imageParams.Add("imageWidth", 100);
             imageParams.Add("imageHeight", 200);
-            imageParams.Add("redThreshold", 0);
+            imageParams.Add("redThreshold", 10);
             imageParams.Add("greenThreshold", 0);
-            imageParams.Add("blueThreshold", 0);
+            imageParams.Add("blueThreshold", 30);
 
             var api = new LearningApi();
 
@@ -201,9 +201,9 @@ namespace ImageBinarizerTest
             Dictionary<String, int> imageParams = new Dictionary<string, int>();
             imageParams.Add("imageWidth", 100);
             imageParams.Add("imageHeight", 200);
-            imageParams.Add("redThreshold", 0);
+            imageParams.Add("redThreshold", 10);
             imageParams.Add("greenThreshold", 0);
-            imageParams.Add("blueThreshold", 0);
+            imageParams.Add("blueThreshold", 30);
 
             var api = new LearningApi();
 
@@ -259,9 +259,9 @@ namespace ImageBinarizerTest
             Dictionary<String, int> imageParams = new Dictionary<string, int>();
             imageParams.Add("imageWidth", 100);
             imageParams.Add("imageHeight", 200);
-            imageParams.Add("redThreshold", 1);
-            imageParams.Add("greenThreshold", 1);
-            imageParams.Add("blueThreshold", 1);
+            imageParams.Add("redThreshold", 100);
+            imageParams.Add("greenThreshold", 100);
+            imageParams.Add("blueThreshold", 100);
 
             var api = new LearningApi();
 
@@ -317,9 +317,9 @@ namespace ImageBinarizerTest
             Dictionary<String, int> imageParams = new Dictionary<string, int>();
             imageParams.Add("imageWidth", 100);
             imageParams.Add("imageHeight", 200);
-            imageParams.Add("redThreshold", 1);
-            imageParams.Add("greenThreshold", 1);
-            imageParams.Add("blueThreshold", 1);
+            imageParams.Add("redThreshold", 100);
+            imageParams.Add("greenThreshold", 100);
+            imageParams.Add("blueThreshold", 100);
 
             var api = new LearningApi();
 
@@ -375,9 +375,9 @@ namespace ImageBinarizerTest
             Dictionary<String, int> imageParams = new Dictionary<string, int>();
             imageParams.Add("imageWidth", 100);
             imageParams.Add("imageHeight", 200);
-            imageParams.Add("redThreshold", 1);
-            imageParams.Add("greenThreshold", 1);
-            imageParams.Add("blueThreshold", 1);
+            imageParams.Add("redThreshold", 100);
+            imageParams.Add("greenThreshold", 100);
+            imageParams.Add("blueThreshold", 100);
 
             var api = new LearningApi();
 
@@ -433,9 +433,9 @@ namespace ImageBinarizerTest
             Dictionary<String, int> imageParams = new Dictionary<string, int>();
             imageParams.Add("imageWidth", 100);
             imageParams.Add("imageHeight", 200);
-            imageParams.Add("redThreshold", 1);
-            imageParams.Add("greenThreshold", 1);
-            imageParams.Add("blueThreshold", 1);
+            imageParams.Add("redThreshold", 100);
+            imageParams.Add("greenThreshold", 100);
+            imageParams.Add("blueThreshold", 100);
 
             var api = new LearningApi();
 
@@ -491,9 +491,9 @@ namespace ImageBinarizerTest
             Dictionary<String, int> imageParams = new Dictionary<string, int>();
             imageParams.Add("imageWidth", 200);
             imageParams.Add("imageHeight", 200);
-            imageParams.Add("redThreshold", -1);
-            imageParams.Add("greenThreshold", -1);
-            imageParams.Add("blueThreshold", -1);
+            imageParams.Add("redThreshold", 180);
+            imageParams.Add("greenThreshold", 150);
+            imageParams.Add("blueThreshold", 180);
 
             var api = new LearningApi();
 
@@ -549,9 +549,9 @@ namespace ImageBinarizerTest
             Dictionary<String, int> imageParams = new Dictionary<string, int>();
             imageParams.Add("imageWidth", 100);
             imageParams.Add("imageHeight", 200);
-            imageParams.Add("redThreshold", -1);
-            imageParams.Add("greenThreshold", -1);
-            imageParams.Add("blueThreshold", -1);
+            imageParams.Add("redThreshold", 180);
+            imageParams.Add("greenThreshold", 180);
+            imageParams.Add("blueThreshold", 180);
 
             var api = new LearningApi();
 
@@ -607,9 +607,9 @@ namespace ImageBinarizerTest
             Dictionary<String, int> imageParams = new Dictionary<string, int>();
             imageParams.Add("imageWidth", 100);
             imageParams.Add("imageHeight", 200);
-            imageParams.Add("redThreshold", -1);
-            imageParams.Add("greenThreshold", -1);
-            imageParams.Add("blueThreshold", -1);
+            imageParams.Add("redThreshold", 180);
+            imageParams.Add("greenThreshold", 180);
+            imageParams.Add("blueThreshold", 180);
 
             var api = new LearningApi();
 
@@ -665,9 +665,9 @@ namespace ImageBinarizerTest
             Dictionary<String, int> imageParams = new Dictionary<string, int>();
             imageParams.Add("imageWidth", 100);
             imageParams.Add("imageHeight", 100);
-            imageParams.Add("redThreshold", -1);
-            imageParams.Add("greenThreshold", -1);
-            imageParams.Add("blueThreshold", -1);
+            imageParams.Add("redThreshold", 180);
+            imageParams.Add("greenThreshold", 180);
+            imageParams.Add("blueThreshold", 180);
 
             var api = new LearningApi();
 
