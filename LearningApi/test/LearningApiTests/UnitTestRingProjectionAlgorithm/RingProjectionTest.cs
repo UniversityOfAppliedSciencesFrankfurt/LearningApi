@@ -265,7 +265,7 @@ namespace UnitTestRingProjectionAlgorithm
         /// Convert 2D byte array to 2D double array
         /// </summary>
         /// <param name="byteArray">Input byte array</param>
-        /// <returns></returns>
+        /// <returns>output 2D double array</returns>
         private double[][] ByteArrayToDoubleArray(byte[][] byteArray)
         {
             double[][] doubleArray = new double[byteArray.Length][];
@@ -405,10 +405,10 @@ namespace UnitTestRingProjectionAlgorithm
         /// <summary>
         /// Adds stat data to csv file
         /// </summary>
-        /// <param name="digit"></param>
-        /// <param name="noSample"></param>
-        /// <param name="stat"></param>
-        /// <param name="sw"></param>
+        /// <param name="digit">digit representation</param>
+        /// <param name="noSample">number of samples</param>
+        /// <param name="stat">stats of MNIST image cross correlation coefficients </param>
+        /// <param name="sw">streamwriter to write CSV data to</param>
         private static void AddCSVStatData(int digit, int noSample, MNISTStat stat, StreamWriter sw)
         {
             sw.Write($"{digit};");

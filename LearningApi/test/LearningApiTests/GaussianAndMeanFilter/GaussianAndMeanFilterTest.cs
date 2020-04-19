@@ -35,7 +35,7 @@ namespace LearningFoundation.Test
         }
 
         /// <summary>
-        /// Unit test for Mean Filter
+        /// Test to verify successful application of Mean filter on an image.
         /// </summary>
         [DataTestMethod]
         [DataRow("/TestPicture/test1.gif", "/TestPicture/test1.gif")]
@@ -59,7 +59,7 @@ namespace LearningFoundation.Test
         }
 
         /// <summary>
-        /// Unit test for Gaussian Filter
+        /// Test to verify successful application of Gaussian filter on an image.
         /// </summary>
         [DataTestMethod]
         [DataRow("/TestPicture/test1.gif", "/TestPicture/test1.gif")]
@@ -81,8 +81,9 @@ namespace LearningFoundation.Test
 
             ValidateBitmap(result, expectedImageFileName);
         }
+
         /// <summary>
-        /// Unit test for Gaussian and Mean Filter together
+        /// Test to verify successful application of Gaussian and Mean filter on an image.
         /// </summary>
         [DataTestMethod]
         [DataRow("/TestPicture/test1.gif", "/TestPicture/test1.gif")]
