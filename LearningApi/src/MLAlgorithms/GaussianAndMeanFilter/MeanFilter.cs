@@ -9,21 +9,22 @@ namespace GaussianAndMeanFilter
     public class MeanFilter : IPipelineModule<double[,,], double[,,]>
     {
         /// <summary>
-        /// Inherited from IPipeLine module
+        /// Applies the Mean filter to a given input image.
         /// </summary>
-        /// <param name="data"></param>
-        /// <param name="ctx"></param>
-        /// <returns></returns>
+        /// <param name="data">Input image in 2D array</param>
+        /// <param name="ctx">Holds context related information, like description of columns, 
+        /// currentlly calculated score, etc</param>
+        /// <returns>Output image in 2D array</returns>
         public double[,,] Run(double[,,] data, IContext ctx)
         {
             return filter(data);
         }
 
         /// <summary>
-        /// Implementing a Mean filter matrix of (3x3) dimention
+        /// Mean filter is applied on a given input image.
         /// </summary>
-        /// <param name="data"></param>
-        /// <returns></returns>
+        /// <param name="data">Input image in 2D array</param>
+        /// <returns>Output image in 2D array</returns>
         private double[,,] filter(double[,,] data)
         {
             double[,,] result = data;

@@ -8,6 +8,9 @@ namespace LearningApiTests.GaussianAndMeanFilter
     [TestClass]
     public class BasicGaussianAndMeanTest
     {
+        /// <summary>
+        /// Test to verify Gaussian filter.
+        /// </summary>
         [TestMethod]
         public void GaussianFilter_FourByFourInputMatrix_AveragedCenterInputs()
         {
@@ -25,6 +28,9 @@ namespace LearningApiTests.GaussianAndMeanFilter
             result.Should().BeEquivalentTo(GetExpectedGaussianMatrix());
         }
 
+        /// <summary>
+        /// Test to verify Mean filter.
+        /// </summary>
         [TestMethod]
         public void MeanFilter_FourByFourInputMatrix_AveragedCenterInputs()
         {
@@ -42,6 +48,9 @@ namespace LearningApiTests.GaussianAndMeanFilter
             result.Should().BeEquivalentTo(GetExpectedMeanMatrix());
         }
 
+        /// <summary>
+        /// Test to verify Gaussion and Mean filter.
+        /// </summary>
         [TestMethod]
         public void GaussianAndMeanFilter_FourByFourInputMatrix_AveragedCenterInputs()
         {
