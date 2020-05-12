@@ -54,8 +54,7 @@ namespace ImageBinarizerApp
             {
                 Console.WriteLine("\nError: All necessary arguments are not passed. Please pass the arguments first.");
 
-                Console.WriteLine("\nPress any key to exit the application.");
-                Console.ReadLine();
+                Console.WriteLine("\nApplication exited.");                
                 return;
             }
 
@@ -79,8 +78,7 @@ namespace ImageBinarizerApp
                 else
                 {
                     Console.WriteLine("\nError: Input file doesn't exist.");
-                    Console.WriteLine("\nPress any key to exit the application.");
-                    Console.ReadLine();
+                    Console.WriteLine("\nApplication exited.");                    
                     return;
                 }
 
@@ -93,24 +91,21 @@ namespace ImageBinarizerApp
                 else
                 {
                     Console.WriteLine("\nError: Output Directory doesn't exist.");
-                    Console.WriteLine("\nPress any key to exit the application.");
-                    Console.ReadLine();
+                    Console.WriteLine("\nApplication exited.");                    
                     return;
                 }
 
                 if (!args3[4].Equals("-width") || !int.TryParse(args3[5], out imageWidth))
                 {
                     Console.WriteLine("\nError: Image Width should be integer.");
-                    Console.WriteLine("\nPress any key to exit the application.");
-                    Console.ReadLine();
+                    Console.WriteLine("\nApplication exited.");
                     return;
                 }
 
                 if (!args3[6].Equals("-height") || !int.TryParse(args3[7], out imageHeight))
                 {
                     Console.WriteLine("\nError: Image Height should be integer.");
-                    Console.WriteLine("\nPress any key to exit the application.");
-                    Console.ReadLine();
+                    Console.WriteLine("\nApplication exited.");
                     return;
                 }
             }
@@ -122,8 +117,7 @@ namespace ImageBinarizerApp
                     if (args3.Length < 14)
                     {
                         Console.WriteLine("\nError: All three Red, Green and Blue Thresholds should be passed.");
-                        Console.WriteLine("\nPress any key to exit the application.");
-                        Console.ReadLine();
+                        Console.WriteLine("\nApplication exited.");
                         return;
                     }
                     else
@@ -135,8 +129,7 @@ namespace ImageBinarizerApp
                         else
                         {
                             Console.WriteLine("\nError: Input file doesn't exist.");
-                            Console.WriteLine("\nPress any key to exit the application.");
-                            Console.ReadLine();
+                            Console.WriteLine("\nApplication exited.");
                             return;
                         }
 
@@ -149,47 +142,41 @@ namespace ImageBinarizerApp
                         else
                         {
                             Console.WriteLine("\nError: Output Directory doesn't exist.");
-                            Console.WriteLine("\nPress any key to exit the application.");
-                            Console.ReadLine();
+                            Console.WriteLine("\nApplication exited.");
                             return;
                         }
 
                         if (!args3[4].Equals("-width") || !int.TryParse(args3[5], out imageWidth))
                         {
                             Console.WriteLine("\nError: Image Width should be integer.");
-                            Console.WriteLine("\nPress any key to exit the application.");
-                            Console.ReadLine();
+                            Console.WriteLine("\nApplication exited.");
                             return;
                         }
 
                         if (!args3[6].Equals("-height") || !int.TryParse(args3[7], out imageHeight))
                         {
                             Console.WriteLine("\nError: Image Height should be integer.");
-                            Console.WriteLine("\nPress any key to exit the application.");
-                            Console.ReadLine();
+                            Console.WriteLine("\nApplication exited.");
                             return;
                         }
                         if (!args3[8].Equals("-red") || !(int.TryParse(args3[9], out redThreshold)) || redThreshold < 0 || redThreshold > 255)
                         {
                             Console.WriteLine("\nError: Red Threshold should be in between 0 and 255.");
-                            Console.WriteLine("\nPress any key to exit the application.");
-                            Console.ReadLine();
+                            Console.WriteLine("\nApplication exited.");
                             return;
                         }
 
                         if (!args3[10].Equals("-green") || !(int.TryParse(args3[11], out greenThreshold)) || greenThreshold < 0 || greenThreshold > 255)
                         {
                             Console.WriteLine("\nError: Green Threshold should be in between 0 and 255.");
-                            Console.WriteLine("\nPress any key to exit the application.");
-                            Console.ReadLine();
+                            Console.WriteLine("\nApplication exited.");
                             return;
                         }
 
                         if (!args3[12].Equals("-blue") || !(int.TryParse(args3[13], out blueThreshold)) || blueThreshold < 0 || blueThreshold > 255)
                         {
                             Console.WriteLine("\nError: Blue Threshold should be in between 0 and 255.");
-                            Console.WriteLine("\nPress any key to exit the application.");
-                            Console.ReadLine();
+                            Console.WriteLine("\nApplication exited.");
                             return;
                         }
                     }
@@ -213,8 +200,7 @@ namespace ImageBinarizerApp
             catch (Exception e)
             {
                 Console.WriteLine($"\nError: {e.Message}");
-                Console.WriteLine("\nPress any key to exit the application.");
-                Console.ReadLine();
+                Console.WriteLine("\nApplication exited.");
                 return;
             }
 
@@ -228,9 +214,8 @@ namespace ImageBinarizerApp
                 Console.Write("Your option? ");
                 args = new String[] { Console.ReadLine() };
             }
-            Console.WriteLine("\nPress any key to exit the application.");
-
-            Console.ReadLine();
+            Console.WriteLine("\nApplication exited.");
+            Environment.Exit(0);     
 
         }
     }
