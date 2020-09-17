@@ -1,0 +1,97 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>RingProjectionAlgorithm</name>
+    </assembly>
+    <members>
+        <member name="M:RingProjectionAlgorithm.BinarizerExtension.GetBinaryArray(ImageBinarizer.Binarizer,System.String,System.Int32)">
+            <summary>
+            Binarizing image and create 2D array output
+            </summary>
+            <param name="bi"></param>
+            <param name="image">Path of input image</param>
+            <returns></returns>
+        </member>
+        <member name="M:RingProjectionAlgorithm.BinarizerExtension.GetBinaryArray(ImageBinarizer.Binarizer,System.String,System.Drawing.Bitmap@,System.Int32)">
+            <summary>
+            Binarizing image and create 2D array output
+            </summary>
+            <param name="bi"></param>
+            <param name="image">Path of input image</param>
+            <param name="img"></param>
+            <returns></returns>
+        </member>
+        <member name="M:RingProjectionAlgorithm.BinarizerExtension.ConvertToBinary(ImageBinarizer.Binarizer,System.Double[][],System.Int32)">
+            <summary>
+            Binarizing MNIST database of handwritten image
+            </summary>
+            <param name="bi"></param>
+            <param name="mnistImage">MNIST image array representation</param>
+            <param name="threshold">Threshold of binarizing (0..255)</param>
+            <returns></returns>
+        </member>
+        <member name="T:RingProjectionAlgorithm.RingProjectionFunctionToCSVPipelineModule">
+            <summary>
+            Save the result from RingProjecitonPipelineComponent into CSV file
+            </summary>
+        </member>
+        <member name="M:RingProjectionAlgorithm.RingProjectionFunctionToCSVPipelineModule.#ctor(System.String,System.Int32,System.String,System.String)">
+            <summary>
+            Generate CSV file from the result of ring projection
+            </summary>
+            <param name="label">Image name</param>
+            <param name="index">Index of image with the same content</param>
+            <param name="delimiter">Separator of CSV file</param>
+            <param name="basePath">Save path of CSV file</param>
+        </member>
+        <member name="M:RingProjectionAlgorithm.RingProjectionFunctionToCSVPipelineModule.Run(System.Double[],LearningFoundation.IContext)">
+            <summary>
+            What actually happens inside pipeline component
+            </summary>
+            <param name="data">output data from the previous compatible pipeline component</param>
+            <param name="ctx">data description</param>
+            <returns></returns>
+        </member>
+        <member name="T:RingProjectionAlgorithm.RingProjectionPipelineModule">
+            <summary>
+            public level is used to test RingProjection() method
+            </summary>
+        </member>
+        <member name="M:RingProjectionAlgorithm.RingProjectionPipelineModule.Run(System.Double[][],LearningFoundation.IContext)">
+            <summary>
+            What actually happens inside pipeline component
+            </summary>
+            <param name="data">output data from the previous compatible pipeline component</param>
+            <param name="ctx">data description</param>
+            <returns></returns>
+        </member>
+        <member name="M:RingProjectionAlgorithm.RingProjectionPipelineModule.RingProjection(System.Double[][],System.Double[][]@)">
+            <summary>
+            Reduce the dimension of 2D binary Image by using Ring Projection Algorithm
+            </summary>
+            <param name="data">2D array binary input data</param>
+            <param name="loopPath">iteration path of Ring Projection Algorithm as output for testing</param>
+            <returns></returns>
+        </member>
+        <member name="M:RingProjectionAlgorithm.RingProjectionPipelineModule.GetDimension(System.Double[][],System.Int32@,System.Int32@)">
+            <summary>
+            Provide width and height of a 2D array
+            </summary>
+            <param name="array">Input array</param>
+            <param name="colLength">Output Column Length - height</param>
+            <param name="rowLength">Output Row Length - width</param>
+        </member>
+        <member name="T:RingProjectionAlgorithm.RingProjectionPipelineModuleExtensions">
+            <summary>
+            Extensions Methods for LearningAPI
+            </summary>
+        </member>
+        <member name="M:RingProjectionAlgorithm.RingProjectionPipelineModuleExtensions.UseRingProjectionPipelineComponent(LearningFoundation.LearningApi)">
+            <summary>
+            Ring Projection Pipeline Component
+            </summary>
+            <param name="api"></param>
+            <returns></returns>
+        </member>
+    </members>
+</doc>
