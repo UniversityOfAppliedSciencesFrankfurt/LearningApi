@@ -1,0 +1,29 @@
+﻿{
+  "Features": [
+    {
+      "Id": 1,
+      "Name": "BMI",
+      "Index": 1,
+      "Type": 0,
+      "Values": null
+    },
+    {
+      "Id": 2,
+      "Name": "Glucose",
+      "Index": 2,
+      "Type": 1,
+      "Values": null
+    },
+    {
+      "Id": 3,
+      "Name": "Insulin",
+      "Index": 3,
+      "Type": 1,
+      "Values": null
+    }
+  ],
+	"NumOfFeatures":3,
+  "LabelIndex": 3,
+  "Min": null,
+  "Max": null
+}

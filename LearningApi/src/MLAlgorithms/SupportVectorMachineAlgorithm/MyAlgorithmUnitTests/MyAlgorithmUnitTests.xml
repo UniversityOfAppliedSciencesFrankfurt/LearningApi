@@ -1,0 +1,51 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>MyAlgorithmUnitTests</name>
+    </assembly>
+    <members>
+        <member name="T:SupportVectorMachineAlgorithmUnitTests.Example">
+            <summary>
+            Test
+            </summary>
+        </member>
+        <member name="M:SupportVectorMachineAlgorithmUnitTests.Example.Example_Test">
+            <summary>
+            The dataset is IRIS, including 100 data samples, which is divided into 2 parts:
+            Training of the model and Testing of the model.
+            The training data has 90 data samples saved in Samples\IrisData\iris.csv file.
+            The testing data set has 10 data samples and it is loaded firectly in the code.  
+            </summary>
+        </member>
+        <member name="T:SupportVectorMachineAlgorithmUnitTests.SVMTest_IrisData">
+            <summary>
+            Test with Iris Data
+            </summary>
+        </member>
+        <member name="M:SupportVectorMachineAlgorithmUnitTests.SVMTest_IrisData.Test_IrisData">
+            <summary>
+            This method is used for testing SVMAlgorithm with Iris data set
+            </summary>
+        </member>
+        <member name="T:SupportVectorMachineAlgorithmUnitTests.SVMTest_BreastCancerData">
+            <summary>
+            Test with Breast Cancer Data
+            </summary>
+        </member>
+        <member name="M:SupportVectorMachineAlgorithmUnitTests.SVMTest_BreastCancerData.Test_BreastCancerData">
+            <summary>
+            This method is used for testing SVMAlgorithm with Breast cancer data set
+            </summary>
+        </member>
+        <member name="T:SupportVectorMachineAlgorithmUnitTests.SVMTest_IonosphereData">
+            <summary>
+            Test with Ionosphere Data
+            </summary>
+        </member>
+        <member name="M:SupportVectorMachineAlgorithmUnitTests.SVMTest_IonosphereData.Test_IonosphereData">
+            <summary>
+            This method is used for testing SVMAlgorithm with Ionosphere data set
+            </summary>
+        </member>
+    </members>
+</doc>

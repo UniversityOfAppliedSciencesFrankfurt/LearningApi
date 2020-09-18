@@ -1,0 +1,246 @@
+﻿{
+  "Features": [
+    {
+      "Id": 1,
+      "Name": "F1",
+      "Index": 0,
+      "Type": 1,
+      "Values": null
+    },
+    {
+      "Id": 2,
+      "Name": "F2",
+      "Index": 1,
+      "Type": 1,
+      "Values": null
+    },
+    {
+      "Id": 3,
+      "Name": "F3",
+      "Index": 2,
+      "Type": 1,
+      "Values": null
+    },
+    {
+      "Id": 4,
+      "Name": "F4",
+      "Index": 3,
+      "Type": 1,
+      "Values": null
+    },
+    {
+      "Id": 5,
+      "Name": "F5",
+      "Index": 4,
+      "Type": 1,
+      "Values": null
+    },
+    {
+      "Id": 6,
+      "Name": "F6",
+      "Index": 5,
+      "Type": 1,
+      "Values": null
+    },
+    {
+      "Id": 7,
+      "Name": "F7",
+      "Index": 6,
+      "Type": 1,
+      "Values": null
+    },
+    {
+      "Id": 8,
+      "Name": "F8",
+      "Index": 7,
+      "Type": 1,
+      "Values": null
+    },
+    {
+      "Id": 9,
+      "Name": "F9",
+      "Index": 8,
+      "Type": 1,
+      "Values": null
+    },
+    {
+      "Id": 10,
+      "Name": "F10",
+      "Index": 9,
+      "Type": 1,
+      "Values": null
+    },
+    {
+      "Id": 11,
+      "Name": "F11",
+      "Index": 10,
+      "Type": 1,
+      "Values": null
+    },
+    {
+      "Id": 12,
+      "Name": "F12",
+      "Index": 11,
+      "Type": 1,
+      "Values": null
+    },
+    {
+      "Id": 13,
+      "Name": "F13",
+      "Index": 12,
+      "Type": 1,
+      "Values": null
+    },
+    {
+      "Id": 14,
+      "Name": "F14",
+      "Index": 13,
+      "Type": 1,
+      "Values": null
+    },
+    {
+      "Id": 15,
+      "Name": "F15",
+      "Index": 14,
+      "Type": 1,
+      "Values": null
+    },
+    {
+      "Id": 16,
+      "Name": "F16",
+      "Index": 15,
+      "Type": 1,
+      "Values": null
+    },
+    {
+      "Id": 17,
+      "Name": "F17",
+      "Index": 16,
+      "Type": 1,
+      "Values": null
+    },
+    {
+      "Id": 18,
+      "Name": "F18",
+      "Index": 17,
+      "Type": 1,
+      "Values": null
+    },
+    {
+      "Id": 19,
+      "Name": "F19",
+      "Index": 18,
+      "Type": 1,
+      "Values": null
+    },
+    {
+      "Id": 20,
+      "Name": "F20",
+      "Index": 19,
+      "Type": 1,
+      "Values": null
+    },
+    {
+      "Id": 21,
+      "Name": "F21",
+      "Index": 20,
+      "Type": 1,
+      "Values": null
+    },
+    {
+      "Id": 22,
+      "Name": "F21",
+      "Index": 20,
+      "Type": 1,
+      "Values": null
+    },
+    {
+      "Id": 23,
+      "Name": "F23",
+      "Index": 22,
+      "Type": 1,
+      "Values": null
+    },
+    {
+      "Id": 24,
+      "Name": "F24",
+      "Index": 23,
+      "Type": 1,
+      "Values": null
+    },
+    {
+      "Id": 25,
+      "Name": "F25",
+      "Index": 24,
+      "Type": 1,
+      "Values": null
+    },
+    {
+      "Id": 26,
+      "Name": "F26",
+      "Index": 25,
+      "Type": 1,
+      "Values": null
+    },
+    {
+      "Id": 27,
+      "Name": "F27",
+      "Index": 26,
+      "Type": 1,
+      "Values": null
+    },
+    {
+      "Id": 28,
+      "Name": "F28",
+      "Index": 27,
+      "Type": 1,
+      "Values": null
+    },
+    {
+      "Id": 29,
+      "Name": "F29",
+      "Index": 28,
+      "Type": 1,
+      "Values": null
+    },
+    {
+      "Id": 30,
+      "Name": "F30",
+      "Index": 29,
+      "Type": 1,
+      "Values": null
+    },
+    {
+      "Id": 31,
+      "Name": "F31",
+      "Index": 30,
+      "Type": 1,
+      "Values": null
+    },
+    {
+      "Id": 32,
+      "Name": "F32",
+      "Index": 31,
+      "Type": 1,
+      "Values": null
+    },
+    {
+      "Id": 33,
+      "Name": "F33",
+      "Index": 32,
+      "Type": 1,
+      "Values": null
+    },
+    {
+      "Id": 34,
+      "Name": "F34",
+      "Index": 33,
+      "Type": 1,
+      "Values": null
+    }
+  ],
+	"NumOfFeatures":34,
+  "LabelIndex": 34,
+  "Min": null,
+  "Max": null
+}
