@@ -1,0 +1,18 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>netcoreapp2.1</TargetFramework>
+    <PackAsTool>true</PackAsTool>
+    <AssemblyVersion>1.0.0.2</AssemblyVersion>
+    <Version>1.0.2</Version>
+    <Authors>daenet GmbH, Damir Dobric</Authors>
+    <Description>.NET Global Tool for easy publishing of events to EventGrid topics.</Description>
+    <PackageTags>eventgrid, serverless, daenet, azure, cloud, messaging</PackageTags>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ImageBinarizerLib\ImageBinarizerLib.csproj" />
+  </ItemGroup>
+
+</Project>
