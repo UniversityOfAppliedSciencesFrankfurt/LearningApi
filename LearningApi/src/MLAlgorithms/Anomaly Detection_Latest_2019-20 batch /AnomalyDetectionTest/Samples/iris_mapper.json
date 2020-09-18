@@ -1,0 +1,28 @@
+﻿{
+	"Features":[
+    {
+      "Id": 1,
+      "Name": "Height",
+      "Index": 0,
+      "Type": 1,
+      "Values": null,
+      "Normalization": 1,
+      "DefaultMissingValue": 5.5
+    },
+    {
+      "Id": 2,
+      "Name": "width",
+      "Index": 1,
+      "Type": 1,
+      "Values": null,
+      "Normalization": 1,
+      "DefaultMissingValue": 4.2
+    },
+					//{"Id":3,"Name":"petal_length","Index":2,"Type":1,"Values":null,"Normalization":1,"DefaultMissingValue":1.4},
+					//{"Id":4,"Name":"petal_width","Index":3,"Type":1,"Values":null,"Normalization":1,"DefaultMissingValue":0.5}
+          ],
+	"NumOfFeatures":3,
+  "LabelIndex": 1,
+  "Min": null,
+  "Max": null
+}
