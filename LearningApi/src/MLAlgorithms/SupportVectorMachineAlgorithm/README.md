@@ -1,4 +1,4 @@
-# Center Module 
+# Support Vector Machine
 Desciber about the project 
 
 ## Project coding 
