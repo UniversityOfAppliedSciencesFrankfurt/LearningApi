@@ -1,0 +1,23 @@
+
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HelloLearningApiExampleAlgorithm", "HelloLearningApiExampleAlgorithm\HelloLearningApiExampleAlgorithm.csproj", "{52DEB193-0E68-419B-9D4A-5540219C63FD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HelloLearningApiExampleAlgorithmTest", "HelloLearningApiExampleAlgorithmTest\HelloLearningApiExampleAlgorithmTest.csproj", "{A9656A4E-FA8A-438D-89D3-C422C5B1A53B}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|anycpu = Debug|anycpu
+		Release|anycpu = Release|anycpu
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{52DEB193-0E68-419B-9D4A-5540219C63FD}.Debug|anycpu.ActiveCfg = Debug|anycpu
+		{52DEB193-0E68-419B-9D4A-5540219C63FD}.Debug|anycpu.Build.0 = Debug|anycpu
+		{52DEB193-0E68-419B-9D4A-5540219C63FD}.Release|anycpu.ActiveCfg = Release|anycpu
+		{52DEB193-0E68-419B-9D4A-5540219C63FD}.Release|anycpu.Build.0 = Release|anycpu
+		{A9656A4E-FA8A-438D-89D3-C422C5B1A53B}.Debug|anycpu.ActiveCfg = Debug|Any CPU
+		{A9656A4E-FA8A-438D-89D3-C422C5B1A53B}.Debug|anycpu.Build.0 = Debug|Any CPU
+		{A9656A4E-FA8A-438D-89D3-C422C5B1A53B}.Release|anycpu.ActiveCfg = Release|Any CPU
+		{A9656A4E-FA8A-438D-89D3-C422C5B1A53B}.Release|anycpu.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
