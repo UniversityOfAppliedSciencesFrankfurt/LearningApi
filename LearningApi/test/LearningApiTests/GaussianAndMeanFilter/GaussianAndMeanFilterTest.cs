@@ -1,10 +1,10 @@
-﻿using GaussianAndMeanFilter;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.IO;
 using System.Linq;
 using System.Drawing;
 using LearningApiTests.GaussianAndMeanFilter;
+using GaussianAndMeanFilter;
 
 namespace LearningFoundation.Test
 {

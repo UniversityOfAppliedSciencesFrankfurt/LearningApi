@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace LearningFoundation.MlAlgorithms.SupportVectorMachineAlgorithm
+namespace SupportVectorMachineAlgorithm
 {
     /// <summary>
     /// SVMResult is a class that contains the response object of the SVM's Predict function.

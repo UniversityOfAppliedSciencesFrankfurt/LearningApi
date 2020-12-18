@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace LearningFoundation.MlAlgorithms.SupportVectorMachineAlgorithm
+namespace SupportVectorMachineAlgorithm
 {
     /// <summary>
     /// SVMException is an exception class that is used to throw the encountered errors. Note that the error message is preceded by the function name where the error was encountered

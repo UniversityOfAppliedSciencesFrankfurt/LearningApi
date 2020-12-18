@@ -2,7 +2,7 @@ using LearningFoundation;
 using System;
 using System.Collections.Generic;
 
-namespace LearningFoundation.MlAlgorithms.SupportVectorMachineAlgorithm
+namespace SupportVectorMachineAlgorithm
 {
     /// <summary>
     /// SupportVectorMachineAlgorithm is implementation of classification objects by using Support Vector Machince (SVM) Technique.

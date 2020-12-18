@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace LearningFoundation.MlAlgorithms.SupportVectorMachineAlgorithm
+namespace SupportVectorMachineAlgorithm
 {
     /// <summary>
     /// SVMExtensions is an extension that call SVM through Learning API
