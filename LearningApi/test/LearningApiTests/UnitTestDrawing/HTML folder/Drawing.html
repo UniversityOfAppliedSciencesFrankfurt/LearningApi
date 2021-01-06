@@ -1,0 +1,47 @@
+﻿
+<!DOCTYPE HTML>
+<html>
+<head>
+    <script>
+window.onload = function () {
+
+var chart = new CanvasJS.Chart("chartContainer", {
+	animationEnabled: true,
+	title:{
+		text: "My X-Axis"
+	},
+
+
+	axisY: {
+		title: "My Y_Axis",
+		includeZero: false,
+		scaleBreaks: {
+			autoCalculate: true
+		}
+	},
+	data: [{
+		type: "line",
+
+		color: "#F08080",
+		dataPoints: [
+			{ x: 12, y: 10 },
+			{ x: 13, y: 23 },
+			{ x: 24, y: 34 },
+			{ x: 32, y: 50 },
+			{ x: 44, y: 60 },
+			{ x: 55, y: 77 },
+			{ x: 70, y: 80 },
+
+		]
+	}]
+});
+chart.render();
+
+}
+    </script>
+</head>
+<body>
+    <div id="chartContainer" style="height: 300px; width: 100%;"></div>
+    <script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,26 @@
+﻿{
+  "Features": [
+    {
+      "Id": 1,
+      "Name": "AptitudeTestScore",
+      "Index": 0,
+      "Type": 0,
+      "Values": null,
+      "Normalization": 1,
+      "DefaultMissingValue": 5.5
+    },
+    {
+      "Id": 2,
+      "Name": "PreviousExperience_month",
+      "Index": 1,
+      "Type": 0,
+      "Values": null,
+      "Normalization": 1,
+      "DefaultMissingValue": 4.2
+    }
+  ],
+  "NumOfFeatures":2,
+  "LabelIndex": 2,
+  "Min": null,
+  "Max": null
+}

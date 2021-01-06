@@ -8,7 +8,6 @@ using System;
 using System.Diagnostics;
 using System.Globalization;
 using NeuralNet.MLPerceptron;
-using LearningFoundation.ImageBinarizer;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace LearningFoundation.Test.MLPerceptron
@@ -47,8 +46,10 @@ namespace LearningFoundation.Test.MLPerceptron
 
         private string readImageData(string imageName, int width, int height)
         {
-            Binarizer bizer = new Binarizer(targetHeight: height, targetWidth: width);
-            return bizer.GetBinary(imageName);
+            //todo: fix
+            //Binarizer bizer = new Binarizer(targetHeight: height, targetWidth: width);
+            //return bizer.GetBinary(imageName);
+            return null;
         }
 
         [TestMethod]

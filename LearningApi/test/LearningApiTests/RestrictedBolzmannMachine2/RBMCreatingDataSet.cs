@@ -6,7 +6,6 @@ using NeuralNet.RestrictedBolzmannMachine2;
 using NeuralNet.Perceptron;
 using LearningFoundation.DataProviders;
 using LearningFoundation;
-using LearningFoundation.ImageBinarizer;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace LearningFoundation.Test.RestrictedBolzmannMachine2
@@ -50,10 +49,12 @@ namespace LearningFoundation.Test.RestrictedBolzmannMachine2
         // Read image and convert to binary format
         private string readImageData(string imageName, int width, int height)
         {
-            //string trainingImagesPath = Path.Combine(Path.Combine(AppContext.BaseDirectory, "RestrictedBolzmannMachine"), "TrainingImages");
-            Binarizer bizer = new Binarizer(targetHeight: height, targetWidth: width);
-            //return bizer.GetBinary(Path.Combine(trainingImagesPath, imageName));
-            return bizer.GetBinary(imageName);
+            //todo: fix
+            ////string trainingImagesPath = Path.Combine(Path.Combine(AppContext.BaseDirectory, "RestrictedBolzmannMachine"), "TrainingImages");
+            //Binarizer bizer = new Binarizer(targetHeight: height, targetWidth: width);
+            ////return bizer.GetBinary(Path.Combine(trainingImagesPath, imageName));
+            //return bizer.GetBinary(imageName);
+            throw new NotImplementedException();
         }
 
         /// <summary>
@@ -76,7 +77,7 @@ namespace LearningFoundation.Test.RestrictedBolzmannMachine2
                 {
                     //Path of training images.
                     //return getImageData(size, $"{Directory.GetCurrentDirectory()}\\RestrictedBolzmannMachine2\\TrainingImages");
-                    trainData = getImageData(size, imagePath +j);
+                    trainData = getImageData(size, imagePath + j);
                 }
                 return trainData;
             });

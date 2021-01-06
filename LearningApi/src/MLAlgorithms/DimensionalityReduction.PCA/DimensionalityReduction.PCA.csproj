@@ -1,0 +1,44 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup Label="Custom">
+    <LearningApiVersion>1.3.0</LearningApiVersion>
+    <CsvDataProviderVersion>1.2.1</CsvDataProviderVersion>
+    <MathNetNumericsVersion>4.7.0</MathNetNumericsVersion>
+    <SystemDrawingCommonVersion>4.5.1</SystemDrawingCommonVersion>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <PackageId>LearningApi.DR</PackageId>
+    <Version>$(LearningApiVersion)</Version>
+    <Authors>TrinhTran</Authors>
+    <Company>FRAUAS</Company>
+    <TargetFramework>netcoreapp2.1</TargetFramework>
+    <OutputType>Library</OutputType>
+    <Platforms>AnyCPU;x64</Platforms>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DocumentationFile>C:\Uni\Tutor\OtherBranches\se-dystsys-2018-2019-softwareengineering\MyProject\DimensionalityReduction.PCA\DimensionalityReduction.PCA.xml</DocumentationFile>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Utils\CSV\**" />
+    <EmbeddedResource Remove="Utils\CSV\**" />
+    <None Remove="Utils\CSV\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="MathNet.Numerics" Version="$(MathNetNumericsVersion)" />
+    <PackageReference Include="System.Drawing.Common" Version="$(SystemDrawingCommonVersion)" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Exceptions\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\DataProviders\CsvDataProvider\CsvDataProvider.csproj" />
+    <ProjectReference Include="..\..\LearningApi\LearningApi.csproj" />
+  </ItemGroup>
+
+</Project>

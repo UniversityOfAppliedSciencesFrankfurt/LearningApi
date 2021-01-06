@@ -70,7 +70,7 @@ namespace UnitTestRingProjectionAlgorithm
         {
             byte[] m_temp = BitConverter.GetBytes(number);
             Array.Reverse(m_temp);
-            return BitConverter.ToInt32(m_temp, 0);
+            return BitConverter.ToInt32(m_temp);
         }
     }
 }

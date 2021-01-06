@@ -1,0 +1,28 @@
+﻿{
+	"Features":[
+					{"Id":1,"Name":"ValueA","Index":0,"Type":1,"Values":null,"Normalization":1,"DefaultMissingValue":5.5},
+					{"Id":2,"Name":"ValueB","Index":1,"Type":1,"Values":null,"Normalization":1,"DefaultMissingValue":4.2},
+						{"Id":3,"Name":"ValueC","Index":2,"Type":1,"Values":null,"Normalization":1,"DefaultMissingValue":4.2},
+						{"Id":4,"Name":"ValueD","Index":3,"Type":1,"Values":null,"Normalization":1,"DefaultMissingValue":5.5},
+					{"Id":5,"Name":"ValueE","Index":4,"Type":1,"Values":null,"Normalization":1,"DefaultMissingValue":4.2},
+						{"Id":6,"Name":"ValueF","Index":5,"Type":1,"Values":null,"Normalization":1,"DefaultMissingValue":4.2},
+							{"Id":7,"Name":"ValueG","Index":6,"Type":1,"Values":null,"Normalization":1,"DefaultMissingValue":5.5},
+					{"Id":8,"Name":"ValueH","Index":7,"Type":1,"Values":null,"Normalization":1,"DefaultMissingValue":4.2},
+						{"Id":9,"Name":"ValueI","Index":8,"Type":1,"Values":null,"Normalization":1,"DefaultMissingValue":4.2},
+						{"Id":10,"Name":"ValueZ","Index":9,"Type":1,"Values":null,"Normalization":1,"DefaultMissingValue":5.5}
+				
+			
+   
+          ],
+	"NumOfFeatures":10,
+  "LabelIndex": 6,
+  "Min": null,
+  "Max": null,
+  "ResolutionFeatureName":"Z",
+  "TrainingSubsetCountRatio":"0.6",
+  "MaxNumberOfTainingItemsInCategory":7,
+  "NumberOfTrees":1
+
+}
+
+

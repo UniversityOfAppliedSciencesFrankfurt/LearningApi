@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\ImageBinarization\Lib\ImageBinarizerLib.csproj" />
+    <ProjectReference Include="..\..\..\LearningApi\LearningApi.csproj" />
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,9 @@
+﻿https://archive.ics.uci.edu/ml/datasets/Fertility
+
+
+ //Output: Diagnosis	normal (N), altered (O)	  N=1  O=2
+
+
+
+
+ one is with 9 feature

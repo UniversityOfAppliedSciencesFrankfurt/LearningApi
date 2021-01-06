@@ -1,0 +1,128 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>UnitTestRingProjectionAlgorithm</name>
+    </assembly>
+    <members>
+        <member name="T:UnitTestRingProjectionAlgorithm.BitmapToImageFilePipelineModule">
+            <summary>
+            Save Bitmap to Image file
+            </summary>
+        </member>
+        <member name="M:UnitTestRingProjectionAlgorithm.BitmapToImageFilePipelineModule.#ctor(System.String,System.String,System.Drawing.Imaging.ImageFormat)">
+            <summary>
+            Save Bitmap to Image file
+            </summary>
+            <param name="label">Image name</param>
+            <param name="basePath">Save path of Image file</param>
+            <param name="imageType">Save type of Image as static value</param>
+        </member>
+        <member name="M:UnitTestRingProjectionAlgorithm.BitmapToImageFilePipelineModule.Run(System.Drawing.Bitmap,LearningFoundation.IContext)">
+            <summary>
+            What actually happens inside pipeline component
+            </summary>
+            <param name="data">output data from the previous compatible pipeline component</param>
+            <param name="ctx">data description</param>
+            <returns></returns>
+        </member>
+        <member name="T:UnitTestRingProjectionAlgorithm.DoubleArrrayToBitmapPipelineModule">
+            <summary>
+            Convert double[][] to Bitmap
+            </summary>
+        </member>
+        <member name="M:UnitTestRingProjectionAlgorithm.DoubleArrrayToBitmapPipelineModule.#ctor(System.Int32,System.Int32)">
+            <summary>
+            Transform double[][] representation of Image into Bitmap object
+            </summary>
+            <param name="width">Width of Image</param>
+            <param name="height">Height of Image</param>
+        </member>
+        <member name="M:UnitTestRingProjectionAlgorithm.DoubleArrrayToBitmapPipelineModule.Run(System.Double[][],LearningFoundation.IContext)">
+            <summary>
+            What actually happens inside pipeline component
+            </summary>
+            <param name="data">output data from the previous compatible pipeline component</param>
+            <param name="ctx">data description</param>
+            <returns></returns>
+        </member>
+        <member name="T:UnitTestRingProjectionAlgorithm.LoadMNISTPipelineModule">
+            <summary>
+            Read Image from MNIST database of handwritten digits
+            </summary>
+        </member>
+        <member name="M:UnitTestRingProjectionAlgorithm.LoadMNISTPipelineModule.Run(System.IO.BinaryReader[],LearningFoundation.IContext)">
+            <summary>
+            What actually happens inside pipeline component
+            </summary>
+            <param name="data">output data from the previous compatible pipeline component</param>
+            <param name="ctx">data description</param>
+            <returns></returns>
+        </member>
+        <member name="M:UnitTestRingProjectionAlgorithm.LoadMNISTPipelineModule.ReverseBytes(System.Int32)">
+            <summary>
+            Convert high-endian format to low-endian format
+            </summary>
+            <param name="number">Input number</param>
+            <returns></returns>
+        </member>
+        <member name="T:UnitTestRingProjectionAlgorithm.MNISTImage">
+            <summary>
+            MNISTImage representation
+            </summary>
+        </member>
+        <member name="M:UnitTestRingProjectionAlgorithm.MNISTImage.#ctor(System.Int32,System.Int32,System.Byte[][],System.Byte)">
+            <summary>
+            Create instance of MNISTimage with parameters
+            </summary>
+            <param name="width">Width of MNISTimage</param>
+            <param name="height">Height of MNISTimage</param>
+            <param name="pixels">array representation of MNISTimage</param>
+            <param name="label">Label digits</param>
+        </member>
+        <member name="M:UnitTestRingProjectionAlgorithm.RingProjectionTest.RingProjectionLoopPath">
+            <summary>
+            Iteration Path test
+            </summary>
+        </member>
+        <member name="M:UnitTestRingProjectionAlgorithm.RingProjectionTest.ByteRevearsalTest">
+            <summary>
+            Convert High-endian to Low-endian and vice versa
+            </summary>
+        </member>
+        <member name="M:UnitTestRingProjectionAlgorithm.RingProjectionTest.RingProjection2D">
+            <summary>
+            Letter A samples with cross correlation and visualized function
+            </summary>
+        </member>
+        <member name="M:UnitTestRingProjectionAlgorithm.RingProjectionTest.RingProjectionMNISTImage">
+            <summary>
+            Image dimension reduction of MNIST database of handwritten digits (traning data)
+            </summary>
+        </member>
+        <member name="M:UnitTestRingProjectionAlgorithm.RingProjectionTest.ByteArrayToDoubleArray(System.Byte[][])">
+            <summary>
+            Convert 2D byte array to 2D double array
+            </summary>
+            <param name="byteArray">Input byte array</param>
+            <returns></returns>
+        </member>
+        <member name="M:UnitTestRingProjectionAlgorithm.RingProjectionTest.CrossCorrCoeff(System.Int32)">
+            <summary>
+            Calculate the cross-correlation coefficients among the Functions from the same digit
+            </summary>
+            <param name="digit">digit representation</param>
+        </member>
+        <member name="M:UnitTestRingProjectionAlgorithm.RingProjectionTest.WriteToCSVStat(System.String,System.Int32,System.Int32,System.Double,System.Double,System.Double,System.Double)">
+            <summary>
+            Provide the statistical result of cross-correlation coefficients among samples for each digit as CSV file
+            </summary>
+            <param name="baseFolder">save path of csv file</param>
+            <param name="digit">digit representation</param>
+            <param name="noSample">number of sample</param>
+            <param name="average">average of cross correlation coefficients </param>
+            <param name="min">minimum cross correlation coefficient</param>
+            <param name="max">maximum cross correlation coefficient</param>
+            <param name="deviation">standard deviation of cross correlation coefficients</param>
+        </member>
+    </members>
+</doc>

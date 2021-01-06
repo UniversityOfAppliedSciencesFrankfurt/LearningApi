@@ -1,0 +1,44 @@
+﻿{
+  "Features": [
+    {
+      "Id": 1,
+      "Name": "age",
+      "Index": 0,
+      "Type": 0,
+      "Values": null,
+      "Normalization": 1,
+      "DefaultMissingValue": 5.5
+    },
+    {
+      "Id": 2,
+      "Name": "offerPeriod",
+      "Index": 1,
+      "Type": 0,
+      "Values": null,
+      "Normalization": 1,
+      "DefaultMissingValue": 4.2
+    },
+	{
+      "Id": 3,
+      "Name": "offerPrice",
+      "Index": 2,
+      "Type": 0,
+      "Values": null,
+      "Normalization": 1,
+      "DefaultMissingValue": 4.2
+    },
+    {
+      "Id": 4,
+      "Name": "y",
+      "Index": 3,
+      "Type": 1,
+      "Values": null,
+      "Normalization": 1,
+      "DefaultMissingValue": 1.4
+    }
+  ],
+  "NumOfFeatures":3,
+  "LabelIndex": 3,
+  "Min": null,
+  "Max": null
+}

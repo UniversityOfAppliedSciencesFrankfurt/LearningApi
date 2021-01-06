@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.1</TargetFramework>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DocumentationFile>C:\Uni\Tutor\OtherBranches\se-dystsys-2018-2019-softwareengineering\Source\MyWork\DecisionForestAlgorithm\DecisonForestRegressionAlgorithm\DecisonForestRegressionAlgorithm.xml</DocumentationFile>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="LearningApi" Version="1.2.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="WindowsBase">
+      <HintPath>..\..\..\..\..\..\..\Desktop\dlls\WindowsBase.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,17 @@
+﻿{
+	"Features": [
+		{
+			"Id": 1,
+			"Name": "1",
+			"Index": 1,
+			"Type": 1,
+			"Values": null,
+			"Normalization": 1,
+			"DefaultMissingValue": 5.5
+		}
+	],
+	"NumOfFeatures": 1,
+	"LabelIndex": 0,
+	"Min": null,
+	"Max": null
+}
