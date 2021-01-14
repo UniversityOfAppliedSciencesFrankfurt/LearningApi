@@ -1,6 +1,6 @@
 ## Example Pipeline Module using LearningApi 
 
-Pipeline module is a canal to send the data to the actual Algorithm. For a deeper knowledge on Pipeline Module click on <a href="#What_is_Pipeline_Module">Pipeline Module Concept</a>
+Pipeline module is a canal to send the data to the actual Algorithm. For a deeper knowledge on Pipeline Module click on [Pipeline Module Concept..](https://universityofappliedsciencesfrankfurt.github.io/LearningApi/#What_is_Pipeline_Module)
 
 Let's implement Pipelinemodule for a Convolution Filter.
 
