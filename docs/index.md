@@ -312,6 +312,8 @@ This example is only for reference on steps to implement a solution using Learni
 
 hope now
 
+<a href="https://github.com/UniversityOfAppliedSciencesFrankfurt.github.io/LearningApi/docs/Pipeline_Module/"><span class="button">Example Pipeline Module using LearningApi</span></a>
+
 uff
 -------------------------------------------------------------------------------------------------------------------------------------
 
