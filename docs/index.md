@@ -298,6 +298,7 @@ This example is only for reference on steps to implement a solution using Learni
 
 <a href="https://universityofappliedsciencesfrankfurt.github.io/LearningApi/docs/Pipeline_Module/"><span class="button">Example Pipeline Module using LearningApi</span></a>
 
+yes
 -------------------------------------------------------------------------------------------------------------------------------------
 
 # What is a LearningApi Algorithm? <a id="What_is_Algorithm"></a>
