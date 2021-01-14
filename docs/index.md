@@ -102,7 +102,7 @@ A real time example model is explained in the below section -
 
 All the supported Modules and Algorithms are listed in an excel sheet. Also, the information about the documentation and coding source files availabiliy in the LearningApi repository can be found here.
 
-[Click here to find the list in Git Repository..](https://github.com/UniversityOfAppliedSciencesFrankfurt/LearningApi/blob/master/LearningApi/src/AlgorithmsModules%20_list.xlsx)
+[Click here to find the list in Git Repository..](https://github.com/UniversityOfAppliedSciencesFrankfurt/LearningApi/blob/master/LearningApi/src/AlgorithmsModules%20_list_Final.xlsx)
 
 ## Machine Learning Algorithms
 
