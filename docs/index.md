@@ -302,7 +302,9 @@ This example is only for reference on steps to implement a solution using Learni
 
 <a href="https://universityofappliedsciencesfrankfurt.github.io/LearningApi/docs/Pipeline_Module/"><span class="button">Example Pipeline Module using LearningApi</span></a>
 
-no
+<a href="https://universityofappliedsciencesfrankfurt.github.io/LearningApi/tree/master/docs/Pipeline_Module/"><span class="button">Example Pipeline Module using LearningApi</span></a>
+
+nos
 yes
 -------------------------------------------------------------------------------------------------------------------------------------
 
