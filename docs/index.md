@@ -42,10 +42,7 @@ You could think about these tasks as follows:
 
 1. Read CSV
 2. Normalize the data
-3. Train the data 
-
-After the above process, you will have a trained instance of the algorithm *algInst*, which can be used for prediction,
-
+3. Train the data - After the above 3 processes, you will have a trained instance of the algorithm *algInst*, which can be used for prediction,
 4. Use *algInst* to predict the power consumption based on the given temperature and wind.
 
 To solve this problem with the *LearningAPI* the following pseudo can be used:
@@ -309,7 +306,7 @@ Machine learning is a class of methods for automatically creating models from da
 
 An algorithm is a set of logical coding which is trained with lots and lots of data to predict the otput most accurately.
 
-# How to build the custom algorithm using LearningAPI? <a id="Example_Custom_Algorithm"></a>
+# How to build the custom algorithm? <a id="Example_Custom_Algorithm"></a>
 
   The below solution demonstrates how to implement a simple model SUM calculation using LearningApi. To understand the implementation, you should initially understand the logic we are using. 
 	
