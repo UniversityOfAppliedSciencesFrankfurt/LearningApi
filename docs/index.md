@@ -296,8 +296,13 @@ The below solution demonstrates how to implement a custom pipeline module. In th
   
 This example is only for reference on steps to implement a solution using LearningApi. 
 
+<a href="https://universityofappliedsciencesfrankfurt.github.io/LearningApi/docs/Pipeline_Module/index.md/"><span class="button">Example Pipeline Module using LearningApi</span></a>
+
+<a href="https://universityofappliedsciencesfrankfurt.github.io/LearningApi/docs/Pipeline_Module/index.md"><span class="button">Example Pipeline Module using LearningApi</span></a>
+
 <a href="https://universityofappliedsciencesfrankfurt.github.io/LearningApi/docs/Pipeline_Module/"><span class="button">Example Pipeline Module using LearningApi</span></a>
 
+no
 yes
 -------------------------------------------------------------------------------------------------------------------------------------
 
