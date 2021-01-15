@@ -164,7 +164,7 @@ Now the project is created with the name _'SumAlgorithm.sln'_
   
 <!--![Image 6] -->
 
-<img src="(https://user-images.githubusercontent.com/44580961/100554992-d09c2080-32be-11eb-8a96-c717eabe077b.png)" width="450" height="300" />
+<img src="(https://user-images.githubusercontent.com/44580961/104665763-7c17fd80-56d2-11eb-80a5-b494678e19e9.png)" width="450" height="300" />
 
 Fig. 6 : Creation of Solution	
 	
@@ -178,7 +178,7 @@ _Sum.cs_ serves as the main class folder for the algorithm.
 
 <!--![Image 7]-->
 
-<img src="(https://user-images.githubusercontent.com/44580961/100554994-d265e400-32be-11eb-95b8-dbeaa8f5c69a.png)" width="450" height="300" />
+<img src="(https://user-images.githubusercontent.com/44580961/104665769-80dcb180-56d2-11eb-9395-96c1e3ecf573.png)" width="450" height="300" />
 
 Fig. 7 : The project and class library folder structure
 
@@ -202,8 +202,9 @@ Test project is created under the main solution and rename the class file as _**
 
 <!--![Image 11] -->
 
-<img src="(https://user-images.githubusercontent.com/44580961/100555000-dd207900-32be-11eb-98c7-0db218463908.png)" width="450" height="300" />
+<img src="(https://user-images.githubusercontent.com/44580961/104665897-cc8f5b00-56d2-11eb-9be0-132990dfd1ad.png)" width="450" height="300" />
 
+Fig 11. class file for test folder 
 
 ### Step 4 : Add NuGet Package 'LearningApi' to both projects 
 
@@ -219,7 +220,7 @@ We should add NuGet package called _LearningApi_ to both project by following th
 	
 <!--![Image 12]()-->
 
-<img src="https://user-images.githubusercontent.com/44580961/100555001-de51a600-32be-11eb-96a8-6d4b0a446a0b" width="400" height="550" />
+<img src="https://user-images.githubusercontent.com/44580961/104665953-ed57b080-56d2-11eb-90fa-13d532853fd9.png" width="400" height="550" />
 
 Fig. 12 : NuGet package integration step1,
 
