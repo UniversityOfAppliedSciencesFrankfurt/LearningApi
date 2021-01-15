@@ -443,10 +443,10 @@ public class LinearRegressionScore : IScore
 
 According to the algorithm, the set of data of house details is given and trained the model with these data. The data for house price is used to calculate the mean square error and When this score is multiplied with each data given, we get the house price value predicted.
 
-![Image 16]()
+![Image 16](https://user-images.githubusercontent.com/44580961/104664592-eaa78c00-56cf-11eb-9348-abae99c7ffdf.png)
 
-Fig. 16 : Result is shown here
+Fig. 16 : Final Result 
 
 ## LINEAR REGRESSION algorithm code in Github
 
-You can refer this example project in the [Click here to refer the above project code in GitHub..](https://github.com/UniversityOfAppliedSciencesFrankfurt/LearningApi/tree/master/LearningApi/src/Individual%20project_AnushaAshokReddy)
+You can refer this example project in the Github by clicking here : [Refer the Linear Regression source code in GitHub](https://github.com/UniversityOfAppliedSciencesFrankfurt/LearningApi/tree/master/LearningApi/src/Individual%20project_AnushaAshokReddy)
