@@ -314,11 +314,11 @@ To train a model to learn predicting the calculation of POWER consumption by doi
 
 Below is the explanation of implementation of LearningApi concept for building the SUM model as explained earlier. 
 
-<a href="https://anushaashokreddy.github.io/trial.github.io/Sum_Algorithm_Example"><span class="button">Example SUM Algorithm using LearningApi</span></a>
+<a href="https://universityofappliedsciencesfrankfurt.github.io/LearningApi/Sum_Algorithm_Example/"><span class="button">Example Pipeline Module using LearningApi</span></a>
 
 We have also given the similar guidance for an actual Machine Learning Algorithm LINEAR REGRESSION as a complex example to learn the process more deeper in the below link. 
 
-[Click here to find the complex example description..](https://anushaashokreddy.github.io/trial.github.io/Linear_Regression_Example)
+[Click here to find the complex example (Linear Regression) description..](https://anushaashokreddy.github.io/trial.github.io/Linear_Regression_Example)
 
 <!--
 <a href="https://anushaashokreddy.github.io/trial.github.io/Linear_Regression_Example"><span class="button">Example Linear Regression using LearningApi</span></a>
@@ -330,9 +330,9 @@ We have also given the similar guidance for an actual Machine Learning Algorithm
 
 If you have implemented a custom module or algorithm and want to integrate it to LearningAPI, then you can do the following, 
 
-<a href="https://anushaashokreddy.github.io/trial.github.io/ContactPage"><span class="button">Contact Us</span></a>
+<a href="https://universityofappliedsciencesfrankfurt.github.io/LearningApi/ContactPage/"><span class="button">Contact Us</span></a>
 
-<a href="https://github.com/UniversityOfAppliedSciencesFrankfurt/LearningApi/issues/new"><span class="button">Create an issue in the Repository</span></a>
+<a href="https://github.com/UniversityOfAppliedSciencesFrankfurt/LearningApi/issues/new"><span class="button">Create an issue in the LearningApi Repository</span></a>
 
 
 <!--
