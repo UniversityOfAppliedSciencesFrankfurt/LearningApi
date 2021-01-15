@@ -319,6 +319,12 @@ uff
 <a href="https://universityofappliedsciencesfrankfurt.github.io/LearningApi.github.io/LearningApi/docs/Pipeline_Module/"><span class="button">Example Pipeline Module using LearningApi</span></a>
 
 <a href="https://universityofappliedsciencesfrankfurt.github.io/LearningApi.github.io/LearningApi/docs/Pipeline_Module/"><span class="button">Example Pipeline Module using LearningApi</span></a>
+
+mmmm
+
+<a href="https://universityofappliedsciencesfrankfurt.github.io/LearningApi/Pipeline_Module/"><span class="button">Example Pipeline Module using LearningApi</span></a>
+
+<a href="https://UniversityOfAppliedSciencesFrankfurt.github.io/LearningApi/Pipeline_Module/"><span class="button">Example Pipeline Module using LearningApi</span></a>
 -------------------------------------------------------------------------------------------------------------------------------------
 
 # What is a LearningApi Algorithm? <a id="What_is_Algorithm"></a>
