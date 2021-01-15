@@ -83,13 +83,7 @@ This is not a major algorithm, instead a small pre processing of Convolution fil
 
 Fig. 22 : IPipeline module for example module
 
-## Result of Module 
-
-Result will be shown as PASSED if the predicted value is accurate to the actual value.
-
-![Image 23](https://user-images.githubusercontent.com/44580961/104664592-eaa78c00-56cf-11eb-9348-abae99c7ffdf.png)
-
 
 ## Pipeline Module Example code in Github
 
-You can refer this example project by clicking here : [Refer the above Pipeline Module code in GitHub](https://github.com/UniversityOfAppliedSciencesFrankfurt/LearningApi/tree/master/LearningApi/src/Individual%20project_AnushaAshokReddy/SumAlgorithm)
+You can refer this example project by clicking here : [Refer the above Pipeline Module code in GitHub](https://github.com/UniversityOfAppliedSciencesFrankfurt/LearningApi/tree/master/LearningApi/src/Individual%20project_AnushaAshokReddy/HelloLearningApiPipelineModule)
