@@ -370,10 +370,10 @@ The values for the Loss are get and set in the _Score.cs_ file with the followin
 
 According to the algorithm, the set of data of house details is given and trained the model with these data. The data for house price is used to calculate the mean square error and When this score is multiplied with each data given, we get the house price value predicted.
 
-![Image 16]()
+![Image 16](https://user-images.githubusercontent.com/44580961/104664596-ec714f80-56cf-11eb-83a4-3091c1611f72.png)
 
-Fig. 16 : Result is shown here
+Fig. 16 : Final Result 
 
 ## Basic Example SUM algorithm code in Github
 
-You can refer this example project by [Clicking here to refer the SUM algorithm project code in GitHub..](https://github.com/UniversityOfAppliedSciencesFrankfurt/LearningApi/tree/master/LearningApi/src/Individual%20project_AnushaAshokReddy/SumAlgorithm)
+You can refer this example project by clicking here [Refer the SUM algorithm project source code in GitHub](https://github.com/UniversityOfAppliedSciencesFrankfurt/LearningApi/tree/master/LearningApi/src/Individual%20project_AnushaAshokReddy/SumAlgorithm)
