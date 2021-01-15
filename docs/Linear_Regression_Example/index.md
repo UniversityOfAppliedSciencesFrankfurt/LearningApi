@@ -237,7 +237,7 @@ Now the project is created with the name _'HelloLearningApiExampleAlgorithm.sln'
   
 <!--![Image 6](https://user-images.githubusercontent.com/44580961/98464421-0ddf2800-21c3-11eb-9951-f66298e25891.png) -->
 
-<img src="(https://user-images.githubusercontent.com/44580961/99438805-5375c080-293a-11eb-928a-ba234162a1ea.png)" width="450" height="300" />
+<img src="(https://user-images.githubusercontent.com/44580961/104665763-7c17fd80-56d2-11eb-80a5-b494678e19e9.png)" width="450" height="300" />
 
 Fig. 6 : Creation of Solution	
 	
@@ -251,7 +251,7 @@ ExampleLearningApiAlgorithm.cs serves as the main class folder for the algorithm
 
 <!--![Image 7]-->
 
-<img src="(https://user-images.githubusercontent.com/44580961/99438878-743e1600-293a-11eb-985d-20de14d1dda5.png)" width="450" height="300" />
+<img src="(https://user-images.githubusercontent.com/44580961/104665769-80dcb180-56d2-11eb-9395-96c1e3ecf573.png)" width="450" height="300" />
 
 Fig. 7 : The project and class library folder structure
 
@@ -271,12 +271,7 @@ Name the project name as _**HelloLearningApiExampleAlgorithmTest**_ and click on
 
 ![Image 10](https://user-images.githubusercontent.com/44580961/99399539-d16ea300-290b-11eb-9336-5d3f6710190b.png) 
 
-Test project is created under the main solution and rename the class file as _**ExampleLearningApiTest**_ as shown in the below Fig. 11.
-
-<!--![Image 11](https://user-images.githubusercontent.com/44580961/99399545-d3d0fd00-290b-11eb-9c1a-135f301f7f64.png) -->
-
-<img src="(https://user-images.githubusercontent.com/44580961/99399545-d3d0fd00-290b-11eb-9c1a-135f301f7f64.png)" width="450" height="300" />
-
+Test project is created under the main solution and rename the class file as _**ExampleLearningApiTest**_.
 
 ### Step 4 : Add NuGet Package 'LearningApi' to both projects 
 
@@ -443,7 +438,7 @@ public class LinearRegressionScore : IScore
 
 According to the algorithm, the set of data of house details is given and trained the model with these data. The data for house price is used to calculate the mean square error and When this score is multiplied with each data given, we get the house price value predicted.
 
-![Image 16](https://user-images.githubusercontent.com/44580961/104664592-eaa78c00-56cf-11eb-9348-abae99c7ffdf.png)
+![Image 16](https://user-images.githubusercontent.com/44580961/104664596-ec714f80-56cf-11eb-83a4-3091c1611f72.png)
 
 Fig. 16 : Final Result 
 
