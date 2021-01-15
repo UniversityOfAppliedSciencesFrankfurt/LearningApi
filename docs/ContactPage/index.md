@@ -91,4 +91,13 @@ Contact via phone : 0123456789
 
 ..
 
-<img src="https://user-images.githubusercontent.com/44580961/101384280-3b151800-38e0-11eb-82d6-e858655ffeef.png" IMG STYLE="position:absolute; TOP:900px; RIGHT:200px; WIDTH:500px; HEIGHT:350px"/>
+.
+.
+.
+.
+.
+.
+...
+.
+
+<img src="https://user-images.githubusercontent.com/44580961/101384280-3b151800-38e0-11eb-82d6-e858655ffeef.png" IMG STYLE="position:absolute; TOP:1000px; RIGHT:200px; WIDTH:1000px; HEIGHT:350px"/>
