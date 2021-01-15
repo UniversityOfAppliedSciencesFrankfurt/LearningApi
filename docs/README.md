@@ -9,9 +9,13 @@ Learning API is Machine Learning Foundation of a set of ML libraries fully imple
 This section is for refering about the LearningApi structure and procedures. Please click on the below link in order to 
 
 1.Learn about the LearningApi 
+
 2.Understand the implementation of LearningApi
+
 3.Stepwise examples 
+
 4.To do some exercises
+
 5.To contribute to the LearningApi Repository
 
 https://universityofappliedsciencesfrankfurt.github.io/LearningApi/
