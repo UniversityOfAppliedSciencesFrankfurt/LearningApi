@@ -377,4 +377,4 @@ Fig. 16 : Final Result
 
 ## Basic Example SUM algorithm code in Github
 
-You can refer this example project by clicking here [Refer the SUM algorithm project source code in GitHub](https://github.com/UniversityOfAppliedSciencesFrankfurt/LearningApi/tree/master/LearningApi/src/Individual%20project_AnushaAshokReddy/SumAlgorithm)
+You can refer this example project by clicking here : [Refer the SUM algorithm project source code in GitHub](https://github.com/UniversityOfAppliedSciencesFrankfurt/LearningApi/tree/master/LearningApi/src/Individual%20project_AnushaAshokReddy/SumAlgorithm)
