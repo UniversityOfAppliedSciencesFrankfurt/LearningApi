@@ -328,9 +328,10 @@ We have also given the similar guidance for an actual Machine Learning Algorithm
 
 # How can you contribute to LearningApi? <a id="Your_Contribution"></a>
 
-If you have implemented a custom module or algorithm and want to integrate it to LearningAPI, then you can do the following, 
-
+If you have implemented a custom module or algorithm and want to integrate it to LearningAPI, then you can create an new issue in the LearningApi repository which will be directed by clicking on the below button : 
+<!--
 <a href="https://universityofappliedsciencesfrankfurt.github.io/LearningApi/ContactPage/"><span class="button">Contact Us</span></a>
+-->
 
 <a href="https://github.com/UniversityOfAppliedSciencesFrankfurt/LearningApi/issues/new"><span class="button">Create an issue in the LearningApi Repository</span></a>
 
