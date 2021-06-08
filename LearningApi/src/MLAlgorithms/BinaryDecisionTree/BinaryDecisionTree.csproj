@@ -9,7 +9,7 @@
     <PackageReference Include="Deedle" Version="2.0.0-beta01" />
     <PackageReference Include="FSharp.Core" Version="4.5.4" />
     <PackageReference Include="LearningApi" Version="1.2.3" />
-    <PackageReference Include="log4net" Version="2.0.8" />
+    <PackageReference Include="log4net" Version="2.0.10" />
   </ItemGroup>
 
 </Project>
