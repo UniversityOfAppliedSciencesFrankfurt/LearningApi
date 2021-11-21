@@ -2,11 +2,12 @@
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="LearningApi" Version="1.2.3" />
-    <PackageReference Include="System.Drawing.Common" Version="4.5.1" />
+    <ProjectReference Include="..\src\LearningApi\LearningApi.csproj" />
   </ItemGroup>
 
 </Project>

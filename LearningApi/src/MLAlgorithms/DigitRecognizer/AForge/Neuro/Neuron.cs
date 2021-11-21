@@ -51,7 +51,7 @@ namespace AForge.Neuro
         /// <remarks>Sets the range of random generator. Affects initial values of neuron's weight.
         /// Default value is [0, 1].</remarks>
         /// 
-        protected static Range randRange = new Range( 0.0f, 1.0f );
+        protected static AForge.Range randRange = new AForge.Range( 0.0f, 1.0f );
 
         /// <summary>
         /// Random number generator.
@@ -79,7 +79,7 @@ namespace AForge.Neuro
         /// <remarks>Sets the range of random generator. Affects initial values of neuron's weight.
         /// Default value is [0, 1].</remarks>
         /// 
-        public static Range RandRange
+        public static AForge.Range RandRange
         {
             get { return randRange; }
             set { randRange = value; }

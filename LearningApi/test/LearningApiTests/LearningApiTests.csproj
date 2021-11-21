@@ -1,10 +1,16 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp2.2</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
 
     <IsPackable>false</IsPackable>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="ImageBinarization\**" />
+    <EmbeddedResource Remove="ImageBinarization\**" />
+    <None Remove="ImageBinarization\**" />
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="FluentAssertions" Version="5.9.0" />
@@ -14,10 +20,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\HiddenMarkov\HiddenMarkov.csproj" />
     <ProjectReference Include="..\..\src\DataProviders\CsvDataProvider\CsvDataProvider.csproj" />
     <ProjectReference Include="..\..\src\Filters\EuclideanFilter\EuclideanFilter.csproj" />
-    <ProjectReference Include="..\..\src\ImageBinarization\Lib\ImageBinarizerLib.csproj" />
-    <ProjectReference Include="..\..\src\ImageBinarization\Module\ImageBinarizer.csproj" />
     <ProjectReference Include="..\..\src\LearningApi\LearningApi.csproj" />
     <ProjectReference Include="..\..\src\MLAlgorithms\AnomDetect.KMeans\AnomDetect.KMeans.csproj" />
     <ProjectReference Include="..\..\src\MLAlgorithms\BinaryDecisionTree\BinaryDecisionTree.csproj" />
@@ -27,9 +32,7 @@
     <ProjectReference Include="..\..\src\MLAlgorithms\DigitRecognizer\DigitRecognizer.csproj" />
     <ProjectReference Include="..\..\src\MLAlgorithms\DimensionalityReduction.PCA\DimensionalityReduction.PCA.csproj" />
     <ProjectReference Include="..\..\src\MLAlgorithms\GaussianMeanFilter\GaussianAndMeanFilter.csproj" />
-    <ProjectReference Include="..\..\src\MLAlgorithms\HiddenMarkovLib\HiddenMarkovLib.csproj" />
     <ProjectReference Include="..\..\src\MLAlgorithms\LogisticRegression\LogisticRegression.csproj" />
-    <ProjectReference Include="..\..\src\MLAlgorithms\MouseGestureRecognition\MouseGestureRecognition.csproj" />
     <ProjectReference Include="..\..\src\MLAlgorithms\NeuralNetworks\NeuralNet.BackPropagation\NeuralNet.BackPropagation.csproj" />
     <ProjectReference Include="..\..\src\MLAlgorithms\NeuralNetworks\NeuralNet.MLPerceptron\NeuralNet.MLPerceptron.csproj" />
     <ProjectReference Include="..\..\src\MLAlgorithms\NeuralNetworks\NeuralNet.Perceptron\NeuralNet.Perceptron.csproj" />
@@ -89,15 +92,6 @@
     </None>
     <None Update="GaussianAndMeanFilter\TestPicture\test7.jpg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="ImageBinarization\TestImages\daenet.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="ImageBinarization\TestImages\face.jpg">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="ImageBinarization\TestImages\gab.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Update="MLPerceptron\TestFiles\Sdr\digit0_64_activeCol.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

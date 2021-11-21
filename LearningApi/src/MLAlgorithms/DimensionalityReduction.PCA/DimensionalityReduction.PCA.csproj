@@ -12,7 +12,7 @@
     <Version>$(LearningApiVersion)</Version>
     <Authors>TrinhTran</Authors>
     <Company>FRAUAS</Company>
-    <TargetFramework>netcoreapp2.1</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
     <OutputType>Library</OutputType>
     <Platforms>AnyCPU;x64</Platforms>
   </PropertyGroup>
