@@ -11,9 +11,16 @@
     <AssemblyVersion>1.0.0.1</AssemblyVersion>
     <FileVersion>1.0.0.1</FileVersion>
     <RootNamespace>LearningFoundation</RootNamespace>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <Description>Open-Source experimental ML algorithms in .NET</Description>
+    <Copyright>daenet GmbH</Copyright>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Content Include="..\license.txt" Link="license.txt" Pack="true" PackagePath="license.txt" />
+  </ItemGroup>
 
+			
   <ItemGroup>
     <Folder Include="Modules\" />
     <Folder Include="Properties\" />
